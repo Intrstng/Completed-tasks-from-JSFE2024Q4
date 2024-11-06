@@ -1,0 +1,46 @@
+/*html {*/
+/*  overflow-x: hidden;*/
+/*  margin-right: calc(-1 * (100vw - 100%));*/
+/*}*/
+
+/*@media screen and (min-width: 960px) {*/
+/*  html {*/
+/*    margin-left: calc(100vw - 100%);*/
+/*    margin-right: 0;*/
+/*  }*/
+/*}*/
+
+
+html,
+body {
+    scrollbar-gutter: stable;
+}
+
+html {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    margin: 0 auto;
+    font-size: 100%;
+    background-color: red;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    font-weight: normal;
+}
+
+body {
+    margin: 0 auto;
+}
+
+.hero__caption {
+    color: rgb(255, 255, 255);
+    /*font-family: Allura;*/
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 100%;
+    /*letter-spacing: 5%;*/
+    text-align: center;
+}

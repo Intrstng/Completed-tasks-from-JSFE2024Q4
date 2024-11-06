@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../../public/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>Christmas-shop</title>
+</head>
+<body>
+<!-- Header
+======================== -->
+<header class="header container">
+  <div class="wrapper">
+    <a class="logo" href="index.html">
+      <object class="logo__img" type="image/svg+xml" data="../../assets/snowflake.svg">Your browser does not support
+        SVG
+      </object>
+      <p class="logo__title">The gifts</p>
+    </a>
+  </div>
+
+  <nav class="nav">
+    <ul class="nav__list">
+      <li class="nav__item"><a class="nav__link nav__link_hover" href="../gifts/index.html">Gifts</a></li>
+      <li class="nav__item"><a class="nav__link nav__link_hover" href="#about">About</a></li>
+      <li class="nav__item"><a class="nav__link nav__link_hover" href="#best">Best</a></li>
+      <li class="nav__item"><a class="nav__link nav__link_hover" href="#contacts">Contacts</a></li>
+    </ul>
+  </nav>
+</header>
+<!-- Main
+======================== -->
+<main>
+  <!-- Hero
+  ======================== -->
+  <section class="hero container" aria-label="hero section" id="hero">
+    <!--    <div class="wrapper">-->
+    <p class="hero__caption">Merry Christmas</p>
+    <h1 class="hero__title">Gift yourself the magic of new possibilities</h1>
+    <button class="hero__button hero__button_hover button"><a href="../gifts/index.html">Explore Magical Gifts</a>
+    </button>
+    <p class="hero__caption">and Happy New Year</p>
+    <!--    </div>-->
+  </section>
+  <!-- About
+======================== -->
+  <section class="about container" aria-label="about section" id="about">
+    <div class="about__content wrapper">
+      <div class="about__card">
+        <p class="about__caption">About</p>
+        <h2 class="about__title">Unleash your inner superhero!</h2>
+        <p class="about__text">This New Year marks the beginning of your journey to inner harmony and new strengths. We
+          offer unique gifts that will help you improve your life.</p>
+      </div>
+      <picture class="about__image-block">
+        <source srcset="../../assets/responsive/santa_mobile.png" media="(max-width: 380px)">
+        <source srcset="../../assets/responsive/santa_tablet.png" media="(max-width: 768px)">
+        <img class="about__image" src="../../assets/santa.png" alt="santa">
+      </picture>
+    </div>
+  </section>
+  <!-- Slider
+======================== -->
+  <section class="slider" aria-label="slider section" id="slider">
+    <!-- //////////////////////////////////// -->
+  </section>
+  <!-- Best gifts
+======================== -->
+  <section class="best container" aria-label="best gifts section" id="best">
+    <div class="best__content wrapper">
+      <p class="best__caption">Best Gifts</p>
+      <h2 class="best__title">especially for you</h2>
+      <div class="cards">
+        <figure class="cards__item" data-type="For Work">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title">For Work</h4>
+            <h3 class="cards__text">Console.log Guru</h3>
+          </figcaption>
+        </figure>
+        <figure class="cards__item" data-type="For Health">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-health_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-health.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title">For Health</h4>
+            <h3 class="cards__text">Hydration Bot</h3>
+          </figcaption>
+        </figure>
+        <figure class="cards__item" data-type="For Work">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title">For Work</h4>
+            <h3 class="cards__text">Merge Master</h3>
+          </figcaption>
+        </figure>
+        <figure class="cards__item" data-type="For Work">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-harmony_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-harmony.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title">For harmony</h4>
+            <h3 class="cards__text">Spontaneous Coding Philosopher</h3>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- CTA
+======================== -->
+  <section class="countdown container" aria-label="countdown section" id="countdown">
+    <h2 class="countdown__title">Ready to start your journey to a better version of yourself?</h2>
+    <button class="countdown__button countdown__button_hover button"><a href="../gifts/index.html">Explore Magical Gifts</a>
+    </button>
+    <p class="countdown__caption">The New Year is Coming Soon...</p>
+    <div class="countdown__block">
+      <div class="countdown__days">
+        <span class="countdown__days-counter">47</span>
+        <span class="countdown__days-text">days</span>
+      </div>
+      <div class="countdown__hours">
+        <span class="countdown__hours-counter">5</span>
+        <span class="countdown__hours-text">hours</span>
+      </div>
+      <div class="countdown__minutes">
+        <span class="countdown__minutes-counter">34</span>
+        <span class="countdown__minutes-text">minutes</span>
+      </div>
+      <div class="countdown__seconds">
+        <span class="countdown__seconds-counter">12</span>
+        <span class="countdown__seconds-text">seconds</span>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
