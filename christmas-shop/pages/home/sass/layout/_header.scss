@@ -1,0 +1,7 @@
+.header {
+  &__content {
+    margin: 1.25rem auto;
+    padding: 0 1.25rem;
+    @include flex(flex, space-between, center);
+  }
+}

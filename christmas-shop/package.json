@@ -2,7 +2,7 @@
   "name": "christmas-shop",
   "version": "1.0.0",
   "scripts": {
-    "style-home": "sass --watch pages/home/sass/styles.scss:pages/home/sass/styles.css"
+    "style-home": "sass --watch pages/home/sass/styles.scss:pages/home/sass/style.css"
   },
   "dependencies": {
   }

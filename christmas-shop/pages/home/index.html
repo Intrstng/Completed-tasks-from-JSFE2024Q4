@@ -5,34 +5,37 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="../../public/favicon.ico" type="image/x-icon">
+<!--  <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@100..900&display=swap" rel="stylesheet">-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@400..600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="sass/normalize.css">
-  <link rel="stylesheet" href="sass/styles.css">
+  <link rel="stylesheet" href="sass/style.css">
   <title>Christmas-shop</title>
 </head>
 <body>
 <!-- Header
 ======================== -->
 <header class="header container">
-  <div class="wrapper">
+  <div class="header__content wrapper">
     <a class="logo" href="index.html">
       <object class="logo__img" type="image/svg+xml" data="../../assets/snowflake.svg">Your browser does not support
         SVG
       </object>
-      <p class="logo__title">The gifts</p>
+      <span class="logo__title">The gifts</span>
     </a>
-  </div>
 
-  <nav class="nav">
-    <ul class="nav__list">
-      <li class="nav__item"><a class="nav__link nav__link_hover" href="../gifts/index.html">Gifts</a></li>
-      <li class="nav__item"><a class="nav__link nav__link_hover" href="#about">About</a></li>
-      <li class="nav__item"><a class="nav__link nav__link_hover" href="#best">Best</a></li>
-      <li class="nav__item"><a class="nav__link nav__link_hover" href="#contacts">Contacts</a></li>
-    </ul>
-  </nav>
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="../gifts/index.html">Gifts</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#about">About</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#best">Best</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#contacts">Contacts</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
 <!-- Main
 ======================== -->
@@ -40,13 +43,13 @@
   <!-- Hero
   ======================== -->
   <section class="hero container" aria-label="hero section" id="hero">
-    <!--    <div class="wrapper">-->
+<!--        <div class="hero__content wrapper">-->
     <p class="hero__caption">Merry Christmas</p>
     <h1 class="hero__title">Gift yourself the magic of new possibilities</h1>
     <button class="hero__button hero__button_hover button"><a href="../gifts/index.html">Explore Magical Gifts</a>
     </button>
     <p class="hero__caption">and Happy New Year</p>
-    <!--    </div>-->
+<!--        </div>-->
   </section>
   <!-- About
 ======================== -->
@@ -188,17 +191,26 @@
     </div>
   </div>
   <div class="footer">
-      <ul class="social">
-        <li class="social__item"><a class="social__link social__link_hover" href="https://web.telegram.org/a/" target="_blank"><img class="social__icon git-img" src="../../assets/telegram.svg" alt="telegram"></a></li>
-        <li class="social__item"><a class="social__link social__link_hover" href="https://m.facebook.com/login/?locale2=ru_RU" target="_blank"><img class="social__icon" src="../../assets/facebook.svg" alt="facebook"></a></li>
-        <li class="social__item"><a class="social__link social__link_hover" href="https://www.instagram.com/accounts/login/" target="_blank"><img class="social__icon" src="../../assets/instagram.svg" alt="instagram"></a></li>
-        <li class="social__item"><a class="social__link social__link_hover" href="https://twitter.com/login?lang=ru" target="_blank"><img class="social__icon" src="../../assets/twitter.svg" alt="twitter"></a></li>
-      </ul>
+    <ul class="social">
+      <li class="social__item"><a class="social__link social__link_hover" href="https://web.telegram.org/a/"
+                                  target="_blank"><img class="social__icon git-img" src="../../assets/telegram.svg"
+                                                       alt="telegram"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover"
+                                  href="https://m.facebook.com/login/?locale2=ru_RU" target="_blank"><img
+        class="social__icon" src="../../assets/facebook.svg" alt="facebook"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover"
+                                  href="https://www.instagram.com/accounts/login/" target="_blank"><img
+        class="social__icon" src="../../assets/instagram.svg" alt="instagram"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover" href="https://twitter.com/login?lang=ru"
+                                  target="_blank"><img class="social__icon" src="../../assets/twitter.svg"
+                                                       alt="twitter"></a></li>
+    </ul>
     <div class="footer__copyright">
       <span>&copy; </span>
       <span class="year">Copyright 2025, All Rights Reserved</span>
     </div>
-    <a class="footer__link footer__link_hover" href="https://rs.school/" target="_blank">Made in Rolling Scopes School</a>
+    <a class="footer__link footer__link_hover" href="https://rs.school/" target="_blank">Made in Rolling Scopes
+      School</a>
   </div>
 </footer>
 </body>

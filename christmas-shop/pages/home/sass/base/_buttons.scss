@@ -1,0 +1,14 @@
+.button {
+  padding: 18px 32px 20px 32px;
+  background-color: $dark;
+  border-radius: 20px;
+  border: none;
+  & a {
+    text-decoration: none;
+    @extend %font-primary;
+    @include font (600, 0.75rem, 130%);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: $light;
+  }
+}

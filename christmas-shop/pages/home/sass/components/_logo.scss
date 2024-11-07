@@ -1,0 +1,11 @@
+.logo {
+  @include flex (flex, space-between, center);
+  gap: 0.5rem;
+  //padding: 0.875rem 0 0 0.75rem;
+  //padding-left: 0.75rem;
+  text-decoration: none;
+  @extend %font-primary;
+  @include font (600, 0.75rem, 130%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

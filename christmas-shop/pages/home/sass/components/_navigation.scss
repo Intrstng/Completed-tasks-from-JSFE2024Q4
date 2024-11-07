@@ -1,0 +1,17 @@
+.nav {
+  &__list {
+    margin: 0;
+    @include flex(flex, space-between, center);
+    gap: 3.05rem;
+  }
+  &__item {
+    list-style-type: none;
+  }
+  &__link {
+    text-decoration: none;
+    @extend %font-primary;
+    @include font (600, 0.75rem, 130%);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
