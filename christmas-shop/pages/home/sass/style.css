@@ -1,9 +1,13 @@
 @import "./normalize.css";
-.hero__title, .nav__link, .logo, .button a {
+.button_hover {
+  transition: all 0.3s ease;
+}
+
+.about__text, .about__title, .hero__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
-.hero__caption {
+.about__caption, .hero__caption {
   font-family: "Allura", cursive;
 }
 
@@ -42,12 +46,12 @@ body {
 }
 
 .button {
-  padding: 18px 32px 20px 32px;
+  display: block;
+  max-width: 236px;
+  padding: 1.25rem 2rem 1.25rem 2rem;
   background-color: rgb(24, 28, 41);
-  border-radius: 20px;
+  border-radius: 1.25rem;
   border: none;
-}
-.button a {
   text-decoration: none;
   font-weight: 600;
   font-size: 0.75rem;
@@ -55,6 +59,10 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.6px;
   color: rgb(255, 255, 255);
+}
+.button_hover:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(24, 28, 41);
 }
 
 .logo {
@@ -99,12 +107,12 @@ body {
 
 .hero {
   padding: 120px;
-  background: url("./../../../assets/bg-ball.png") no-repeat center center, url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
-  background-size: cover, cover, cover;
-  border-radius: 20px 20px 0px 0px;
   margin: 0 auto;
   width: 100%;
   height: 525px;
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: url("./../../../assets/bg-ball.png") no-repeat center center, url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
+  background-size: cover, cover, cover;
 }
 .hero__caption {
   margin: 0 0 0.75rem;
@@ -128,10 +136,59 @@ body {
 }
 .hero__button {
   margin: 0 auto 0.75rem;
-  display: block;
 }
 .hero__caption {
   text-align: center;
+}
+
+.about {
+  margin: 0 auto;
+  padding: 60px;
+  width: 100%;
+  height: 648px;
+  background: url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
+  background-size: cover, cover, cover;
+}
+.about__content {
+  width: 100%;
+  height: 528px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 1.1rem;
+  background-color: rgb(255, 255, 255);
+}
+.about__card {
+  padding: 1rem 3.75rem 0;
+}
+.about__caption {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 100%;
+  letter-spacing: 1.2px;
+  color: rgb(255, 70, 70);
+}
+.about__title {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 152%;
+  letter-spacing: 3.8px;
+  color: rgb(24, 28, 41);
+  text-transform: uppercase;
+}
+.about__text {
+  max-width: 426px;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 148%;
+  color: rgb(24, 28, 41);
+}
+.about__image-block {
+  height: 100%;
+}
+.about__image {
+  border-radius: 1.1rem;
 }
 
 /*# sourceMappingURL=style.css.map */

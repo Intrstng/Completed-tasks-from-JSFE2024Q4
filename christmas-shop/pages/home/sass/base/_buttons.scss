@@ -1,14 +1,21 @@
 .button {
-  padding: 18px 32px 20px 32px;
+  display: block;
+  max-width: 236px;
+  padding: 1.25rem 2rem 1.25rem 2rem;
   background-color: $dark;
-  border-radius: 20px;
+  border-radius: 1.25rem;
   border: none;
-  & a {
-    text-decoration: none;
-    @extend %font-primary;
-    @include font (600, 0.75rem, 130%);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: $light;
+  text-decoration: none;
+  @extend %font-primary;
+  @include font(600, 0.75rem, 130%);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: $light;
+  &_hover {
+    @extend %transition;
+    &:hover {
+      background-color: $light;;
+      color: $dark;
+    }
   }
 }

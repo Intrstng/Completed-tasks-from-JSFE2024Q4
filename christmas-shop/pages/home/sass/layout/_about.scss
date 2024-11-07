@@ -1,0 +1,51 @@
+.about {
+  margin: 0 auto;
+  padding: 60px;
+  width: 100%;
+  height: 648px;
+  background:
+          url("./../../../assets/bg-snow.png") no-repeat center center,
+          $primary;
+  background-size: cover, cover, cover;
+    &__content {
+      width: 100%;
+      height: 528px;
+      @include flex(flex, space-between, center);
+      border-radius: 1.1rem;
+      background-color: $light;
+    }
+
+
+    &__card {
+      padding: 1rem 3.75rem 0;
+  }
+
+
+
+  &__caption {
+    margin: 0;
+    @extend %font-add;
+    @include font (400, 1.5rem, 100%);
+    letter-spacing: 1.2px;
+    color: $primary;
+  }
+  &__title {
+    @extend %font-primary;
+    @include font (600, 1.5rem, 152%);
+    letter-spacing: 3.8px;
+    color: $dark;
+    text-transform: uppercase;
+  }
+  &__text {
+    max-width: 426px;
+    @extend %font-primary;
+    @include font (400, 1rem, 148%);
+    color: $dark;
+  }
+  &__image-block {
+    height: 100%;
+  }
+  &__image {
+    border-radius: 1.1rem;
+  }
+}
