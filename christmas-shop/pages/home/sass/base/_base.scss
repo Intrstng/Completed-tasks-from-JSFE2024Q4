@@ -1,0 +1,23 @@
+html,
+body {
+  scrollbar-gutter: stable;
+}
+
+html {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  margin: 0 auto;
+  font-size: 100%;
+  background-color: red;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-weight: normal;
+}
+
+body {
+  margin: 0 auto;
+}

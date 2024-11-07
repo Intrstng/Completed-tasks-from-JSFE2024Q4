@@ -1,0 +1,9 @@
+{
+  "name": "christmas-shop",
+  "version": "1.0.0",
+  "scripts": {
+    "style-home": "sass --watch pages/home/sass/styles.scss:pages/home/sass/styles.css"
+  },
+  "dependencies": {
+  }
+}
