@@ -1,0 +1,46 @@
+.carousel {
+  &__line {
+    @include flex(flex, space-between, center);
+    gap: 1.3rem;
+  }
+  &__item {
+    &:first-of-type {
+      p {
+        margin-left: 4.625rem;
+      }
+    }
+    & p {
+      margin: 0 0 0.625rem;
+      @extend %font-primary;
+      @include font (600, 5rem, 6.125rem);
+      color: $light;
+      text-transform: uppercase;
+    }
+    & img {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 1.25rem;
+    }
+  }
+  &__controls {
+    margin-top: 0.875rem;
+    text-align: right;
+  }
+  &__btn-prev,
+  &__btn-next {
+    padding: 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
+  &__btn-prev {
+    margin-right: 1rem;
+  }
+  &__btn-img {
+    width: 100%;
+    height: 100%;
+  }
+}

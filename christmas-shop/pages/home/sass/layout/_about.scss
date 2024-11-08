@@ -14,14 +14,9 @@
       border-radius: 1.1rem;
       background-color: $light;
     }
-
-
     &__card {
       padding: 1rem 3.75rem 0;
   }
-
-
-
   &__caption {
     margin: 0;
     @extend %font-add;
