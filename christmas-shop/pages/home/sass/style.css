@@ -3,11 +3,11 @@
   transition: all 0.3s ease;
 }
 
-.slider__title, .about__text, .about__title, .hero__title, .carousel__item p, .nav__link, .logo, .button {
+.slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .cards__text, .cards__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
-.slider__caption, .about__caption, .hero__caption {
+.slider__caption, .best__caption, .about__caption, .hero__caption {
   font-family: "Allura", cursive;
 }
 
@@ -96,6 +96,57 @@ body {
   line-height: 130%;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-items: stretch;
+}
+.cards__item {
+  margin: 0;
+  max-width: 310px;
+  max-height: 342px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 1.25rem;
+}
+.cards__item picture {
+  font-size: 0;
+}
+.cards__item figcaption {
+  padding: 0.875rem 1.25rem;
+}
+.cards__title {
+  margin: 0 0 0.625rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 130%;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+.cards__text {
+  margin: 0 0 0.625rem;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 152%;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.cards__img {
+  width: 100%;
+  height: 230px;
+  background-color: rgb(244, 248, 251);
+  border-radius: 1.25rem 1.25rem 0 0;
+}
+.cards .work {
+  color: rgb(67, 97, 255);
+}
+.cards .harmony {
+  color: rgb(255, 67, 247);
+}
+.cards .health {
+  color: rgb(6, 164, 79);
 }
 
 .carousel__line {
@@ -233,6 +284,33 @@ body {
 }
 .about__image {
   border-radius: 1.1rem;
+}
+
+.best {
+  padding-top: 3.75rem;
+  width: 100%;
+  height: 554px;
+  background: url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
+  background-size: cover, cover;
+}
+.best__caption {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 100%;
+  letter-spacing: 1.2px;
+  color: rgb(255, 255, 255);
+}
+.best__title {
+  margin: 0 0 1.25rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 152%;
+  letter-spacing: 3.7px;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
 }
 
 .slider {
