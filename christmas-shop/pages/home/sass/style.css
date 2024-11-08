@@ -3,7 +3,7 @@
   transition: all 0.3s ease;
 }
 
-.countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .cards__text, .cards__title, .nav__link, .logo, .button {
+.countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .contacts__slogan, .contacts__info, .cards__text, .cards__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
@@ -147,6 +147,55 @@ body {
 }
 .cards .health {
   color: rgb(6, 164, 79);
+}
+
+.contacts {
+  width: 100%;
+}
+.contacts__cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.contacts__link {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  max-width: 418px;
+  width: 100%;
+  height: 204px;
+  border-radius: 20px;
+  background-color: rgb(236, 243, 248);
+  text-decoration: none;
+}
+.contacts__image {
+  margin: 1.25rem 0 0.5rem;
+  width: 80px;
+  height: 80px;
+}
+.contacts__info {
+  margin: 0 0 0.625rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 152%;
+  letter-spacing: 1.2px;
+  color: rgb(24, 28, 41);
+  letter-spacing: 3.6px;
+  text-transform: uppercase;
+}
+.contacts__slogan {
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 152%;
+  letter-spacing: 1.2px;
+  color: rgb(24, 28, 41);
+  text-transform: uppercase;
 }
 
 .carousel__line {
@@ -409,6 +458,10 @@ body {
   letter-spacing: 1.2px;
   color: rgb(255, 255, 255);
   text-transform: uppercase;
+}
+
+footer {
+  padding: 60px 0;
 }
 
 /*# sourceMappingURL=style.css.map */
