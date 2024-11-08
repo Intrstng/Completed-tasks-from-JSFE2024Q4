@@ -6,6 +6,7 @@
           url("./../../../assets/bg-snow.png") no-repeat center center,
           $primary;
   background-size: cover, cover, cover;
+  border-radius: 0 0 1.25rem 1.25rem;
   &__title {
     margin: 11.25rem auto 1.1rem;
     max-width: 426px;

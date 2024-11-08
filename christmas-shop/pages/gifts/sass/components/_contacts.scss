@@ -1,0 +1,40 @@
+.contacts {
+  width: 100%;
+  &__cards {
+    @include flex(flex, space-between, center);
+  }
+  &__link {
+    @include flex(flex, flex-start, center);
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    max-width: 418px;
+    width: 100%;
+    height: 204px;
+    border-radius: 20px;
+    background-color: $bg-contacts;
+    text-decoration: none;
+  }
+  &__image {
+    margin: 1.25rem 0 0.5rem;
+    width: 80px;
+    height: 80px;
+  }
+  &__info,
+  &__slogan {
+    text-align: center;
+    @extend %font-primary;
+    color: $dark;
+    text-transform: uppercase;
+  }
+  &__info {
+    margin: 0 0 0.625rem;
+    @include font (600, 1.5rem, 152%);
+    letter-spacing: 3.6px;
+  }
+  &__slogan {
+    margin: 0;
+    @include font (600, 1rem, 152%);
+    letter-spacing: 1.2px;
+  }
+}

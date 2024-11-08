@@ -5,13 +5,16 @@
     margin: 0;
     max-width: 310px;
     max-height: 342px;
-    background-color: $light;
+    background-color: $bg-image;
     border-radius: 1.25rem;
     picture {
       font-size: 0;
     }
     & figcaption {
       padding: 0.875rem 1.25rem;
+      height: 106px;
+      border-radius: 1.25rem;
+      background-color: $light;
     }
   }
   &__title {
@@ -31,7 +34,6 @@
   &__img {
     width: 100%;
     height: 230px;
-    background-color: $bg-image;
     border-radius: 1.25rem 1.25rem 0 0;
   }
   & .work {

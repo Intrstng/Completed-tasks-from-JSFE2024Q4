@@ -1,0 +1,11 @@
+.button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background-color: transparent;
+  @extend %font-primary;
+  @include font (600, 0.75rem, 130%);
+  color: $light;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
