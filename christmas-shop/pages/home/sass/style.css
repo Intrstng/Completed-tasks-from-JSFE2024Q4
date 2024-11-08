@@ -3,11 +3,11 @@
   transition: all 0.3s ease;
 }
 
-.slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .cards__text, .cards__title, .nav__link, .logo, .button {
+.countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .cards__text, .cards__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
-.slider__caption, .best__caption, .about__caption, .hero__caption {
+.countdown__caption, .slider__caption, .best__caption, .about__caption, .hero__caption {
   font-family: "Allura", cursive;
 }
 
@@ -335,6 +335,78 @@ body {
   font-size: 1.5rem;
   line-height: 152%;
   letter-spacing: 3.8px;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+}
+
+.countdown {
+  width: 100%;
+  height: 668px;
+  background: url("./../../../assets/bg-forest.png") no-repeat center center, url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
+  background-size: cover, cover, cover;
+}
+.countdown__title {
+  margin: 11.25rem auto 1.1rem;
+  max-width: 426px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 152%;
+  letter-spacing: 4px;
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+}
+.countdown__button {
+  margin: 0 auto 1.25rem;
+}
+.countdown__caption {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 100%;
+  letter-spacing: 1.2px;
+  color: rgb(255, 255, 255);
+}
+.countdown__block {
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem 0.75rem;
+  max-width: 344px;
+  height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 1.25rem;
+}
+.countdown__separator {
+  width: 1px;
+  height: 20px;
+  background-color: rgb(255, 255, 255);
+}
+.countdown__days, .countdown__hours, .countdown__minutes, .countdown__seconds {
+  width: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter {
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 152%;
+  letter-spacing: 1.2px;
+  color: rgb(255, 255, 255);
+}
+.countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text {
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 130%;
+  letter-spacing: 1.2px;
   color: rgb(255, 255, 255);
   text-transform: uppercase;
 }
