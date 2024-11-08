@@ -1,0 +1,16 @@
+.social {
+  margin: 0 auto 1.125rem;
+  padding: 4.125rem 0 0;
+  @include flex(flex, space-between, center);
+  max-width: 180px;
+  &__item {
+    list-style-type: none;
+  }
+  &__link {
+    text-decoration: none;
+  }
+  &__icon {
+    width: 24px;
+    height: 24px;
+  }
+}

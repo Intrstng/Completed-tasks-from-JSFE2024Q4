@@ -3,11 +3,11 @@
   transition: all 0.3s ease;
 }
 
-.countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .contacts__slogan, .contacts__info, .cards__text, .cards__title, .nav__link, .logo, .button {
+.footer__copyright, .countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .contacts__info, .contacts__slogan, .cards__text, .cards__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
-.countdown__caption, .slider__caption, .best__caption, .about__caption, .hero__caption {
+.footer__link, .countdown__caption, .slider__caption, .best__caption, .about__caption, .hero__caption {
   font-family: "Allura", cursive;
 }
 
@@ -176,26 +176,24 @@ body {
   width: 80px;
   height: 80px;
 }
+.contacts__info, .contacts__slogan {
+  text-align: center;
+  color: rgb(24, 28, 41);
+  text-transform: uppercase;
+}
 .contacts__info {
   margin: 0 0 0.625rem;
-  text-align: center;
   font-weight: 600;
   font-size: 1.5rem;
   line-height: 152%;
-  letter-spacing: 1.2px;
-  color: rgb(24, 28, 41);
   letter-spacing: 3.6px;
-  text-transform: uppercase;
 }
 .contacts__slogan {
   margin: 0;
-  text-align: center;
   font-weight: 600;
   font-size: 1rem;
   line-height: 152%;
   letter-spacing: 1.2px;
-  color: rgb(24, 28, 41);
-  text-transform: uppercase;
 }
 
 .carousel__line {
@@ -239,6 +237,25 @@ body {
 .carousel__btn-img {
   width: 100%;
   height: 100%;
+}
+
+.social {
+  margin: 0 auto 1.125rem;
+  padding: 4.125rem 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 180px;
+}
+.social__item {
+  list-style-type: none;
+}
+.social__link {
+  text-decoration: none;
+}
+.social__icon {
+  width: 24px;
+  height: 24px;
 }
 
 .header__content {
@@ -462,6 +479,26 @@ body {
 
 footer {
   padding: 60px 0;
+}
+
+.footer__copyright {
+  display: block;
+  margin-bottom: 0.625rem;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 148%;
+  color: rgb(24, 28, 41);
+}
+.footer__link {
+  display: block;
+  text-align: center;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 100%;
+  letter-spacing: 1.2px;
+  color: rgb(24, 28, 41);
+  text-decoration: none;
 }
 
 /*# sourceMappingURL=style.css.map */
