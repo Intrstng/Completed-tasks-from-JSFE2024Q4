@@ -9,6 +9,11 @@
         margin-left: 4.625rem;
       }
     }
+    &:last-of-type {
+      img {
+        margin-right: 4.625rem;
+      }
+    }
     & p {
       margin: 0 0 0.625rem;
       @extend %font-primary;

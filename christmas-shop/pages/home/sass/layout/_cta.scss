@@ -8,7 +8,7 @@
   background-size: cover, cover, cover;
   border-radius: 0 0 1.25rem 1.25rem;
   &__title {
-    margin: 11.25rem auto 1.1rem;
+    margin: 11.19rem auto 1.125rem;
     max-width: 426px;
     text-align: center;
     @extend %font-primary;
@@ -30,7 +30,7 @@
   }
   &__block {
     margin: 0 auto;
-    padding: 0.5rem 0.75rem 0.75rem;
+    padding: 0.625rem 0.75rem 0.75rem;
     max-width: 344px;
     height: 72px;
     @include flex(flex, space-between, center);
@@ -58,7 +58,7 @@
     text-align: center;
     @extend %font-primary;
     @include font (600, 1.5rem, 152%);
-    letter-spacing: 1.2px;
+    letter-spacing: 2px;
     color: $light;
   }
   &__days-text,

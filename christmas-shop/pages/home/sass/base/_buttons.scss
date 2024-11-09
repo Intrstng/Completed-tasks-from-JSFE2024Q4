@@ -14,7 +14,7 @@
   &_hover {
     @extend %transition;
     &:hover {
-      background-color: $light;;
+      background-color: $light;
       color: $dark;
     }
   }
