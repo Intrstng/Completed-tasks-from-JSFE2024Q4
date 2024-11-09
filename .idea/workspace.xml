@@ -5,36 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2dca2ee9-44a9-4995-ab7e-7c0ba7a8be0f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/christmas-shop/assets/controls/arrow-left-small.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/christmas-shop/assets/controls/arrow-right-small.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/assets/facebook.svg" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/assets/facebook.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/assets/instagram.svg" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/assets/instagram.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/assets/telegram.svg" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/assets/telegram.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/assets/twitter.svg" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/assets/twitter.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/base/_buttons.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/base/_buttons.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_cards.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_cards.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_contacts.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_contacts.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_logo.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_logo.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_navigation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_navigation.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_social.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_social.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_footer.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_footer.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_gifts.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_gifts.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_header.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_header.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/base/_buttons.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/base/_buttons.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_cards.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_cards.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_carousel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_carousel.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_contacts.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_contacts.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_logo.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_logo.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_navigation.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_navigation.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_social.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_social.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_about.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_about.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_best.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_best.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_cta.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_cta.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_footer.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_footer.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_header.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_header.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_slider.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_slider.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css.map" afterDir="false" />
     </list>
@@ -70,7 +57,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Projects/RSSchool/Stage#1/3.week/intrstng-JSFE2024Q4",
+    "last_opened_file_path": "D:/Projects/RSSchool/Stage#1/3.week/intrstng-JSFE2024Q4/christmas-shop/assets/controls",
     "list.type.of.created.stylesheet": "SCSS",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "liveEdit",
@@ -79,8 +66,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\pages\gifts" />
       <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\assets\controls" />
+      <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\pages\gifts" />
       <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\assets\responsive" />
       <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\assets" />
       <recent name="D:\Projects\RSSchool\Stage#1\3.week\intrstng-JSFE2024Q4\christmas-shop\pages\home" />
@@ -142,7 +129,7 @@
       <updated>1730902239907</updated>
       <workItem from="1730902241256" duration="1425000" />
       <workItem from="1730904074309" duration="72687000" />
-      <workItem from="1731096763017" duration="17616000" />
+      <workItem from="1731096763017" duration="22603000" />
     </task>
     <servers />
   </component>

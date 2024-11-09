@@ -18,5 +18,17 @@
   &__controls {
     margin-bottom: 1.25rem;
     text-align: center;
+    & .active {
+      background-color: $light-opacity-20;
+      cursor: not-allowed;
+    }
+  }
+  &__button {
+    @extend %transition;
+    &:not(.active) {
+      &:hover {
+        background-color: $light-opacity-20;
+      }
+    }
   }
 }

@@ -19,7 +19,7 @@
     max-width: 418px;
     width: 100%;
     &_hover {
-      & :hover {
+      &:hover {
         .contacts__info,
         .contacts__slogan {
           @extend %transition;

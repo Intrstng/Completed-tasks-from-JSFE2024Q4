@@ -1,6 +1,6 @@
 @import "./normalize.css";
-.footer__link_hover, .social__icon_hover, .contacts__item_hover :hover .contacts__info,
-.contacts__item_hover :hover .contacts__slogan, .cards__content_hover :hover .cards__text, .nav__link {
+.footer__link_hover, .gifts__button, .social__icon_hover, .contacts__item_hover:hover .contacts__info,
+.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link {
   transition: all 0.3s ease;
 }
 
@@ -38,6 +38,7 @@ body {
 
 .button {
   padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
   border: none;
   background-color: transparent;
   font-weight: 600;
@@ -97,8 +98,8 @@ body {
   letter-spacing: 0.5px;
   color: rgb(24, 28, 41);
 }
-.nav__link:active {
-  padding: 12px 20px 12px 20px;
+.nav__link:not(.active):hover {
+  padding: 0.75rem 1.25rem 0.75rem 1.25rem;
   color: rgb(255, 70, 70);
   background-color: rgba(255, 70, 70, 0.1);
   border-radius: 0.75rem;
@@ -118,7 +119,7 @@ body {
 .cards__content {
   cursor: pointer;
 }
-.cards__content_hover :hover .cards__text {
+.cards__content_hover:hover .cards__text {
   color: rgb(255, 70, 70);
 }
 .cards__item {
@@ -198,8 +199,8 @@ body {
   max-width: 418px;
   width: 100%;
 }
-.contacts__item_hover :hover .contacts__info,
-.contacts__item_hover :hover .contacts__slogan {
+.contacts__item_hover:hover .contacts__info,
+.contacts__item_hover:hover .contacts__slogan {
   color: rgb(255, 70, 70);
 }
 .contacts__image {
@@ -286,6 +287,13 @@ body {
 .gifts__controls {
   margin-bottom: 1.25rem;
   text-align: center;
+}
+.gifts__controls .active {
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+}
+.gifts__button:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 footer {

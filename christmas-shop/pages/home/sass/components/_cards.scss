@@ -4,7 +4,7 @@
   &__content {
     cursor: pointer;
     &_hover {
-      & :hover {
+      &:hover {
         .cards__text {
           @extend %transition;
           color: $primary;

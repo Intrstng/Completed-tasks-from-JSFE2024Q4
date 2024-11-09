@@ -1,6 +1,6 @@
 @import "./normalize.css";
-.footer__link_hover, .social__icon_hover, .contacts__item_hover :hover .contacts__info,
-.contacts__item_hover :hover .contacts__slogan, .cards__content_hover :hover .cards__text, .nav__link, .button_hover {
+.footer__link_hover, .carousel__btn-prev_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-next_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-prev_hover, .carousel__btn-next_hover, .contacts__item_hover:hover .contacts__info,
+.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link, .button_hover {
   transition: all 0.3s ease;
 }
 
@@ -104,8 +104,8 @@ body {
   letter-spacing: 0.5px;
   color: rgb(24, 28, 41);
 }
-.nav__link:active {
-  padding: 12px 20px 12px 20px;
+.nav__link:not(.active):hover {
+  padding: 0.75rem 1.25rem 0.75rem 1.25rem;
   color: rgb(255, 70, 70);
   background-color: rgba(255, 70, 70, 0.1);
   border-radius: 0.75rem;
@@ -125,7 +125,7 @@ body {
 .cards__content {
   cursor: pointer;
 }
-.cards__content_hover :hover .cards__text {
+.cards__content_hover:hover .cards__text {
   color: rgb(255, 70, 70);
 }
 .cards__item {
@@ -205,8 +205,8 @@ body {
   max-width: 418px;
   width: 100%;
 }
-.contacts__item_hover :hover .contacts__info,
-.contacts__item_hover :hover .contacts__slogan {
+.contacts__item_hover:hover .contacts__info,
+.contacts__item_hover:hover .contacts__slogan {
   color: rgb(255, 70, 70);
 }
 .contacts__image {
@@ -264,16 +264,23 @@ body {
   text-align: right;
 }
 .carousel__btn-prev, .carousel__btn-next {
-  padding: 0;
+  padding: 1.25rem 1.25rem 1rem;
+  border-radius: 1.25rem;
   cursor: pointer;
   background-color: transparent;
-  border: none;
+  border: 1px solid rgb(255, 255, 255);
 }
 .carousel__btn-prev:disabled, .carousel__btn-next:disabled {
   opacity: 0.4;
 }
+.carousel__btn-prev_hover:not(:disabled):hover, .carousel__btn-next_hover:not(:disabled):hover {
+  background-color: rgb(255, 255, 255);
+}
+.carousel__btn-prev_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-next_hover:not(:disabled):hover .carousel__btn-img {
+  filter: invert(67%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+}
 .carousel__btn-prev {
-  margin-right: 1rem;
+  margin-right: 1.08rem;
 }
 .carousel__btn-img {
   width: 100%;
