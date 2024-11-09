@@ -1,0 +1,10 @@
+{
+  "name": "christmas-shop",
+  "version": "1.0.0",
+  "scripts": {
+    "style-home": "sass --watch pages/home/sass/styles.scss:pages/home/sass/style.css",
+    "style-gifts": "sass --watch pages/gifts/sass/styles.scss:pages/gifts/sass/style.css"
+  },
+  "dependencies": {
+  }
+}

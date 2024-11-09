@@ -1,0 +1,76 @@
+.countdown {
+  width: 100%;
+  height: 668px;
+  background:
+          url("./../../../assets/bg-forest.png") no-repeat center center,
+          url("./../../../assets/bg-snow.png") no-repeat center center,
+          $primary;
+  background-size: cover, cover, cover;
+  border-radius: 0 0 1.25rem 1.25rem;
+  &__title {
+    margin: 11.19rem auto 1.125rem;
+    max-width: 426px;
+    text-align: center;
+    @extend %font-primary;
+    @include font (600, 1.5rem, 152%);
+    letter-spacing: 4px;
+    color: $light;
+    text-transform: uppercase;
+  }
+  &__button {
+    margin: 0 auto 1.25rem;
+  }
+  &__caption {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    @extend %font-add;
+    @include font (400, 1.5rem, 100%);
+    letter-spacing: 1.2px;
+    color: $light;
+  }
+  &__block {
+    margin: 0 auto;
+    padding: 0.625rem 0.75rem 0.75rem;
+    max-width: 344px;
+    height: 72px;
+    @include flex(flex, space-between, center);
+    background-color: $light-opacity-40;
+    border-radius: 1.25rem;
+  }
+  &__separator {
+    width: 1px;
+    height: 20px;
+    background-color: $light;
+  }
+  &__days,
+  &__hours,
+  &__minutes,
+  &__seconds {
+    width: 5rem;
+    @include flex(flex, center, center);
+    flex-direction: column;
+  }
+  &__days-counter,
+  &__hours-counter,
+  &__minutes-counter,
+  &__seconds-counter {
+    margin: 0;
+    text-align: center;
+    @extend %font-primary;
+    @include font (600, 1.5rem, 152%);
+    letter-spacing: 2px;
+    color: $light;
+  }
+  &__days-text,
+  &__hours-text,
+  &__minutes-text,
+  &__seconds-text {
+    margin: 0;
+    text-align: center;
+    @extend %font-primary;
+    @include font (600, 0.75rem, 130%);
+    letter-spacing: 1.2px;
+    color: $light;
+    text-transform: uppercase;
+  }
+}

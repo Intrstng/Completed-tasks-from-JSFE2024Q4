@@ -1,0 +1,11 @@
+<svg width="56.000000" height="56.000000" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<clipPath id="clip3_658">
+			<rect id="arrow-left" rx="0.000000" width="23.000000" height="23.000000" transform="translate(16.500000 16.500000)" fill="white" fill-opacity="0"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip3_658)">
+		<path id="vector-left" d="M34.5 28L22 28M28 34L22 28L28 22" stroke="#FFFFFF" stroke-opacity="1.000000" stroke-width="1.000000" stroke-linejoin="round" stroke-linecap="round"/>
+	</g>
+	<rect id="button-left" rx="19.500000" width="55.000000" height="55.000000" transform="translate(0.500000 0.500000)" stroke="#FFFFFF" stroke-opacity="1.000000" stroke-width="1.000000"/>
+</svg>

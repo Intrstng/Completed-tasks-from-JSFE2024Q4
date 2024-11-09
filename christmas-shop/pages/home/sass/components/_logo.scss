@@ -1,0 +1,12 @@
+.logo {
+  padding: 0.625rem 1.25rem 0.5rem;
+  @include flex (flex, space-between, center);
+  gap: 0.5rem;
+  text-decoration: none;
+  @extend %font-primary;
+  @include font (600, 0.75rem, 130%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: $dark;
+  cursor: pointer;
+}

@@ -1,0 +1,65 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 0.75rem;
+  &__content {
+    cursor: pointer;
+    &_hover {
+      &:hover {
+        .cards__text {
+          @extend %transition;
+          color: $primary;
+        }
+      }
+    }
+  }
+  &__item {
+    margin: 0;
+    max-width: 310px;
+    max-height: 342px;
+    background-color: $bg-image;
+    border-radius: 1.25rem;
+    picture {
+      font-size: 0;
+    }
+    & figcaption {
+      padding: 1rem 1.25rem;
+      height: 108px;
+      border-radius: 1.25rem;
+      background-color: $light;
+    }
+  }
+  &__title {
+    margin: 0 0 0.56rem;
+    @extend %font-primary;
+    @include font (600, 0.75rem, 130%);
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+  }
+  &__text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0 0 0.625rem;
+    @extend %font-primary;
+    @include font (600, 1rem, 152%);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  &__img {
+    width: 100%;
+    height: 230px;
+    border-radius: 1.25rem 1.25rem 0 0;
+  }
+  & .work {
+    color: $work;
+  }
+  & .harmony {
+    color: $harmony;
+  }
+  & .health {
+    color: $health;
+  }
+}

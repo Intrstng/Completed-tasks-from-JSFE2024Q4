@@ -1,0 +1,29 @@
+footer {
+  padding: 3.69rem 0;
+}
+
+.footer {
+  &__copyright {
+    display: block;
+    margin-bottom: 0.755rem;
+    text-align: center;
+    @extend %font-primary;
+    @include font (400, 1rem, 148%);
+    color: $dark;
+  }
+  &__link {
+    display: block;
+    text-align: center;
+    @extend %font-add;
+    @include font (400, 1.5rem, 100%);
+    letter-spacing: 1.2px;
+    color: $dark;
+    text-decoration: none;
+    &_hover {
+      @extend %transition;
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+}

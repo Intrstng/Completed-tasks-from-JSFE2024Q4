@@ -1,0 +1,25 @@
+.slider {
+  padding: 59px 8px 60px;
+  height: 488px;
+  background:
+          url("./../../../assets/bg-snow.png") no-repeat center center,
+          $primary;
+  background-size: cover, cover, cover;
+  &__caption {
+    margin: 0 0 0.75rem;
+    text-align: center;
+    @extend %font-add;
+    @include font (400, 1.5rem, 100%);
+    letter-spacing: 1.2px;
+    color: $light;
+  }
+  &__title {
+    margin: 0 0 21px;
+    text-align: center;
+    @extend %font-primary;
+    @include font (600, 1.5rem, 152%);
+    letter-spacing: 3.8px;
+    color: $light;
+    text-transform: uppercase;
+  }
+}

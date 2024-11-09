@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../../public/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Montserrat:wght@100..900&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="sass/style.css">
+  <title>Christmas-shop</title>
+</head>
+<body>
+<!-- Header
+======================== -->
+<header class="header container">
+  <div class="header__content wrapper">
+    <a class="logo" href="index.html">
+      <img class="logo__img" src="../../assets/snowflake.svg" alt="logo">
+      <span class="logo__title">The gifts</span>
+    </a>
+
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="../gifts/index.html">Gifts</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#about">About</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#best">Best</a></li>
+        <li class="nav__item"><a class="nav__link nav__link_hover" href="#contacts">Contacts</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- Main
+======================== -->
+<main>
+  <!-- Hero
+  ======================== -->
+  <section class="hero container" aria-label="hero section" id="hero">
+    <!--        <div class="hero__content wrapper">-->
+    <p class="hero__caption">Merry Christmas</p>
+    <h1 class="hero__title">Gift yourself the magic of new possibilities</h1>
+    <a class="hero__button button button_hover" href="../gifts/index.html">Explore Magical Gifts</a>
+    <p class="hero__caption">and Happy New Year</p>
+    <!--        </div>-->
+  </section>
+  <!-- About
+  ======================== -->
+  <section class="about container" aria-label="about section" id="about">
+    <div class="wrapper">
+      <div class="about__content">
+        <div class="about__card">
+          <p class="about__caption">About</p>
+          <h2 class="about__title">Unleash your inner superhero!</h2>
+          <p class="about__text">This New Year marks the beginning of your journey to inner harmony and new strengths.
+            We
+            offer unique gifts that will help you improve your life.</p>
+        </div>
+        <picture class="about__image-block">
+          <source srcset="../../assets/responsive/santa_mobile.png" media="(max-width: 380px)">
+          <source srcset="../../assets/responsive/santa_tablet.png" media="(max-width: 768px)">
+          <img class="about__image" src="../../assets/santa.png" alt="santa">
+        </picture>
+      </div>
+    </div>
+  </section>
+  <!-- Slider
+  ======================== -->
+  <section class="slider container" id="slider" aria-label="slider">
+    <div class="slider__content">
+      <p class="slider__caption">Become Happier!</p>
+      <h2 class="slider__title">in the new 2025</h2>
+      <div class="carousel">
+        <div class="carousel__container">
+          <div class="carousel__line">
+            <div class="carousel__item"><p>live</p></div>
+            <div class="carousel__item"><img src="../../assets/responsive/snowman_responsive.png" alt="slider gifts">
+            </div>
+            <div class="carousel__item"><p>create</p></div>
+            <div class="carousel__item"><img src="../../assets/responsive/christmas-trees_responsive.png"
+                                             alt="slider gifts"></div>
+            <div class="carousel__item"><p>love</p></div>
+            <div class="carousel__item"><img src="../../assets/responsive/christmas-tree-ball_responsive.png"
+                                             alt="slider gifts"></div>
+            <div class="carousel__item"><p>dream</p></div>
+            <div class="carousel__item"><img src="../../assets/responsive/fairytale-house_responsive.png"
+                                             alt="slider gifts"></div>
+          </div>
+        </div>
+        <div class="carousel__controls wrapper">
+          <button class="carousel__btn-prev carousel__btn-prev_hover" disabled>
+            <img class="carousel__btn-img" src="../../assets/controls/arrow-left-small.svg" alt="button">
+          </button>
+          <button class="carousel__btn-next carousel__btn-next_hover">
+            <img class="carousel__btn-img" src="../../assets/controls/arrow-right-small.svg" alt="button">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Best gifts
+  ======================== -->
+  <section class="best container" aria-label="best gifts section" id="best">
+    <div class="best__content wrapper">
+      <p class="best__caption">Best Gifts</p>
+      <h2 class="best__title">especially for you</h2>
+      <div class="cards">
+        <div class="cards__content cards__content_hover">
+        <figure class="cards__item cards__item_hover" data-type="For Work">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title work">For Work</h4>
+            <h3 class="cards__text">Console.log Guru</h3>
+          </figcaption>
+        </figure>
+        </div>
+
+        <div class="cards__content cards__content_hover">
+        <figure class="cards__item cards__item_hover" data-type="For Health">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-health_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-health.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title health">For Health</h4>
+            <h3 class="cards__text">Hydration Bot</h3>
+          </figcaption>
+        </figure>
+        </div>
+
+        <div class="cards__content cards__content_hover">
+        <figure class="cards__item cards__item_hover" data-type="For Work">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title work">For Work</h4>
+            <h3 class="cards__text">Merge Master</h3>
+          </figcaption>
+        </figure>
+        </div>
+
+        <div class="cards__content cards__content_hover">
+        <figure class="cards__item cards__item_hover" data-type="For Harmony">
+          <picture>
+            <source srcset="../../assets/responsive/gift-for-harmony_responsive.png" media="(max-width: 1000px)">
+            <img class="cards__img" src="../../assets/gift-for-harmony.png" alt="gift">
+          </picture>
+          <figcaption>
+            <h4 class="cards__title harmony">For harmony</h4>
+            <h3 class="cards__text">Spontaneous Coding Philosopher</h3>
+          </figcaption>
+        </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- CTA
+  ======================== -->
+  <section class="countdown container" aria-label="countdown section" id="countdown">
+    <h2 class="countdown__title">Ready to start your journey to a better version of yourself?</h2>
+    <a class="countdown__button button button_hover" href="../gifts/index.html">Explore Magical
+      Gifts</a>
+    <p class="countdown__caption">The New Year is Coming Soon...</p>
+    <div class="countdown__block">
+      <div class="countdown__days">
+        <h2 class="countdown__days-counter">47</h2>
+        <h4 class="countdown__days-text">days</h4>
+      </div>
+      <div class="countdown__separator"></div>
+      <div class="countdown__hours">
+        <h2 class="countdown__hours-counter">5</h2>
+        <h4 class="countdown__hours-text">hours</h4>
+      </div>
+      <div class="countdown__separator"></div>
+      <div class="countdown__minutes">
+        <h2 class="countdown__minutes-counter">34</h2>
+        <h4 class="countdown__minutes-text">minutes</h4>
+      </div>
+      <div class="countdown__separator"></div>
+      <div class="countdown__seconds">
+        <h2 class="countdown__seconds-counter">12</h2>
+        <h4 class="countdown__seconds-text">seconds</h4>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- Footer
+======================== -->
+<footer class="wrapper" aria-label="footer">
+  <div class="contacts" id="contacts">
+    <div class="contacts__cards">
+      <div class="contacts__item contacts__item_hover">
+        <a class="contacts__link contacts__link_hover" href="tel:80163156267">
+          <picture>
+            <source srcset="../../assets/responsive/santa-claus_responsive.svg" media="(max-width: 1000px)">
+            <img class="contacts__image" src="../../assets/santa-claus.png" alt="contact">
+          </picture>
+          <p class="contacts__info">+375 (29) 111-22-33</p>
+          <h3 class="contacts__slogan">Call us</h3>
+        </a>
+      </div>
+      <div class="contacts__item contacts__item_hover">
+        <a class="contacts__link contacts__link_hover"
+           href="https://www.google.com/maps/place/%D0%9F%D0%BE%D0%BC%D0%B5%D1%81%D1%82%D1%8C%D0%B5+%D0%B1%D0%B5%D0%BB%D0%BE%D1%80%D1%83%D1%81%D1%81%D0%BA%D0%BE%D0%B3%D0%BE+%D0%94%D0%B5%D0%B4%D0%B0+%D0%9C%D0%BE%D1%80%D0%BE%D0%B7%D0%B0/@52.6170872,23.8988459,15z/data=!4m6!3m5!1s0x47205ea652608d7f:0xbcab6f648ce2b58!8m2!3d52.6170872!4d23.8988459!16s%2Fg%2F11b6hkb4mf?entry=ttu&g_ep=EgoyMDI0MTAyOS4wIKXMDSoASAFQAw%3D%3D"
+           target="_blank">
+          <picture>
+            <source srcset="../../assets/responsive/christmas-tree_responsive.svg" media="(max-width: 1000px)">
+            <img class="contacts__image" src="../../assets/christmas-tree.png" alt="contact">
+          </picture>
+          <p class="contacts__info">Magic forest</p>
+          <h3 class="contacts__slogan">meet us</h3>
+        </a>
+      </div>
+      <div class="contacts__item contacts__item_hover">
+        <a class="contacts__link contacts__link_hover" href="mailto:gifts@magic.com" target="_blank">
+          <picture>
+            <source srcset="../../assets/responsive/snake_responsive.svg" media="(max-width: 1000px)">
+            <img class="contacts__image" src="../../assets/snake.png" alt="contact">
+          </picture>
+          <p class="contacts__info">gifts@magic.com</p>
+          <h3 class="contacts__slogan">write us</h3>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <ul class="social">
+      <li class="social__item"><a class="social__link social__link_hover" href="https://web.telegram.org/a/"
+                                  target="_blank"><img class="social__icon social__icon_hover"
+                                                       src="../../assets/telegram.svg"
+                                                       alt="telegram"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover"
+                                  href="https://m.facebook.com/login/?locale2=ru_RU" target="_blank"><img
+        class="social__icon social__icon_hover" src="../../assets/facebook.svg" alt="facebook"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover"
+                                  href="https://www.instagram.com/accounts/login/" target="_blank"><img
+        class="social__icon social__icon_hover" src="../../assets/instagram.svg" alt="instagram"></a></li>
+      <li class="social__item"><a class="social__link social__link_hover" href="https://twitter.com/login?lang=ru"
+                                  target="_blank"><img class="social__icon social__icon_hover"
+                                                       src="../../assets/twitter.svg"
+                                                       alt="twitter"></a></li>
+    </ul>
+    <div class="footer__copyright">
+      <span>&copy; </span>
+      <span class="year">Copyright 2025, All Rights Reserved</span>
+    </div>
+    <a class="footer__link footer__link_hover" href="https://rs.school/" target="_blank">Made in Rolling Scopes
+      School</a>
+  </div>
+</footer>
+</body>
+</html>
