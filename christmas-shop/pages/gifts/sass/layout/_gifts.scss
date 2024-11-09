@@ -20,7 +20,7 @@
     text-align: center;
     & .active {
       background-color: $light-opacity-20;
-      cursor: not-allowed;
+      cursor: unset;
     }
   }
   &__button {
