@@ -4,6 +4,9 @@ footer {
   @include media-tablet {
     padding-top: 3.8rem !important;
   }
+  @include media-mobile {
+    padding-top: 6rem !important;
+  }
 }
 
 .footer {

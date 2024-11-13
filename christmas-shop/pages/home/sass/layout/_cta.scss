@@ -19,6 +19,16 @@
     @include media-tablet {
       margin-top: 11.3rem;
     }
+    @include media-mobile {
+      text-align: justify;
+      letter-spacing: 3.6px;
+    }
+    & span {
+      @include media-mobile {
+        text-align: center;
+        display: block;
+      }
+    }
   }
   &__button {
     margin: 0 auto 1.25rem;

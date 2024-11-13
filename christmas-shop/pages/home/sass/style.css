@@ -582,6 +582,18 @@ body {
     margin-top: 11.3rem;
   }
 }
+@media (max-width: 380px) {
+  .countdown__title {
+    text-align: justify;
+    letter-spacing: 3.6px;
+  }
+}
+@media (max-width: 380px) {
+  .countdown__title span {
+    text-align: center;
+    display: block;
+  }
+}
 .countdown__button {
   margin: 0 auto 1.25rem;
 }
@@ -644,6 +656,11 @@ footer {
 @media (max-width: 768px) {
   footer {
     padding-top: 3.8rem !important;
+  }
+}
+@media (max-width: 380px) {
+  footer {
+    padding-top: 6rem !important;
   }
 }
 
