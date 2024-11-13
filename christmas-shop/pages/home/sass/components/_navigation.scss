@@ -32,4 +32,7 @@
     border-radius: 0.75rem;
     cursor: unset;
   }
+  @include media-tablet {
+    display: none;
+  }
 }
