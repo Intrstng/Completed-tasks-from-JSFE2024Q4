@@ -17,16 +17,18 @@
       @include media-tablet-min {
         @include flex(flex, center, center);
         flex-wrap: wrap;
+        text-align: center;
       }
       @include media-mobile {
         //@include flex(flex, space-between, space-between);
         margin: 0 auto;
+        text-align: left;
       }
     }
     &__card {
       padding: 1rem 3.75rem 0;
       width: 50%;
-      @include media-mobile {
+      @include media-tablet-min {
         margin: 3.75rem 1.25rem 2.8rem;
         padding: 0;
         width: 100%;
@@ -38,6 +40,9 @@
     @include font (400, 1.5rem, 100%);
     letter-spacing: 1.2px;
     color: $primary;
+    @include media-mobile {
+      margin-bottom: 1.25rem;
+    }
   }
   &__title {
     @extend %font-primary;
@@ -46,12 +51,24 @@
     letter-spacing: 3.8px;
     color: $dark;
     text-transform: uppercase;
+    @include media-tablet-min {
+      margin: 1rem auto;
+    }
+    @include media-mobile {
+      margin: 0 auto;
+    }
   }
   &__text {
     max-width: 426px;
     @extend %font-primary;
     @include font (400, 1rem, 148%);
     color: $dark;
+    @include media-tablet-min {
+      margin: 1rem auto;
+    }
+    @include media-mobile {
+      margin: 1.25rem auto 1rem;
+    }
   }
   &__image-block {
     //height: auto;

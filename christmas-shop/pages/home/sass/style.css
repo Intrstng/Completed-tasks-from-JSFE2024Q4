@@ -408,6 +408,11 @@ body {
   letter-spacing: 1.2px;
   color: rgb(255, 255, 255);
 }
+@media (max-width: 640px) {
+  .hero {
+    padding: 7.5rem 0.5rem 0;
+  }
+}
 @media (max-width: 380px) {
   .hero {
     height: 572px;
@@ -437,18 +442,20 @@ body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    text-align: center;
   }
 }
 @media (max-width: 380px) {
   .about__content {
     margin: 0 auto;
+    text-align: left;
   }
 }
 .about__card {
   padding: 1rem 3.75rem 0;
   width: 50%;
 }
-@media (max-width: 380px) {
+@media (max-width: 640px) {
   .about__card {
     margin: 3.75rem 1.25rem 2.8rem;
     padding: 0;
@@ -463,6 +470,11 @@ body {
   letter-spacing: 1.2px;
   color: rgb(255, 70, 70);
 }
+@media (max-width: 380px) {
+  .about__caption {
+    margin-bottom: 1.25rem;
+  }
+}
 .about__title {
   font-weight: 600;
   font-size: 1.5rem;
@@ -472,12 +484,32 @@ body {
   color: rgb(24, 28, 41);
   text-transform: uppercase;
 }
+@media (max-width: 640px) {
+  .about__title {
+    margin: 1rem auto;
+  }
+}
+@media (max-width: 380px) {
+  .about__title {
+    margin: 0 auto;
+  }
+}
 .about__text {
   max-width: 426px;
   font-weight: 400;
   font-size: 1rem;
   line-height: 148%;
   color: rgb(24, 28, 41);
+}
+@media (max-width: 640px) {
+  .about__text {
+    margin: 1rem auto;
+  }
+}
+@media (max-width: 380px) {
+  .about__text {
+    margin: 1.25rem auto 1rem;
+  }
 }
 .about__image-block {
   display: flex;

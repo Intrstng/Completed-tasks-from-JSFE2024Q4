@@ -30,6 +30,9 @@
     letter-spacing: 1.2px;
     color: $light;
   }
+  @include media-tablet-min {
+    padding: 7.5rem 0.5rem 0;
+  }
   @include media-mobile {
     height: 572px;
     padding: 7.5rem 0 0;
