@@ -16,6 +16,9 @@
     letter-spacing: 4px;
     color: $light;
     text-transform: uppercase;
+    @include media-tablet {
+      margin-top: 11.4rem;
+    }
   }
   &__button {
     margin: 0 auto 1.25rem;

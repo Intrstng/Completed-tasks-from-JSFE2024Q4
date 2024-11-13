@@ -1,6 +1,9 @@
 footer {
   padding-top: 3.65rem !important;
   padding-bottom: 3.65rem !important;
+  @include media-tablet {
+    padding-top: 3.8rem !important;
+  }
 }
 
 .footer {

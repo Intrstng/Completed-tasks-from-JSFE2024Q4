@@ -18,6 +18,9 @@
     border-radius: 20px;
     background-color: $bg-contacts;
     text-decoration: none;
+    @include media-laptop-responsive {
+      max-width: 100%;
+    }
   }
   &__item {
     max-width: 418px;
@@ -33,6 +36,7 @@
     }
     @include media-laptop-responsive {
       margin-bottom: 0.75rem;
+      max-width: 100%;
     }
   }
   &__image {

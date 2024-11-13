@@ -27,4 +27,7 @@
       }
     }
   }
+  @include media-laptop-responsive {
+    padding-top: 3.1rem;
+  }
 }
