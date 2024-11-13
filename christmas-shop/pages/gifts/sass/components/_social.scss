@@ -1,5 +1,5 @@
 .social {
-  margin: 0 auto 0.625rem;
+  margin: 0 auto 0.69rem;
   padding: 3.875rem 0 0;
   @include flex(flex, center, center);
   gap: 0.75rem;
@@ -26,5 +26,8 @@
         filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
       }
     }
+  }
+  @include media-laptop-responsive {
+    padding-top: 3.1rem;
   }
 }

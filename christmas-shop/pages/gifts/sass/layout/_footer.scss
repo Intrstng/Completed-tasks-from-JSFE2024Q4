@@ -1,11 +1,15 @@
 footer {
-  padding: 60px 0;
+  padding-top: 3.8rem !important;
+  padding-bottom: 3.65rem !important;
+  @include media-tablet {
+    padding-top: 3.8rem !important;
+  }
 }
 
 .footer {
   &__copyright {
     display: block;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.7rem;
     text-align: center;
     @extend %font-primary;
     @include font (400, 1rem, 148%);

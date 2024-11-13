@@ -45,14 +45,21 @@ body {
   font-size: 0.75rem;
   line-height: 130%;
   color: rgb(255, 255, 255);
-  letter-spacing: 1px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
   cursor: pointer;
+  white-space: nowrap;
+}
+@media (max-width: 380px) {
+  .button {
+    padding: 0.75rem 0.5rem;
+  }
 }
 
 .container {
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 0.5rem;
   overflow: hidden;
 }
 
@@ -109,6 +116,11 @@ body {
   background-color: rgba(255, 70, 70, 0.1);
   border-radius: 0.75rem;
   cursor: unset;
+}
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
 }
 
 .cards {
@@ -173,6 +185,26 @@ body {
 .cards .health {
   color: rgb(6, 164, 79);
 }
+@media (max-width: 1280px) {
+  .cards {
+    grid-template-columns: repeat(3, 310px);
+    grid-template-rows: repeat(4, auto);
+    margin: 0 auto;
+    justify-content: center;
+  }
+}
+@media (max-width: 1000px) {
+  .cards {
+    grid-template-columns: repeat(2, 310px);
+    grid-template-rows: repeat(6, auto);
+  }
+}
+@media (max-width: 660px) {
+  .cards {
+    grid-template-columns: repeat(1, 310px);
+    grid-template-rows: repeat(12, auto);
+  }
+}
 
 .contacts {
   width: 100%;
@@ -181,6 +213,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+@media (max-width: 1280px) {
+  .contacts__cards {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+  }
 }
 .contacts__link {
   display: flex;
@@ -196,6 +236,11 @@ body {
   background-color: rgb(236, 243, 248);
   text-decoration: none;
 }
+@media (max-width: 1280px) {
+  .contacts__link {
+    max-width: 100%;
+  }
+}
 .contacts__item {
   max-width: 418px;
   width: 100%;
@@ -203,6 +248,12 @@ body {
 .contacts__item_hover:hover .contacts__info,
 .contacts__item_hover:hover .contacts__slogan {
   color: rgb(255, 70, 70);
+}
+@media (max-width: 1280px) {
+  .contacts__item {
+    margin-bottom: 0.75rem;
+    max-width: 100%;
+  }
 }
 .contacts__image {
   margin: 1.25rem 0 0.5rem;
@@ -230,7 +281,7 @@ body {
 }
 
 .social {
-  margin: 0 auto 0.625rem;
+  margin: 0 auto 0.69rem;
   padding: 3.875rem 0 0;
   display: flex;
   justify-content: center;
@@ -260,6 +311,11 @@ body {
 .social__icon_hover:focus {
   filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
 }
+@media (max-width: 1280px) {
+  .social {
+    padding-top: 3.1rem;
+  }
+}
 
 .header__content {
   margin: 0.625rem auto 0.875rem;
@@ -269,7 +325,8 @@ body {
 }
 
 .gifts {
-  padding: 60px 0;
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
   border-radius: 1.25rem 1.25rem;
   background: url("./../../../assets/bg-garland.png") no-repeat top center, rgb(255, 70, 70);
   background-size: contain;
@@ -287,23 +344,38 @@ body {
 }
 .gifts__controls {
   margin-bottom: 1.25rem;
+  padding: 0 0.2rem;
   text-align: center;
 }
 .gifts__controls .active {
   background-color: rgba(255, 255, 255, 0.2);
   cursor: unset;
 }
+@media (max-width: 380px) {
+  .gifts__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+}
 .gifts__button:not(.active):hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
 footer {
-  padding: 60px 0;
+  padding-top: 3.8rem !important;
+  padding-bottom: 3.65rem !important;
+}
+@media (max-width: 768px) {
+  footer {
+    padding-top: 3.8rem !important;
+  }
 }
 
 .footer__copyright {
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.7rem;
   text-align: center;
   font-weight: 400;
   font-size: 1rem;
