@@ -39,6 +39,7 @@ body {
 .container {
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 0.5rem;
   overflow: hidden;
 }
 
@@ -121,6 +122,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   align-items: stretch;
 }
 .cards__content {
@@ -179,6 +181,14 @@ body {
 .cards .health {
   color: rgb(6, 164, 79);
 }
+@media (max-width: 1280px) {
+  .cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
 
 .contacts {
   width: 100%;
@@ -187,6 +197,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+@media (max-width: 1280px) {
+  .contacts__cards {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+  }
 }
 .contacts__link {
   display: flex;
@@ -209,6 +227,11 @@ body {
 .contacts__item_hover:hover .contacts__info,
 .contacts__item_hover:hover .contacts__slogan {
   color: rgb(255, 70, 70);
+}
+@media (max-width: 1280px) {
+  .contacts__item {
+    margin-bottom: 0.75rem;
+  }
 }
 .contacts__image {
   margin: 1.25rem 0 0.5rem;
@@ -365,7 +388,8 @@ body {
 
 .about {
   margin: 0 auto;
-  padding: 59px 0 60px;
+  padding-top: 59px;
+  padding-bottom: 60px;
   width: 100%;
   height: 648px;
   background: url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
@@ -373,7 +397,7 @@ body {
 }
 .about__content {
   width: 100%;
-  height: 528px;
+  max-height: 528px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -382,6 +406,7 @@ body {
 }
 .about__card {
   padding: 1rem 3.75rem 0;
+  width: 50%;
 }
 .about__caption {
   margin: 0;
@@ -395,6 +420,7 @@ body {
   font-weight: 600;
   font-size: 1.5rem;
   line-height: 152%;
+  max-width: 426px;
   letter-spacing: 3.8px;
   color: rgb(24, 28, 41);
   text-transform: uppercase;
@@ -407,16 +433,21 @@ body {
   color: rgb(24, 28, 41);
 }
 .about__image-block {
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .about__image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
   border-radius: 1.1rem;
 }
 
 .best {
   padding-top: 3.69rem;
+  padding-bottom: 3.69rem;
   width: 100%;
-  height: 554px;
   background: url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
   background-size: cover, cover;
 }
@@ -441,7 +472,8 @@ body {
 }
 
 .slider {
-  padding: 59px 8px 60px;
+  padding-top: 59px;
+  padding-bottom: 60px;
   height: 488px;
   background: url("./../../../assets/bg-snow.png") no-repeat center center, rgb(255, 70, 70);
   background-size: cover, cover, cover;
@@ -540,7 +572,8 @@ body {
 }
 
 footer {
-  padding: 3.69rem 0;
+  padding-top: 3.65rem !important;
+  padding-bottom: 3.65rem !important;
 }
 
 .footer__copyright {

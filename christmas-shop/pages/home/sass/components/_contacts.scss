@@ -2,6 +2,10 @@
   width: 100%;
   &__cards {
     @include flex(flex, space-between, center);
+    @include media-laptop-responsive {
+      @include flex(flex, flex-start, center);
+      flex-direction: column;
+    }
   }
   &__link {
     @include flex(flex, flex-start, center);
@@ -26,6 +30,9 @@
           color: $primary;
         }
       }
+    }
+    @include media-laptop-responsive {
+      margin-bottom: 0.75rem;
     }
   }
   &__image {
