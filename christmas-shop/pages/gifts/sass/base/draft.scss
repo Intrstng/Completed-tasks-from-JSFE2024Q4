@@ -1,0 +1,18 @@
+// Десктоп
+@media (hover: hover) and (pointer: fine) {
+  .cards__content_hover:hover {
+    .cards__text {
+      @extend %transition;
+      color: $primary;
+    }
+  }
+}
+
+
+@media (hover: none) and (pointer: coarse) {
+  .cards__content_hover:hover {
+    .cards__text {
+      color: inherit;
+    }
+  }
+}

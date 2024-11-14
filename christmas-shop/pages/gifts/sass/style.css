@@ -1,6 +1,6 @@
 @import "./normalize.css";
 .footer__link_hover, .gifts__button, .social__icon_hover, .contacts__item_hover:hover .contacts__info,
-.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link {
+.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link, .hamburger__line, .hamburger {
   transition: all 0.3s ease;
 }
 
@@ -67,6 +67,52 @@ body {
 .wrapper {
   max-width: 1276px;
   margin: 0 auto;
+}
+
+.hamburger {
+  display: none;
+  align-items: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+}
+.hamburger:hover {
+  transform: scale(1.15);
+}
+.hamburger:hover .hamburger__line:before, .hamburger:hover .hamburger__line:after {
+  background-color: rgb(255, 70, 70);
+}
+.hamburger:active .hamburger__line:before, .hamburger:active .hamburger__line:after {
+  background-color: rgb(6, 164, 79);
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    padding-top: 0.25rem;
+  }
+}
+
+.hamburger__line {
+  width: 20px;
+  height: 10px;
+  position: relative;
+  text-replace: auto;
+}
+.hamburger__line:before, .hamburger__line:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 2px;
+  background-color: rgb(24, 28, 41);
+}
+.hamburger__line:before {
+  top: 0;
+}
+.hamburger__line:after {
+  bottom: 0;
 }
 
 .logo {
