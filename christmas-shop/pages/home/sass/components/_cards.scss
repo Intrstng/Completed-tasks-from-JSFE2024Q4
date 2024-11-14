@@ -1,13 +1,15 @@
 .cards {
   @include flex(flex, space-between, center);
+  flex-wrap: wrap;
   align-items: stretch;
   &__content {
     cursor: pointer;
     &_hover {
-      &:hover {
-        .cards__text {
-          @extend %transition;
-          color: $primary;
+      @include hover-desktop {
+        &:hover {
+          .cards__text {
+            color: $primary;
+          }
         }
       }
     }
@@ -45,6 +47,7 @@
     @include font (600, 1rem, 152%);
     letter-spacing: 1.2px;
     text-transform: uppercase;
+    @extend %transition;
   }
   &__img {
     width: 100%;
@@ -59,5 +62,9 @@
   }
   & .health {
     color: $health;
+  }
+  @include media-laptop-responsive {
+    @include flex(flex, center, center);
+    gap: 0.75rem;
   }
 }

@@ -1,6 +1,7 @@
 .slider {
-  padding: 59px 8px 60px;
-  height: 488px;
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
+  //height: 488px;
   background:
           url("./../../../assets/bg-snow.png") no-repeat center center,
           $primary;
@@ -14,7 +15,7 @@
     color: $light;
   }
   &__title {
-    margin: 0 0 21px;
+    margin: 0 0 1.25rem;
     text-align: center;
     @extend %font-primary;
     @include font (600, 1.5rem, 152%);

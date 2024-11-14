@@ -17,8 +17,11 @@
   #{$property}: $value;
 }
 
-@mixin media-responsive {
+@mixin media-laptop-responsive {
   @media (max-width: $laptop-responsive) { @content; }
+}
+@mixin media-laptop-small-responsive {
+  @media (max-width: $laptop-small-responsive) { @content; }
 }
 @mixin media-tablet {
   @media (max-width: $tablet-width) { @content; }
@@ -29,7 +32,13 @@
 @mixin media-mobile {
   @media (max-width: $mobile-width) { @content; }
 }
-
 @mixin media-mobile-small {
   @media (max-width: $mobile-small-width) { @content; }
+}
+
+@mixin hover-desktop {
+  @media (hover: hover) and (pointer: fine) { @content; }
+}
+@mixin no-hover-mobile {
+  @media (hover: none) and (pointer: coarse) { @content; }
 }
