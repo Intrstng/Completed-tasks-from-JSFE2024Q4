@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2dca2ee9-44a9-4995-ab7e-7c0ba7a8be0f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/base/_hamburger.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/base/draft.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/base/_hamburger.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/abstracts/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/abstracts/_mixins.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_social.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/components/_social.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_footer.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/layout/_footer.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/style.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/gifts/sass/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/abstracts/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/abstracts/_mixins.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_carousel.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/components/_carousel.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_cta.scss" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/layout/_cta.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/christmas-shop/pages/home/sass/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +118,7 @@
       <workItem from="1730902241256" duration="1425000" />
       <workItem from="1730904074309" duration="72687000" />
       <workItem from="1731096763017" duration="58485000" />
-      <workItem from="1731572403321" duration="3691000" />
+      <workItem from="1731572403321" duration="5240000" />
     </task>
     <servers />
   </component>

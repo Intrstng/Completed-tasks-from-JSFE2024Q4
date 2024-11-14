@@ -351,7 +351,7 @@ body {
   border-radius: 1.25rem;
 }
 .carousel__controls {
-  margin-top: 0.875rem;
+  margin-top: 0.94rem;
   text-align: right;
 }
 .carousel__btn-prev, .carousel__btn-next {
@@ -657,7 +657,7 @@ body {
 }
 @media (max-width: 768px) {
   .countdown__title {
-    margin-top: 11.3rem;
+    margin-top: 11.25rem;
   }
 }
 @media (max-width: 380px) {

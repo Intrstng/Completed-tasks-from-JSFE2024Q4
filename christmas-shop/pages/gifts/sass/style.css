@@ -328,7 +328,7 @@ body {
 }
 
 .social {
-  margin: 0 auto 0.69rem;
+  margin: 0 auto 0.62rem;
   padding: 3.875rem 0 0;
   display: flex;
   justify-content: center;
@@ -422,7 +422,7 @@ footer {
 
 .footer__copyright {
   display: block;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.75rem;
   text-align: center;
   font-weight: 400;
   font-size: 1rem;
