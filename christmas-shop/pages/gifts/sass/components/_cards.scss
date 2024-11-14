@@ -6,10 +6,11 @@
   &__content {
     cursor: pointer;
     &_hover {
-      &:hover {
-        .cards__text {
-          @extend %transition;
-          color: $primary;
+      @include hover-desktop {
+        &:hover {
+          .cards__text {
+            color: $primary;
+          }
         }
       }
     }
@@ -47,6 +48,7 @@
     @include font (600, 1rem, 152%);
     letter-spacing: 1.2px;
     text-transform: uppercase;
+    @extend %transition;
   }
   &__img {
     width: 100%;

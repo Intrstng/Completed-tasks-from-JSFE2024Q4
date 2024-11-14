@@ -28,8 +28,10 @@ footer {
     text-decoration: none;
     &_hover {
       @extend %transition;
-      &:hover {
-        color: $primary;
+      @include hover-desktop {
+        &:hover {
+          color: $primary;
+        }
       }
     }
   }

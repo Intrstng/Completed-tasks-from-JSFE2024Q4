@@ -19,11 +19,10 @@
     height: 24px;
     &_hover {
       @extend %transition;
-      &:hover {
-        filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
-      }
-      &:focus {
-        filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+      @include hover-desktop {
+        &:hover {
+          filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+        }
       }
     }
   }

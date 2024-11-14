@@ -35,3 +35,10 @@
 @mixin media-mobile-small {
   @media (max-width: $mobile-small-width) { @content; }
 }
+
+@mixin hover-desktop {
+  @media (hover: hover) and (pointer: fine) { @content; }
+}
+@mixin no-hover-mobile {
+  @media (hover: none) and (pointer: coarse) { @content; }
+}

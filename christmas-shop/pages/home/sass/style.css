@@ -1,6 +1,5 @@
 @import "./normalize.css";
-.footer__link_hover, .social__icon_hover, .carousel__btn-prev_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-next_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-prev_hover, .carousel__btn-next_hover, .contacts__item_hover:hover .contacts__info,
-.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link, .hamburger__line, .hamburger, .button_hover {
+.footer__link_hover, .social__icon_hover, .carousel__btn-img, .carousel__btn-prev_hover, .carousel__btn-next_hover, .contacts__info, .contacts__slogan, .cards__text, .nav__link, .hamburger__line, .hamburger, .button_hover {
   transition: all 0.3s ease;
 }
 
@@ -63,9 +62,11 @@ body {
   letter-spacing: 0.6px;
   color: rgb(255, 255, 255);
 }
-.button_hover:hover {
-  background-color: rgb(255, 255, 255);
-  color: rgb(24, 28, 41);
+@media (hover: hover) and (pointer: fine) {
+  .button_hover:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(24, 28, 41);
+  }
 }
 
 .hamburger {
@@ -76,14 +77,16 @@ body {
   height: 40px;
   z-index: 5;
 }
-.hamburger:hover {
-  transform: scale(1.15);
-}
-.hamburger:hover .hamburger__line:before, .hamburger:hover .hamburger__line:after {
-  background-color: rgb(255, 70, 70);
-}
 .hamburger:active .hamburger__line:before, .hamburger:active .hamburger__line:after {
   background-color: rgb(6, 164, 79);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hamburger:hover {
+    transform: scale(1.15);
+  }
+  .hamburger:hover .hamburger__line:before, .hamburger:hover .hamburger__line:after {
+    background-color: rgb(255, 70, 70);
+  }
 }
 @media (max-width: 768px) {
   .hamburger {
@@ -151,11 +154,13 @@ body {
   letter-spacing: 0.5px;
   color: rgb(24, 28, 41);
 }
-.nav__link:not(.active):hover {
-  padding: 0.75rem 1.25rem 0.75rem 1.25rem;
-  color: rgb(255, 70, 70);
-  background-color: rgba(255, 70, 70, 0.1);
-  border-radius: 0.75rem;
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:not(.active):hover {
+    padding: 0.75rem 1.25rem 0.75rem 1.25rem;
+    color: rgb(255, 70, 70);
+    background-color: rgba(255, 70, 70, 0.1);
+    border-radius: 0.75rem;
+  }
 }
 .nav .active {
   color: rgb(255, 70, 70);
@@ -179,8 +184,10 @@ body {
 .cards__content {
   cursor: pointer;
 }
-.cards__content_hover:hover .cards__text {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .cards__content_hover:hover .cards__text {
+    color: rgb(255, 70, 70);
+  }
 }
 .cards__item {
   margin: 0;
@@ -280,9 +287,11 @@ body {
   max-width: 418px;
   width: 100%;
 }
-.contacts__item_hover:hover .contacts__info,
-.contacts__item_hover:hover .contacts__slogan {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .contacts__item_hover:hover .contacts__info,
+  .contacts__item_hover:hover .contacts__slogan {
+    color: rgb(255, 70, 70);
+  }
 }
 @media (max-width: 1280px) {
   .contacts__item {
@@ -364,11 +373,13 @@ body {
 .carousel__btn-prev:disabled, .carousel__btn-next:disabled {
   opacity: 0.4;
 }
-.carousel__btn-prev_hover:not(:disabled):hover, .carousel__btn-next_hover:not(:disabled):hover {
-  background-color: rgb(255, 255, 255);
-}
-.carousel__btn-prev_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-next_hover:not(:disabled):hover .carousel__btn-img {
-  filter: invert(67%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+@media (hover: hover) and (pointer: fine) {
+  .carousel__btn-prev_hover:not(:disabled):hover, .carousel__btn-next_hover:not(:disabled):hover {
+    background-color: rgb(255, 255, 255);
+  }
+  .carousel__btn-prev_hover:not(:disabled):hover .carousel__btn-img, .carousel__btn-next_hover:not(:disabled):hover .carousel__btn-img {
+    filter: invert(67%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+  }
 }
 .carousel__btn-prev {
   margin-right: 1.08rem;
@@ -403,11 +414,10 @@ body {
   width: 24px;
   height: 24px;
 }
-.social__icon_hover:hover {
-  filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
-}
-.social__icon_hover:focus {
-  filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+@media (hover: hover) and (pointer: fine) {
+  .social__icon_hover:hover {
+    filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+  }
 }
 @media (max-width: 1280px) {
   .social {
@@ -761,8 +771,10 @@ footer {
   color: rgb(24, 28, 41);
   text-decoration: none;
 }
-.footer__link_hover:hover {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .footer__link_hover:hover {
+    color: rgb(255, 70, 70);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

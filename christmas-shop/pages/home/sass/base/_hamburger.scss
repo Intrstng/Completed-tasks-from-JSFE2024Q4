@@ -6,15 +6,6 @@
   height: 40px;
   z-index: 5;
   @extend %transition;
-  &:hover {
-    transform: scale(1.15);
-    & .hamburger__line {
-      &:before,
-      &:after {
-        background-color: $primary;
-      }
-    }
-  }
   &:active {
     & .hamburger__line {
       &:before,
@@ -23,9 +14,20 @@
       }
     }
   }
+  @include hover-desktop {
+    &:hover {
+      transform: scale(1.15);
+      & .hamburger__line {
+        &:before,
+        &:after {
+          background-color: $primary;
+        }
+      }
+    }
+  }
   @include media-tablet {
-      display: flex;
-      padding-top: 0.25rem;
+    display: flex;
+    padding-top: 0.25rem;
   }
 }
 .hamburger__line {

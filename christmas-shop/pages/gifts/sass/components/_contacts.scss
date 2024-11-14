@@ -26,11 +26,12 @@
     max-width: 418px;
     width: 100%;
     &_hover {
-      &:hover {
-        .contacts__info,
-        .contacts__slogan {
-          @extend %transition;
-          color: $primary;
+      @include hover-desktop {
+        &:hover {
+          .contacts__info,
+          .contacts__slogan {
+            color: $primary;
+          }
         }
       }
     }
@@ -48,6 +49,7 @@
   &__slogan {
     text-align: center;
     @extend %font-primary;
+    @extend %transition;
     color: $dark;
     text-transform: uppercase;
   }

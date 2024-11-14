@@ -32,8 +32,10 @@
   &__button {
     @extend %transition;
     &:not(.active) {
-      &:hover {
-        background-color: $light-opacity-20;
+      @include hover-desktop {
+        &:hover {
+          background-color: $light-opacity-20;
+        }
       }
     }
   }
