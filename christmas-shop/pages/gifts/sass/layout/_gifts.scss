@@ -1,5 +1,6 @@
 .gifts {
-  padding: 60px 0;
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
   border-radius: 1.25rem 1.25rem;
   background:
           url("./../../../assets/bg-garland.png") no-repeat top center,
@@ -17,17 +18,24 @@
   }
   &__controls {
     margin-bottom: 1.25rem;
+    padding: 0 0.2rem;
     text-align: center;
     & .active {
       background-color: $light-opacity-20;
       cursor: unset;
     }
+    @include media-mobile {
+      @include flex(flex, space-between, center);
+      flex-wrap: nowrap;
+    }
   }
   &__button {
     @extend %transition;
     &:not(.active) {
-      &:hover {
-        background-color: $light-opacity-20;
+      @include hover-desktop {
+        &:hover {
+          background-color: $light-opacity-20;
+        }
       }
     }
   }

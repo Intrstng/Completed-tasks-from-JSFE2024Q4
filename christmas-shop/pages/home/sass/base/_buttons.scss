@@ -13,9 +13,11 @@
   color: $light;
   &_hover {
     @extend %transition;
-    &:hover {
-      background-color: $light;
-      color: $dark;
+    @include hover-desktop {
+      &:hover {
+        background-color: $light;
+        color: $dark;
+      }
     }
   }
 }

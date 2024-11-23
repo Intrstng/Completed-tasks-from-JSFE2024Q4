@@ -8,7 +8,7 @@
   background-size: cover, cover, cover;
   border-radius: 0 0 1.25rem 1.25rem;
   &__title {
-    margin: 11.19rem auto 1.125rem;
+    margin: 11.3rem auto 1.125rem;
     max-width: 426px;
     text-align: center;
     @extend %font-primary;
@@ -16,6 +16,19 @@
     letter-spacing: 4px;
     color: $light;
     text-transform: uppercase;
+    @include media-tablet {
+      margin-top: 11.25rem;
+    }
+    @include media-mobile {
+      text-align: justify;
+      letter-spacing: 3.6px;
+    }
+    & span {
+      @include media-mobile {
+        text-align: center;
+        display: block;
+      }
+    }
   }
   &__button {
     margin: 0 auto 1.25rem;

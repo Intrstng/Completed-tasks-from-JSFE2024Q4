@@ -6,10 +6,11 @@
   &__content {
     cursor: pointer;
     &_hover {
-      &:hover {
-        .cards__text {
-          @extend %transition;
-          color: $primary;
+      @include hover-desktop {
+        &:hover {
+          .cards__text {
+            color: $primary;
+          }
         }
       }
     }
@@ -47,6 +48,7 @@
     @include font (600, 1rem, 152%);
     letter-spacing: 1.2px;
     text-transform: uppercase;
+    @extend %transition;
   }
   &__img {
     width: 100%;
@@ -61,5 +63,20 @@
   }
   & .health {
     color: $health;
+  }
+  @include media-laptop-responsive {
+    grid-template-columns: repeat(3, 310px);
+    grid-template-rows: repeat(4, auto);
+    margin: 0 auto;
+    justify-content: center;
+    //max-width: 930px;
+  }
+  @include media-laptop-small-responsive {
+    grid-template-columns: repeat(2, 310px);
+    grid-template-rows: repeat(6, auto);
+  }
+  @include media-tablet-min {
+    grid-template-columns: repeat(1, 310px);
+    grid-template-rows: repeat(12, auto);
   }
 }

@@ -1,6 +1,5 @@
 @import "./normalize.css";
-.footer__link_hover, .gifts__button, .social__icon_hover, .contacts__item_hover:hover .contacts__info,
-.contacts__item_hover:hover .contacts__slogan, .cards__content_hover:hover .cards__text, .nav__link {
+.footer__link_hover, .gifts__button, .social__icon_hover, .contacts__info, .contacts__slogan, .cards__text, .nav__link, .hamburger__line, .hamburger {
   transition: all 0.3s ease;
 }
 
@@ -48,17 +47,73 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
+  white-space: nowrap;
+}
+@media (max-width: 380px) {
+  .button {
+    padding: 0.75rem 0.5rem;
+    letter-spacing: 0.7px;
+  }
 }
 
 .container {
   max-width: 1440px;
   margin: 0 auto;
+  padding: 0 0.5rem;
   overflow: hidden;
 }
 
 .wrapper {
   max-width: 1276px;
   margin: 0 auto;
+}
+
+.hamburger {
+  display: none;
+  align-items: center;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+}
+.hamburger:active .hamburger__line:before, .hamburger:active .hamburger__line:after {
+  background-color: rgb(6, 164, 79);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hamburger:active:hover {
+    transform: scale(1.15);
+  }
+  .hamburger:active:hover .hamburger__line:before, .hamburger:active:hover .hamburger__line:after {
+    background-color: rgb(255, 70, 70);
+  }
+}
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    padding-top: 0.25rem;
+  }
+}
+
+.hamburger__line {
+  width: 20px;
+  height: 10px;
+  position: relative;
+  text-replace: auto;
+}
+.hamburger__line:before, .hamburger__line:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 2px;
+  background-color: rgb(24, 28, 41);
+}
+.hamburger__line:before {
+  top: 0;
+}
+.hamburger__line:after {
+  bottom: 0;
 }
 
 .logo {
@@ -98,17 +153,24 @@ body {
   letter-spacing: 0.5px;
   color: rgb(24, 28, 41);
 }
-.nav__link:not(.active):hover {
-  padding: 0.75rem 1.25rem 0.75rem 1.25rem;
-  color: rgb(255, 70, 70);
-  background-color: rgba(255, 70, 70, 0.1);
-  border-radius: 0.75rem;
+@media (hover: hover) and (pointer: fine) {
+  .nav__link:not(.active):hover {
+    padding: 0.75rem 1.25rem 0.75rem 1.25rem;
+    color: rgb(255, 70, 70);
+    background-color: rgba(255, 70, 70, 0.1);
+    border-radius: 0.75rem;
+  }
 }
 .nav .active {
   color: rgb(255, 70, 70);
   background-color: rgba(255, 70, 70, 0.1);
   border-radius: 0.75rem;
   cursor: unset;
+}
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
 }
 
 .cards {
@@ -120,8 +182,10 @@ body {
 .cards__content {
   cursor: pointer;
 }
-.cards__content_hover:hover .cards__text {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .cards__content_hover:hover .cards__text {
+    color: rgb(255, 70, 70);
+  }
 }
 .cards__item {
   margin: 0;
@@ -173,6 +237,26 @@ body {
 .cards .health {
   color: rgb(6, 164, 79);
 }
+@media (max-width: 1280px) {
+  .cards {
+    grid-template-columns: repeat(3, 310px);
+    grid-template-rows: repeat(4, auto);
+    margin: 0 auto;
+    justify-content: center;
+  }
+}
+@media (max-width: 1000px) {
+  .cards {
+    grid-template-columns: repeat(2, 310px);
+    grid-template-rows: repeat(6, auto);
+  }
+}
+@media (max-width: 660px) {
+  .cards {
+    grid-template-columns: repeat(1, 310px);
+    grid-template-rows: repeat(12, auto);
+  }
+}
 
 .contacts {
   width: 100%;
@@ -181,6 +265,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+@media (max-width: 1280px) {
+  .contacts__cards {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+  }
 }
 .contacts__link {
   display: flex;
@@ -196,13 +288,26 @@ body {
   background-color: rgb(236, 243, 248);
   text-decoration: none;
 }
+@media (max-width: 1280px) {
+  .contacts__link {
+    max-width: 100%;
+  }
+}
 .contacts__item {
   max-width: 418px;
   width: 100%;
 }
-.contacts__item_hover:hover .contacts__info,
-.contacts__item_hover:hover .contacts__slogan {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .contacts__item_hover:hover .contacts__info,
+  .contacts__item_hover:hover .contacts__slogan {
+    color: rgb(255, 70, 70);
+  }
+}
+@media (max-width: 1280px) {
+  .contacts__item {
+    margin-bottom: 0.75rem;
+    max-width: 100%;
+  }
 }
 .contacts__image {
   margin: 1.25rem 0 0.5rem;
@@ -230,7 +335,7 @@ body {
 }
 
 .social {
-  margin: 0 auto 0.625rem;
+  margin: 0 auto 0.62rem;
   padding: 3.875rem 0 0;
   display: flex;
   justify-content: center;
@@ -254,11 +359,15 @@ body {
   width: 24px;
   height: 24px;
 }
-.social__icon_hover:hover {
-  filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+@media (hover: hover) and (pointer: fine) {
+  .social__icon_hover:hover {
+    filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+  }
 }
-.social__icon_hover:focus {
-  filter: invert(20%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+@media (max-width: 1280px) {
+  .social {
+    padding-top: 3.1rem;
+  }
 }
 
 .header__content {
@@ -269,7 +378,8 @@ body {
 }
 
 .gifts {
-  padding: 60px 0;
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
   border-radius: 1.25rem 1.25rem;
   background: url("./../../../assets/bg-garland.png") no-repeat top center, rgb(255, 70, 70);
   background-size: contain;
@@ -287,18 +397,35 @@ body {
 }
 .gifts__controls {
   margin-bottom: 1.25rem;
+  padding: 0 0.2rem;
   text-align: center;
 }
 .gifts__controls .active {
   background-color: rgba(255, 255, 255, 0.2);
   cursor: unset;
 }
-.gifts__button:not(.active):hover {
-  background-color: rgba(255, 255, 255, 0.2);
+@media (max-width: 380px) {
+  .gifts__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .gifts__button:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
 footer {
-  padding: 60px 0;
+  padding-top: 3.8rem !important;
+  padding-bottom: 3.65rem !important;
+}
+@media (max-width: 768px) {
+  footer {
+    padding-top: 3.8rem !important;
+  }
 }
 
 .footer__copyright {
@@ -320,8 +447,10 @@ footer {
   color: rgb(24, 28, 41);
   text-decoration: none;
 }
-.footer__link_hover:hover {
-  color: rgb(255, 70, 70);
+@media (hover: hover) and (pointer: fine) {
+  .footer__link_hover:hover {
+    color: rgb(255, 70, 70);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,5 +1,9 @@
 footer {
-  padding: 60px 0;
+  padding-top: 3.8rem !important;
+  padding-bottom: 3.65rem !important;
+  @include media-tablet {
+    padding-top: 3.8rem !important;
+  }
 }
 
 .footer {
@@ -21,8 +25,10 @@ footer {
     text-decoration: none;
     &_hover {
       @extend %transition;
-      &:hover {
-        color: $primary;
+      @include hover-desktop {
+        &:hover {
+          color: $primary;
+        }
       }
     }
   }
