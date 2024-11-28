@@ -1,5 +1,5 @@
 @import "./normalize.css";
-.footer__link_hover, .social__icon_hover, .carousel__btn-img, .carousel__btn-prev_hover, .carousel__btn-next_hover, .contacts__info, .contacts__slogan, .cards__text, .nav__link, .hamburger__line, .hamburger, .button_hover {
+.footer__link_hover, .social__icon_hover, .carousel__btn-img, .carousel__btn-prev_hover, .carousel__btn-next_hover, .contacts__info, .contacts__slogan, .cards__text, .nav__link, .hamburger__line:before, .hamburger__line:after, .hamburger__line, .hamburger, .button_hover {
   transition: all 0.3s ease;
 }
 
@@ -33,6 +33,10 @@ html {
 body {
   margin: 0 auto;
   font-size: 1rem;
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 .container {
@@ -81,18 +85,25 @@ body {
   background-color: rgb(6, 164, 79);
 }
 @media (hover: hover) and (pointer: fine) {
-  .hamburger:hover {
-    transform: scale(1.15);
-  }
   .hamburger:hover .hamburger__line:before, .hamburger:hover .hamburger__line:after {
     background-color: rgb(255, 70, 70);
   }
 }
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   .hamburger {
     display: flex;
     padding-top: 0.25rem;
   }
+}
+.hamburger_active .hamburger__line {
+  top: 0.2rem;
+}
+.hamburger_active .hamburger__line:before {
+  transform: rotate(-45deg);
+}
+.hamburger_active .hamburger__line:after {
+  top: 0;
+  transform: rotate(45deg);
 }
 
 .hamburger__line {
@@ -141,8 +152,67 @@ body {
   align-items: center;
   gap: 0.55rem;
 }
+@media only screen and (max-width: 768px) {
+  .nav__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0;
+    position: fixed;
+    right: -100%;
+    top: 3.2rem;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    transition: 0.3s all ease-in-out;
+    background-color: rgb(255, 255, 255);
+    z-index: 2;
+  }
+}
+@media (max-width: 380px) {
+  .nav__list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 258px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .nav__list_active {
+    position: fixed;
+    right: 0;
+  }
+}
 .nav__item {
   list-style-type: none;
+}
+@media only screen and (max-width: 768px) {
+  .nav__item {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .nav__item:nth-child(1) {
+    padding: 6.25rem 1.25rem 0.375rem;
+  }
+  .nav__item:nth-child(2) {
+    padding: 1.125rem 1.25rem 0.75rem;
+  }
+  .nav__item:last-child {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 380px) {
+  .nav__item {
+    margin-bottom: 0.5rem;
+    padding: 0.75rem 1.25rem;
+  }
+  .nav__item:nth-child(1) {
+    padding: 0.75rem 1.25rem 0.75rem;
+  }
+  .nav__item:nth-child(3) {
+    margin-bottom: 1rem;
+  }
 }
 .nav__link {
   padding: 0.75rem 1.25rem;
@@ -162,16 +232,21 @@ body {
     border-radius: 0.75rem;
   }
 }
+.nav__link_active {
+  left: 20%;
+}
+@media only screen and (max-width: 768px) {
+  .nav__link {
+    padding: 0;
+    font-size: 1.5rem;
+    letter-spacing: 0.25rem;
+  }
+}
 .nav .active {
   color: rgb(255, 70, 70);
   background-color: rgba(255, 70, 70, 0.1);
   border-radius: 0.75rem;
   cursor: unset;
-}
-@media (max-width: 768px) {
-  .nav {
-    display: none;
-  }
 }
 
 .cards {
@@ -672,14 +747,8 @@ body {
 }
 @media (max-width: 380px) {
   .countdown__title {
-    text-align: justify;
-    letter-spacing: 3.6px;
-  }
-}
-@media (max-width: 380px) {
-  .countdown__title span {
     text-align: center;
-    display: block;
+    letter-spacing: 3.6px;
   }
 }
 .countdown__button {

@@ -35,6 +35,10 @@
 @mixin media-mobile-small {
   @media (max-width: $mobile-small-width) { @content; }
 }
+@mixin media-touch-device {
+  @media only screen and (max-width: $tablet-width) { @content; }
+}
+
 
 @mixin hover-desktop {
   @media (hover: hover) and (pointer: fine) { @content; }
