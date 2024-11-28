@@ -237,7 +237,6 @@ body.no-scroll {
 }
 @media only screen and (max-width: 768px) {
   .nav__link {
-    padding: 0;
     font-size: 1.5rem;
     letter-spacing: 0.25rem;
   }
