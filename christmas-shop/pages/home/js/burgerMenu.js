@@ -6,6 +6,11 @@ export class Burger {
     toggleBurgerMenu = () => {
         this.hamburger.addEventListener('click', this.openBurgerMenu);
         this.navigationLinks.forEach(link => link.addEventListener('click', this.closeBurgerMenu));
+        this.closeBurgerMenuOnResize();
+    }
+
+    closeBurgerMenuOnResize = () => {
+        window.addEventListener('resize', this.closeBurgerMenu);
     }
 
     openBurgerMenu = () => {
