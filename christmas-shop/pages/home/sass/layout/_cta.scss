@@ -36,6 +36,7 @@
     color: $light;
   }
   &__block {
+    position: relative;
     margin: 0 auto;
     padding: 0.625rem 0.75rem 0.75rem;
     max-width: 344px;
@@ -79,5 +80,31 @@
     letter-spacing: 1.2px;
     color: $light;
     text-transform: uppercase;
+  }
+  &__greetings {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    background-color: $light;
+    border-radius: 1.25rem;
+    z-index: -1;
+    &_active {
+      z-index: 2;
+    }
+    & .countdown__greetings-text {
+      margin: 0;
+      @extend %font-primary;
+      @include font (600, 1.25rem, 130%);
+      letter-spacing: 1.2px;
+      color: $dark;
+      text-transform: uppercase;
+      transform: translateY(90%);
+    }
+    & .countdown__greetings-year {
+      color: $primary;
+    }
   }
 }

@@ -3,7 +3,7 @@
   transition: all 0.3s ease;
 }
 
-.footer__copyright, .countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .contacts__info, .contacts__slogan, .cards__text, .cards__title, .nav__link, .logo, .button {
+.footer__copyright, .countdown__greetings .countdown__greetings-text, .countdown__days-text, .countdown__hours-text, .countdown__minutes-text, .countdown__seconds-text, .countdown__days-counter, .countdown__hours-counter, .countdown__minutes-counter, .countdown__seconds-counter, .countdown__title, .slider__title, .best__title, .about__text, .about__title, .hero__title, .carousel__item p, .contacts__info, .contacts__slogan, .cards__text, .cards__title, .nav__link, .logo, .button {
   font-family: "Montserrat", serif;
 }
 
@@ -763,6 +763,7 @@ body.no-scroll {
   color: rgb(255, 255, 255);
 }
 .countdown__block {
+  position: relative;
   margin: 0 auto;
   padding: 0.625rem 0.75rem 0.75rem;
   max-width: 344px;
@@ -803,6 +804,33 @@ body.no-scroll {
   letter-spacing: 1.2px;
   color: rgb(255, 255, 255);
   text-transform: uppercase;
+}
+.countdown__greetings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 1.25rem;
+  z-index: -1;
+}
+.countdown__greetings_active {
+  z-index: 2;
+}
+.countdown__greetings .countdown__greetings-text {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 130%;
+  letter-spacing: 1.2px;
+  color: rgb(24, 28, 41);
+  text-transform: uppercase;
+  transform: translateY(90%);
+}
+.countdown__greetings .countdown__greetings-year {
+  color: rgb(255, 70, 70);
 }
 
 footer {
