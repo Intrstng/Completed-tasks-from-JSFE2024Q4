@@ -672,14 +672,8 @@ body {
 }
 @media (max-width: 380px) {
   .countdown__title {
-    text-align: justify;
-    letter-spacing: 3.6px;
-  }
-}
-@media (max-width: 380px) {
-  .countdown__title span {
     text-align: center;
-    display: block;
+    letter-spacing: 3.6px;
   }
 }
 .countdown__button {

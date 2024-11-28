@@ -20,14 +20,8 @@
       margin-top: 11.25rem;
     }
     @include media-mobile {
-      text-align: justify;
+      text-align: center;
       letter-spacing: 3.6px;
-    }
-    & span {
-      @include media-mobile {
-        text-align: center;
-        display: block;
-      }
     }
   }
   &__button {
