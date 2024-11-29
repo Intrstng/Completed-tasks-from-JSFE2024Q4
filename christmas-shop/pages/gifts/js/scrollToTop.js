@@ -7,15 +7,17 @@ export class ScrollToTop {
 
     toggleScrollButtonVisibility = () => {
         if (window.innerWidth <= 768 && (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300)) {
-            this.scrollToTopButton.classList.add('scroll-to-top_active');
+            this.scrollToTopButton?.classList.add('scroll-to-top_active');
         } else {
-            this.scrollToTopButton.classList.remove('scroll-to-top_active');
+            if (this.scrollToTopButton?.classList.contains('scroll-to-top_active')) {
+                this.scrollToTopButton.classList.remove('scroll-to-top_active');
+            }
         }
     }
 
     addScrollHandlers = () => {
         window.addEventListener('scroll', this.toggleScrollButtonVisibility);
-        this.scrollToTopButton.addEventListener('click', this.moveUp);
+        this.scrollToTopButton && this.scrollToTopButton.addEventListener('click', this.moveUp);
     }
 
     moveUp = () => {

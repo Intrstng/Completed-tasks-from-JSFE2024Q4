@@ -1,4 +1,3 @@
-
 export const categorySwitcher = (data) => {
     const tabsCollection = document.querySelectorAll('[data-category]');
 
@@ -13,7 +12,7 @@ export const categorySwitcher = (data) => {
 
 const selectCategory = (data, tab) => {
     const { dataset: { category } } = tab;
-    return category === 'All' ? data : data.filter(item => item.category.toLowerCase() === category.toLowerCase());
+    console.log(category === 'All' ? data : data.filter(item => item.category.toLowerCase() === category.toLowerCase()));
 }
 
 const selectTab = (tab) => {

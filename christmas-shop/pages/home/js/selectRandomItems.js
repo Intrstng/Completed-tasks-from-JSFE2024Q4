@@ -1,13 +1,11 @@
 import { randomInteger } from './util.js';
-import { getDataByLink } from '../scripts';
 
-export const selectRandomItems = async () => {
-    const data = await getDataByLink('./js/gifts.json');
+export const selectRandomItems = (data, quantity) => {
     const result = [];
 
     if (data) {
         const filteredData = [...data];
-        const itemsToSelect = Math.min(4, filteredData.length);
+        const itemsToSelect = Math.min(quantity, filteredData.length);
 
         for (let i = 0; i < itemsToSelect; i++) {
             const randomIdx = randomInteger(0, filteredData.length - 1);
@@ -17,7 +15,3 @@ export const selectRandomItems = async () => {
         return result;
     }
 };
-
-selectRandomItems().then(selectedItems => {
-    console.log(selectedItems);
-});
