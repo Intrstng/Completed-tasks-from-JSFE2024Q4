@@ -2,6 +2,8 @@
   position: fixed;
   display: none;
   padding: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
   background-color: $light;
   border: 1px solid $primary;
   border-radius: 50%;
@@ -11,11 +13,11 @@
   }
   @include media-touch-device {
     bottom: 1.25rem;
-    right: 1.25rem;
+    right: 0.55rem;
   }
   @include media-mobile {
     bottom: 1rem;
-    right: 0.6rem;
+    right: 0.5rem;
   }
   // Temporary turned off
   //&_hover {

@@ -1,11 +1,12 @@
 export function ModalView() {
-    let myModal, myModalOverlay,myContainer,modalImageSource, modalImage, title, text, descriptionField, livePoint, createPoint, lovePoint, dreamPoint, liveRating, createRating, loveRating, dreamRating, imageRatingLink;
+    let myModal, myModalOverlay,myContainer,modalImageSource, modalImage, title, text, descriptionField, livePoint, createPoint, lovePoint, dreamPoint, liveRating, createRating, loveRating, dreamRating, imageRatingLink, imageRatingLinkLight;
 
         this.init = function (container, containerModal, overlay) {
         myContainer = container;
         myModal = containerModal;
         myModalOverlay = overlay;
         imageRatingLink = '../../assets/modal/snowflake.svg';
+        imageRatingLinkLight = '../../assets/modal/snowflake-light.svg';
         modalImageSource = myContainer.querySelector('.modal__img-source');
         modalImage = myContainer.querySelector('.modal__img');
         title = myContainer.querySelector('.modal__title');
@@ -57,29 +58,31 @@ export function ModalView() {
         lovePoint.innerText = love;
         dreamPoint.innerText = dream;
 
-        for (let i = 1; i <= rating.live; i++) {
-           const imageRating = document.createElement('img');
-            imageRating.setAttribute('src', imageRatingLink);
-            imageRating.setAttribute('alt', 'snowflake rating');
-            liveRating.append(imageRating);
-        }
-        for (let i = 1; i <= rating.create; i++) {
-            const imageRating = document.createElement('img');
-            imageRating.setAttribute('src', imageRatingLink);
-            imageRating.setAttribute('alt', 'snowflake rating');
-            createRating.append(imageRating);
-        }
-        for (let i = 1; i <= rating.love; i++) {
-            const imageRating = document.createElement('img');
-            imageRating.setAttribute('src', imageRatingLink);
-            imageRating.setAttribute('alt', 'snowflake rating');
-            loveRating.append(imageRating);
-        }
-        for (let i = 1; i <= rating.dream; i++) {
-            const imageRating = document.createElement('img');
-            imageRating.setAttribute('src', imageRatingLink);
-            imageRating.setAttribute('alt', 'snowflake rating');
-            dreamRating.append(imageRating);
+        for (let i = 1; i <= 5; i++) {
+            const imageLiveLinkRating = document.createElement('img');
+            const imageCreateLinkRating = document.createElement('img');
+            const imageLoveLinkRating = document.createElement('img');
+            const imageDreamLinkRating = document.createElement('img');
+
+            const imgLiveLink = i <= rating.live ? imageRatingLink : imageRatingLinkLight;
+            const imgCreateLink = i <= rating.create ? imageRatingLink : imageRatingLinkLight;
+            const imgLoveLink = i <= rating.love ? imageRatingLink : imageRatingLinkLight;
+            const imgDreamLink = i <= rating.dream ? imageRatingLink : imageRatingLinkLight;
+
+            imageLiveLinkRating.setAttribute('src', imgLiveLink);
+            imageCreateLinkRating.setAttribute('src', imgCreateLink);
+            imageLoveLinkRating.setAttribute('src', imgLoveLink);
+            imageDreamLinkRating.setAttribute('src', imgDreamLink);
+
+            imageLiveLinkRating.setAttribute('alt', 'snowflake rating');
+            imageCreateLinkRating.setAttribute('alt', 'snowflake rating');
+            imageLoveLinkRating.setAttribute('alt', 'snowflake rating');
+            imageDreamLinkRating.setAttribute('alt', 'snowflake rating');
+
+            liveRating.append(imageLiveLinkRating);
+            createRating.append(imageCreateLinkRating);
+            loveRating.append(imageLoveLinkRating);
+            dreamRating.append(imageDreamLinkRating);
         }
     }
 

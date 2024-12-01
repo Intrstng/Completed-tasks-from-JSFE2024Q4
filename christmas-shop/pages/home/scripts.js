@@ -48,12 +48,3 @@ if (window.location.href.includes('/home/')) {
 } else if (window.location.href.includes('/gifts/')) {
     // generateCardsFromData(data, cardsContainer);
 }
-
-//
-// window.onclick = function(event) {
-//     console.log(event.target === modalWindow)
-//     if (event.target === modalWindow) {
-//
-//         modalWindow.style.display = "none";
-//     }
-// }

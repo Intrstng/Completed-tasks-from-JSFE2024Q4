@@ -448,6 +448,8 @@ body.no-scroll {
   position: fixed;
   display: none;
   padding: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(255, 70, 70);
   border-radius: 50%;
@@ -459,13 +461,13 @@ body.no-scroll {
 @media only screen and (max-width: 768px) {
   .scroll-to-top {
     bottom: 1.25rem;
-    right: 1.25rem;
+    right: 0.55rem;
   }
 }
 @media (max-width: 380px) {
   .scroll-to-top {
     bottom: 1rem;
-    right: 0.6rem;
+    right: 0.5rem;
   }
 }
 
