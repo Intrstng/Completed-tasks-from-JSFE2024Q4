@@ -1,29 +1,29 @@
 import { fillGiftsSectionWithCards } from './fillGiftsSectionWithCards.js';
+import { getDataByLink } from './getDataByLink.js';
 
 export class Controller {
-    constructor(dataLoader) {
-        this.dataLoader = dataLoader;
+    constructor(link) {
+        this.link = link;
         this.data = [];
     }
 
     loadData = async () => {
-        this.data = await this.dataLoader.getDataByLink();
+        this.data = await getDataByLink(this.link);
         fillGiftsSectionWithCards(this.data);
     }
 
     addHandlers = () => {
         if (window.location.href.includes('/gifts/')) {
-
             this.categorySwitcher(this.data);
         }
-        //     const tabsCollection = document.querySelectorAll('[data-category]');
-        // add listeners to open modal windows
+                    // const giftCardCollection = document.querySelectorAll('[data-type]');
+                    // giftCardCollection.forEach(card => card.addEventListener('click', this.cons))
     }
 
 
-                            cons = () => {
-                                console.log(this.data)
-                            }
+                                            cons = () => {
+                                                console.log(this.data)
+                                            }
 
 
     categorySwitcher = (data) => {
@@ -50,5 +50,9 @@ export class Controller {
             tab.classList.remove('active');
         })
         tab.classList.add('active');
+    }
+
+    getData = () => {
+        return this.data;
     }
 }

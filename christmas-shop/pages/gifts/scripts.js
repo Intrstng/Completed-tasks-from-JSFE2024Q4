@@ -1,6 +1,5 @@
-import { burger, controller } from '../home/scripts.js';
+import { burger, appController } from '../home/scripts.js';
+
 
 burger.toggleBurgerMenu();
-await controller.loadData();
-
-
+await appController.loadData();

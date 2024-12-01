@@ -1,8 +1,9 @@
 export class CreateCard {
-    constructor(parameters) {
+    constructor(cardData) {
         this.imgSet = {};
-        this.name = parameters.name;
-        this.category = parameters.category;
+        this.name = cardData.name;
+        this.category = cardData.category;
+        this.cardData = JSON.stringify(cardData);
         this.titleCategoryClass = this.category.split(' ').at(-1).toLowerCase();
         this.getImdSrcByCategory();
         this.generateCardContent();
@@ -30,9 +31,8 @@ export class CreateCard {
 
     generateCardContent = () => {
         this.card = document.createElement('div');
-        this.card.classList.add('cards__content', 'cards__content_hover');
-        this.card.setAttribute('data-type', this.category);
-
+        this.card.classList.add('cards__content', 'cards__content_hover', 'modal-open');
+        this.card.setAttribute('data-description', this.cardData);
         const figure = document.createElement('figure');
         figure.classList.add('cards__item', 'cards__item_hover');
 

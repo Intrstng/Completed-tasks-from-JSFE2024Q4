@@ -1,4 +1,4 @@
-import { randomInteger } from './util.js';
+import { randomInteger } from './utils.js';
 
 export const selectRandomItems = (data, quantity) => {
     const result = [];

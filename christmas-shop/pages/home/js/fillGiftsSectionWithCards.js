@@ -1,15 +1,14 @@
 import { CreateCard } from './createCard.js';
 import { selectRandomItems } from './selectRandomItems.js';
 import { RANDOM_CARDS_QUANTITY } from '../scripts.js';
+import { shuffleArray } from './utils.js';
 
 const generateCardsFromData = (cardsData, container) => {
-    const cardItems = cardsData.map(card => new CreateCard({
-            name: card.name,
-            category: card.category,
-        }).getCard()
+    const cardItems = cardsData.map(card => new CreateCard(card).getCard()
     )
+    const shuffledCardItems = shuffleArray(cardItems);
     container.innerHTML = '';
-    container.append(...cardItems);
+    container.append(...shuffledCardItems);
 }
 
 export const fillGiftsSectionWithCards = (data) => {
