@@ -46,11 +46,12 @@ export function ModalView() {
         document.body.classList.remove('no-scroll');
     }
 
-    this.printViewData = function (cardData, rating, imgSources) {
+    this.printViewData = function (cardData, rating, imgSources, cardCategory) {
         const { name, category, description, superpowers: { live, create, love, dream } } = cardData;
         modalImageSource.setAttribute('srcset', imgSources.srcset);
         modalImage.setAttribute('src', imgSources.src);
         title.innerText = category;
+        title.classList.add(cardCategory);
         text.innerText = name;
         descriptionField.innerText = description;
         livePoint.innerText = live;
@@ -90,6 +91,8 @@ export function ModalView() {
         modalImageSource.setAttribute('srcset', '');
         modalImage.setAttribute('src', '');
         title.innerText = '';
+        title.className = '';
+        title.classList.add('modal__title');
         text.innerText = '';
         descriptionField.innerText = '';
         livePoint.innerText = '';

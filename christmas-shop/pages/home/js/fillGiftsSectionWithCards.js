@@ -1,7 +1,9 @@
 import { CreateCard } from './createCard.js';
 import { selectRandomItems } from './selectRandomItems.js';
-import { RANDOM_CARDS_QUANTITY } from '../scripts.js';
+import { modalWindowInitialization, RANDOM_CARDS_QUANTITY } from '../scripts.js';
 import { shuffleArray } from './utils.js';
+import { generateModalOverlay, generateModalWindowLayout } from './generateModalWindowLayout.js';
+
 
 const generateCardsFromData = (cardsData, container) => {
     const cardItems = cardsData.map(card => new CreateCard(card).getCard()
@@ -19,5 +21,11 @@ export const fillGiftsSectionWithCards = (data) => {
         generateCardsFromData(randomGiftData, cardsContainer);
     } else if (window.location.href.includes('/gifts/')) {
         generateCardsFromData(data, cardsContainer);
+        const overlay = generateModalOverlay();
+        const modalWindowLayout = generateModalWindowLayout();
+        cardsContainer.append(overlay);
+        cardsContainer.append(modalWindowLayout);
+        // Injected MVC modal window initialization
+        modalWindowInitialization();
     }
 }

@@ -16,15 +16,7 @@ export class Controller {
         if (window.location.href.includes('/gifts/')) {
             this.categorySwitcher(this.data);
         }
-                    // const giftCardCollection = document.querySelectorAll('[data-type]');
-                    // giftCardCollection.forEach(card => card.addEventListener('click', this.cons))
     }
-
-
-                                            cons = () => {
-                                                console.log(this.data)
-                                            }
-
 
     categorySwitcher = (data) => {
         const tabsCollection = document.querySelectorAll('[data-category]');
