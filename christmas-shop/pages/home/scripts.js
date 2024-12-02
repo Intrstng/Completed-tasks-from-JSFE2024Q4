@@ -16,8 +16,6 @@ export const appController = new Controller(PATH_TO_FILE);
 
 await appController.loadData();
 appController.addHandlers()
-appController.cons()
-
 
 // Burger menu
 export const burger = new Burger();
@@ -32,9 +30,10 @@ new ScrollToTop();
 countdown();
 
 
-// Modal window
+// Modal window MVC
 // Global initialization
-if (window.location.href.includes('/home/')) {
+// Injected in fillGiftsSectionWithCards function
+export function modalWindowInitialization() {
     const appModalView = new ModalView();
     const appModalModel = new ModalModel();
     const appModalController = new ModalController();
@@ -45,6 +44,10 @@ if (window.location.href.includes('/home/')) {
     appModalView.init(container, modalWindow, overlay);
     appModalModel.init(appModalView);
     appModalController.init(appModalModel, modalWindow, container);
+}
+
+if (window.location.href.includes('/home/')) {
+    modalWindowInitialization();
 }
 
 
