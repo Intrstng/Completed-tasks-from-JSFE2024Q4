@@ -3,8 +3,11 @@
     @include flex(flex, flex-start, center);
     gap: 1.3rem;
     transition: 0.6s all ease-in-out;
-    @include media-desktop {
+    @include widescreen-desktop {
       width: 2635px;
+    }
+    @include media-desktop {
+      width: 2255px;
     }
     @include media-middle-desktop {
       width: 2155px;
