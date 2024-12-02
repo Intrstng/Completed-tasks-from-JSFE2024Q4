@@ -1,8 +1,12 @@
-import { burger, appController } from '../home/scripts.js';
+import { ModalController } from '../home/js/modalWindow/controller.js';
+import { ModalView } from '../home/js/modalWindow/view.js';
+import { ModalModel } from '../home/js/modalWindow/model.js';
+import { burger } from '../home/scripts.js';
 
 
-burger.toggleBurgerMenu();
-await appController.loadData();
+// Burger menu
+// burger.toggleBurgerMenu();
+// await appController.loadData();
 
-const a  = document.querySelector('.gifts__title')
-console.log(a)
+
+

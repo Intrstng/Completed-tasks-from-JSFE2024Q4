@@ -17,7 +17,9 @@
   #{$property}: $value;
 }
 
-
+@mixin widescreen-desktop {
+  @media (min-width: $widescreen-width) { @content; }
+}
 @mixin media-desktop {
   @media (min-width: $desktop-width) { @content; }
 }
