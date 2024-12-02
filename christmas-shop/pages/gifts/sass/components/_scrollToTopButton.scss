@@ -1,0 +1,33 @@
+.scroll-to-top {
+  position: fixed;
+  display: none;
+  padding: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: $light;
+  border: 1px solid $primary;
+  border-radius: 50%;
+  cursor: pointer;
+  &_active {
+    display: block;
+  }
+  @include media-touch-device {
+    bottom: 1.25rem;
+    right: 0.55rem;
+  }
+  @include media-mobile {
+    bottom: 1rem;
+    right: 0.5rem;
+  }
+  // Temporary turned off
+  //&_hover {
+  //  @extend %transition;
+  //  &:hover {
+  //    background-color: $primary-semi;
+  //    border: 1px solid $health;
+  //    .scroll-to-top__btn-img {
+  //      filter: invert(100%) brightness(10%);
+  //    }
+  //  }
+  //}
+}

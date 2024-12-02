@@ -41,12 +41,10 @@
   <!-- Hero
   ======================== -->
   <section class="hero container" aria-label="hero section" id="hero">
-    <!--        <div class="hero__content wrapper">-->
     <p class="hero__caption">Merry Christmas</p>
     <h1 class="hero__title">Gift yourself the magic of new possibilities</h1>
     <a class="hero__button button button_hover" href="../gifts/index.html">Explore Magical Gifts</a>
     <p class="hero__caption">and Happy New Year</p>
-    <!--        </div>-->
   </section>
   <!-- About
   ======================== -->
@@ -75,30 +73,28 @@
       <p class="slider__caption">Become Happier!</p>
       <h2 class="slider__title">in the new 2025</h2>
       <div class="carousel">
-        <div class="carousel__container">
-          <div class="carousel__line">
-            <div class="carousel__item"><p>live</p></div>
-            <div class="carousel__item"><img src="../../assets/responsive/snowman_responsive.png" alt="slider gifts">
-            </div>
-            <div class="carousel__item"><p>create</p></div>
-            <div class="carousel__item"><img src="../../assets/responsive/christmas-trees_responsive.png"
-                                             alt="slider gifts"></div>
-            <div class="carousel__item"><p>love</p></div>
-            <div class="carousel__item"><img src="../../assets/responsive/christmas-tree-ball_responsive.png"
-                                             alt="slider gifts"></div>
-            <div class="carousel__item"><p>dream</p></div>
-            <div class="carousel__item"><img src="../../assets/responsive/fairytale-house_responsive.png"
-                                             alt="slider gifts"></div>
+        <div class="carousel__line">
+          <div class="carousel__item"><p>live</p></div>
+          <div class="carousel__item"><img src="../../assets/responsive/snowman_responsive.png" alt="slider gifts">
           </div>
+          <div class="carousel__item"><p>create</p></div>
+          <div class="carousel__item"><img src="../../assets/responsive/christmas-trees_responsive.png"
+                                           alt="slider gifts"></div>
+          <div class="carousel__item"><p>love</p></div>
+          <div class="carousel__item"><img src="../../assets/responsive/christmas-tree-ball_responsive.png"
+                                           alt="slider gifts"></div>
+          <div class="carousel__item"><p>dream</p></div>
+          <div class="carousel__item"><img src="../../assets/responsive/fairytale-house_responsive.png"
+                                           alt="slider gifts"></div>
         </div>
-        <div class="carousel__controls wrapper">
-          <button class="carousel__btn-prev carousel__btn-prev_hover" disabled>
-            <img class="carousel__btn-img" src="../../assets/controls/arrow-left-small.svg" alt="button">
-          </button>
-          <button class="carousel__btn-next carousel__btn-next_hover">
-            <img class="carousel__btn-img" src="../../assets/controls/arrow-right-small.svg" alt="button">
-          </button>
-        </div>
+      </div>
+      <div class="carousel__controls wrapper">
+        <button class="carousel__btn-prev carousel__btn-prev_hover" disabled>
+          <img class="carousel__btn-img" src="../../assets/controls/arrow-left-small.svg" alt="button">
+        </button>
+        <button class="carousel__btn-next carousel__btn-next_hover">
+          <img class="carousel__btn-img" src="../../assets/controls/arrow-right-small.svg" alt="button">
+        </button>
       </div>
     </div>
   </section>
@@ -108,87 +104,73 @@
     <div class="best__content wrapper">
       <p class="best__caption">Best Gifts</p>
       <h2 class="best__title">especially for you</h2>
-      <div class="cards">
-        <div class="cards__content cards__content_hover">
-        <figure class="cards__item cards__item_hover" data-type="For Work">
-          <picture>
-            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
-            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
-          </picture>
-          <figcaption>
-            <h4 class="cards__title work">For Work</h4>
-            <h3 class="cards__text">Console.log Guru</h3>
-          </figcaption>
-        </figure>
-        </div>
-
-        <div class="cards__content cards__content_hover">
-        <figure class="cards__item cards__item_hover" data-type="For Health">
-          <picture>
-            <source srcset="../../assets/responsive/gift-for-health_responsive.png" media="(max-width: 1000px)">
-            <img class="cards__img" src="../../assets/gift-for-health.png" alt="gift">
-          </picture>
-          <figcaption>
-            <h4 class="cards__title health">For Health</h4>
-            <h3 class="cards__text">Hydration Bot</h3>
-          </figcaption>
-        </figure>
-        </div>
-
-        <div class="cards__content cards__content_hover">
-        <figure class="cards__item cards__item_hover" data-type="For Work">
-          <picture>
-            <source srcset="../../assets/responsive/gift-for-work_responsive.png" media="(max-width: 1000px)">
-            <img class="cards__img" src="../../assets/gift-for-work.png" alt="gift">
-          </picture>
-          <figcaption>
-            <h4 class="cards__title work">For Work</h4>
-            <h3 class="cards__text">Merge Master</h3>
-          </figcaption>
-        </figure>
-        </div>
-
-        <div class="cards__content cards__content_hover">
-        <figure class="cards__item cards__item_hover" data-type="For Harmony">
-          <picture>
-            <source srcset="../../assets/responsive/gift-for-harmony_responsive.png" media="(max-width: 1000px)">
-            <img class="cards__img" src="../../assets/gift-for-harmony.png" alt="gift">
-          </picture>
-          <figcaption>
-            <h4 class="cards__title harmony">For harmony</h4>
-            <h3 class="cards__text">Spontaneous Coding Philosopher</h3>
-          </figcaption>
-        </figure>
-        </div>
-      </div>
+      <div class="cards"></div>
+      <div class="modal-overlay modal_closed" id="modal-overlay"></div>
+      <figure class="modal modal_closed" id="my-custom-modal">
+        <picture>
+          <source class="modal__img-source" srcset="" media="(max-width: 640px)">
+          <img class="modal__img" src="" alt="gift">
+        </picture>
+        <figcaption>
+          <h4 class="modal__title work"></h4>
+          <h3 class="modal__text"></h3>
+          <p class="modal__description"></p>
+          <h4 class="modal__superpowers-title">Adds superpowers to:</h4>
+          <div class="modal__superpowers-content">
+            <div class="modal__superpowers">
+              <p class="modal__superpower-item">Live</p>
+              <p class="modal__superpower-item">Create</p>
+              <p class="modal__superpower-item">Love</p>
+              <p class="modal__superpower-item">Dream</p>
+            </div>
+            <div class="modal__points">
+              <p class="modal__point-item live-point"></p>
+              <p class="modal__point-item create-point"></p>
+              <p class="modal__point-item love-point"></p>
+              <p class="modal__point-item dream-point"></p>
+            </div>
+            <div class="modal__rating">
+              <div class="modal__rating-item live-rating"></div>
+              <div class="modal__rating-item create-rating"></div>
+              <div class="modal__rating-item love-rating"></div>
+              <div class="modal__rating-item dream-rating"></div>
+            </div>
+          </div>
+        </figcaption>
+        <a href="#best" class="modal__close modal__close_hover" id="modal-close" title="Close modal window"><img
+          src="../../assets/twitter.svg" alt="close modal window button"></a>
+      </figure>
     </div>
   </section>
   <!-- CTA
   ======================== -->
   <section class="countdown container" aria-label="countdown section" id="countdown">
-    <h2 class="countdown__title">Ready to start your journey to a better version of yourself<span>?</span></h2>
+    <h2 class="countdown__title">Ready to start your journey to a better version of yourself?</h2>
     <a class="countdown__button button button_hover" href="../gifts/index.html">Explore Magical
       Gifts</a>
     <p class="countdown__caption">The New Year is Coming Soon...</p>
     <div class="countdown__block">
       <div class="countdown__days">
-        <h2 class="countdown__days-counter">47</h2>
+        <h2 class="countdown__days-counter"></h2>
         <h4 class="countdown__days-text">days</h4>
       </div>
       <div class="countdown__separator"></div>
       <div class="countdown__hours">
-        <h2 class="countdown__hours-counter">5</h2>
+        <h2 class="countdown__hours-counter"></h2>
         <h4 class="countdown__hours-text">hours</h4>
       </div>
       <div class="countdown__separator"></div>
       <div class="countdown__minutes">
-        <h2 class="countdown__minutes-counter">34</h2>
+        <h2 class="countdown__minutes-counter"></h2>
         <h4 class="countdown__minutes-text">minutes</h4>
       </div>
       <div class="countdown__separator"></div>
       <div class="countdown__seconds">
-        <h2 class="countdown__seconds-counter">12</h2>
+        <h2 class="countdown__seconds-counter"></h2>
         <h4 class="countdown__seconds-text">seconds</h4>
+      </div>
+      <div class="countdown__greetings">
+        <p class="countdown__greetings-text">Happy New Year <span class="countdown__greetings-year">2025</span>!</p>
       </div>
     </div>
   </section>
@@ -259,5 +241,6 @@
     </div>
   </div>
 </footer>
+<script defer src="./scripts.js" type="module"></script>
 </body>
 </html>

@@ -1,7 +1,17 @@
 .carousel {
   &__line {
-    @include flex(flex, space-between, center);
+    @include flex(flex, flex-start, center);
     gap: 1.3rem;
+    transition: 0.6s all ease-in-out;
+    @include media-desktop {
+      width: 2635px;
+    }
+    @include media-middle-desktop {
+      width: 2155px;
+    }
+    @include media-tablet {
+      width: 2015px;
+    }
   }
   &__item {
     &:first-of-type {

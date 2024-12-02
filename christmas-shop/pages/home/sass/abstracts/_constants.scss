@@ -1,6 +1,8 @@
 $primary: rgb(255, 70, 70);
+$primary-semi: rgba(255, 70, 70, 0.7);
 $primary-light: rgba(255, 70, 70, 0.1);
 $dark: rgb(24, 28, 41);
+$dark-opacity-80: rgba(24, 28, 41, 0.8);
 $light: rgb(255, 255, 255);
 $light-opacity-40: rgba(255, 255, 255, 0.4);
 $light-opacity-20: rgba(255, 255, 255, 0.2);
@@ -12,9 +14,10 @@ $health: rgb(6, 164, 79);
 
 $page-width: 1440px;
 $wrapper-width: 1276px;
-
+$desktop-width: 1441px;
 $laptop-responsive: 1280px;
 $laptop-small-responsive: 900px;
+$tablet-width-upper: 769px;
 $tablet-width: 768px;
 $tablet-min-width: 640px;
 $mobile-width: 380px;
