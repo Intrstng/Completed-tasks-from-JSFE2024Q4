@@ -6,7 +6,6 @@ import { getPathToCardsData } from './js/utils.js';
 import { ModalView } from './js/modalWindow/view.js';
 import { ModalModel } from './js/modalWindow/model.js';
 import { ModalController } from './js/modalWindow/controller.js';
-import { leftMoveSlider, rightMoveSlider } from './js/slider.js';
 
 
 // Filling Gift cards (random and by category), switching between them by clicking on tabs
@@ -32,7 +31,7 @@ new ScrollToTop();
 // Countdown
 countdown();
 
-let modalWindow
+
 // Modal window
 // Global initialization
 if (window.location.href.includes('/home/')) {
@@ -40,17 +39,51 @@ if (window.location.href.includes('/home/')) {
     const appModalModel = new ModalModel();
     const appModalController = new ModalController();
     const container = document.querySelector("#best");
-    modalWindow = document.querySelector("#my-custom-modal");
+    const modalWindow = document.querySelector("#my-custom-modal");
     const overlay = document.querySelector("#modal-overlay");
 
     appModalView.init(container, modalWindow, overlay);
     appModalModel.init(appModalView);
     appModalController.init(appModalModel, modalWindow, container);
-} else if (window.location.href.includes('/gifts/')) {
-    // generateCardsFromData(data, cardsContainer);
 }
 
 
 // Slider
-document.querySelector('.carousel__btn-prev').addEventListener('click', leftMoveSlider);
-document.querySelector('.carousel__btn-next').addEventListener('click', rightMoveSlider);
+if (window.location.href.includes('/home/')) {
+    const carousel = document.querySelector('.carousel__line');
+    const prevBtn = document.querySelector('.carousel__btn-prev');
+    const nextBtn = document.querySelector('.carousel__btn-next');
+    const windowWidth = window.innerWidth;
+    let maxWidth = carousel.scrollWidth;
+    let maxOffset = maxWidth - windowWidth;
+    const WIDTH_SCREEN_TABLET = 768;
+    const STEPS_DESKTOP = 3;
+    const STEPS_MOBILE = 6;
+    let currentOffset = 0;
+    let stepNumber = window.innerWidth > WIDTH_SCREEN_TABLET ? STEPS_DESKTOP : STEPS_MOBILE;
+    let stepWidth = Math.ceil(maxOffset / stepNumber);
+
+    function rightMoveSlider() {
+        prevBtn.disabled = false;
+        if (currentOffset + stepWidth >= maxOffset) {
+            currentOffset = maxOffset;
+            nextBtn.disabled = true;
+        } else {
+            currentOffset += stepWidth;
+        }
+        carousel.style.marginLeft = -currentOffset + 'px';
+    }
+
+    function leftMoveSlider() {
+        nextBtn.disabled = false;
+        if (currentOffset - stepWidth <= 0) {
+            currentOffset = 0;
+            prevBtn.disabled = true;
+        } else {
+            currentOffset -= stepWidth;
+        }
+        carousel.style.marginLeft = -currentOffset + 'px';
+    }
+    document.querySelector('.carousel__btn-prev').addEventListener('click', leftMoveSlider);
+    document.querySelector('.carousel__btn-next').addEventListener('click', rightMoveSlider);
+}
