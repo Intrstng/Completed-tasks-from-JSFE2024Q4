@@ -21,7 +21,7 @@
   @media (min-width: $widescreen-width) { @content; }
 }
 @mixin media-desktop {
-  @media (min-width: $desktop-width) { @content; }
+  @media (min-width: $desktop-width) and (max-width: $widescreen-width-low) { @content; }
 }
 @mixin media-middle-desktop {
   @media (min-width: $tablet-width-upper) and (max-width: $page-width) { @content; }

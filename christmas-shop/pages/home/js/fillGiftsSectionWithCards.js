@@ -1,8 +1,9 @@
 import { CreateCard } from './createCard.js';
 import { selectRandomItems } from './selectRandomItems.js';
-import { modalWindowInitialization, RANDOM_CARDS_QUANTITY } from '../scripts.js';
+import { RANDOM_CARDS_QUANTITY } from '../scripts.js';
 import { shuffleArray } from './utils.js';
 import { generateModalOverlay, generateModalWindowLayout } from './generateModalWindowLayout.js';
+import { modalWindowInitialization } from './modalWindow/init.js';
 
 
 const generateCardsFromData = (cardsData, container) => {

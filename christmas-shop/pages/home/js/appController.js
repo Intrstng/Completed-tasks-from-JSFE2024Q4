@@ -1,7 +1,7 @@
 import { fillGiftsSectionWithCards } from './fillGiftsSectionWithCards.js';
 import { getDataByLink } from './getDataByLink.js';
 
-export class Controller {
+export class AppController {
     constructor(link) {
         this.link = link;
         this.data = [];
