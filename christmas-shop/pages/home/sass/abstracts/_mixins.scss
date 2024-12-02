@@ -17,6 +17,13 @@
   #{$property}: $value;
 }
 
+
+@mixin media-desktop {
+  @media (min-width: $desktop-width) { @content; }
+}
+@mixin media-middle-desktop {
+  @media (min-width: $tablet-width-upper) and (max-width: $page-width) { @content; }
+}
 @mixin media-laptop-responsive {
   @media (max-width: $laptop-responsive) { @content; }
 }

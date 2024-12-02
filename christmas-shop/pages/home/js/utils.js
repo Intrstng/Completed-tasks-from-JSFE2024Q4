@@ -9,4 +9,3 @@ export const shuffleArray = (array) => {
 }
 
 export const getPathToCardsData = () => window.location.href.includes('/gifts/') ? '../home/js' : './js';
-

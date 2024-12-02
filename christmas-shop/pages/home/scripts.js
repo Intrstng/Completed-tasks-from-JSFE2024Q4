@@ -6,7 +6,8 @@ import { getPathToCardsData } from './js/utils.js';
 import { ModalView } from './js/modalWindow/view.js';
 import { ModalModel } from './js/modalWindow/model.js';
 import { ModalController } from './js/modalWindow/controller.js';
-// import { selectRandomItems } from './js/selectRandomItems';
+import { leftMoveSlider, rightMoveSlider } from './js/slider.js';
+
 
 // Filling Gift cards (random and by category), switching between them by clicking on tabs
 export const PATH_TO_FILE = `${getPathToCardsData()}/gifts.json`;
@@ -48,3 +49,8 @@ if (window.location.href.includes('/home/')) {
 } else if (window.location.href.includes('/gifts/')) {
     // generateCardsFromData(data, cardsContainer);
 }
+
+
+// Slider
+document.querySelector('.carousel__btn-prev').addEventListener('click', leftMoveSlider);
+document.querySelector('.carousel__btn-next').addEventListener('click', rightMoveSlider);

@@ -400,9 +400,25 @@ body.no-scroll {
 
 .carousel__line {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 1.3rem;
+  transition: 0.6s all ease-in-out;
+}
+@media (min-width: 1441px) {
+  .carousel__line {
+    width: 2635px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1440px) {
+  .carousel__line {
+    width: 2155px;
+  }
+}
+@media (max-width: 768px) {
+  .carousel__line {
+    width: 2015px;
+  }
 }
 .carousel__item:first-of-type p {
   margin-left: 4.625rem;
