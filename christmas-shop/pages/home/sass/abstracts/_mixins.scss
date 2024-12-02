@@ -17,6 +17,13 @@
   #{$property}: $value;
 }
 
+
+@mixin media-desktop {
+  @media (min-width: $desktop-width) { @content; }
+}
+@mixin media-middle-desktop {
+  @media (min-width: $tablet-width-upper) and (max-width: $page-width) { @content; }
+}
 @mixin media-laptop-responsive {
   @media (max-width: $laptop-responsive) { @content; }
 }
@@ -35,6 +42,10 @@
 @mixin media-mobile-small {
   @media (max-width: $mobile-small-width) { @content; }
 }
+@mixin media-touch-device {
+  @media only screen and (max-width: $tablet-width) { @content; }
+}
+
 
 @mixin hover-desktop {
   @media (hover: hover) and (pointer: fine) { @content; }

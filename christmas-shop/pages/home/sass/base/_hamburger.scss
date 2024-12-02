@@ -16,7 +16,6 @@
   }
   @include hover-desktop {
     &:hover {
-      transform: scale(1.15);
       & .hamburger__line {
         &:before,
         &:after {
@@ -25,11 +24,24 @@
       }
     }
   }
-  @include media-tablet {
+  @include media-touch-device {
     display: flex;
     padding-top: 0.25rem;
   }
+  &_active {
+    .hamburger__line {
+      top: 0.2rem;
+      &:before {
+        transform: rotate(-45deg);
+      }
+      &:after {
+        top: 0;
+        transform: rotate(45deg);
+      }
+    }
+  }
 }
+
 .hamburger__line {
   width: 20px;
   height: 10px;
@@ -45,6 +57,7 @@
     width: 20px;
     height: 2px;
     background-color: $dark;
+    @extend %transition;
   }
   &:before {
     top: 0;
@@ -53,3 +66,5 @@
     bottom: 0;
   }
 }
+
+
