@@ -24,10 +24,9 @@
     "prettier": "3.4.2"
   },
   "lint-staged": {
-    "**/*.{js,mjs,cjs,ts,jsx,tsx}": [
+    "**/*.{js,mjs,cjs,ts,jsx,tsx,html}": [
       "npx prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   }
 }
