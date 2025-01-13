@@ -17,7 +17,7 @@ function createStartLayout() {
 
   const label = document.createElement('label');
   label.setAttribute('for', 'difficulty');
-  label.textContent = 'Select difficulty level:';
+  label.textContent = 'Select difficulty level';
   gameContainer.appendChild(label);
 
   const select = document.createElement('select');
@@ -32,7 +32,16 @@ function createStartLayout() {
   });
   gameContainer.appendChild(select);
 
+  // Restore selected option from sessionStorage on load
+  const savedDifficulty = sessionStorage.getItem('selectedDifficulty');
+  if (savedDifficulty) {
+    select.value = savedDifficulty;
+  }
+
   select.addEventListener('change', () => {
+    // Save the selected value to sessionStorage
+    sessionStorage.setItem('selectedDifficulty', select.value);
+
     select.blur();
     toggleDisableKeyboard(false);
     removeKeyHandlers();
@@ -52,7 +61,8 @@ function createStartLayout() {
   output.setAttribute('type', 'text');
   output.readOnly = true;
 
-  document.body.append(title, gameContainer, output);
+  gameContainer.appendChild(output);
+  document.body.append(title, gameContainer);
 }
 
 let keyClickHandlers = [];
@@ -208,10 +218,16 @@ function clearOutputField() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  const savedDifficulty = sessionStorage.getItem('selectedDifficulty');
+  if (savedDifficulty) {
+    drawKeyboard(savedDifficulty);
+    return;
+  }
   drawKeyboard();
 });
 
 createStartLayout();
+// window.onload = createStartLayout;
 
 function toggleDisableStartButton() {
   const button = document.querySelector('#startButton');
@@ -227,11 +243,21 @@ function toggleDisableKeyboard(flag) {
   });
 }
 
+function toggleDisableSelect(flag) {
+  const difficulty = document.querySelector('#difficulty');
+  difficulty.disabled = flag;
+}
+
+// function addCurrentLevelIndicator(level = 1) {
+//
+// }
+
 function startGame() {
   const difficulty = document.querySelector('#difficulty').value;
   const stringToGuess = generateRandomString(difficulty, 3).split('');
 
   clearOutputField();
+  toggleDisableSelect(true);
   toggleDisableStartButton();
   toggleDisableKeyboard(false);
   highLightCharactersSequentially(stringToGuess);

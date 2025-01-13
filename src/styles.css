@@ -8,19 +8,31 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 50px;
+    gap: 10px;
+    justify-content: flex-start;
+    background-image: url('../assets/children.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
 }
-
-/* Temporary solution -> */
+h1 {
+    margin: 20vh 0 0;
+    font-size: 3.5rem;
+    font-family: "Calibri Light", serif;
+    font-weight: bold;
+    color: #f0f0f0;
+    text-transform: uppercase;
+    letter-spacing: 0.4rem;
+}
 #keyboardDigit {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 #keyboardDigit,
 .row-1,
 .row-2,
 .row-3 {
-    /*display: grid;*/
-    /*grid-template-columns: repeat(10, 1fr);*/
     display: flex;
     flex-wrap: nowrap;
     gap: 10px;
@@ -32,7 +44,6 @@ body {
     justify-content: center;
     align-items: center;
     gap: 4px;
-    /*margin-top: 20px;*/
 }
 .key {
     padding: 20px;
@@ -43,7 +54,7 @@ body {
     transition: all 0.25s;
 }
 .key:not(.active-pc):hover {
-    transform: scale(1.05);
+    transform: scale(1.07);
 }
 .active {
     color: #f0f0f0;
@@ -58,46 +69,70 @@ body {
     background-color: rgba(231, 8, 146, 0.9);
 }
 #output {
-    width: 20%;
+    margin: 0 auto;
+    padding-left: 1rem;
+    width: 100%;
     height: 50px;
-    margin-bottom: 20px;
     font-size: 24px;
+    color: rgba(8, 83, 231, 0.9);
+    background-color: rgba(240, 240, 240, 0.8);
+    border-radius: 0.6rem;
+    border: none;
+    outline: none;
+    overflow: hidden;
 }
 #gameContainer {
+    max-width: 380px;
+    width: 100%;
+    height: 250px;
 }
 #startButton {
+    display: block;
+    margin: 15px auto;
     padding: 10px 20px;
     font-size: 1rem;
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
+    background-color: rgba(7, 40, 255, 0.55);
     color: white;
     letter-spacing: 1px;
     font-weight: bold;
     transition: background-color 0.3s;
 }
+#startButton:disabled {
+    background-color: #4CAF50;
+    opacity: 0.5;
+}
 #startButton:hover {
-    background-color: #45a049;
+    background-color: #0728ff;
 }
 select {
+    display: block;
+    margin: 15px auto 20px;
     padding: 10px;
     font-size: 16px;
-    margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
-label, select, #startButton {
-    display: block;
-    margin: 10px auto;
-}
 label {
+    display: block;
+    margin: 15px auto;
+    text-align: center;
+    color: #d9ff00;
+    font-family: "Calibri Light", serif;
+    font-weight: bold;
     font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 .keyButtonBlank {
     visibility: hidden;
 }
-#startButton:disabled {
-    background-color: orange;
-    opacity: 0.5;
+#difficulty {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 40%;
+    font-weight: bold;
+    color: rgba(73, 37, 117, 0.7);
 }
