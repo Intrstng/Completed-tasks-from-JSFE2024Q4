@@ -1,4 +1,5 @@
 import { keysDigit, keysLetter } from './keyboard.js';
+import { generateRandomString } from './utils/generateRandomString.js';
 
 function createStartLayout() {
   const title = document.createElement('h1');
@@ -67,9 +68,16 @@ function addHandlers() {
     if (isKeyPressed) return;
 
     const key = event.key.toUpperCase();
-    if (Array.from(keys).some(k => k.textContent === key)) {
+    const button = Array.from(keys).find(k => k.textContent === key);
+
+    if (button) {
       output.value += key; // Adds character to the input field
       isKeyPressed = true;
+
+      button.classList.add('active');
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 300);
     }
   };
 
@@ -200,3 +208,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 createStartLayout();
+
+generateRandomString('medium', 5);

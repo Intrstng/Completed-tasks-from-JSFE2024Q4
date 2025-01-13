@@ -47,6 +47,14 @@ body {
 .key:hover {
     background-color: #ddd;
 }
+.key:active {
+    color: #f0f0f0;
+    background-color: rgba(8, 83, 231, 0.9);
+}
+.active {
+    color: #f0f0f0;
+    background-color: rgba(8, 83, 231, 0.9);
+}
 #output {
     width: 20%;
     height: 50px;

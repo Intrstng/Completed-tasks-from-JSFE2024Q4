@@ -39,3 +39,5 @@ export const keysLetter = [
   { char: 'N', charCode: 78 },
   { char: 'M', charCode: 77 },
 ];
+
+export const keysCombined = [...keysDigit, ...keysLetter];
