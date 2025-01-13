@@ -348,7 +348,6 @@ function updateRoundCounter() {
   const round = document.querySelector('#round');
   roundCounter++;
   if (roundCounter > 5) {
-    console.log('wwwwwwwiiiiiiiinnnnn!!!!!!');
     roundCounter = 1;
   }
   round.textContent = `Round ${roundCounter}`;
