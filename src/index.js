@@ -6,6 +6,7 @@ import {
 } from './utils/keyHighLighters.js';
 
 export const TIME_DELAY = 700;
+const roundCounter = 1;
 let isKeyboardActive = false;
 
 function createStartLayout() {
@@ -32,16 +33,13 @@ function createStartLayout() {
   });
   gameContainer.appendChild(select);
 
-  // Restore selected option from sessionStorage on load
   const savedDifficulty = sessionStorage.getItem('selectedDifficulty');
   if (savedDifficulty) {
     select.value = savedDifficulty;
   }
 
   select.addEventListener('change', () => {
-    // Save the selected value to sessionStorage
     sessionStorage.setItem('selectedDifficulty', select.value);
-
     select.blur();
     toggleDisableKeyboard(false);
     removeKeyHandlers();
@@ -60,8 +58,29 @@ function createStartLayout() {
   output.id = 'output';
   output.setAttribute('type', 'text');
   output.readOnly = true;
-
+  output.className = 'hidden';
   gameContainer.appendChild(output);
+
+  const repeatButton = document.createElement('button');
+  repeatButton.id = 'repeat';
+  repeatButton.textContent = 'Repeat the sequence';
+  // repeatButton.addEventListener('click', repeatGame);
+  repeatButton.className = 'hidden';
+  gameContainer.appendChild(repeatButton);
+
+  const newGameButton = document.createElement('button');
+  newGameButton.id = 'newGame';
+  newGameButton.textContent = 'New game';
+  // newGameButton.addEventListener('click', startGame);
+  newGameButton.className = 'hidden';
+  gameContainer.appendChild(newGameButton);
+
+  const round = document.createElement('h2');
+  round.id = 'round';
+  round.textContent = `Round ${roundCounter}`;
+  round.className = 'hidden';
+  gameContainer.appendChild(round);
+
   document.body.append(title, gameContainer);
 }
 
@@ -176,7 +195,6 @@ function drawKeyboard(value = 'easy') {
     for (let i = 0; i <= currentLetterKeys.length; i++) {
       const keyButton = document.createElement('button');
       keyButton.classList.add('key', 'letter');
-      console.log(currentLetterKeys[i]);
       keyButton.textContent = currentLetterKeys[i]?.char;
       keyButton.dataset.char = currentLetterKeys[i]?.char.toLowerCase();
 
@@ -217,18 +235,6 @@ function clearOutputField() {
   output.value = '';
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  const savedDifficulty = sessionStorage.getItem('selectedDifficulty');
-  if (savedDifficulty) {
-    drawKeyboard(savedDifficulty);
-    return;
-  }
-  drawKeyboard();
-});
-
-createStartLayout();
-// window.onload = createStartLayout;
-
 function toggleDisableStartButton() {
   const button = document.querySelector('#startButton');
   button.disabled = !button.disabled;
@@ -248,6 +254,15 @@ function toggleDisableSelect(flag) {
   difficulty.disabled = flag;
 }
 
+function toggleElementVisibility(id) {
+  const element = document.querySelector(id);
+  if (element.classList.contains('hidden')) {
+    element.classList.remove('hidden');
+  } else {
+    element.classList.add('hidden');
+  }
+}
+
 // function addCurrentLevelIndicator(level = 1) {
 //
 // }
@@ -259,6 +274,13 @@ function startGame() {
   clearOutputField();
   toggleDisableSelect(true);
   toggleDisableStartButton();
+
+  toggleElementVisibility('#output');
+  toggleElementVisibility('#startButton');
+  toggleElementVisibility('#repeat');
+  toggleElementVisibility('#newGame');
+  toggleElementVisibility('#round');
+
   toggleDisableKeyboard(false);
   highLightCharactersSequentially(stringToGuess);
   setTimeout(
@@ -269,3 +291,14 @@ function startGame() {
     stringToGuess.length * TIME_DELAY + 300
   );
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  const savedDifficulty = sessionStorage.getItem('selectedDifficulty');
+  if (savedDifficulty) {
+    createStartLayout();
+    drawKeyboard(savedDifficulty);
+    return;
+  }
+  createStartLayout();
+  drawKeyboard();
+});
