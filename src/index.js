@@ -6,8 +6,12 @@ import {
 } from './utils/keyHighLighters.js';
 
 export const TIME_DELAY = 700;
-const roundCounter = 1;
+let roundCounter = 1;
+let repeatCounter = 0;
 let isKeyboardActive = false;
+let isReadyToListenUser = false;
+let stringToGuess = '';
+let isFinished = false;
 
 function createStartLayout() {
   const title = document.createElement('h1');
@@ -64,14 +68,21 @@ function createStartLayout() {
   const repeatButton = document.createElement('button');
   repeatButton.id = 'repeat';
   repeatButton.textContent = 'Repeat the sequence';
-  // repeatButton.addEventListener('click', repeatGame);
+  repeatButton.addEventListener('click', repeatSequence);
   repeatButton.className = 'hidden';
   gameContainer.appendChild(repeatButton);
+
+  const nextRound = document.createElement('button');
+  nextRound.id = 'nextRound';
+  nextRound.textContent = 'Next round';
+  // nextRound.addEventListener('click', moveToTheNextRound);
+  nextRound.className = 'hidden';
+  gameContainer.appendChild(nextRound);
 
   const newGameButton = document.createElement('button');
   newGameButton.id = 'newGame';
   newGameButton.textContent = 'New game';
-  // newGameButton.addEventListener('click', startGame);
+  newGameButton.addEventListener('click', startNewGame);
   newGameButton.className = 'hidden';
   gameContainer.appendChild(newGameButton);
 
@@ -81,7 +92,12 @@ function createStartLayout() {
   round.className = 'hidden';
   gameContainer.appendChild(round);
 
-  document.body.append(title, gameContainer);
+  const message = document.createElement('p');
+  message.id = 'message';
+  // message.textContent = `Round dddddddddddddddddd dddddddddd ddddddddddddd ${roundCounter}`;
+  message.className = 'hidden';
+
+  document.body.append(title, gameContainer, message);
 }
 
 let keyClickHandlers = [];
@@ -98,6 +114,7 @@ function addHandlers() {
       if (isKeyboardActive) {
         output.value += key.textContent;
         highLightElement(key, 'user');
+        checkIfStringsAreEqual(stringToGuess, output.value);
       }
     };
     key.addEventListener('click', clickHandler);
@@ -114,6 +131,8 @@ function addHandlers() {
         output.value += key;
         isKeyPressed = true;
         highLightElement(button, 'user');
+
+        checkIfStringsAreEqual(stringToGuess, output.value);
       }
     }
   };
@@ -254,6 +273,16 @@ function toggleDisableSelect(flag) {
   difficulty.disabled = flag;
 }
 
+function toggleDisableRepeatButton(flag) {
+  const repeatButton = document.querySelector('#repeat');
+  repeatButton.disabled = flag;
+}
+
+export function toggleDisableNewGameButton(flag) {
+  const newGameButton = document.querySelector('#newGame');
+  newGameButton.disabled = flag;
+}
+
 function toggleElementVisibility(id) {
   const element = document.querySelector(id);
   if (element.classList.contains('hidden')) {
@@ -263,14 +292,17 @@ function toggleElementVisibility(id) {
   }
 }
 
-// function addCurrentLevelIndicator(level = 1) {
-//
-// }
+function startNewGame() {
+  roundCounter = 1;
+  repeatCounter = 0;
+  startGame();
+}
 
 function startGame() {
   const difficulty = document.querySelector('#difficulty').value;
-  const stringToGuess = generateRandomString(difficulty, 3).split('');
+  stringToGuess = generateRandomString(difficulty, roundCounter).split('');
 
+  isReadyToListenUser = false;
   clearOutputField();
   toggleDisableSelect(true);
   toggleDisableStartButton();
@@ -282,14 +314,86 @@ function startGame() {
   toggleElementVisibility('#round');
 
   toggleDisableKeyboard(false);
+  toggleDisableNewGameButton(true);
+
   highLightCharactersSequentially(stringToGuess);
+  temporaryDisableKeyboardAndClicks();
+}
+
+function temporaryDisableKeyboardAndClicks() {
   setTimeout(
     () => {
       toggleDisableStartButton();
+      toggleDisableNewGameButton(false);
+
       toggleDisableKeyboard(true);
+      isReadyToListenUser = true;
     },
     stringToGuess.length * TIME_DELAY + 300
   );
+}
+
+function updateRoundCounter() {
+  const round = document.querySelector('#round');
+  roundCounter++;
+  if (roundCounter > 5) {
+    roundCounter = 1;
+  }
+  round.textContent = `Round ${roundCounter}`;
+}
+
+function repeatSequence() {
+  repeatCounter++;
+  toggleDisableRepeatButton(true);
+  clearOutputField();
+
+  if (isReadyToListenUser && !isFinished) {
+    highLightCharactersSequentially(stringToGuess);
+    temporaryDisableKeyboardAndClicks();
+  }
+}
+
+function showMessage(text) {
+  const message = document.querySelector('#message');
+  message.textContent = text;
+  toggleElementVisibility('#message');
+  // setTimeout(() => {
+  //   toggleElementVisibility('#message');
+  //   message.textContent = '';
+  // }, 3500);
+}
+
+function checkIfStringsAreEqual(sampleStr, subStr) {
+  const originalString = sampleStr.join('');
+
+  if (originalString.toLowerCase().startsWith(subStr.toLowerCase())) {
+    if (originalString.length === subStr.length) {
+      console.log('good');
+      toggleDisableKeyboard(false);
+      clearOutputField();
+      isFinished = true;
+      updateRoundCounter();
+      // startGame();
+      toggleElementVisibility('#repeat');
+      toggleElementVisibility('#nextRound');
+      showMessage('You win!!! Press Next round button to continue');
+    }
+  } else {
+    // repeatCounter++;
+    toggleDisableKeyboard(false);
+    clearOutputField();
+    console.log(repeatCounter);
+    if (repeatCounter >= 1) {
+      console.log('not ok');
+      isFinished = true;
+      showMessage('You lose. Press New game to play again');
+    } else {
+      clearOutputField();
+      showMessage(
+        'You lose. Try one more time. Press Repeat the sequence button to continue'
+      );
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

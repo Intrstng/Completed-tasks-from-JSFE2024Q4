@@ -16,6 +16,7 @@ body {
     background-repeat: no-repeat;
     height: 100vh;
     overflow: hidden;
+    position: relative;
 }
 h1 {
     margin: 20vh 0 0;
@@ -70,8 +71,8 @@ h1 {
 }
 #output {
     margin: 0 auto;
-    padding-left: 1rem;
-    width: 100%;
+    padding: 0 1rem;
+    width: 92%;
     height: 50px;
     font-size: 24px;
     color: rgba(8, 83, 231, 0.9);
@@ -92,7 +93,8 @@ h1 {
 }
 #startButton,
 #repeat,
-#newGame {
+#newGame,
+#nextRound {
     display: block;
     margin: 15px auto;
     padding: 10px 20px;
@@ -155,10 +157,45 @@ label {
     right: 0;
     background-color: rgba(255, 234, 0, 0.8);
 }
+#repeat:disabled,
+#newGame:disabled{
+    opacity: 0.5;
+}
+#nextRound {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    background-color: rgba(232, 89, 12, 0.85);
+}
 #round {
     margin: 0.8rem 0;
     text-align: center;
-    color: #f0f0f0;
+    color: rgba(232, 89, 12, 0.85);
     text-transform: uppercase;
     letter-spacing: 2px;
+}
+#message {
+    display: flex;
+    padding: 1rem;
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 200px;
+    width: 100%;
+    height: 120px;
+    border: 1px solid grey;
+    border-radius: 1rem;
+    background-color: rgba(240, 240, 240, 0.7);
+    line-height: 1.5rem;
+    letter-spacing: 2px;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: "Calibri Light", serif;
+    text-transform: uppercase;
+    color: rgb(62, 117, 37);
+}
+.lose {
+    color: rgba(197, 9, 9);
 }
