@@ -75,7 +75,7 @@ function createStartLayout() {
   const nextRound = document.createElement('button');
   nextRound.id = 'nextRound';
   nextRound.textContent = 'Next round';
-  // nextRound.addEventListener('click', moveToTheNextRound);
+  nextRound.addEventListener('click', moveToTheNextRound);
   nextRound.className = 'hidden';
   gameContainer.appendChild(nextRound);
 
@@ -295,6 +295,7 @@ function toggleElementVisibility(id) {
 function startNewGame() {
   roundCounter = 1;
   repeatCounter = 0;
+  hideMessage();
   startGame();
 }
 
@@ -320,6 +321,16 @@ function startGame() {
   temporaryDisableKeyboardAndClicks();
 }
 
+function moveToTheNextRound() {
+  hideMessage();
+  startGame();
+
+  toggleElementVisibility('#output');
+  toggleElementVisibility('#startButton');
+  toggleElementVisibility('#nextRound');
+  toggleElementVisibility('#newGame');
+}
+
 function temporaryDisableKeyboardAndClicks() {
   setTimeout(
     () => {
@@ -337,15 +348,23 @@ function updateRoundCounter() {
   const round = document.querySelector('#round');
   roundCounter++;
   if (roundCounter > 5) {
+    console.log('wwwwwwwiiiiiiiinnnnn!!!!!!');
     roundCounter = 1;
   }
   round.textContent = `Round ${roundCounter}`;
+}
+
+function hideMessage() {
+  const message = document.querySelector('#message');
+  message.textContent = '';
+  message.classList.add('hidden');
 }
 
 function repeatSequence() {
   repeatCounter++;
   toggleDisableRepeatButton(true);
   clearOutputField();
+  hideMessage();
 
   if (isReadyToListenUser && !isFinished) {
     highLightCharactersSequentially(stringToGuess);
@@ -357,10 +376,6 @@ function showMessage(text) {
   const message = document.querySelector('#message');
   message.textContent = text;
   toggleElementVisibility('#message');
-  // setTimeout(() => {
-  //   toggleElementVisibility('#message');
-  //   message.textContent = '';
-  // }, 3500);
 }
 
 function checkIfStringsAreEqual(sampleStr, subStr) {
@@ -373,13 +388,11 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
       clearOutputField();
       isFinished = true;
       updateRoundCounter();
-      // startGame();
       toggleElementVisibility('#repeat');
       toggleElementVisibility('#nextRound');
       showMessage('You win!!! Press Next round button to continue');
     }
   } else {
-    // repeatCounter++;
     toggleDisableKeyboard(false);
     clearOutputField();
     console.log(repeatCounter);
