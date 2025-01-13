@@ -34,26 +34,28 @@ body {
     gap: 4px;
     /*margin-top: 20px;*/
 }
-/* <- Temporary solution */
-
 .key {
     padding: 20px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     text-align: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.25s;
 }
-.key:hover {
-    background-color: #ddd;
-}
-.key:active {
-    color: #f0f0f0;
-    background-color: rgba(8, 83, 231, 0.9);
+.key:not(.active-pc):hover {
+    transform: scale(1.05);
 }
 .active {
     color: #f0f0f0;
+    background-color: rgba(231, 8, 146, 0.9);
+}
+.active-user {
+    color: #f0f0f0;
     background-color: rgba(8, 83, 231, 0.9);
+}
+.active-pc {
+    color: #f0f0f0;
+    background-color: rgba(231, 8, 146, 0.9);
 }
 #output {
     width: 20%;
@@ -63,17 +65,19 @@ body {
 }
 #gameContainer {
 }
-button {
+#startButton {
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 1rem;
     cursor: pointer;
     border: none;
     border-radius: 5px;
     background-color: #4CAF50;
     color: white;
+    letter-spacing: 1px;
+    font-weight: bold;
     transition: background-color 0.3s;
 }
-button:hover {
+#startButton:hover {
     background-color: #45a049;
 }
 select {
@@ -83,7 +87,7 @@ select {
     border-radius: 5px;
     border: 1px solid #ccc;
 }
-label, select, button {
+label, select, #startButton {
     display: block;
     margin: 10px auto;
 }
@@ -92,4 +96,8 @@ label {
 }
 .keyButtonBlank {
     visibility: hidden;
+}
+#startButton:disabled {
+    background-color: orange;
+    opacity: 0.5;
 }

@@ -1,5 +1,12 @@
 import { keysDigit, keysLetter } from './keyboard.js';
 import { generateRandomString } from './utils/generateRandomString.js';
+import {
+  highLightCharactersSequentially,
+  highLightElement,
+} from './utils/keyHighLighters.js';
+
+export const TIME_DELAY = 700;
+let isKeyboardActive = false;
 
 function createStartLayout() {
   const title = document.createElement('h1');
@@ -27,6 +34,7 @@ function createStartLayout() {
 
   select.addEventListener('change', () => {
     select.blur();
+    toggleDisableKeyboard(false);
     removeKeyHandlers();
     removeKeydownHandler();
     removeKeyUpHandler();
@@ -58,7 +66,10 @@ function addHandlers() {
 
   keys.forEach(key => {
     const clickHandler = () => {
-      output.value += key.textContent;
+      if (isKeyboardActive) {
+        output.value += key.textContent;
+        highLightElement(key, 'user');
+      }
     };
     key.addEventListener('click', clickHandler);
     keyClickHandlers.push({ key, clickHandler });
@@ -66,18 +77,15 @@ function addHandlers() {
 
   keydownHandler = event => {
     if (isKeyPressed) return;
+    if (isKeyboardActive) {
+      const key = event.key.toUpperCase();
+      const button = Array.from(keys).find(k => k.textContent === key);
 
-    const key = event.key.toUpperCase();
-    const button = Array.from(keys).find(k => k.textContent === key);
-
-    if (button) {
-      output.value += key; // Adds character to the input field
-      isKeyPressed = true;
-
-      button.classList.add('active');
-      setTimeout(() => {
-        button.classList.remove('active');
-      }, 300);
+      if (button) {
+        output.value += key;
+        isKeyPressed = true;
+        highLightElement(button, 'user');
+      }
     }
   };
 
@@ -110,10 +118,6 @@ function removeKeyUpHandler() {
   }
 }
 
-function startGame() {
-  console.log('Start!');
-}
-
 function drawKeyboard(value = 'easy') {
   let currentDigitKeys = null;
   let currentLetterKeys = null;
@@ -142,10 +146,10 @@ function drawKeyboard(value = 'easy') {
 
   if (currentDigitKeys) {
     currentDigitKeys.forEach(key => {
-      const keyButton = document.createElement('div');
+      const keyButton = document.createElement('button');
       keyButton.classList.add('key', 'digit');
       keyButton.textContent = key.char;
-      keyButton.dataset.charCode = key.charCode;
+      keyButton.dataset.char = key.char;
 
       keyboardDigit.append(keyButton);
     });
@@ -160,11 +164,11 @@ function drawKeyboard(value = 'easy') {
     row_3.classList.add('row', 'row-3');
 
     for (let i = 0; i <= currentLetterKeys.length; i++) {
-      const keyButton = document.createElement('div');
+      const keyButton = document.createElement('button');
       keyButton.classList.add('key', 'letter');
       console.log(currentLetterKeys[i]);
       keyButton.textContent = currentLetterKeys[i]?.char;
-      keyButton.dataset.charCode = currentLetterKeys[i]?.charCode;
+      keyButton.dataset.char = currentLetterKeys[i]?.char.toLowerCase();
 
       if (i >= 0 && i < 10) {
         row_1.append(keyButton);
@@ -209,4 +213,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
 createStartLayout();
 
-generateRandomString('medium', 5);
+function toggleDisableStartButton() {
+  const button = document.querySelector('#startButton');
+  button.disabled = !button.disabled;
+}
+
+function toggleDisableKeyboard(flag) {
+  isKeyboardActive = flag;
+
+  const keyboardKeys = document.querySelectorAll('.key');
+  keyboardKeys.forEach(key => {
+    key.disabled = !key.disabled;
+  });
+}
+
+function startGame() {
+  const difficulty = document.querySelector('#difficulty').value;
+  const stringToGuess = generateRandomString(difficulty, 3).split('');
+
+  clearOutputField();
+  toggleDisableStartButton();
+  toggleDisableKeyboard(false);
+  highLightCharactersSequentially(stringToGuess);
+  setTimeout(
+    () => {
+      toggleDisableStartButton();
+      toggleDisableKeyboard(true);
+    },
+    stringToGuess.length * TIME_DELAY + 300
+  );
+}
