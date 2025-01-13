@@ -1,4 +1,4 @@
-import { keysCombined, keysDigit, keysLetter } from './keyboard.js';
+import { keysDigit, keysLetter } from './keyboard.js';
 
 function createStartLayout() {
   const title = document.createElement('h1');
@@ -28,6 +28,7 @@ function createStartLayout() {
     select.blur();
     removeKeyHandlers();
     removeKeydownHandler();
+    removeKeyUpHandler();
     drawKeyboard(select.value);
   });
 
@@ -42,17 +43,17 @@ function createStartLayout() {
   output.setAttribute('type', 'text');
   output.readOnly = true;
 
-  document.body.append(title);
-  document.body.append(gameContainer);
-  document.body.append(output);
+  document.body.append(title, gameContainer, output);
 }
 
 let keyClickHandlers = [];
 let keydownHandler;
+let keyupHandler;
 
 function addHandlers() {
   const output = document.getElementById('output');
   const keys = document.querySelectorAll('.key');
+  let isKeyPressed = false;
 
   keys.forEach(key => {
     const clickHandler = () => {
@@ -63,13 +64,21 @@ function addHandlers() {
   });
 
   keydownHandler = event => {
+    if (isKeyPressed) return;
+
     const key = event.key.toUpperCase();
     if (Array.from(keys).some(k => k.textContent === key)) {
-      output.value += key;
+      output.value += key; // Adds character to the input field
+      isKeyPressed = true;
     }
   };
 
+  keyupHandler = () => {
+    isKeyPressed = false;
+  };
+
   document.addEventListener('keydown', keydownHandler);
+  document.addEventListener('keyup', keyupHandler);
 }
 
 function removeKeyHandlers() {
@@ -86,48 +95,99 @@ function removeKeydownHandler() {
   }
 }
 
+function removeKeyUpHandler() {
+  if (keyupHandler) {
+    document.removeEventListener('keyup', keyupHandler);
+    keyupHandler = null;
+  }
+}
+
 function startGame() {
   console.log('Start!');
 }
 
 function drawKeyboard(value = 'easy') {
-  let keys;
-  const keyboard = document.createElement('div');
-  keyboard.id = 'keyboard';
+  let currentDigitKeys = null;
+  let currentLetterKeys = null;
+
+  const keyboardDigit = document.createElement('div');
+  const keyboardLetter = document.createElement('div');
+
+  keyboardDigit.id = 'keyboardDigit';
+  keyboardLetter.id = 'keyboardLetter';
 
   switch (value) {
     case 'easy':
-      keys = keysDigit;
+      currentDigitKeys = keysDigit;
       break;
     case 'medium':
-      keys = keysLetter;
+      currentLetterKeys = keysLetter;
       break;
     case 'hard':
-      keys = keysCombined;
+      currentDigitKeys = keysDigit;
+      currentLetterKeys = keysLetter;
       break;
     default:
       console.error('Unknown difficulty level entered:', value);
       break;
   }
 
-  keys.forEach(key => {
-    const keyButton = document.createElement('div');
-    keyButton.className = 'key';
-    keyButton.textContent = key.char;
-    keyButton.dataset.charCode = key.charCode;
-    keyboard.append(keyButton);
-  });
+  if (currentDigitKeys) {
+    currentDigitKeys.forEach(key => {
+      const keyButton = document.createElement('div');
+      keyButton.classList.add('key', 'digit');
+      keyButton.textContent = key.char;
+      keyButton.dataset.charCode = key.charCode;
 
-  const keyboardOnScreen = document.querySelector('#keyboard');
+      keyboardDigit.append(keyButton);
+    });
+  }
+
+  if (currentLetterKeys) {
+    const row_1 = document.createElement('div');
+    const row_2 = document.createElement('div');
+    const row_3 = document.createElement('div');
+    row_1.classList.add('row', 'row-1');
+    row_2.classList.add('row', 'row-2');
+    row_3.classList.add('row', 'row-3');
+
+    for (let i = 0; i <= currentLetterKeys.length; i++) {
+      const keyButton = document.createElement('div');
+      keyButton.classList.add('key', 'letter');
+      console.log(currentLetterKeys[i]);
+      keyButton.textContent = currentLetterKeys[i]?.char;
+      keyButton.dataset.charCode = currentLetterKeys[i]?.charCode;
+
+      if (i >= 0 && i < 10) {
+        row_1.append(keyButton);
+      }
+
+      if (i >= 10 && i <= 18) {
+        row_2.append(keyButton);
+      }
+
+      if (i >= 19 && i <= 25) {
+        row_3.append(keyButton);
+      }
+    }
+    keyboardLetter.append(row_1, row_2, row_3);
+  }
+
+  updateKeyboardOnScreen('#keyboardDigit', keyboardDigit);
+  updateKeyboardOnScreen('#keyboardLetter', keyboardLetter);
+
+  clearOutputField();
+  addHandlers();
+}
+
+function updateKeyboardOnScreen(id, keyboard) {
+  const keyboardOnScreen = document.querySelector(id);
   if (!keyboardOnScreen) {
     document.body.append(keyboard);
   } else {
     keyboardOnScreen.innerHTML = '';
     keyboardOnScreen.append(...keyboard.childNodes);
   }
-
-  clearOutputField();
-  addHandlers();
 }
 
 function clearOutputField() {

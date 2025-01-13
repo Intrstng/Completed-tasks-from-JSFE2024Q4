@@ -10,12 +10,32 @@ body {
     align-items: center;
     margin: 50px;
 }
-#keyboard {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 10px;
-    margin-top: 20px;
+
+/* Temporary solution -> */
+#keyboardDigit {
+    margin-top: 30px;
 }
+#keyboardDigit,
+.row-1,
+.row-2,
+.row-3 {
+    /*display: grid;*/
+    /*grid-template-columns: repeat(10, 1fr);*/
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+#keyboardLetter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    /*margin-top: 20px;*/
+}
+/* <- Temporary solution */
+
 .key {
     padding: 20px;
     background-color: #f0f0f0;
@@ -61,4 +81,7 @@ label, select, button {
 }
 label {
     font-size: 1.5rem;
+}
+.keyButtonBlank {
+    visibility: hidden;
 }
