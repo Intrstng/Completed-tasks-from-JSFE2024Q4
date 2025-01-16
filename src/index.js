@@ -94,7 +94,6 @@ function createStartLayout() {
 
   const message = document.createElement('p');
   message.id = 'message';
-  // message.textContent = `Round dddddddddddddddddd dddddddddd ddddddddddddd ${roundCounter}`;
   message.className = 'hidden';
 
   document.body.append(title, gameContainer, message);
@@ -254,9 +253,9 @@ function clearOutputField() {
   output.value = '';
 }
 
-function toggleDisableStartButton() {
+function toggleDisableStartButton(flag) {
   const button = document.querySelector('#startButton');
-  button.disabled = !button.disabled;
+  button.disabled = flag;
 }
 
 function toggleDisableKeyboard(flag) {
@@ -264,7 +263,7 @@ function toggleDisableKeyboard(flag) {
 
   const keyboardKeys = document.querySelectorAll('.key');
   keyboardKeys.forEach(key => {
-    key.disabled = !key.disabled;
+    key.disabled = !flag;
   });
 }
 
@@ -306,7 +305,7 @@ function startGame() {
   isReadyToListenUser = false;
   clearOutputField();
   toggleDisableSelect(true);
-  toggleDisableStartButton();
+  toggleDisableStartButton(true);
 
   toggleElementVisibility('#output');
   toggleElementVisibility('#startButton');
@@ -322,10 +321,16 @@ function startGame() {
 }
 
 function moveToTheNextRound() {
+  const round = document.querySelector('#round');
+  round.textContent = `Round ${roundCounter}`;
+
   hideMessage();
   startGame();
+  repeatCounter = 0;
 
+  toggleDisableRepeatButton(false);
   toggleElementVisibility('#output');
+  toggleElementVisibility('#round');
   toggleElementVisibility('#startButton');
   toggleElementVisibility('#nextRound');
   toggleElementVisibility('#newGame');
@@ -334,7 +339,7 @@ function moveToTheNextRound() {
 function temporaryDisableKeyboardAndClicks() {
   setTimeout(
     () => {
-      toggleDisableStartButton();
+      toggleDisableStartButton(false);
       toggleDisableNewGameButton(false);
 
       toggleDisableKeyboard(true);
@@ -342,15 +347,6 @@ function temporaryDisableKeyboardAndClicks() {
     },
     stringToGuess.length * TIME_DELAY + 300
   );
-}
-
-function updateRoundCounter() {
-  const round = document.querySelector('#round');
-  roundCounter++;
-  if (roundCounter > 5) {
-    roundCounter = 1;
-  }
-  round.textContent = `Round ${roundCounter}`;
 }
 
 function hideMessage() {
@@ -382,27 +378,37 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
 
   if (originalString.toLowerCase().startsWith(subStr.toLowerCase())) {
     if (originalString.length === subStr.length) {
-      console.log('good');
       toggleDisableKeyboard(false);
       clearOutputField();
       isFinished = true;
-      updateRoundCounter();
+
+      // Actions for the final level
+      roundCounter++;
+      if (roundCounter > 5) {
+        showMessage(
+          'YOU ARE A WINNER!!! Congratulations! Click the ‘New Game’ button to start the game from the beginning'
+        );
+        roundCounter = 1;
+        return;
+      }
+
       toggleElementVisibility('#repeat');
       toggleElementVisibility('#nextRound');
-      showMessage('You win!!! Press Next round button to continue');
+      showMessage(
+        'You win this round!!! Click ‘Next round‘ button to continue'
+      );
     }
   } else {
     toggleDisableKeyboard(false);
     clearOutputField();
     console.log(repeatCounter);
     if (repeatCounter >= 1) {
-      console.log('not ok');
       isFinished = true;
-      showMessage('You lose. Press New game to play again');
+      showMessage('You lose. Click ‘New game‘ button to play again');
     } else {
       clearOutputField();
       showMessage(
-        'You lose. Try one more time. Press Repeat the sequence button to continue'
+        'You lose. Try one more time. Click ‘Repeat the sequence‘ button to continue'
       );
     }
   }
