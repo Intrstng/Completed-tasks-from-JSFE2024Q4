@@ -348,20 +348,20 @@ function moveToTheNextRound() {
 
 function temporaryDisableKeyboardAndClicks() {
   setTimeout(
-    () => {
-      toggleDisableStartButton(false);
-      toggleDisableNewGameButton(false);
+      () => {
+        toggleDisableStartButton(false);
+        toggleDisableNewGameButton(false);
 
-      if (repeatCounter < 1) {
-        toggleDisableRepeatButton(false);
-      } else {
-        toggleDisableRepeatButton(true);
-      }
+        if (repeatCounter < 1) {
+          toggleDisableRepeatButton(false);
+        } else {
+          toggleDisableRepeatButton(true);
+        }
 
-      toggleDisableKeyboard(true);
-      isReadyToListenUser = true;
-    },
-    stringToGuess.length * TIME_DELAY + 300
+        toggleDisableKeyboard(true);
+        isReadyToListenUser = true;
+      },
+      stringToGuess.length * TIME_DELAY + 300
   );
 }
 
@@ -409,7 +409,7 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
       roundCounter++;
       if (roundCounter > 5) {
         showMessage(
-          'YOU ARE A WINNER!!! Congratulations! Click the ‘New Game’ button to start the game from the beginning'
+            'YOU ARE A WINNER!!! Congratulations! Click the ‘New Game’ button to start the game from the beginning'
         );
         isFinished = true;
         roundCounter = 1;
@@ -420,7 +420,7 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
       toggleElementVisibility('#repeat');
       toggleElementVisibility('#nextRound');
       showMessage(
-        'You win this round!!! Click ‘Next round‘ button to continue'
+          'You win this round!!! Click ‘Next round‘ button to continue'
       );
     }
   } else {
@@ -432,7 +432,7 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
     } else {
       highLightOutputField('lose');
       showMessage(
-        'You lose. Try one more time. Click ‘Repeat the sequence‘ button to continue'
+          'You lose. Try one more time. Click ‘Repeat the sequence‘ button to continue'
       );
     }
   }
