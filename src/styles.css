@@ -196,6 +196,12 @@ label {
     text-transform: uppercase;
     color: rgb(62, 117, 37);
 }
+.success {
+    border: 1px solid #f0f0f0 !important;
+    color: rgba(100, 95, 95, 0.9) !important;
+    background-color: rgba(212, 225, 24, 0.5) !important;
+}
 .lose {
-    color: rgba(197, 9, 9);
+    color: #f0f0f0 !important;
+    background-color: rgba(255, 0, 0, 0.6) !important;
 }

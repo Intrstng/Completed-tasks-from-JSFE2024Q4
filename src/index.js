@@ -10,8 +10,11 @@ let roundCounter = 1;
 let repeatCounter = 0;
 let isKeyboardActive = false;
 let isReadyToListenUser = false;
-let stringToGuess = '';
 let isFinished = false;
+let stringToGuess = '';
+let keyClickHandlers = [];
+let keydownHandler;
+let keyupHandler;
 
 function createStartLayout() {
   const title = document.createElement('h1');
@@ -99,10 +102,6 @@ function createStartLayout() {
   document.body.append(title, gameContainer, message);
 }
 
-let keyClickHandlers = [];
-let keydownHandler;
-let keyupHandler;
-
 function addHandlers() {
   const output = document.getElementById('output');
   const keys = document.querySelectorAll('.key');
@@ -130,7 +129,6 @@ function addHandlers() {
         output.value += key;
         isKeyPressed = true;
         highLightElement(button, 'user');
-
         checkIfStringsAreEqual(stringToGuess, output.value);
       }
     }
@@ -295,7 +293,19 @@ function startNewGame() {
   roundCounter = 1;
   repeatCounter = 0;
   hideMessage();
-  startGame();
+  isReadyToListenUser = false;
+  isFinished = false;
+  clearOutputField();
+  toggleDisableSelect(false);
+  toggleDisableStartButton(false);
+  document.querySelector('#output').classList.add('hidden');
+  document.querySelector('#repeat').classList.add('hidden');
+  document.querySelector('#newGame').classList.add('hidden');
+  document.querySelector('#round').classList.add('hidden');
+  document.querySelector('#nextRound').classList.add('hidden');
+  document.querySelector('#startButton').classList.remove('hidden');
+  const round = document.querySelector('#round');
+  round.textContent = `Round ${roundCounter}`;
 }
 
 function startGame() {
@@ -304,9 +314,6 @@ function startGame() {
 
   isReadyToListenUser = false;
   clearOutputField();
-  toggleDisableSelect(true);
-  toggleDisableStartButton(true);
-
   toggleElementVisibility('#output');
   toggleElementVisibility('#startButton');
   toggleElementVisibility('#repeat');
@@ -315,6 +322,9 @@ function startGame() {
 
   toggleDisableKeyboard(false);
   toggleDisableNewGameButton(true);
+  toggleDisableSelect(true);
+  toggleDisableStartButton(true);
+  toggleDisableRepeatButton(true);
 
   highLightCharactersSequentially(stringToGuess);
   temporaryDisableKeyboardAndClicks();
@@ -328,7 +338,7 @@ function moveToTheNextRound() {
   startGame();
   repeatCounter = 0;
 
-  toggleDisableRepeatButton(false);
+  toggleDisableRepeatButton(true);
   toggleElementVisibility('#output');
   toggleElementVisibility('#round');
   toggleElementVisibility('#startButton');
@@ -341,6 +351,12 @@ function temporaryDisableKeyboardAndClicks() {
     () => {
       toggleDisableStartButton(false);
       toggleDisableNewGameButton(false);
+
+      if (repeatCounter < 1) {
+        toggleDisableRepeatButton(false);
+      } else {
+        toggleDisableRepeatButton(true);
+      }
 
       toggleDisableKeyboard(true);
       isReadyToListenUser = true;
@@ -360,7 +376,6 @@ function repeatSequence() {
   toggleDisableRepeatButton(true);
   clearOutputField();
   hideMessage();
-
   if (isReadyToListenUser && !isFinished) {
     highLightCharactersSequentially(stringToGuess);
     temporaryDisableKeyboardAndClicks();
@@ -373,22 +388,32 @@ function showMessage(text) {
   toggleElementVisibility('#message');
 }
 
+function highLightOutputField(status) {
+  const output = document.querySelector('#output');
+  output.classList.add(status);
+
+  setTimeout(() => {
+    output.classList.remove(status);
+    clearOutputField();
+  }, 1000);
+}
+
 function checkIfStringsAreEqual(sampleStr, subStr) {
   const originalString = sampleStr.join('');
 
   if (originalString.toLowerCase().startsWith(subStr.toLowerCase())) {
     if (originalString.length === subStr.length) {
       toggleDisableKeyboard(false);
-      clearOutputField();
-      isFinished = true;
-
+      highLightOutputField('success');
       // Actions for the final level
       roundCounter++;
       if (roundCounter > 5) {
         showMessage(
           'YOU ARE A WINNER!!! Congratulations! Click the ‘New Game’ button to start the game from the beginning'
         );
+        isFinished = true;
         roundCounter = 1;
+        toggleDisableRepeatButton(true);
         return;
       }
 
@@ -400,13 +425,12 @@ function checkIfStringsAreEqual(sampleStr, subStr) {
     }
   } else {
     toggleDisableKeyboard(false);
-    clearOutputField();
-    console.log(repeatCounter);
+    highLightOutputField('lose');
     if (repeatCounter >= 1) {
       isFinished = true;
       showMessage('You lose. Click ‘New game‘ button to play again');
     } else {
-      clearOutputField();
+      highLightOutputField('lose');
       showMessage(
         'You lose. Try one more time. Click ‘Repeat the sequence‘ button to continue'
       );
