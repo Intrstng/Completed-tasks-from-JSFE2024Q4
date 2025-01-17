@@ -1,5 +1,7 @@
 import { TIME_DELAY } from '../index.js';
+import { clearOutputField } from './elementVisibilityHandlers.js';
 
+// Keyboard highlight
 export function highLightElement(element, control) {
   let classActive;
 
@@ -33,4 +35,15 @@ export function highLightCharactersSequentially(chars) {
       clearInterval(interval);
     }
   }, TIME_DELAY);
+}
+
+// Output field highlight
+export function highLightOutputField(status) {
+  const output = document.querySelector('#output');
+  output.classList.add(status);
+
+  setTimeout(() => {
+    output.classList.remove(status);
+    clearOutputField();
+  }, 1000);
 }
