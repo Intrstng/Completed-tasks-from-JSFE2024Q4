@@ -4,8 +4,35 @@
   "description": "Nonograms game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve -- --devtool inline-source-map",
+    "build": "webpack --mode production",
+    "lint": "npx eslint src",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier src --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix"
   },
   "author": "Intrstng",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@eslint/js": "^9.18.0",
+    "babel-loader": "^9.2.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "favicons-webpack-plugin": "^6.0.1",
+    "globals": "^15.14.0",
+    "html-webpack-plugin": "^5.6.3",
+    "nodemon": "^3.1.9",
+    "prettier": "3.4.2",
+    "sass": "^1.83.4",
+    "sass-loader": "^16.0.4",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  }
 }
