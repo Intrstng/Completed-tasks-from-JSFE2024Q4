@@ -1,4 +1,4 @@
-const templates = [
+export const templates = [
   {
     size: 5,
     name: 'Dinosaur',
@@ -313,5 +313,20 @@ const templates = [
       [ 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1 ],
       [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
     ],
+  },
+]
+
+export const optionsData = [
+  {
+    size: 5,
+    name: 'Easy',
+  },
+  {
+    size: 10,
+    name: 'Medium',
+  },
+  {
+    size: 15,
+    name: 'Hard',
   },
 ]
