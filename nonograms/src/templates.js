@@ -3,7 +3,7 @@ export const templates = [
     size: 5,
     name: 'Dinosaur',
     clues: [
-        [[1], [3], [2], [5], [1]],
+            [[1], [3], [2], [5], [1]],
         [[2], [1], [3], [3], [2,1]]
     ],
     playboard: [
