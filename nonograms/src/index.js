@@ -5,6 +5,7 @@ import soundOnImg from '../assets/sound-on.png';
 import soundOffImg from '../assets/sound-off.png';
 import lightImg from '../assets/light.png';
 import darkImg from '../assets/dark.png';
+import { getRandomInteger } from './utils/getRandomInteger';
 
 
 function createGameLayout() {
@@ -68,16 +69,7 @@ function createGameLayout() {
   templateSelectorWrapper.className = 'template-select-wrapper';
 
   const templateSelector = document.createElement('select');
-  sizeSelector.id = 'templateSelector';
-
-  templates.forEach(template => {
-    if (template.size === Number(sizeSelector.value)) {
-      const templateOption = document.createElement('option');
-      templateOption.setAttribute('value', template.name);
-      templateOption.textContent = template.name;
-      templateSelector.append(templateOption);
-    }
-  });
+  templateSelector.id = 'templateSelector';
 
   const randomGameButton = document.createElement('button');
   randomGameButton.id = 'randomGameBtn';
@@ -122,7 +114,7 @@ function createGameLayout() {
 
   board.append(header, controls, gameOptions, timer, buttonContainer, playBoard);
   document.body.append(board);
-
+  selectTemplate();
   createGamePlayBoard(playBoard, templates, 'Kettle');
 }
 
@@ -212,4 +204,40 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   container.append(mainBoard);
 }
 
+function addControlsHandlers() {
+  const sizeSelector = document.querySelector('#sizeSelector');
+  sizeSelector.addEventListener('change', selectTemplate);
+
+  const templateSelector = document.querySelector('#templateSelector');
+  templateSelector.addEventListener('change', ()=>{});
+
+  const randomGameButton = document.querySelector('#randomGameBtn');
+  randomGameButton.addEventListener('click', selectRandomTemplate);
+}
+
+function selectTemplate() {
+  const sizeSelector = document.querySelector('#sizeSelector');
+  const templateSelector = document.querySelector('#templateSelector');
+  templateSelector.innerHTML = '';
+
+  templates.forEach(template => {
+    if (template.size === Number(sizeSelector.value)) {
+      const templateOption = document.createElement('option');
+      templateOption.className = 'template-option';
+      templateOption.setAttribute('value', template.name);
+      templateOption.textContent = template.name;
+      templateSelector.append(templateOption);
+    }
+  });
+}
+
+function selectRandomTemplate() {
+  const availableTemplates = document.querySelectorAll('.template-option');
+
+  const randomIndex = getRandomInteger(0, availableTemplates.length - 1);
+  console.log(availableTemplates[randomIndex].value);
+  // return availableTemplates[randomIndex].value;
+}
+
 document.addEventListener('DOMContentLoaded', createGameLayout);
+document.addEventListener('DOMContentLoaded', addControlsHandlers);
