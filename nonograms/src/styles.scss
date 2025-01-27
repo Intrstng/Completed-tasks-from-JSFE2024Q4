@@ -158,8 +158,8 @@ label {
   border: 1px solid #000;
   transition: 0.2s all ease;
 }
-.row-cell:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+.row-cell:hover:not(.highlight) {
+  background-color: rgba(81, 81, 81, 0.4);
 }
 
 .row-cell:active {
@@ -328,4 +328,40 @@ select:focus {
 
 .highlight {
   background-color: black;
+}
+
+/* Row cell cross */
+.row-cell {
+  position: relative;
+  cursor: pointer;
+}
+
+.row-cell::before,
+.row-cell::after {
+  content: "";
+  position: absolute;
+  background-color: black;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+
+.row-cell::before {
+  width: 100%;
+  height: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.row-cell::after {
+  width: 2px;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.cross-visible::before,
+.cross-visible::after {
+  opacity: 1;
 }

@@ -220,16 +220,25 @@ function addControlsHandlers() {
   const randomGameButton = document.querySelector('#randomGameBtn');
   randomGameButton.addEventListener('click', selectRandomTemplate);
 
+  const saveGameButton = document.querySelector('#saveGameBtn');
+  saveGameButton.addEventListener('click', () => {});
+
+  const continueGameButton = document.querySelector('#continueGameBtn');
+  continueGameButton.addEventListener('click', () => {});
+
+  const resetGameButton = document.querySelector('#resetGameBtn');
+  resetGameButton.addEventListener('click', resetGame);
+
+  const showSolutionButton = document.querySelector('#solutionBtn');
+  showSolutionButton.addEventListener('click', () => {});
+
   addHandleCellClick();
 }
 
 function addHandleCellClick() {
   const mainBoard = document.querySelector('.main-board');
-  mainBoard.addEventListener('click', handleCellClick);
-}
-
-function handleCellClick(e) {
-  addCellHandlers(e)
+  mainBoard.addEventListener('click', addCellHandlers);
+  mainBoard.addEventListener('contextmenu', addContextMenuCellHandlers);
 }
 
 function redrawPlayboard() {
@@ -252,7 +261,8 @@ function reselectTemplate() {
 
 function removeHandleCellClick() {
   const mainBoard = document.querySelector('.main-board');
-  mainBoard.removeEventListener('click', handleCellClick);
+  mainBoard.removeEventListener('click', addCellHandlers);
+  mainBoard.removeEventListener('contextmenu', addContextMenuCellHandlers);
 }
 
 function selectInitTemplate() {
@@ -272,16 +282,21 @@ function selectInitTemplate() {
   });
 }
 
-
-
-
 function addCellHandlers(e) {
   let target = e.target.closest('.row-cell');
   if (!target) return;
   highlightCell(target);
 }
 
+function addContextMenuCellHandlers(e) {
+  let target = e.target.closest('.row-cell');
+  if (!target) return;
+  e.preventDefault();
+  crossOutCell(target);
+}
+
 function highlightCell(cell) {
+  cell.classList.remove('cross-visible');
   if (cell.classList.contains('highlight')) {
     cell.classList.remove('highlight');
     currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
@@ -290,7 +305,19 @@ function highlightCell(cell) {
   cell.classList.add('highlight');
   currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 1;
   checkForWin(gamePlayboardToGuess, currentGamePlayboard);
-  // console.log(currentGamePlayboard);
+}
+
+function crossOutCell(cell) {
+  cell.classList.remove('highlight');
+  cell.classList.toggle('cross-visible');
+  currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
+  checkForWin(gamePlayboardToGuess, currentGamePlayboard);
+}
+
+function resetGame() {
+  const sizeSelector = document.querySelector('#sizeSelector');
+  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
+  redrawPlayboard();
 }
 
 function checkForWin(sourcePlayBoard, currentPlayBoard) {
