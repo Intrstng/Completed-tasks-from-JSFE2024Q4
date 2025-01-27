@@ -6,7 +6,10 @@ import soundOffImg from '../assets/sound-off.png';
 import lightImg from '../assets/light.png';
 import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger';
+import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray';
 
+let gamePlayboardToGuess = [];
+let currentGamePlayboard = [];
 
 function createGameLayout() {
   const board = document.createElement('div');
@@ -114,8 +117,8 @@ function createGameLayout() {
 
   board.append(header, controls, gameOptions, timer, buttonContainer, playBoard);
   document.body.append(board);
-  selectTemplate();
-  createGamePlayBoard(playBoard, templates, 'Kettle');
+  selectInitTemplate();
+  createGamePlayBoard(playBoard, templates, templateSelector.value);
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
@@ -124,7 +127,7 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   const templateObject = templates.find(t => t.name === value);
 
   const playBoard = document.querySelector('#playBoard');
-  playBoard.classList.add(`playboard-size-${templateObject.size}`)
+  playBoard.classList.add(`playboard-size-${templateObject.size}`);
 
   const mainBoard = document.createElement('div');
   mainBoard.classList.add('main-board', `size-${templateObject.size}`);
@@ -136,6 +139,8 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
     for (let j = 0; j < templateObject.size; j++) {
       const rowCell = document.createElement('div');
       rowCell.className = 'row-cell';
+      rowCell.dataset.rowIndex = String(i);
+      rowCell.dataset.cellIndex = String(j);
       rowContainer.append(rowCell);
     }
     mainBoard.append(rowContainer);
@@ -202,23 +207,59 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   container.prepend(columnCluesContainer);
   mainBoard.append(rowCluesContainer);
   container.append(mainBoard);
+  gamePlayboardToGuess = templateObject.playboard;
 }
 
 function addControlsHandlers() {
   const sizeSelector = document.querySelector('#sizeSelector');
-  sizeSelector.addEventListener('change', selectTemplate);
+  sizeSelector.addEventListener('change', reselectTemplate);
 
   const templateSelector = document.querySelector('#templateSelector');
-  templateSelector.addEventListener('change', ()=>{});
+  templateSelector.addEventListener('change', redrawPlayboard);
 
   const randomGameButton = document.querySelector('#randomGameBtn');
   randomGameButton.addEventListener('click', selectRandomTemplate);
+
+  addHandleCellClick();
 }
 
-function selectTemplate() {
+function addHandleCellClick() {
+  const mainBoard = document.querySelector('.main-board');
+  mainBoard.addEventListener('click', handleCellClick);
+}
+
+function handleCellClick(e) {
+  addCellHandlers(e)
+}
+
+function redrawPlayboard() {
+  const playBoard = document.querySelector('#playBoard');
+  const sizeSelector = document.querySelector('#sizeSelector');
+  const templateSelector = document.querySelector('#templateSelector');
+  playBoard.innerHTML = '';
+  playBoard.className = '';
+  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
+  createGamePlayBoard(playBoard, templates, templateSelector.value);
+
+  removeHandleCellClick();
+  addHandleCellClick();
+}
+
+function reselectTemplate() {
+  selectInitTemplate();
+  redrawPlayboard();
+}
+
+function removeHandleCellClick() {
+  const mainBoard = document.querySelector('.main-board');
+  mainBoard.removeEventListener('click', handleCellClick);
+}
+
+function selectInitTemplate() {
   const sizeSelector = document.querySelector('#sizeSelector');
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.innerHTML = '';
+  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
 
   templates.forEach(template => {
     if (template.size === Number(sizeSelector.value)) {
@@ -231,12 +272,52 @@ function selectTemplate() {
   });
 }
 
+
+
+
+function addCellHandlers(e) {
+  let target = e.target.closest('.row-cell');
+  if (!target) return;
+  highlightCell(target);
+}
+
+function highlightCell(cell) {
+  if (cell.classList.contains('highlight')) {
+    cell.classList.remove('highlight');
+    currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
+    return;
+  }
+  cell.classList.add('highlight');
+  currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 1;
+  checkForWin(gamePlayboardToGuess, currentGamePlayboard);
+  // console.log(currentGamePlayboard);
+}
+
+function checkForWin(sourcePlayBoard, currentPlayBoard) {
+  if (sourcePlayBoard.length !== currentPlayBoard.length) {
+    return false;
+  }
+  for (let i = 0; i < sourcePlayBoard.length; i++) {
+    if (sourcePlayBoard[i].length !== currentPlayBoard[i].length) {
+      return false;
+    }
+    for (let j = 0; j < sourcePlayBoard[i].length; j++) {
+      if (sourcePlayBoard[i][j] !== currentPlayBoard[i][j]) {
+        return false;
+      }
+    }
+  }
+                  console.log('Win')
+                  return true;
+}
+
 function selectRandomTemplate() {
   const availableTemplates = document.querySelectorAll('.template-option');
 
   const randomIndex = getRandomInteger(0, availableTemplates.length - 1);
-  console.log(availableTemplates[randomIndex].value);
-  // return availableTemplates[randomIndex].value;
+  const templateSelector = document.querySelector('#templateSelector');
+  templateSelector.value = availableTemplates[randomIndex].value;
+  redrawPlayboard();
 }
 
 document.addEventListener('DOMContentLoaded', createGameLayout);
