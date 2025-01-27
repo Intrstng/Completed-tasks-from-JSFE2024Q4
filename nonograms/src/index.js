@@ -51,6 +51,9 @@ function createGameLayout() {
   difficultyLabel.setAttribute('for', 'sizeSelector');
   difficultyLabel.innerText = 'Select size of board and template:';
 
+  const sizeSelectorWrapper = document.createElement('div');
+  sizeSelectorWrapper.className = 'size-select-wrapper';
+
   const sizeSelector = document.createElement('select');
   sizeSelector.id = 'sizeSelector';
 
@@ -60,6 +63,9 @@ function createGameLayout() {
     level.textContent = data.name;
     sizeSelector.append(level);
   })
+
+  const templateSelectorWrapper = document.createElement('div');
+  templateSelectorWrapper.className = 'template-select-wrapper';
 
   const templateSelector = document.createElement('select');
   sizeSelector.id = 'templateSelector';
@@ -78,7 +84,10 @@ function createGameLayout() {
   randomGameButton.textContent = 'Random Game';
   randomGameButton.className = 'game-button';
 
-  gameOptions.append(difficultyLabel, sizeSelector, templateSelector, randomGameButton)
+  sizeSelectorWrapper.append(sizeSelector);
+  templateSelectorWrapper.append(templateSelector);
+
+  gameOptions.append(difficultyLabel, sizeSelectorWrapper, templateSelectorWrapper, randomGameButton)
 
   const timer = document.createElement('p');
   timer.id = 'timer';
@@ -111,24 +120,27 @@ function createGameLayout() {
 
   buttonContainer.append(saveGameButton, continueGameButton, resetGameButton, solutionButton);
 
-  createGamePlayBoard(playBoard, templates, 'Brigantine');
-
   board.append(header, controls, gameOptions, timer, buttonContainer, playBoard);
   document.body.append(board);
+
+  createGamePlayBoard(playBoard, templates, 'Kettle');
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
+  let rowCluesLength = 1;
+  let rowCluesLeftPosition = '';
   const templateObject = templates.find(t => t.name === value);
 
-  container.classList.add(`size-${templateObject.size}`);
+  const playBoard = document.querySelector('#playBoard');
+  playBoard.classList.add(`playboard-size-${templateObject.size}`)
 
   const mainBoard = document.createElement('div');
-  mainBoard.className = 'main-board';
+  mainBoard.classList.add('main-board', `size-${templateObject.size}`);
 
   for (let i = 0; i < templateObject.size; i++) {
     const rowContainer = document.createElement('div');
     rowContainer.className = 'row';
-    rowContainer.style.gridTemplateColumns = `repeat(${templateObject.size}, 30px)`;
+    rowContainer.style.gridTemplateColumns = `repeat(${templateObject.size}, 25px)`;
     for (let j = 0; j < templateObject.size; j++) {
       const rowCell = document.createElement('div');
       rowCell.className = 'row-cell';
@@ -138,7 +150,7 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   }
 
   const columnCluesContainer = document.createElement('div');
-  columnCluesContainer.className = 'column-clues';
+  columnCluesContainer.classList.add('column-clues', `column-clue-size-${templateObject.size}`);
 
   for (let i = 0; i < templateObject.clues[0].length; i++) {
     const columnClueBox = document.createElement('div');
@@ -147,13 +159,17 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
       const columnClueItem = document.createElement('span');
       columnClueItem.className = 'column-clue-item';
       columnClueItem.textContent = templateObject.clues[0][i][j];
+      if (!templateObject.clues[0][i][j]) {
+        templateObject.clues[0][i][j] = 0;
+        columnClueItem.classList.add('hidden');
+      }
       columnClueBox.append(columnClueItem);
     }
     columnCluesContainer.append(columnClueBox);
   }
 
   const rowCluesContainer = document.createElement('div');
-  rowCluesContainer.className = 'row-clues';
+  rowCluesContainer.classList.add('row-clues', `row-clue-size-${templateObject.size}`);
 
   for (let i = 0; i < templateObject.clues[1].length; i++) {
     const rowClueBox = document.createElement('div');
@@ -162,11 +178,38 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
       const rowClueItem = document.createElement('span');
       rowClueItem.className = 'row-clue-item';
       rowClueItem.textContent = templateObject.clues[1][i][j];
+      rowCluesLength = rowCluesLength <= templateObject.clues[1][i].length ? templateObject.clues[1][i].length : rowCluesLength;
+      if (!templateObject.clues[1][i][j]) {
+        templateObject.clues[1][i][j] = 0;
+        rowClueItem.classList.add('hidden');
+      }
       rowClueBox.append(rowClueItem);
     }
     rowCluesContainer.append(rowClueBox);
   }
-  container.append(mainBoard, columnCluesContainer, rowCluesContainer);
+
+  switch (rowCluesLength) {
+    case 1:
+      rowCluesLeftPosition = '-29px';
+      break;
+    case 2:
+      rowCluesLeftPosition = '-54px';
+      break;
+    case 3:
+      rowCluesLeftPosition = '-79px';
+      break;
+    case 4:
+      rowCluesLeftPosition = '-104px';
+      break;
+    default:
+      rowCluesLeftPosition = '-29px';
+  }
+
+  rowCluesContainer.style.left = rowCluesLeftPosition;
+
+  container.prepend(columnCluesContainer);
+  mainBoard.append(rowCluesContainer);
+  container.append(mainBoard);
 }
 
 document.addEventListener('DOMContentLoaded', createGameLayout);

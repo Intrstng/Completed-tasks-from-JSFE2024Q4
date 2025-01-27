@@ -11,6 +11,10 @@ body {
   overflow: hidden;
   margin-top: 40px;
   box-sizing: border-box;
+  background-image: url('../assets/wallpaper.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 $body-color: black;
@@ -21,20 +25,28 @@ body {
 
 #board {
   position: relative;
-  background-color: green;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: rgba(0, 128, 0, 0.1);
   border-radius: 30px;
   padding: 20px;
 }
 
 #header {
-  margin: 0 0 10px;
+  margin: 0 0 15px;
+  align-self: flex-start;
+  text-transform: capitalize;
+  font-family: Corbel;
+  color: #d4d4d4;
 }
 
 #controls {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: 10px;
+  gap: 12px;
   position: absolute;
   top: 20px;
   right: 20px;
@@ -45,11 +57,20 @@ body {
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+}
+
+#playBoard.playboard-size-15 {
+  align-self: flex-end;
 }
 
 label {
   display: inline-block;
   max-width: 150px;
+  color: #03400e;
+  font-weight: bold;
+  font-family: Calibri, sans-serif;
+  letter-spacing: 0.5px;
 }
 
 .button-container {
@@ -60,33 +81,36 @@ label {
 }
 
 .controls-button {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
   background-color: transparent;
   cursor: pointer;
+  opacity: 0.6;
   transition: 0.3s all ease;
 }
 
 .controls-button > img {
-  height: 30px;
-  width: 30px;
+  height: 25px;
+  width: 25px;
 }
 
 .controls-button:hover {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .button-container {
   margin-bottom: 20px;
+  //max-width: ;
 }
 
 .game-button {
+  margin-right: 15px;
   background-color: #4CAF50;
-  color: white;
+  color: #ffffff;
   border: none;
   padding: 8px 12px;
   text-align: center;
@@ -98,6 +122,10 @@ label {
   transition: background-color 0.3s;
 }
 
+.game-button:last-child {
+  margin-right: 0;
+}
+
 .game-button:hover {
   background-color: #45a049;
 }
@@ -106,38 +134,49 @@ label {
   background-color: #3e8e41;
 }
 
+#randomGameBtn {
+  margin-right: 0;
+}
+
 .main-board {
+  border: 2px solid #000;
+  position: relative;
 }
 
 .row {
   display: grid;
 }
 
+//.row-cell {
+//  width: 25px;
+//  height: 25px;
+//  border: 0.5px solid #000;
+//}
 .row-cell {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border: 1px solid #000;
+  transition: 0.2s all ease;
+}
+.row-cell:hover {
+  background-color: rgba(107, 107, 107, 0.6);
 }
 
-//#playBoard {
-//  position: relative;
-//}
-
 .size-5 {
-  width: 151px;
-  height: 158px;
+  width: 126.5px;
+  height: 133px;
   border: 2px solid #000;
 }
 
 .size-10 {
-  width: 301px;
-  height: 316px;
+  width: 252px;
+  height: 267px;
   border: 2px solid #000;
 }
 
 .size-15 {
-  width: 451px;
-  height: 474px;
+  width: 376.5px;
+  height: 400.5px;
   border: 2px solid #000;
 }
 
@@ -146,22 +185,139 @@ label {
   justify-content: flex-start;
   flex-wrap: nowrap;
   align-items: stretch;
-  //position: absolute;
-  //top: -100px;
-  //left: 0;
+  border: 3px solid #000;
+  border-right: 2px solid #000;
+  border-bottom: none;
 }
+
+.column-clues.column-clue-size-5 .column-clue-box {
+  width: 24.3px;
+}
+
+.column-clues.column-clue-size-10 .column-clue-box {
+  width: 24.2px;
+}
+
+.column-clues.column-clue-size-15 .column-clue-box {
+  width: 24.1px;
+}
+
 .column-clue-box {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: 30px;
-  border: 1px solid #000;
-
+  width: 24.5px;
+  border-right: 1px solid #000;
 }
-.column-clue-box span {
+
+.column-clue-box:nth-child(5n) {
+  border-right: 2px solid #000;
+}
+
+.column-clue-box:last-child {
+  border-right: 1px solid #000;
+}
+
+.column-clue-item {
   padding: 5px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+}
+
+.row-clues {
+  position: absolute;
+  top: -2px;
+  left: -29px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  align-content: stretch;
+  border: 3px solid #000;
+  border-right: none;
+}
+
+.row-clues.row-clue-size-10 .row-clue-box {
+  height: 25.7px;
+}
+.row-clues.row-clue-size-15 .row-clue-box {
+  height: 25.7px;
+}
+
+.row-clue-box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 25.6px;
+  border-bottom: 1px solid #000;
+}
+
+.row-clue-item {
+  padding: 3px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+}
+
+.row-clue-box:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.row:nth-child(5n) {
+  border-bottom: 1px solid #000;
+}
+.row-clue-box:nth-child(5n) {
+  border-bottom: 2px solid #000;
+}
+.row-clue-box:last-child {
+  border-bottom: none;
+}
+
+.row-cell:nth-child(5n) {
+  border-right: 2px solid #000;
+}
+
+select {
+  width: 95px;
+  padding: 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgba(248, 248, 248, 0.7);
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  appearance: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Custom arrow for the select */
+.size-select-wrapper,
+.template-select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.size-select-wrapper::after,
+.template-select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 13px;
+  color: rgba(6, 95, 24, 0.7);
+  transition: transform 0.3s ease;
 }
