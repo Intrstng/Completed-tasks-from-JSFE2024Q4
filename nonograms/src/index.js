@@ -13,6 +13,7 @@ import { generateModalWindow } from './utils/modalWindow.js';
 let gamePlayboardToGuess = [];
 let currentGamePlayboard = [];
 let mute = false;
+let theme = 'light';
 
 function createGameLayout() {
   const board = document.createElement('div');
@@ -37,6 +38,7 @@ function createGameLayout() {
   soundButton.id ='soundButton';
   soundButton.className = 'controls-button';
   const soundLogo = document.createElement('img');
+  soundLogo.className = 'sound-logo';
   soundLogo.setAttribute('src', soundOnImg);
   soundLogo.setAttribute('alt', 'Sound button');
   soundButton.append(soundLogo);
@@ -45,6 +47,7 @@ function createGameLayout() {
   themeButton.id ='themeButton';
   themeButton.className = 'controls-button';
   const themeLogo = document.createElement('img');
+  themeLogo.classList.add('theme-logo');
   themeLogo.setAttribute('src', lightImg);
   themeLogo.setAttribute('alt', 'Theme button');
   themeButton.append(themeLogo);
@@ -215,6 +218,15 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
 }
 
 function addControlsHandlers() {
+  const scoresButton = document.querySelector('#scoresButton');
+  scoresButton.addEventListener('click', ()=>{});
+
+  const soundButton = document.querySelector('#soundButton');
+  soundButton.addEventListener('click', toggleMuteSound);
+
+  const themeButton = document.querySelector('#themeButton');
+  themeButton.addEventListener('click', toggleTheme);
+
   const sizeSelector = document.querySelector('#sizeSelector');
   sizeSelector.addEventListener('change', reselectTemplate);
 
@@ -237,6 +249,31 @@ function addControlsHandlers() {
   showSolutionButton.addEventListener('click', showSolution);
 
   addHandleCellClick();
+}
+
+function toggleMuteSound() {
+  const soundLogo = document.querySelector('.sound-logo');
+  if (!mute) {
+    soundLogo.setAttribute('src', soundOffImg);
+    soundLogo.classList.add('sound-off');
+  } else {
+    soundLogo.setAttribute('src', soundOnImg);
+    soundLogo.classList.remove('sound-off');
+  }
+  mute = !mute;
+  playSound(audio.toggle.src);
+}
+
+function toggleTheme() {
+  const themeLogo = document.querySelector('.theme-logo');
+  playSound(audio.toggle.src);
+  if (theme === 'light') {
+    theme = 'dark';
+    themeLogo.setAttribute('src', darkImg);
+  } else {
+    theme = 'light';
+    themeLogo.setAttribute('src', lightImg);
+  }
 }
 
 function showSolution() {
