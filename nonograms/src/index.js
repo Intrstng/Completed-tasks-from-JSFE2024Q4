@@ -7,9 +7,11 @@ import lightImg from '../assets/light.png';
 import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray';
+import { audio } from './utils/audio.js';
 
 let gamePlayboardToGuess = [];
 let currentGamePlayboard = [];
+let mute = false;
 
 function createGameLayout() {
   const board = document.createElement('div');
@@ -318,11 +320,13 @@ function highlightCell(cell) {
   cell.classList.remove('cross-visible');
   if (cell.classList.contains('highlight')) {
     cell.classList.remove('highlight');
+    playSound(audio.undoClick.src);
     currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
     checkForWin(gamePlayboardToGuess, currentGamePlayboard);
     return;
   }
   cell.classList.add('highlight');
+  playSound(audio.leftClick.src);
   currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 1;
   checkForWin(gamePlayboardToGuess, currentGamePlayboard);
 }
@@ -330,6 +334,7 @@ function highlightCell(cell) {
 function crossOutCell(cell) {
   cell.classList.remove('highlight');
   cell.classList.toggle('cross-visible');
+  playSound(audio.rightClick.src);
   currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
   checkForWin(gamePlayboardToGuess, currentGamePlayboard);
 }
@@ -372,6 +377,24 @@ async function selectRandomTemplate() {
   templateSelector.value = availableTemplates[randomTemplateIndex].name;
   redrawPlayboard();
 }
+
+function playSound(sound) {
+  if (!mute) {
+    sound.currentTime = 0;
+    sound.play();
+  }
+}
+
+// // Preload audio to cash
+// (function() {
+//   for (let sound in audio) {
+//     if (audio?.[sound]?.src) {
+//       audio[sound].src.play();
+//       audio[sound].src.pause();
+//     }
+//   }
+// })();
+
 
 document.addEventListener('DOMContentLoaded', createGameLayout);
 document.addEventListener('DOMContentLoaded', addControlsHandlers);

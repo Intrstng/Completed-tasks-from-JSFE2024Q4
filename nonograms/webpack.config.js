@@ -11,10 +11,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: 'asset/resource',
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
@@ -31,6 +27,10 @@ module.exports = {
           'css-loader',
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg|mp3|ogg)$/i,
+        type: 'asset/resource',
       },
     ],
   },
