@@ -8,6 +8,7 @@ import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray';
 import { audio } from './utils/audio.js';
+import { generateModalWindow } from './utils/modalWindow.js';
 
 let gamePlayboardToGuess = [];
 let currentGamePlayboard = [];
@@ -360,7 +361,9 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
     }
   }
                   console.log('Win')
-                  return true;
+  const modal = document.getElementById('modal');
+  modal.style.display = 'block';
+                  playSound(audio.win.src);
 }
 
 async function selectRandomTemplate() {
@@ -395,6 +398,6 @@ function playSound(sound) {
 //   }
 // })();
 
-
+generateModalWindow();
 document.addEventListener('DOMContentLoaded', createGameLayout);
 document.addEventListener('DOMContentLoaded', addControlsHandlers);
