@@ -64,6 +64,7 @@ function createGameLayout() {
   optionsData.forEach((data) => {
     const level = document.createElement('option');
     level.setAttribute('value', data.size);
+    level.className = 'size-option';
     level.textContent = data.name;
     sizeSelector.append(level);
   })
@@ -267,7 +268,7 @@ function redrawPlayboard() {
   playBoard.className = '';
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   createGamePlayBoard(playBoard, templates, templateSelector.value);
-
+// console.log(currentGamePlayboard)
   removeHandleCellClick();
   addHandleCellClick();
 }
@@ -357,12 +358,18 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
                   return true;
 }
 
-function selectRandomTemplate() {
-  const availableTemplates = document.querySelectorAll('.template-option');
+async function selectRandomTemplate() {
+  const sizeSelector = document.querySelector('#sizeSelector');
+  const randomSizeIndex = getRandomInteger(0, optionsData.length - 1);
+  const randomSizeValue = optionsData[randomSizeIndex].size;
+  sizeSelector.value = String(randomSizeValue);
 
-  const randomIndex = getRandomInteger(0, availableTemplates.length - 1);
+  selectInitTemplate();
+
+  const availableTemplates = templates.filter(t => t.size === randomSizeValue);
+  const randomTemplateIndex = getRandomInteger(0, availableTemplates.length - 1);
   const templateSelector = document.querySelector('#templateSelector');
-  templateSelector.value = availableTemplates[randomIndex].value;
+  templateSelector.value = availableTemplates[randomTemplateIndex].name;
   redrawPlayboard();
 }
 
