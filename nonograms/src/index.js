@@ -170,7 +170,7 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
 
   for (let i = 0; i < templateObject.clues[1].length; i++) {
     const rowClueBox = document.createElement('div');
-    rowClueBox.className = 'row-clue-box';
+    rowClueBox.classList.add('row-clue-box', `row-clue-box-size-${templateObject.size}`);
     for (let j = 0; j < templateObject.clues[1][i].length; j++) {
       const rowClueItem = document.createElement('span');
       rowClueItem.className = 'row-clue-item';
@@ -230,9 +230,27 @@ function addControlsHandlers() {
   resetGameButton.addEventListener('click', resetGame);
 
   const showSolutionButton = document.querySelector('#solutionBtn');
-  showSolutionButton.addEventListener('click', () => {});
+  showSolutionButton.addEventListener('click', showSolution);
 
   addHandleCellClick();
+}
+
+function showSolution() {
+  const value = document.querySelector('#templateSelector').value;
+  const sourcePlayBoard = templates.find(t => t.name === value);
+
+  if (!sourcePlayBoard) {
+    return;
+  }
+
+  for (let i = 0; i < sourcePlayBoard.playboard.length; i++) {
+    const rowToHighlight = document.querySelectorAll(`[data-row-index="${i}"]`);
+    for (let j = 0; j < rowToHighlight.length; j++) {
+      if (sourcePlayBoard.playboard[i][j] === 1) {
+        rowToHighlight[j].classList.add('highlight');
+      }
+    }
+  }
 }
 
 function addHandleCellClick() {
@@ -300,6 +318,7 @@ function highlightCell(cell) {
   if (cell.classList.contains('highlight')) {
     cell.classList.remove('highlight');
     currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
+    checkForWin(gamePlayboardToGuess, currentGamePlayboard);
     return;
   }
   cell.classList.add('highlight');
