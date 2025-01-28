@@ -1,4 +1,6 @@
 import closeImg from '../../assets/close.png';
+import { playSound } from '../index';
+import { audio } from './audio';
 
 export function generateModalWindow() {
   const modal = document.createElement('div');
@@ -35,6 +37,7 @@ function addModalHandlers() {
   const closeModalButton = document.getElementById('closeModalButton');
 
   closeModalButton.addEventListener('click', () => {
+    playSound(audio.close.src);
     modal.style.display = 'none';
   });
 

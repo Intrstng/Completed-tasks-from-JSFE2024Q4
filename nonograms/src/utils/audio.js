@@ -4,6 +4,7 @@ import undoClickSound from '../../assets/sounds/undo.mp3';
 import winSound from '../../assets/sounds/win.mp3';
 import failSound from '../../assets/sounds/fail.mp3';
 import toggleSound from '../../assets/sounds/toggle.mp3';
+import closeSound from '../../assets/sounds/close.mp3';
 
 export const audio = {
   leftClick: {
@@ -23,5 +24,8 @@ export const audio = {
   },
   toggle: {
     src: new Audio(toggleSound),
+  },
+  close: {
+    src: new Audio(closeSound),
   }
 }

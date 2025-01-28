@@ -5,10 +5,11 @@ import soundOnImg from '../assets/sound-on.png';
 import soundOffImg from '../assets/sound-off.png';
 import lightImg from '../assets/light.png';
 import darkImg from '../assets/dark.png';
-import { getRandomInteger } from './utils/getRandomInteger';
-import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray';
+import { getRandomInteger } from './utils/getRandomInteger.js';
+import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray.js';
 import { audio } from './utils/audio.js';
 import { generateModalWindow } from './utils/modalWindow.js';
+import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
 
 let gamePlayboardToGuess = [];
 let currentGamePlayboard = [];
@@ -249,6 +250,7 @@ function addControlsHandlers() {
   showSolutionButton.addEventListener('click', showSolution);
 
   addHandleCellClick();
+  slideMenu();
 }
 
 function toggleMuteSound() {
@@ -418,7 +420,7 @@ async function selectRandomTemplate() {
   redrawPlayboard();
 }
 
-function playSound(sound) {
+export function playSound(sound) {
   if (!mute) {
     sound.currentTime = 0;
     sound.play();
@@ -436,5 +438,6 @@ function playSound(sound) {
 // })();
 
 generateModalWindow();
+generateSlideMenuLayout();
 document.addEventListener('DOMContentLoaded', createGameLayout);
 document.addEventListener('DOMContentLoaded', addControlsHandlers);
