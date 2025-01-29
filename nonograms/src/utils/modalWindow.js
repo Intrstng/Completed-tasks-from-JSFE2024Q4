@@ -1,7 +1,6 @@
 import closeImg from '../../assets/close.png';
 import { playSound } from '../index.js';
 import { audio } from './audio';
-import { showTimerValue } from './timer.js';
 
 export function generateModalWindow() {
   const modal = document.createElement('div');
@@ -52,6 +51,13 @@ export function fillModalWindowWithCongrats() {
   } else {
     congratsText.textContent = 'Well done! You\'ve solved the nonogram';
   }
+}
+
+export function addSnackbarNotification() {
+  const notification = document.createElement('div');
+  notification.id = 'notification';
+  notification.className = 'notification';
+  document.body.append(notification);
 }
 
 function addModalHandlers() {

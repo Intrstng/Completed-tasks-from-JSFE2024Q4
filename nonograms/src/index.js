@@ -8,11 +8,12 @@ import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger.js';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray.js';
 import { audio } from './utils/audio.js';
-import { fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
+import { addSnackbarNotification, fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
 import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
+import { saveGameProgress } from './utils/saveGame';
 
 let gamePlayboardToGuess = [];
-let currentGamePlayboard = [];
+export let currentGamePlayboard = [];
 let mute = false;
 let theme = 'light';
 let isGameStarted = false;
@@ -290,7 +291,7 @@ function addControlsHandlers() {
   randomGameButton.addEventListener('click', selectRandomTemplate);
 
   const saveGameButton = document.querySelector('#saveGameBtn');
-  saveGameButton.addEventListener('click', () => {});
+  saveGameButton.addEventListener('click', saveGameProgress);
 
   const continueGameButton = document.querySelector('#continueGameBtn');
   continueGameButton.addEventListener('click', () => {});
@@ -445,6 +446,8 @@ function resetGame() {
   const sizeSelector = document.querySelector('#sizeSelector');
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   redrawPlayboard();
+                                  isGameStarted = false;
+                                  toggleDisableGameButtons();
 }
 
 function checkForWin(sourcePlayBoard, currentPlayBoard) {
@@ -486,6 +489,9 @@ async function selectRandomTemplate() {
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.value = availableTemplates[randomTemplateIndex].name;
   redrawPlayboard();
+
+  isGameStarted = false;
+  toggleDisableGameButtons();
 }
 
 export function playSound(sound) {
@@ -506,6 +512,7 @@ export function playSound(sound) {
 // })();
 
 generateModalWindow();
+addSnackbarNotification();
 generateSlideMenuLayout();
 document.addEventListener('DOMContentLoaded', createGameLayout);
 document.addEventListener('DOMContentLoaded', addControlsHandlers);
@@ -527,7 +534,6 @@ document.addEventListener('DOMContentLoaded',  () => updateTimerDisplay('.minute
 export function updateTimerDisplay(minutes, seconds) {
   const minutesDisplay = document.querySelector(minutes);
   const secondsDisplay = document.querySelector(seconds);
-  console.log(minutesDisplay)
   const calculatedMinutes = Math.floor(elapsedTime / 60);
   const calculatedSeconds = elapsedTime % 60;
   minutesDisplay.innerText = `${String(calculatedMinutes).padStart(2, '0')}`
