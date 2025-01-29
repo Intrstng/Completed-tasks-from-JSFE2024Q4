@@ -1,5 +1,7 @@
-@use './styles/modalWindow';
-@use './styles/scoresMenu';
+@use 'sass/modalWindow';
+@use 'sass/scoresMenu';
+@use 'sass/abstracts/fonts';
+@use 'sass/abstracts/placeholders';
 
 html {
   font-size: 16px;
@@ -9,10 +11,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: 100vh;
   overflow: hidden;
-  margin-top: 40px;
+  //margin-top: 40px;
   box-sizing: border-box;
   background-image: url('../assets/wallpaper.jpg');
   background-size: cover;
@@ -67,13 +69,21 @@ body {
   align-self: flex-end;
 }
 
+#timer {
+  margin: 10px auto;
+  @extend %font-timer;
+  color: rgb(3, 64, 14);
+  font-size: 20px;
+}
+
 label {
   display: inline-block;
   max-width: 150px;
-  color: #03400e;
+  color: rgba(3, 64, 14, 0.8);
   font-weight: bold;
-  font-family: Calibri, sans-serif;
-  letter-spacing: 0.5px;
+  font-size: 14px;
+  @extend %font-additional;
+  letter-spacing: 0.4px;
 }
 
 .button-container {
@@ -135,6 +145,10 @@ label {
 
 .game-button:active {
   background-color: #3e8e41;
+}
+
+.game-button:disabled {
+  opacity: 0.6;
 }
 
 #randomGameBtn {

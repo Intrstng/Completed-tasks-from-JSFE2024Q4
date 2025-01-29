@@ -15,6 +15,8 @@ let gamePlayboardToGuess = [];
 let currentGamePlayboard = [];
 let mute = false;
 let theme = 'light';
+let isGameStarted = false;
+let isGameFinished = false;
 
 function createGameLayout() {
   const board = document.createElement('div');
@@ -60,7 +62,7 @@ function createGameLayout() {
 
   const difficultyLabel = document.createElement('label');
   difficultyLabel.setAttribute('for', 'sizeSelector');
-  difficultyLabel.innerText = 'Select size of board and template:';
+  difficultyLabel.innerText = 'Select size of board and template';
 
   const sizeSelectorWrapper = document.createElement('div');
   sizeSelectorWrapper.className = 'size-select-wrapper';
@@ -94,6 +96,7 @@ function createGameLayout() {
 
   const timer = document.createElement('p');
   timer.id = 'timer';
+  timer.innerText = '00:00';
 
   const playBoard = document.createElement('div');
   playBoard.id = 'playBoard';
@@ -127,6 +130,13 @@ function createGameLayout() {
   document.body.append(board);
   selectInitTemplate();
   createGamePlayBoard(playBoard, templates, templateSelector.value);
+}
+
+function toggleDisableGameButtons() {
+  const saveGameButton = document.querySelector('#saveGameBtn');
+  const resetGameButton = document.querySelector('#resetGameBtn');
+    saveGameButton.disabled = !isGameStarted;
+    resetGameButton.disabled = !isGameStarted;
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
@@ -250,6 +260,7 @@ function addControlsHandlers() {
   showSolutionButton.addEventListener('click', showSolution);
 
   addHandleCellClick();
+  toggleDisableGameButtons();
   slideMenu();
 }
 
@@ -279,6 +290,8 @@ function toggleTheme() {
 }
 
 function showSolution() {
+  isGameStarted = false;
+  toggleDisableGameButtons();
   const value = document.querySelector('#templateSelector').value;
   const sourcePlayBoard = templates.find(t => t.name === value);
 
@@ -289,6 +302,7 @@ function showSolution() {
   for (let i = 0; i < sourcePlayBoard.playboard.length; i++) {
     const rowToHighlight = document.querySelectorAll(`[data-row-index="${i}"]`);
     for (let j = 0; j < rowToHighlight.length; j++) {
+      rowToHighlight[j].classList.remove('highlight');
       if (sourcePlayBoard.playboard[i][j] === 1) {
         rowToHighlight[j].classList.add('highlight');
       }
@@ -346,6 +360,8 @@ function selectInitTemplate() {
 function addCellHandlers(e) {
   let target = e.target.closest('.row-cell');
   if (!target) return;
+  isGameStarted = true;
+  toggleDisableGameButtons();
   highlightCell(target);
 }
 
@@ -353,6 +369,8 @@ function addContextMenuCellHandlers(e) {
   let target = e.target.closest('.row-cell');
   if (!target) return;
   e.preventDefault();
+  isGameStarted = true;
+  toggleDisableGameButtons();
   crossOutCell(target);
 }
 

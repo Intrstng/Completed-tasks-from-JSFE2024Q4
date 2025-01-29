@@ -29,6 +29,10 @@ module.exports = {
         ],
       },
       {
+        test: /\.(woff2?|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+      },
+      {
         test: /\.(?:ico|gif|png|jpg|jpeg|mp3|ogg)$/i,
         type: 'asset/resource',
       },
