@@ -27,5 +27,5 @@ export const audio = {
   },
   close: {
     src: new Audio(closeSound),
-  }
-}
+  },
+};

@@ -8,7 +8,7 @@ import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger.js';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray.js';
 import { audio } from './utils/audio.js';
-import { generateModalWindow } from './utils/modalWindow.js';
+import { fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
 import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
 
 let gamePlayboardToGuess = [];
@@ -30,7 +30,7 @@ function createGameLayout() {
   controls.id = 'controls';
 
   const scoresButton = document.createElement('button');
-  scoresButton.id ='scoresButton';
+  scoresButton.id = 'scoresButton';
   scoresButton.className = 'controls-button';
   const scoresLogo = document.createElement('img');
   scoresLogo.setAttribute('src', scoresImg);
@@ -38,7 +38,7 @@ function createGameLayout() {
   scoresButton.append(scoresLogo);
 
   const soundButton = document.createElement('button');
-  soundButton.id ='soundButton';
+  soundButton.id = 'soundButton';
   soundButton.className = 'controls-button';
   const soundLogo = document.createElement('img');
   soundLogo.className = 'sound-logo';
@@ -47,7 +47,7 @@ function createGameLayout() {
   soundButton.append(soundLogo);
 
   const themeButton = document.createElement('button');
-  themeButton.id ='themeButton';
+  themeButton.id = 'themeButton';
   themeButton.className = 'controls-button';
   const themeLogo = document.createElement('img');
   themeLogo.classList.add('theme-logo');
@@ -70,13 +70,13 @@ function createGameLayout() {
   const sizeSelector = document.createElement('select');
   sizeSelector.id = 'sizeSelector';
 
-  optionsData.forEach((data) => {
+  optionsData.forEach(data => {
     const level = document.createElement('option');
     level.setAttribute('value', data.size);
     level.className = 'size-option';
     level.textContent = data.name;
     sizeSelector.append(level);
-  })
+  });
 
   const templateSelectorWrapper = document.createElement('div');
   templateSelectorWrapper.className = 'template-select-wrapper';
@@ -92,11 +92,29 @@ function createGameLayout() {
   sizeSelectorWrapper.append(sizeSelector);
   templateSelectorWrapper.append(templateSelector);
 
-  gameOptions.append(difficultyLabel, sizeSelectorWrapper, templateSelectorWrapper, randomGameButton)
+  gameOptions.append(
+    difficultyLabel,
+    sizeSelectorWrapper,
+    templateSelectorWrapper,
+    randomGameButton
+  );
 
   const timer = document.createElement('p');
   timer.id = 'timer';
-  timer.innerText = '00:00';
+
+  const minutes = document.createElement('span');
+  minutes.className = 'minutes';
+  minutes.innerText = '00';
+
+  const seconds = document.createElement('span');
+  seconds.className = 'seconds';
+  seconds.innerText = '00';
+
+  const colon = document.createElement('span');
+  colon.className = 'colon';
+  colon.innerText = ':';
+
+  timer.append(minutes, colon, seconds);
 
   const playBoard = document.createElement('div');
   playBoard.id = 'playBoard';
@@ -124,9 +142,21 @@ function createGameLayout() {
   solutionButton.textContent = 'Show Solution';
   solutionButton.className = 'game-button';
 
-  buttonContainer.append(saveGameButton, continueGameButton, resetGameButton, solutionButton);
+  buttonContainer.append(
+    saveGameButton,
+    continueGameButton,
+    resetGameButton,
+    solutionButton
+  );
 
-  board.append(header, controls, gameOptions, timer, buttonContainer, playBoard);
+  board.append(
+    header,
+    controls,
+    gameOptions,
+    timer,
+    buttonContainer,
+    playBoard
+  );
   document.body.append(board);
   selectInitTemplate();
   createGamePlayBoard(playBoard, templates, templateSelector.value);
@@ -135,8 +165,8 @@ function createGameLayout() {
 function toggleDisableGameButtons() {
   const saveGameButton = document.querySelector('#saveGameBtn');
   const resetGameButton = document.querySelector('#resetGameBtn');
-    saveGameButton.disabled = !isGameStarted;
-    resetGameButton.disabled = !isGameStarted;
+  saveGameButton.disabled = !isGameStarted;
+  resetGameButton.disabled = !isGameStarted;
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
@@ -165,7 +195,10 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   }
 
   const columnCluesContainer = document.createElement('div');
-  columnCluesContainer.classList.add('column-clues', `column-clue-size-${templateObject.size}`);
+  columnCluesContainer.classList.add(
+    'column-clues',
+    `column-clue-size-${templateObject.size}`
+  );
 
   for (let i = 0; i < templateObject.clues[0].length; i++) {
     const columnClueBox = document.createElement('div');
@@ -184,16 +217,25 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   }
 
   const rowCluesContainer = document.createElement('div');
-  rowCluesContainer.classList.add('row-clues', `row-clue-size-${templateObject.size}`);
+  rowCluesContainer.classList.add(
+    'row-clues',
+    `row-clue-size-${templateObject.size}`
+  );
 
   for (let i = 0; i < templateObject.clues[1].length; i++) {
     const rowClueBox = document.createElement('div');
-    rowClueBox.classList.add('row-clue-box', `row-clue-box-size-${templateObject.size}`);
+    rowClueBox.classList.add(
+      'row-clue-box',
+      `row-clue-box-size-${templateObject.size}`
+    );
     for (let j = 0; j < templateObject.clues[1][i].length; j++) {
       const rowClueItem = document.createElement('span');
       rowClueItem.className = 'row-clue-item';
       rowClueItem.textContent = templateObject.clues[1][i][j];
-      rowCluesLength = rowCluesLength <= templateObject.clues[1][i].length ? templateObject.clues[1][i].length : rowCluesLength;
+      rowCluesLength =
+        rowCluesLength <= templateObject.clues[1][i].length
+          ? templateObject.clues[1][i].length
+          : rowCluesLength;
       if (!templateObject.clues[1][i][j]) {
         templateObject.clues[1][i][j] = 0;
         rowClueItem.classList.add('hidden');
@@ -230,7 +272,7 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
 
 function addControlsHandlers() {
   const scoresButton = document.querySelector('#scoresButton');
-  scoresButton.addEventListener('click', ()=>{});
+  scoresButton.addEventListener('click', () => {});
 
   const soundButton = document.querySelector('#soundButton');
   soundButton.addEventListener('click', toggleMuteSound);
@@ -324,7 +366,7 @@ function redrawPlayboard() {
   playBoard.className = '';
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   createGamePlayBoard(playBoard, templates, templateSelector.value);
-// console.log(currentGamePlayboard)
+  // console.log(currentGamePlayboard)
   removeHandleCellClick();
   addHandleCellClick();
 }
@@ -360,6 +402,7 @@ function selectInitTemplate() {
 function addCellHandlers(e) {
   let target = e.target.closest('.row-cell');
   if (!target) return;
+                if (!isGameStarted) toggleTimer()
   isGameStarted = true;
   toggleDisableGameButtons();
   highlightCell(target);
@@ -369,6 +412,7 @@ function addContextMenuCellHandlers(e) {
   let target = e.target.closest('.row-cell');
   if (!target) return;
   e.preventDefault();
+                      if (!isGameStarted) toggleTimer()
   isGameStarted = true;
   toggleDisableGameButtons();
   crossOutCell(target);
@@ -417,10 +461,13 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
       }
     }
   }
-                  console.log('Win')
+  console.log('Win');
   const modal = document.getElementById('modal');
   modal.style.display = 'block';
-                  playSound(audio.win.src);
+  playSound(audio.win.src);
+
+  if (isGameStarted) stopTimer();
+  fillModalWindowWithCongrats();
 }
 
 async function selectRandomTemplate() {
@@ -432,7 +479,10 @@ async function selectRandomTemplate() {
   selectInitTemplate();
 
   const availableTemplates = templates.filter(t => t.size === randomSizeValue);
-  const randomTemplateIndex = getRandomInteger(0, availableTemplates.length - 1);
+  const randomTemplateIndex = getRandomInteger(
+    0,
+    availableTemplates.length - 1
+  );
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.value = availableTemplates[randomTemplateIndex].name;
   redrawPlayboard();
@@ -459,3 +509,53 @@ generateModalWindow();
 generateSlideMenuLayout();
 document.addEventListener('DOMContentLoaded', createGameLayout);
 document.addEventListener('DOMContentLoaded', addControlsHandlers);
+
+
+
+
+// Timer
+
+let timerInterval;
+let elapsedTime = 0;
+
+if (localStorage.getItem('timer')) {
+  elapsedTime = parseInt(localStorage.getItem('timer'), 10);
+}
+
+document.addEventListener('DOMContentLoaded',  () => updateTimerDisplay('.minutes', '.seconds'))
+
+export function updateTimerDisplay(minutes, seconds) {
+  const minutesDisplay = document.querySelector(minutes);
+  const secondsDisplay = document.querySelector(seconds);
+  console.log(minutesDisplay)
+  const calculatedMinutes = Math.floor(elapsedTime / 60);
+  const calculatedSeconds = elapsedTime % 60;
+  minutesDisplay.innerText = `${String(calculatedMinutes).padStart(2, '0')}`
+  secondsDisplay.innerText = `${String(calculatedSeconds).padStart(2, '0')}`;
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    elapsedTime++;
+    updateTimerDisplay('.minutes', '.seconds');
+  }, 1000);
+}
+
+export function stopTimer() {
+  clearInterval(timerInterval);
+  localStorage.setItem('timer', elapsedTime);
+}
+
+export function toggleTimer() {
+  if (timerInterval) {
+    stopTimer();
+    timerInterval = null;
+  } else {
+    startTimer();
+  }
+}
+
+window.addEventListener('beforeunload',  () => {
+  elapsedTime = 0;
+  localStorage.removeItem('timer');
+});

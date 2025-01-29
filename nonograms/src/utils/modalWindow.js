@@ -1,6 +1,7 @@
 import closeImg from '../../assets/close.png';
-import { playSound } from '../index';
+import { playSound } from '../index.js';
 import { audio } from './audio';
+import { showTimerValue } from './timer.js';
 
 export function generateModalWindow() {
   const modal = document.createElement('div');
@@ -19,17 +20,38 @@ export function generateModalWindow() {
   crossLogo.alt = 'Close';
   closeModalButton.appendChild(crossLogo);
 
-  const timer = document.createElement('span');
-  timer.id = 'timer';
-
-  const congratulation = document.createElement('h2');
+  const congratulation = document.createElement('div');
   congratulation.className = 'congrats';
-  congratulation.textContent = `Well done! You\'ve solved the nonogram in ${timer} seconds!`;
 
+  const congratsText = document.createElement('h2');
+  congratsText.className = 'congrats-text';
+
+  const modalSeconds = document.createElement('span');
+  modalSeconds.id = 'modalSeconds';
+
+  const congratsTextEnding = document.createElement('span');
+  congratsTextEnding.className = 'congrats-text-end';
+
+  congratulation.append(congratsText, modalSeconds, congratsTextEnding);
   modalContent.append(closeModalButton, congratulation);
   modal.append(modalContent);
   document.body.append(modal);
   addModalHandlers();
+}
+
+export function fillModalWindowWithCongrats() {
+  const congratsText = document.querySelector('.congrats-text');
+  const modalSeconds = document.querySelector('#modalSeconds');
+  const congratsTextEnding = document.querySelector('.congrats-text-end');
+  const timerResult = localStorage.getItem('timer');
+
+  if (timerResult) {
+    congratsText.textContent = 'Well done! You\'ve solved the nonogram in ';
+    modalSeconds.textContent = timerResult;
+    congratsTextEnding.innerText = ' seconds';
+  } else {
+    congratsText.textContent = 'Well done! You\'ve solved the nonogram';
+  }
 }
 
 function addModalHandlers() {
@@ -41,7 +63,7 @@ function addModalHandlers() {
     modal.style.display = 'none';
   });
 
-  window.addEventListener('click', (e) => {
+  window.addEventListener('click', e => {
     if (e.target === modal) {
       modal.style.display = 'none';
     }

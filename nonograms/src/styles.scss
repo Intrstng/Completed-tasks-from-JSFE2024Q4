@@ -43,8 +43,8 @@ body {
   margin: 0 0 15px;
   align-self: flex-start;
   text-transform: capitalize;
-  font-family: Corbel, sans-serif;
-  color: #d4d4d4;
+  @extend %font-primary;
+  color: rgba(212, 212, 212, 0.8);
 }
 
 #controls {
@@ -122,7 +122,7 @@ label {
 
 .game-button {
   margin-right: 15px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: #ffffff;
   border: none;
   padding: 8px 12px;
@@ -163,13 +163,13 @@ label {
 .main-board.size-15 .row-cell {
   //width: 24.29px;
   //height: 25px;
-                              width: 24.31px;
+  width: 24.31px;
   height: 25.01px;
 }
 
-                            //.main-board:nth-last-child(1) {
-                            //  border-bottom: none !important;
-                            //}
+//.main-board:nth-last-child(1) {
+//  border-bottom: none !important;
+//}
 
 .row {
   display: grid;
@@ -199,7 +199,6 @@ label {
   background-color: rgb(0, 0, 0);
 }
 
-
 .size-5 {
   //width: 126.5px;
   width: 124.3px;
@@ -208,13 +207,13 @@ label {
 }
 
 .size-10 {
-                                              width: 249px; //250
+  width: 249px; //250
   height: 258px;
   border: 2px solid #000;
 }
 
 .size-15 {
-                                      width: 374px;
+  width: 374px;
   height: 387.5px;
   border: 2px solid #000;
 }
@@ -236,7 +235,7 @@ label {
   width: 249px;
 }
 .column-clues.column-clue-size-10 .column-clue-box {
-                    width: 24.1px;
+  width: 24.1px;
   //width: 24.3px;
   //                  box-sizing: content-box;
 }
@@ -365,7 +364,7 @@ select {
 }
 
 select:focus {
-  border-color: #4CAF50;
+  border-color: #4caf50;
   outline: none;
 }
 
@@ -391,7 +390,7 @@ select:focus {
 
 .highlight {
   background-color: black;
-                          border-color: grey;
+  border-color: grey;
 }
 
 /* Row cell cross */
@@ -401,10 +400,12 @@ select:focus {
 
 .row-cell::before,
 .row-cell::after {
-  content: "";
+  content: '';
   position: absolute;
   background-color: black;
-  transition: transform 0.3s, opacity 0.3s;
+  transition:
+    transform 0.3s,
+    opacity 0.3s;
   opacity: 0;
 }
 

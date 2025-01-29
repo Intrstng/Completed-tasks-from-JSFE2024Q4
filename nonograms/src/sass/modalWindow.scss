@@ -1,3 +1,6 @@
+@use 'abstracts/fonts';
+@use 'abstracts/placeholders';
+
 .modal {
   display: none;
   position: fixed;
@@ -41,12 +44,16 @@
 
 .congrats {
   margin-bottom: 0;
-  font-family: Corbel, sans-serif;
+  @extend %font-primary;
   font-size: 24px;
   color: #347936;
   text-align: center;
   line-height: 35px;
   letter-spacing: 1px;
+}
+
+.congrats-text {
+  margin: 30px 0 12px;
 }
 
 .close:hover,
