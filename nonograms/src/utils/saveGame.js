@@ -1,16 +1,18 @@
 import { currentGamePlayboard } from '../index.js';
 import { optionsData } from '../templates';
 
-export function saveGameProgress() {
+export function saveGameProgress(time) {
   const sizeSelector = document.querySelector('#sizeSelector');
   const templateSelector = document.querySelector('#templateSelector');
   const saveGameButton = document.querySelector('#saveGameBtn');
-  const timerResult = localStorage.getItem('timer') || '0';
+  const continueGameButton = document.querySelector('#continueGameBtn');
+  // const timerResult = localStorage.getItem('timer') || '0';
+  continueGameButton.disabled = false;
 
   const progress = {
     size: sizeSelector.value,
     template: templateSelector.value,
-    timer: timerResult,
+    timer: time,
     progress: currentGamePlayboard,
   }
   localStorage.setItem('gameProgress', JSON.stringify(progress));

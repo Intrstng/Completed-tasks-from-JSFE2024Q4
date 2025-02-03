@@ -31,14 +31,28 @@ $board-bg-dark: rgba(164, 206, 164, 0.1);
 $light-bg-image: url('/assets/wallpaper.jpg');
 $dark-bg-image: url('/assets/wallpaper-dark.jpg');
 $dark: rgb(0, 0, 0);
+$dark-night: rgb(141, 166, 90);
 $cell-hover: rgba(81, 81, 81, 0.4);
 $form: rgba(0, 0, 0, 0.85);
+$form-border: rgb(204, 204, 204);
 $form-bg: rgba(248, 248, 248, 0.7);
 $arrow: rgba(6, 95, 24, 0.7);
 $highlight: rgb(128, 128, 128);
 $highlight-dark: rgba(184, 184, 184, 0.3);
 $modal-light-bg: rgba(0, 0, 0, 0.5);
 $modal-dark-bg: rgba(255, 255, 255, 0.5);
+
+:root {
+  --dark-color: #{$dark};
+}
+
+.light-theme {
+  --dark-color: #{$dark};
+}
+
+.dark-theme {
+  --dark-color: #{$dark-night};
+}
 
 html {
   font-size: 16px;
@@ -192,7 +206,7 @@ label {
 }
 
 .main-board {
-  border: 2px solid $dark;
+  border: 2px solid var(--dark-color);
   position: relative;
 }
 
@@ -220,8 +234,8 @@ label {
   width: 24.29px;
   height: 25px;
   //border: 1px solid #000;
-  border-bottom: 1px solid $dark;
-  border-right: 1px solid $dark;
+  border-bottom: 1px solid var(--dark-color);
+  border-right: 1px solid var(--dark-color);
   transition: 0.2s all ease;
 }
 
@@ -234,26 +248,26 @@ label {
 }
 
 .row-cell:active {
-  background-color: $dark;
+  background-color: var(--dark-color);
 }
 
 .size-5 {
   //width: 126.5px;
   width: 124.3px;
   height: 128px;
-  border: 2px solid $dark;
+  border: 2px solid var(--dark-color);
 }
 
 .size-10 {
   width: 249px; //250
   height: 258px;
-  border: 2px solid $dark;
+  border: 2px solid var(--dark-color);
 }
 
 .size-15 {
   width: 374px;
   height: 387.5px;
-  border: 2px solid $dark;
+  border: 2px solid var(--dark-color);
 }
 
 .column-clues {
@@ -261,8 +275,8 @@ label {
   justify-content: flex-start;
   flex-wrap: nowrap;
   align-items: stretch;
-  border: 2px solid $dark;
-  border-right: 2px solid $dark;
+  border: 2px solid var(--dark-color);
+  border-right: 2px solid var(--dark-color);
   border-bottom: none;
 }
 
@@ -294,11 +308,11 @@ label {
   flex-direction: column;
   justify-content: flex-end;
   width: 24.3px;
-  border-right: 1px solid $dark;
+  border-right: 1px solid var(--dark-color);
 }
 
 .column-clue-box:nth-child(5n) {
-  border-right: 2px solid $dark;
+  border-right: 2px solid var(--dark-color);
 }
 
 .column-clue-box:last-child {
@@ -322,7 +336,7 @@ label {
   align-items: flex-end;
   flex-wrap: nowrap;
   align-content: stretch;
-  border: 2px solid $dark;
+  border: 2px solid var(--dark-color);
   border-right: none;
 }
 
@@ -337,7 +351,7 @@ label {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  border-bottom: 1px solid $dark;
+  border-bottom: 1px solid var(--dark-color);
 }
 
 .row-clue-box-size-5 {
@@ -374,24 +388,24 @@ label {
 }
 
 .row:nth-child(5n) {
-  border-bottom: 1px solid $dark;
+  border-bottom: 1px solid var(--dark-color);
 }
 
 .row-clue-box:nth-child(5n) {
-  border-bottom: 2px solid $dark;
+  border-bottom: 2px solid var(--dark-color);
 }
 .row-clue-box:last-child {
   border-bottom: none;
 }
 
 .row-cell:nth-child(5n) {
-  border-right: 2px solid $dark;
+  border-right: 2px solid var(--dark-color);
 }
 
 select {
   width: 95px;
   padding: 7px;
-  border: 1px solid $form;
+  border: 1px solid $form-border;
   border-radius: 5px;
   background-color: $form-bg;
   font-size: 14px;
@@ -427,7 +441,7 @@ select:focus {
 }
 
 .highlight {
-  background-color: $dark;
+  background-color: var(--dark-color);
   border-color: $highlight;
 }
 
@@ -440,7 +454,7 @@ select:focus {
 .row-cell::after {
   content: '';
   position: absolute;
-  background-color: $dark;
+  background-color: var(--dark-color);
   transition:
     transform 0.3s,
     opacity 0.3s;
@@ -495,7 +509,7 @@ select:focus {
 
   .column-clue-item,
   .row-clue-item {
-    color: $dark;
+    color: var(--dark-color);
   }
 
   #board {
@@ -519,6 +533,11 @@ select:focus {
   td {
     border: 1px solid $form;
   }
+
+  //.highlight {
+  //  background-color: $dark; // another color
+  //  border-color: $dark-bg;
+  //}
 }
 
 // Dark Theme
@@ -557,7 +576,7 @@ select:focus {
   }
 
   .highlight {
-    background-color: $dark;
+    background-color: var(--dark-color);
     border-color: $dark-bg;
   }
 
@@ -566,7 +585,7 @@ select:focus {
   }
 
   .row-cell.highlight:nth-child(5n) {
-    border-right: 2px solid $highlight-dark !important;
+    border-right: 1px solid #000 !important;
   }
 
   .menu {

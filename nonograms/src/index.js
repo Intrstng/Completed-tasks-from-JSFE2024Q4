@@ -134,6 +134,9 @@ function createGameLayout() {
   continueGameButton.textContent = 'Continue Game';
   continueGameButton.className = 'game-button';
 
+  const storedGameProgress = localStorage.getItem('gameProgress');
+  continueGameButton.disabled = !storedGameProgress;
+
   const resetGameButton = document.createElement('button');
   resetGameButton.id = 'resetGameBtn';
   resetGameButton.textContent = 'Reset Game';
@@ -166,9 +169,13 @@ function createGameLayout() {
 
 function toggleDisableGameButtons() {
   const saveGameButton = document.querySelector('#saveGameBtn');
+  const continueGameButton = document.querySelector('#continueGameBtn');
   const resetGameButton = document.querySelector('#resetGameBtn');
   saveGameButton.disabled = !isGameStarted;
+  const storedGameProgress = localStorage.getItem('gameProgress');
+  continueGameButton.disabled = !storedGameProgress;
   resetGameButton.disabled = !isGameStarted;
+
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
@@ -292,10 +299,10 @@ function addControlsHandlers() {
   randomGameButton.addEventListener('click', selectRandomTemplate);
 
   const saveGameButton = document.querySelector('#saveGameBtn');
-  saveGameButton.addEventListener('click', saveGameProgress);
+  saveGameButton.addEventListener('click', () => saveGameProgress(elapsedTime));
 
   const continueGameButton = document.querySelector('#continueGameBtn');
-  continueGameButton.addEventListener('click', () => {});
+  continueGameButton.addEventListener('click', continueGame);
 
   const resetGameButton = document.querySelector('#resetGameBtn');
   resetGameButton.addEventListener('click', resetGame);
@@ -349,6 +356,37 @@ function showSolution() {
     for (let j = 0; j < rowToHighlight.length; j++) {
       rowToHighlight[j].classList.remove('highlight');
       if (sourcePlayBoard.playboard[i][j] === 1) {
+        rowToHighlight[j].classList.add('highlight');
+      }
+    }
+  }
+}
+
+function continueGame() {
+  // if (!isGameStarted) toggleTimer()
+  // isGameStarted = true;
+
+  const saveGameButton = document.querySelector('#saveGameBtn');
+  const continueGameButton = document.querySelector('#continueGameBtn');
+  const resetGameButton = document.querySelector('#resetGameBtn');
+  saveGameButton.disabled = true;
+  continueGameButton.disabled = true;
+  resetGameButton.disabled = false;
+
+  const storedGameProgress = localStorage.getItem('gameProgress');
+  if (!storedGameProgress) {
+    return;
+  }
+
+  const storedGameData = JSON.parse(storedGameProgress);
+  const storedPlayBoard = storedGameData.progress;
+  elapsedTime = Number(storedGameData.timer) || 0;
+console.log(elapsedTime,'ssssss')
+  for (let i = 0; i < storedPlayBoard.length; i++) {
+    const rowToHighlight = document.querySelectorAll(`[data-row-index="${i}"]`);
+    for (let j = 0; j < rowToHighlight.length; j++) {
+      rowToHighlight[j].classList.remove('highlight');
+      if (storedPlayBoard[i][j] === 1) {
         rowToHighlight[j].classList.add('highlight');
       }
     }
@@ -549,6 +587,7 @@ function startTimer() {
     updateTimerDisplay('.minutes', '.seconds');
   }, 1000);
 }
+
 
 export function stopTimer() {
   clearInterval(timerInterval);
