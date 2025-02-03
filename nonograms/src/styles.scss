@@ -388,6 +388,10 @@ label {
   border-right: 2px solid $dark;
 }
 
+.row-cell.highlight:nth-child(5n) {
+  border-right: 2px solid $highlight;
+}
+
 select {
   width: 95px;
   padding: 7px;
@@ -556,7 +560,8 @@ select:focus {
 
   .game-button {
     background-color: $dark-button-bg;
-    color: $dark-button-text;
+    //color: $dark-button-text;
+    color: $title;
   }
 
   label {
