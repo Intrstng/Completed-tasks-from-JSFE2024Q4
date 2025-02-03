@@ -10,7 +10,7 @@ import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray
 import { audio } from './utils/audio.js';
 import { addSnackbarNotification, fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
 import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
-import { saveGameProgress } from './utils/saveGame';
+import { saveGameProgress, saveWinResults } from './utils/saveGame';
 
 let gamePlayboardToGuess = [];
 export let currentGamePlayboard = [];
@@ -471,6 +471,7 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
 
   if (isGameStarted) stopTimer();
   fillModalWindowWithCongrats();
+  saveWinResults(elapsedTime);
 }
 
 async function selectRandomTemplate() {

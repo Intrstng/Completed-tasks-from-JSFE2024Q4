@@ -1,4 +1,5 @@
 import { currentGamePlayboard } from '../index.js';
+import { optionsData } from '../templates';
 
 export function saveGameProgress() {
   const sizeSelector = document.querySelector('#sizeSelector');
@@ -29,4 +30,26 @@ export function showSnackbarNotification(text) {
       notification.style.display = 'none';
     }, 500);
   }, 2000);
+}
+
+export function saveWinResults(time) {
+  const levelValue = document.querySelector('#sizeSelector').value;
+  const template = document.querySelector('#templateSelector').value;
+  const level = optionsData.find(el => el.size === Number(levelValue)).name  || 'Level unknown';
+
+  const winResult = {
+    level,
+    template,
+    time
+  }
+  let data = [];
+  const storedData = localStorage.getItem('winResults');
+  if (storedData) {
+    data = JSON.parse(storedData);
+    data.push(winResult);
+  } else {
+    data = [winResult];
+  }
+
+  localStorage.setItem('winResults', JSON.stringify(data));
 }
