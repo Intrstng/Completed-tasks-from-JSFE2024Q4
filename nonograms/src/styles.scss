@@ -388,10 +388,6 @@ label {
   border-right: 2px solid $dark;
 }
 
-.row-cell.highlight:nth-child(5n) {
-  border-right: 2px solid $highlight;
-}
-
 select {
   width: 95px;
   padding: 7px;
@@ -476,34 +472,9 @@ select:focus {
   padding-left: 2px;
 }
 
-//
-///* Light Theme */
-//.light-theme {
-//  background-color: #ffffff; /* Light background */
-//  color: #000000; /* Light text */
-//  background-image: url('../assets/wallpaper.jpg'); /* Light theme background image */
-//  background-size: cover; /* Ensure the image covers the entire background */
-//  background-repeat: no-repeat; /* Prevent image repeat */
-//}
-//
-//.light-theme button {
-//  background-color: #007bff; /* Light button background */
-//  color: #ffffff; /* Light button text */
-//}
-//
-///* Dark Theme */
-//.dark-theme {
-//  background-color: #333333; /* Dark background */
-//  color: #ffffff; /* Dark text */
-//  background-image: url('../assets/wallpaper-dark.jpg'); /* Dark theme background image */
-//  background-size: cover; /* Ensure the image covers the entire background */
-//  background-repeat: no-repeat; /* Prevent image repeat */
-//}
-//
-//.dark-theme button {
-//  background-color: #0056b3; /* Dark button background */
-//  color: #ffffff; /* Dark button text */
-//}
+.row-cell.highlight:nth-child(5n) {
+  border-right: 2px solid $highlight !important;
+}
 
 // Light Theme
 .light-theme {
@@ -592,6 +563,10 @@ select:focus {
 
   .row-cell:hover:not(.highlight) {
     background-color: $highlight-dark;
+  }
+
+  .row-cell.highlight:nth-child(5n) {
+    border-right: 2px solid $highlight-dark !important;
   }
 
   .menu {
