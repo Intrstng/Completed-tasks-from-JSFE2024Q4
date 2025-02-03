@@ -10,7 +10,8 @@ import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray
 import { audio } from './utils/audio.js';
 import { addSnackbarNotification, fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
 import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
-import { saveGameProgress, saveWinResults } from './utils/saveGame';
+import { saveGameProgress, saveWinResults } from './utils/saveGame.js';
+import { themeToggle } from './utils/themeToggle.js';
 
 let gamePlayboardToGuess = [];
 export let currentGamePlayboard = [];
@@ -323,6 +324,7 @@ function toggleMuteSound() {
 function toggleTheme() {
   const themeLogo = document.querySelector('.theme-logo');
   playSound(audio.toggle.src);
+  themeToggle();
   if (theme === 'light') {
     theme = 'dark';
     themeLogo.setAttribute('src', darkImg);
