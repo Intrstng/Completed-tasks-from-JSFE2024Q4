@@ -8,13 +8,22 @@ import darkImg from '../assets/dark.png';
 import { getRandomInteger } from './utils/getRandomInteger.js';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray.js';
 import { audio } from './utils/audio.js';
-import { addSnackbarNotification, fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
-import { fillSlideMenuWithScoreData, generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
+import {
+  addSnackbarNotification,
+  fillModalWindowWithCongrats,
+  generateModalWindow,
+} from './utils/modalWindow.js';
+import {
+  fillSlideMenuWithScoreData,
+  generateSlideMenuLayout,
+  slideMenu,
+} from './utils/scoresMenu.js';
 import { saveGameProgress, saveWinResults } from './utils/saveGame.js';
 import { themeToggle } from './utils/themeToggle.js';
+import { addHandleCellClick, removeHandleCellClick } from './utils/handlers.js';
 
-let gamePlayboardToGuess = [];
-export let currentGamePlayboard = [];
+let gamePlayBoardToGuess = [];
+export let currentGamePlayBoard = [];
 let mute = false;
 let theme = 'light';
 let isGameStarted = false;
@@ -260,7 +269,7 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
   container.prepend(columnCluesContainer);
   mainBoard.append(rowCluesContainer);
   container.append(mainBoard);
-  gamePlayboardToGuess = templateObject.playboard;
+  gamePlayBoardToGuess = templateObject.playboard;
 
   updateRowCluesPosition();
 }
@@ -308,7 +317,7 @@ function addControlsHandlers() {
   sizeSelector.addEventListener('change', reselectTemplate);
 
   const templateSelector = document.querySelector('#templateSelector');
-  templateSelector.addEventListener('change', redrawPlayboard);
+  templateSelector.addEventListener('change', redrawPlayBoard);
 
   const randomGameButton = document.querySelector('#randomGameBtn');
   randomGameButton.addEventListener('click', selectRandomTemplate);
@@ -361,7 +370,7 @@ function showSolution() {
   const showSolutionButton = document.querySelector('#solutionBtn');
   showSolutionButton.disabled = isShownSolution;
   isGameStarted = false;
-  isGameFinished = true
+  isGameFinished = true;
   toggleDisableGameButtons(false);
   const value = document.querySelector('#templateSelector').value;
   const sourcePlayBoard = templates.find(t => t.name === value);
@@ -383,9 +392,8 @@ function showSolution() {
 }
 
 function continueGame() {
-                      // if (!isGameStarted) toggleTimer()
-                                  isGameStarted = false;
-                                  isGameFinished = false;
+  isGameStarted = false;
+  isGameFinished = false;
   const saveGameButton = document.querySelector('#saveGameBtn');
   const continueGameButton = document.querySelector('#continueGameBtn');
   const resetGameButton = document.querySelector('#resetGameBtn');
@@ -402,13 +410,13 @@ function continueGame() {
   const storedPlayBoard = storedGameData.progress;
   const sizeSelector = document.querySelector('#sizeSelector');
   sizeSelector.value = String(storedGameData.size);
-  selectInitTemplate()
+  selectInitTemplate();
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.value = storedGameData.template;
-  redrawPlayboard();
-  currentGamePlayboard = [...storedPlayBoard];
+  redrawPlayBoard();
+  currentGamePlayBoard = [...storedPlayBoard];
   elapsedTime = Number(storedGameData.timer) || 0;
-  updateTimerDisplay('.minutes', '.seconds')
+  updateTimerDisplay('.minutes', '.seconds');
 
   for (let i = 0; i < storedPlayBoard.length; i++) {
     const rowToHighlight = document.querySelectorAll(`[data-row-index="${i}"]`);
@@ -419,10 +427,7 @@ function continueGame() {
       }
     }
   }
-
-
-                                  activateShowSolutionButton()
-
+  activateShowSolutionButton();
 }
 
 function activateShowSolutionButton() {
@@ -431,18 +436,11 @@ function activateShowSolutionButton() {
   showSolutionButton.disabled = isShownSolution;
 }
 
-function addHandleCellClick() {
-  const mainBoard = document.querySelector('.main-board');
-  mainBoard.addEventListener('click', addCellHandlers);
-  mainBoard.addEventListener('contextmenu', addContextMenuCellHandlers);
-}
-
-function redrawPlayboard() {
-                                isGameStarted = false;
-                                isGameFinished = false;
-                                resetTimer();
-                                activateShowSolutionButton();
-
+function redrawPlayBoard() {
+  isGameStarted = false;
+  isGameFinished = false;
+  resetTimer();
+  activateShowSolutionButton();
   const playBoard = document.querySelector('#playBoard');
   const sizeSelector = document.querySelector('#sizeSelector');
   const templateSelector = document.querySelector('#templateSelector');
@@ -452,31 +450,22 @@ function redrawPlayboard() {
 
   playBoard.innerHTML = '';
   playBoard.className = '';
-  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
+  currentGamePlayBoard = generateEmptyPlayboardArray(sizeSelector.value);
   createGamePlayBoard(playBoard, templates, templateSelector.value);
-
   removeHandleCellClick();
   addHandleCellClick();
-
-
 }
 
 function reselectTemplate() {
   selectInitTemplate();
-  redrawPlayboard();
-}
-
-function removeHandleCellClick() {
-  const mainBoard = document.querySelector('.main-board');
-  mainBoard.removeEventListener('click', addCellHandlers);
-  mainBoard.removeEventListener('contextmenu', addContextMenuCellHandlers);
+  redrawPlayBoard();
 }
 
 function selectInitTemplate() {
   const sizeSelector = document.querySelector('#sizeSelector');
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.innerHTML = '';
-  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
+  currentGamePlayBoard = generateEmptyPlayboardArray(sizeSelector.value);
 
   templates.forEach(template => {
     if (template.size === Number(sizeSelector.value)) {
@@ -489,23 +478,23 @@ function selectInitTemplate() {
   });
 }
 
-function addCellHandlers(e) {
+export function addCellHandlers(e) {
   if (!isGameFinished) {
     let target = e.target.closest('.row-cell');
     if (!target) return;
-    if (!isGameStarted) toggleTimer()
+    if (!isGameStarted) toggleTimer();
     isGameStarted = true;
     toggleDisableGameButtons();
     highlightCell(target);
   }
 }
 
-function addContextMenuCellHandlers(e) {
+export function addContextMenuCellHandlers(e) {
   if (!isGameFinished) {
     let target = e.target.closest('.row-cell');
     if (!target) return;
     e.preventDefault();
-                        if (!isGameStarted) toggleTimer()
+    if (!isGameStarted) toggleTimer();
     isGameStarted = true;
     toggleDisableGameButtons();
     crossOutCell(target);
@@ -517,39 +506,38 @@ function highlightCell(cell) {
   if (cell.classList.contains('highlight')) {
     cell.classList.remove('highlight');
     playSound(audio.undoClick.src);
-    currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
-    checkForWin(gamePlayboardToGuess, currentGamePlayboard);
+    currentGamePlayBoard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
+    checkForWin(gamePlayBoardToGuess, currentGamePlayBoard);
     return;
   }
   cell.classList.add('highlight');
   playSound(audio.leftClick.src);
-  currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 1;
-  checkForWin(gamePlayboardToGuess, currentGamePlayboard);
+  currentGamePlayBoard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 1;
+  checkForWin(gamePlayBoardToGuess, currentGamePlayBoard);
 }
 
 function crossOutCell(cell) {
   cell.classList.remove('highlight');
   cell.classList.toggle('cross-visible');
   playSound(audio.rightClick.src);
-  currentGamePlayboard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
-  checkForWin(gamePlayboardToGuess, currentGamePlayboard);
+  currentGamePlayBoard[cell.dataset.rowIndex][cell.dataset.cellIndex] = 0;
+  checkForWin(gamePlayBoardToGuess, currentGamePlayBoard);
 }
 
 function resetGame() {
   const sizeSelector = document.querySelector('#sizeSelector');
-  currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
-  redrawPlayboard();
+  currentGamePlayBoard = generateEmptyPlayboardArray(sizeSelector.value);
+  redrawPlayBoard();
 
-                          if (!isGameFinished) {
-                            resetTimer();
-                          } else {
-                            elapsedTime = 0;
-                            updateTimerDisplay('.minutes', '.seconds');
-                          }
-               isGameStarted = false;
-                          isGameFinished = false;
-               toggleDisableGameButtons();
-
+  if (!isGameFinished) {
+    resetTimer();
+  } else {
+    elapsedTime = 0;
+    updateTimerDisplay('.minutes', '.seconds');
+  }
+  isGameStarted = false;
+  isGameFinished = false;
+  toggleDisableGameButtons();
 }
 
 function checkForWin(sourcePlayBoard, currentPlayBoard) {
@@ -568,23 +556,18 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
     }
   }
   console.log('Win!');
-                      isGameFinished = true;
+  isGameFinished = true;
   const modal = document.getElementById('modal');
   modal.style.display = 'block';
   playSound(audio.win.src);
-
-  // if (isGameStarted) stopTimer();
-                        if (isGameStarted) toggleTimer();
+  if (isGameStarted) toggleTimer();
   fillModalWindowWithCongrats();
 
   saveWinResults(elapsedTime);
-                      isGameStarted = false
-                      const saveGameButton = document.querySelector('#saveGameBtn');
-                        saveGameButton.disabled = !isGameStarted;
-
-
-                                  elapsedTime = 0;
-
+  isGameStarted = false;
+  const saveGameButton = document.querySelector('#saveGameBtn');
+  saveGameButton.disabled = !isGameStarted;
+  elapsedTime = 0;
   fillSlideMenuWithScoreData();
 }
 
@@ -595,7 +578,6 @@ async function selectRandomTemplate() {
   sizeSelector.value = String(randomSizeValue);
   resetTimer();
   selectInitTemplate();
-
   const availableTemplates = templates.filter(t => t.size === randomSizeValue);
   const randomTemplateIndex = getRandomInteger(
     0,
@@ -603,14 +585,11 @@ async function selectRandomTemplate() {
   );
   const templateSelector = document.querySelector('#templateSelector');
   templateSelector.value = availableTemplates[randomTemplateIndex].name;
-  redrawPlayboard();
-
+  redrawPlayBoard();
   isGameStarted = false;
-                              isGameFinished = false;
+  isGameFinished = false;
   toggleDisableGameButtons();
-
-
-                                  activateShowSolutionButton()
+  activateShowSolutionButton();
 }
 
 export function playSound(sound) {
@@ -620,27 +599,7 @@ export function playSound(sound) {
   }
 }
 
-// // Preload audio to cash
-// (function() {
-//   for (let sound in audio) {
-//     if (audio?.[sound]?.src) {
-//       audio[sound].src.play();
-//       audio[sound].src.pause();
-//     }
-//   }
-// })();
-
-generateModalWindow();
-addSnackbarNotification();
-generateSlideMenuLayout();
-document.addEventListener('DOMContentLoaded', createGameLayout);
-document.addEventListener('DOMContentLoaded', addControlsHandlers);
-
-
-
-
-// Timer
-
+/* Timer */
 let timerInterval;
 let elapsedTime = 0;
 
@@ -648,16 +607,13 @@ if (localStorage.getItem('timer')) {
   elapsedTime = parseInt(localStorage.getItem('timer'), 10);
 }
 
-document.addEventListener('DOMContentLoaded',  () => updateTimerDisplay('.minutes', '.seconds'))
-
 export function updateTimerDisplay(minutes, seconds) {
   const minutesDisplay = document.querySelector(minutes);
   const secondsDisplay = document.querySelector(seconds);
   const calculatedMinutes = Math.floor(elapsedTime / 60);
   const calculatedSeconds = elapsedTime % 60;
-  minutesDisplay.innerText = `${String(calculatedMinutes).padStart(2, '0')}`
+  minutesDisplay.innerText = `${String(calculatedMinutes).padStart(2, '0')}`;
   secondsDisplay.innerText = `${String(calculatedSeconds).padStart(2, '0')}`;
-  // console.log('timer tick', elapsedTime)
 }
 
 function startTimer() {
@@ -666,7 +622,6 @@ function startTimer() {
     updateTimerDisplay('.minutes', '.seconds');
   }, 1000);
 }
-
 
 export function stopTimer() {
   clearInterval(timerInterval);
@@ -691,9 +646,25 @@ function resetTimer() {
   }
 }
 
-window.addEventListener('beforeunload',  () => {
+/* Preload audio to cash */
+(function () {
+  for (let sound in audio) {
+    if (audio[sound]?.src) {
+      audio[sound].src.load();
+    }
+  }
+})();
+
+generateModalWindow();
+addSnackbarNotification();
+generateSlideMenuLayout();
+document.addEventListener('DOMContentLoaded', createGameLayout);
+document.addEventListener('DOMContentLoaded', addControlsHandlers);
+document.addEventListener('DOMContentLoaded', () =>
+  updateTimerDisplay('.minutes', '.seconds')
+);
+window.addEventListener('beforeunload', () => {
   elapsedTime = 0;
   localStorage.removeItem('timer');
 });
-
 window.addEventListener('resize', updateRowCluesPosition);

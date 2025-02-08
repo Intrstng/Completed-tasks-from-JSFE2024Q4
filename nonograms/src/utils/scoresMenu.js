@@ -57,7 +57,7 @@ function createScoreTable(container) {
     cell.className = 'table-head-cell';
     cell.textContent = content;
     tableRow.append(cell);
-  })
+  });
 
   tableHead.append(tableRow);
   scoresTable.append(tableHead, tableBody);
@@ -71,11 +71,13 @@ export function fillSlideMenuWithScoreData() {
   let lastFiveItemsAsc = [];
   resultsContainer.innerHTML = '';
   if (storedData) {
-    lastFiveItemsAsc = JSON.parse(storedData).slice(-5).sort((a, b) => a.time - b.time);
+    lastFiveItemsAsc = JSON.parse(storedData)
+      .slice(-5)
+      .sort((a, b) => a.time - b.time);
     noScoresMessage.innerHTML = '';
 
     lastFiveItemsAsc.forEach((scoreRecords, index) => {
-      const calculatedMinutes = `${String(Math.floor(scoreRecords.time / 60)).padStart(2, '0')}`
+      const calculatedMinutes = `${String(Math.floor(scoreRecords.time / 60)).padStart(2, '0')}`;
       const calculatedSeconds = `${String(scoreRecords.time % 60).padStart(2, '0')}`;
 
       const scoreRow = document.createElement('tr');
@@ -105,5 +107,5 @@ export function fillSlideMenuWithScoreData() {
     resultsContainer.append(emptyRow);
     noScoresMessage.textContent = 'No saved high scores';
   }
-  resultsContainer.append()
+  resultsContainer.append();
 }

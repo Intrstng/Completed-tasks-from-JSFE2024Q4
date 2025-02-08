@@ -61,7 +61,10 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: background-color 0.3s, color 0.3s, background-image 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    background-image 0.3s;
 }
 
 body {
@@ -200,17 +203,13 @@ label {
 }
 
 .main-board.size-10 .row-cell {
-  //                width: 24.31px;
-  //                height: 25.01px;
   width: 24px;
   height: 24.8px;
 }
 
 .main-board.size-15 .row-cell {
-  //                width: 24.31px;
-  //                height: 25.01px;
-                  width: 24.31px;
-                  height: 24.8px;
+  width: 24.31px;
+  height: 24.8px;
 }
 
 //.main-board:nth-last-child(1) {
@@ -227,10 +226,8 @@ label {
 //  border: 0.5px solid #000;
 //}
 .row-cell {
-  //width: 24.29px;
-  //height: 25px;
-                        width: 24px;
-                        height: 24.8px;
+  width: 24px;
+  height: 24.8px;
   border-bottom: 1px solid var(--dark-color);
   border-right: 1px solid var(--dark-color);
   transition: 0.2s all ease;
@@ -278,7 +275,6 @@ label {
 }
 
 .column-clues.column-clue-size-5 .column-clue-box {
-  //width: 24.24px;
   width: 24px;
 }
 .column-clue-size-10 {
@@ -295,7 +291,6 @@ label {
 //.column-clues.column-clue-size-10 .column-clue-box:nth-child(6) {
 //  width: 23px;
 //}
-
 
 .column-clues.column-clue-size-15 .column-clue-box {
   width: 24px;

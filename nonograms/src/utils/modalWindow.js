@@ -45,11 +45,11 @@ export function fillModalWindowWithCongrats() {
   const timerResult = localStorage.getItem('timer');
 
   if (timerResult) {
-    congratsText.textContent = 'Well done! You\'ve solved the nonogram in ';
+    congratsText.textContent = "Well done! You've solved the nonogram in ";
     modalSeconds.textContent = timerResult;
     congratsTextEnding.innerText = ' seconds';
   } else {
-    congratsText.textContent = 'Well done! You\'ve solved the nonogram';
+    congratsText.textContent = "Well done! You've solved the nonogram";
   }
 }
 
