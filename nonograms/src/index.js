@@ -19,6 +19,8 @@ let mute = false;
 let theme = 'light';
 let isGameStarted = false;
 let isGameFinished = false;
+let rowCluesLength = 1;
+let isShownSolution = false;
 
 function createGameLayout() {
   const board = document.createElement('div');
@@ -167,20 +169,21 @@ function createGameLayout() {
   createGamePlayBoard(playBoard, templates, templateSelector.value);
 }
 
-function toggleDisableGameButtons() {
+function toggleDisableGameButtons(disableResetBtn = true) {
   const saveGameButton = document.querySelector('#saveGameBtn');
   const continueGameButton = document.querySelector('#continueGameBtn');
-  const resetGameButton = document.querySelector('#resetGameBtn');
   saveGameButton.disabled = !isGameStarted;
   const storedGameProgress = localStorage.getItem('gameProgress');
   continueGameButton.disabled = !storedGameProgress;
-  resetGameButton.disabled = !isGameStarted;
 
+  if (disableResetBtn) {
+    const resetGameButton = document.querySelector('#resetGameBtn');
+    resetGameButton.disabled = !isGameStarted;
+  }
 }
 
 function createGamePlayBoard(container, templates, value = 'Dinosaur') {
-  let rowCluesLength = 1;
-  let rowCluesLeftPosition = '';
+  rowCluesLength = 1;
   const templateObject = templates.find(t => t.name === value);
 
   const playBoard = document.querySelector('#playBoard');
@@ -254,29 +257,36 @@ function createGamePlayBoard(container, templates, value = 'Dinosaur') {
     rowCluesContainer.append(rowClueBox);
   }
 
-  switch (rowCluesLength) {
-    case 1:
-      rowCluesLeftPosition = '-29px';
-      break;
-    case 2:
-      rowCluesLeftPosition = '-54px';
-      break;
-    case 3:
-      rowCluesLeftPosition = '-79px';
-      break;
-    case 4:
-      rowCluesLeftPosition = '-104px';
-      break;
-    default:
-      rowCluesLeftPosition = '-29px';
-  }
-
-  rowCluesContainer.style.left = rowCluesLeftPosition;
-
   container.prepend(columnCluesContainer);
   mainBoard.append(rowCluesContainer);
   container.append(mainBoard);
   gamePlayboardToGuess = templateObject.playboard;
+
+  updateRowCluesPosition();
+}
+
+function updateRowCluesPosition() {
+  let rowCluesLeftPosition = '';
+  const rowCluesContainer = document.querySelector('.row-clues');
+  const screenWidth = window.innerWidth;
+
+  switch (rowCluesLength) {
+    case 1:
+      rowCluesLeftPosition = screenWidth <= 550 ? '-24px' : '-29px';
+      break;
+    case 2:
+      rowCluesLeftPosition = screenWidth <= 550 ? '-44px' : '-54px';
+      break;
+    case 3:
+      rowCluesLeftPosition = screenWidth <= 550 ? '-64px' : '-79px';
+      break;
+    case 4:
+      rowCluesLeftPosition = screenWidth <= 550 ? '-84px' : '-104px';
+      break;
+    default:
+      rowCluesLeftPosition = '-29px';
+  }
+  rowCluesContainer.style.left = rowCluesLeftPosition;
 }
 
 function addControlsHandlers() {
@@ -342,8 +352,12 @@ function toggleTheme() {
 }
 
 function showSolution() {
+  isShownSolution = true;
+  const showSolutionButton = document.querySelector('#solutionBtn');
+  showSolutionButton.disabled = isShownSolution;
   isGameStarted = false;
-  toggleDisableGameButtons();
+  isGameFinished = true
+  toggleDisableGameButtons(false);
   const value = document.querySelector('#templateSelector').value;
   const sourcePlayBoard = templates.find(t => t.name === value);
 
@@ -360,12 +374,18 @@ function showSolution() {
       }
     }
   }
+                                        elapsedTime = 0;
+                                        updateTimerDisplay('.minutes', '.seconds');
+                                        if (timerInterval) {
+                                          stopTimer();
+                                          timerInterval = null;
+                                        }
 }
 
 function continueGame() {
-  // if (!isGameStarted) toggleTimer()
-  // isGameStarted = true;
-
+                      // if (!isGameStarted) toggleTimer()
+                                  isGameStarted = false;
+                                  isGameFinished = false;
   const saveGameButton = document.querySelector('#saveGameBtn');
   const continueGameButton = document.querySelector('#continueGameBtn');
   const resetGameButton = document.querySelector('#resetGameBtn');
@@ -380,8 +400,16 @@ function continueGame() {
 
   const storedGameData = JSON.parse(storedGameProgress);
   const storedPlayBoard = storedGameData.progress;
+  const sizeSelector = document.querySelector('#sizeSelector');
+  sizeSelector.value = String(storedGameData.size);
+  selectInitTemplate()
+  const templateSelector = document.querySelector('#templateSelector');
+  templateSelector.value = storedGameData.template;
+  redrawPlayboard();
+  currentGamePlayboard = [...storedPlayBoard];
   elapsedTime = Number(storedGameData.timer) || 0;
-console.log(elapsedTime,'ssssss')
+  updateTimerDisplay('.minutes', '.seconds')
+
   for (let i = 0; i < storedPlayBoard.length; i++) {
     const rowToHighlight = document.querySelectorAll(`[data-row-index="${i}"]`);
     for (let j = 0; j < rowToHighlight.length; j++) {
@@ -391,6 +419,16 @@ console.log(elapsedTime,'ssssss')
       }
     }
   }
+
+
+                                  activateShowSolutionButton()
+
+}
+
+function activateShowSolutionButton() {
+  isShownSolution = false;
+  const showSolutionButton = document.querySelector('#solutionBtn');
+  showSolutionButton.disabled = isShownSolution;
 }
 
 function addHandleCellClick() {
@@ -400,17 +438,43 @@ function addHandleCellClick() {
 }
 
 function redrawPlayboard() {
+                                isGameStarted = false;
+                                isGameFinished = false;
+                                elapsedTime = 0;
+                                updateTimerDisplay('.minutes', '.seconds');
+                                if (timerInterval) {
+                                  stopTimer();
+                                  timerInterval = null;
+                                }
+                                activateShowSolutionButton();
+
   const playBoard = document.querySelector('#playBoard');
   const sizeSelector = document.querySelector('#sizeSelector');
   const templateSelector = document.querySelector('#templateSelector');
+  const continueGameButton = document.querySelector('#continueGameBtn');
+  const storedGameProgress = localStorage.getItem('gameProgress');
+  continueGameButton.disabled = !storedGameProgress;
+
   playBoard.innerHTML = '';
   playBoard.className = '';
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   createGamePlayBoard(playBoard, templates, templateSelector.value);
-  // console.log(currentGamePlayboard)
+
   removeHandleCellClick();
   addHandleCellClick();
+
+
 }
+
+// function reselectTemplateByUser() {
+//                 elapsedTime = 0;
+//                 updateTimerDisplay('.minutes', '.seconds');
+//                 if (timerInterval) {
+//                   stopTimer();
+//                   timerInterval = null;
+//                 }
+//                 reselectTemplate()
+// }
 
 function reselectTemplate() {
   selectInitTemplate();
@@ -441,22 +505,26 @@ function selectInitTemplate() {
 }
 
 function addCellHandlers(e) {
-  let target = e.target.closest('.row-cell');
-  if (!target) return;
-                if (!isGameStarted) toggleTimer()
-  isGameStarted = true;
-  toggleDisableGameButtons();
-  highlightCell(target);
+  if (!isGameFinished) {
+    let target = e.target.closest('.row-cell');
+    if (!target) return;
+    if (!isGameStarted) toggleTimer()
+    isGameStarted = true;
+    toggleDisableGameButtons();
+    highlightCell(target);
+  }
 }
 
 function addContextMenuCellHandlers(e) {
-  let target = e.target.closest('.row-cell');
-  if (!target) return;
-  e.preventDefault();
-                      if (!isGameStarted) toggleTimer()
-  isGameStarted = true;
-  toggleDisableGameButtons();
-  crossOutCell(target);
+  if (!isGameFinished) {
+    let target = e.target.closest('.row-cell');
+    if (!target) return;
+    e.preventDefault();
+                        if (!isGameStarted) toggleTimer()
+    isGameStarted = true;
+    toggleDisableGameButtons();
+    crossOutCell(target);
+  }
 }
 
 function highlightCell(cell) {
@@ -486,14 +554,33 @@ function resetGame() {
   const sizeSelector = document.querySelector('#sizeSelector');
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   redrawPlayboard();
-                                  isGameStarted = false;
-                                  toggleDisableGameButtons();
+                          elapsedTime = 0;
+                          if (!isGameFinished) {
+                            updateTimerDisplay('.minutes', '.seconds');
+                            // stopTimer();
+                            //                         toggleTimer()
+
+
+                                      updateTimerDisplay('.minutes', '.seconds');
+                                      if (timerInterval) {
+                                        stopTimer();
+                                        timerInterval = null;
+                                      }
+
+                          } else {
+                            updateTimerDisplay('.minutes', '.seconds');
+                          }
+               isGameStarted = false;
+                          isGameFinished = false;
+               toggleDisableGameButtons();
+
 }
 
 function checkForWin(sourcePlayBoard, currentPlayBoard) {
   if (sourcePlayBoard.length !== currentPlayBoard.length) {
     return false;
   }
+
   for (let i = 0; i < sourcePlayBoard.length; i++) {
     if (sourcePlayBoard[i].length !== currentPlayBoard[i].length) {
       return false;
@@ -504,14 +591,22 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
       }
     }
   }
-  console.log('Win');
+  console.log('Win!');
+                      isGameFinished = true;
   const modal = document.getElementById('modal');
   modal.style.display = 'block';
   playSound(audio.win.src);
 
-  if (isGameStarted) stopTimer();
+  // if (isGameStarted) stopTimer();
+                        if (isGameStarted) toggleTimer();
   fillModalWindowWithCongrats();
   saveWinResults(elapsedTime);
+                      isGameStarted = false
+                      const saveGameButton = document.querySelector('#saveGameBtn');
+                        saveGameButton.disabled = !isGameStarted;
+
+
+                                  elapsedTime = 0;
 }
 
 async function selectRandomTemplate() {
@@ -519,6 +614,13 @@ async function selectRandomTemplate() {
   const randomSizeIndex = getRandomInteger(0, optionsData.length - 1);
   const randomSizeValue = optionsData[randomSizeIndex].size;
   sizeSelector.value = String(randomSizeValue);
+                            elapsedTime = 0;
+                            updateTimerDisplay('.minutes', '.seconds');
+                              if (timerInterval) {
+                                stopTimer();
+                                timerInterval = null;
+                              }
+
 
   selectInitTemplate();
 
@@ -532,7 +634,11 @@ async function selectRandomTemplate() {
   redrawPlayboard();
 
   isGameStarted = false;
+                              isGameFinished = false;
   toggleDisableGameButtons();
+
+
+                                  activateShowSolutionButton()
 }
 
 export function playSound(sound) {
@@ -579,6 +685,7 @@ export function updateTimerDisplay(minutes, seconds) {
   const calculatedSeconds = elapsedTime % 60;
   minutesDisplay.innerText = `${String(calculatedMinutes).padStart(2, '0')}`
   secondsDisplay.innerText = `${String(calculatedSeconds).padStart(2, '0')}`;
+  // console.log('timer tick', elapsedTime)
 }
 
 function startTimer() {
@@ -603,7 +710,18 @@ export function toggleTimer() {
   }
 }
 
+function resetTimer() {
+  elapsedTime = 0;
+  updateTimerDisplay('.minutes', '.seconds');
+  if (timerInterval) {
+    stopTimer();
+    timerInterval = null;
+  }
+}
+
 window.addEventListener('beforeunload',  () => {
   elapsedTime = 0;
   localStorage.removeItem('timer');
 });
+
+window.addEventListener('resize', updateRowCluesPosition);

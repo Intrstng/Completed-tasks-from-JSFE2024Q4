@@ -4,16 +4,6 @@
 @use 'sass/scoresMenu';
 @use 'sass/snackbar';
 
-//$light-bg: #ffffff;
-//$light-text: #000000;
-//$light-button-bg: #007bff;
-//$dark-bg: #333333;
-//$dark-text: #ffffff;
-//$dark-button-bg: #0056b3;
-//$light-bg-image: url('/assets/wallpaper.jpg');
-//$dark-bg-image: url('/assets/wallpaper-dark.jpg');
-//$body-color: black;
-
 $light-bg: rgb(255, 255, 255);
 $light-text: rgb(0, 0, 0);
 $light-button-bg: rgb(76, 175, 80);
@@ -167,7 +157,6 @@ label {
 
 .button-container {
   margin-bottom: 20px;
-  //max-width: ;
 }
 
 .game-button {
@@ -210,11 +199,18 @@ label {
   position: relative;
 }
 
+.main-board.size-10 .row-cell {
+  //                width: 24.31px;
+  //                height: 25.01px;
+  width: 24px;
+  height: 24.8px;
+}
+
 .main-board.size-15 .row-cell {
-  //width: 24.29px;
-  //height: 25px;
-  width: 24.31px;
-  height: 25.01px;
+  //                width: 24.31px;
+  //                height: 25.01px;
+                  width: 24.31px;
+                  height: 24.8px;
 }
 
 //.main-board:nth-last-child(1) {
@@ -231,9 +227,10 @@ label {
 //  border: 0.5px solid #000;
 //}
 .row-cell {
-  width: 24.29px;
-  height: 25px;
-  //border: 1px solid #000;
+  //width: 24.29px;
+  //height: 25px;
+                        width: 24px;
+                        height: 24.8px;
   border-bottom: 1px solid var(--dark-color);
   border-right: 1px solid var(--dark-color);
   transition: 0.2s all ease;
@@ -253,14 +250,14 @@ label {
 
 .size-5 {
   //width: 126.5px;
-  width: 124.3px;
+  width: 125px;
   height: 128px;
   border: 2px solid var(--dark-color);
 }
 
 .size-10 {
   width: 249px; //250
-  height: 258px;
+  height: 257px;
   border: 2px solid var(--dark-color);
 }
 
@@ -281,26 +278,34 @@ label {
 }
 
 .column-clues.column-clue-size-5 .column-clue-box {
-  width: 24.24px;
+  //width: 24.24px;
+  width: 24px;
 }
 .column-clue-size-10 {
   width: 249px;
 }
-.column-clues.column-clue-size-10 .column-clue-box {
-  width: 24.1px;
-  //width: 24.3px;
-  //                  box-sizing: content-box;
+//.column-clues.column-clue-size-10 .column-clue-box {
+//  //width: 24.3px;
+//  //                  box-sizing: content-box;
+//}
+
+.column-clues.column-clue-size-10 .column-clue-box:nth-child(5) {
+  width: 23.4px;
 }
+//.column-clues.column-clue-size-10 .column-clue-box:nth-child(6) {
+//  width: 23px;
+//}
+
 
 .column-clues.column-clue-size-15 .column-clue-box {
-  width: 24.04px;
+  width: 24px;
 }
-.column-clues.column-clue-size-15 .column-clue-box:nth-child(3) {
-  width: 24.8px;
+.column-clues.column-clue-size-15 .column-clue-box:nth-child(6) {
+  width: 23px;
 }
 
-.column-clues.column-clue-size-15 .column-clue-box:nth-child(6) {
-  width: 23.2px;
+.column-clues.column-clue-size-15 .column-clue-box:nth-child(11) {
+  width: 23px;
 }
 
 .column-clue-box {
@@ -339,9 +344,12 @@ label {
   border: 2px solid var(--dark-color);
   border-right: none;
 }
+.row-clues.row-clue-size-5 .row-clue-box:nth-child(3) {
+  height: 24.7px;
+}
 
 .row-clues.row-clue-size-10 .row-clue-box {
-  height: 24.98px;
+  height: 24.8px;
 }
 .row-clues.row-clue-size-15 .row-clue-box {
   height: 24.95px;
@@ -355,17 +363,17 @@ label {
 }
 
 .row-clue-box-size-5 {
-  height: 25px;
+  height: 24.9px;
 }
 
 .row-clue-box-size-10 {
   height: 24.75px;
 }
 
-//.row-clue-box-size-15 {
-//  height: 26px;
-//  //display: none;
-//}
+.row-clue-box-size-15 {
+  height: 24.8px !important;
+  //display: none;
+}
 
 .row-clue-item {
   padding: 3px 0;
@@ -379,9 +387,9 @@ label {
   border-bottom: none;
 }
 
-.row-clue-box-size-15:last-child {
-  height: 24.6px !important;
-}
+//.row-clue-box-size-15:last-child {
+//  height: 23px !important;
+//}
 
 .hidden {
   visibility: hidden;
@@ -596,5 +604,26 @@ select:focus {
   th,
   td {
     border: 1px solid $dark-bg;
+  }
+}
+
+@media (max-width: 550px) {
+  label {
+    max-width: 100px;
+  }
+
+  #board {
+    padding: 15px 10px;
+    border-radius: 10px;
+  }
+
+  .row-clue-item {
+    width: 20px;
+  }
+
+  .congrats-text,
+  #modalSeconds,
+  .congrats-text-end {
+    font-size: 16px;
   }
 }
