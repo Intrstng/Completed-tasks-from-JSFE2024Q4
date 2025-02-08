@@ -35,14 +35,7 @@ export function generateSlideMenuLayout() {
 
 export function slideMenu() {
   const slidingMenu = document.getElementById('slidingMenu');
-  const toggleMenuButton = document.getElementById('scoresButton');
   const closeMenuButton = document.getElementById('closeMenuButton');
-
-  toggleMenuButton.addEventListener('click', () => {
-    playSound(audio.toggle.src);
-    slidingMenu.classList.toggle('open');
-    fillSlideMenuWithScoreData();
-  });
 
   closeMenuButton.addEventListener('click', () => {
     playSound(audio.close.src);
@@ -71,7 +64,7 @@ function createScoreTable(container) {
   container.append(scoresTable);
 }
 
-function fillSlideMenuWithScoreData() {
+export function fillSlideMenuWithScoreData() {
   const resultsContainer = document.querySelector('.table-body');
   const noScoresMessage = document.querySelector('.no-scores-message');
   const storedData = localStorage.getItem('winResults');

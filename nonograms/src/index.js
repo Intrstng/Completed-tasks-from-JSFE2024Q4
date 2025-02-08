@@ -9,7 +9,7 @@ import { getRandomInteger } from './utils/getRandomInteger.js';
 import { generateEmptyPlayboardArray } from './utils/generateEmptyPlayboardArray.js';
 import { audio } from './utils/audio.js';
 import { addSnackbarNotification, fillModalWindowWithCongrats, generateModalWindow } from './utils/modalWindow.js';
-import { generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
+import { fillSlideMenuWithScoreData, generateSlideMenuLayout, slideMenu } from './utils/scoresMenu.js';
 import { saveGameProgress, saveWinResults } from './utils/saveGame.js';
 import { themeToggle } from './utils/themeToggle.js';
 
@@ -290,8 +290,13 @@ function updateRowCluesPosition() {
 }
 
 function addControlsHandlers() {
+  const slidingMenu = document.getElementById('slidingMenu');
   const scoresButton = document.querySelector('#scoresButton');
-  scoresButton.addEventListener('click', () => {});
+  scoresButton.addEventListener('click', () => {
+    playSound(audio.toggle.src);
+    slidingMenu.classList.toggle('open');
+    fillSlideMenuWithScoreData();
+  });
 
   const soundButton = document.querySelector('#soundButton');
   soundButton.addEventListener('click', toggleMuteSound);
@@ -374,12 +379,7 @@ function showSolution() {
       }
     }
   }
-                                        elapsedTime = 0;
-                                        updateTimerDisplay('.minutes', '.seconds');
-                                        if (timerInterval) {
-                                          stopTimer();
-                                          timerInterval = null;
-                                        }
+  resetTimer();
 }
 
 function continueGame() {
@@ -440,12 +440,7 @@ function addHandleCellClick() {
 function redrawPlayboard() {
                                 isGameStarted = false;
                                 isGameFinished = false;
-                                elapsedTime = 0;
-                                updateTimerDisplay('.minutes', '.seconds');
-                                if (timerInterval) {
-                                  stopTimer();
-                                  timerInterval = null;
-                                }
+                                resetTimer();
                                 activateShowSolutionButton();
 
   const playBoard = document.querySelector('#playBoard');
@@ -465,16 +460,6 @@ function redrawPlayboard() {
 
 
 }
-
-// function reselectTemplateByUser() {
-//                 elapsedTime = 0;
-//                 updateTimerDisplay('.minutes', '.seconds');
-//                 if (timerInterval) {
-//                   stopTimer();
-//                   timerInterval = null;
-//                 }
-//                 reselectTemplate()
-// }
 
 function reselectTemplate() {
   selectInitTemplate();
@@ -554,20 +539,11 @@ function resetGame() {
   const sizeSelector = document.querySelector('#sizeSelector');
   currentGamePlayboard = generateEmptyPlayboardArray(sizeSelector.value);
   redrawPlayboard();
-                          elapsedTime = 0;
+
                           if (!isGameFinished) {
-                            updateTimerDisplay('.minutes', '.seconds');
-                            // stopTimer();
-                            //                         toggleTimer()
-
-
-                                      updateTimerDisplay('.minutes', '.seconds');
-                                      if (timerInterval) {
-                                        stopTimer();
-                                        timerInterval = null;
-                                      }
-
+                            resetTimer();
                           } else {
+                            elapsedTime = 0;
                             updateTimerDisplay('.minutes', '.seconds');
                           }
                isGameStarted = false;
@@ -600,6 +576,7 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
   // if (isGameStarted) stopTimer();
                         if (isGameStarted) toggleTimer();
   fillModalWindowWithCongrats();
+
   saveWinResults(elapsedTime);
                       isGameStarted = false
                       const saveGameButton = document.querySelector('#saveGameBtn');
@@ -607,6 +584,8 @@ function checkForWin(sourcePlayBoard, currentPlayBoard) {
 
 
                                   elapsedTime = 0;
+
+  fillSlideMenuWithScoreData();
 }
 
 async function selectRandomTemplate() {
@@ -614,14 +593,7 @@ async function selectRandomTemplate() {
   const randomSizeIndex = getRandomInteger(0, optionsData.length - 1);
   const randomSizeValue = optionsData[randomSizeIndex].size;
   sizeSelector.value = String(randomSizeValue);
-                            elapsedTime = 0;
-                            updateTimerDisplay('.minutes', '.seconds');
-                              if (timerInterval) {
-                                stopTimer();
-                                timerInterval = null;
-                              }
-
-
+  resetTimer();
   selectInitTemplate();
 
   const availableTemplates = templates.filter(t => t.size === randomSizeValue);
