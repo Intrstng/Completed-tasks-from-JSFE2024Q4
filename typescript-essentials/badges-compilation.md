@@ -18,7 +18,7 @@ Here is a collection of badges I earned from completing Microsoft Learn's TypeSc
 **Build JavaScript applications using TypeScript**: [Badge](https://learn.microsoft.com/en-us/users/intrstng/achievements/ekje56vp)
 
 ## Screenshot:
-<img src="D:\Projects\RSSchool\Stage_2\12.week\TypeScript Essentials - task\intrstng-JSFE2024Q4\typescript-essentials\Achievements.PNG" width="800" height="600" alt="Achievements"/>
+<img src="./Achievements.PNG" width="800" height="600" alt="Achievements"/>
 
 ## Reflections
 
