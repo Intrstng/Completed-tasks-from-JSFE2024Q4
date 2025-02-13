@@ -13,6 +13,10 @@ Here is a collection of badges I earned from completing Microsoft Learn's TypeSc
 7. **Work with External Libraries in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/Intrstng/2QKPZMDV?sharingId=C3CD0C30A48C6211)
 8. **Organize Code with Namespaces in TypeScript**: [Badge](https://learn.microsoft.com/api/achievements/share/en-us/Intrstng/KJLS4DLB?sharingId=C3CD0C30A48C6211)
 
+### Learning path
+
+**Build JavaScript applications using TypeScript**: [Badge](https://learn.microsoft.com/en-us/users/intrstng/achievements/ekje56vp)
+
 ## Reflections
 
 [Add your personal reflections on what you learned in each module and how it contributes to your development skills]
