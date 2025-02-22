@@ -12,10 +12,5 @@
         "es6": true,
         "browser": true,
         "node": true
-    },
-    "rules": {
-        "no-debugger": "off",
-        "no-console": 0,
-        "class-methods-use-this": "off"
     }
 }
