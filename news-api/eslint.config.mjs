@@ -10,7 +10,7 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 export default tseslint.config(
     pluginJs.configs.recommended,
     eslint.configs.recommended,
-    ...tseslint.configs.recommended,
+    tseslint.configs.recommended,
     eslintPluginPrettierRecommended,
     {
       files: ["**/*.ts"],
@@ -30,7 +30,7 @@ export default tseslint.config(
         "no-debugger": "off",
         "no-console": "off",
         "class-methods-use-this": "off",
-        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-explicit-any": "error",
       },
     },
     {
