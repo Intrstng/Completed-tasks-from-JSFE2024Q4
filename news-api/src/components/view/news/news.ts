@@ -26,12 +26,12 @@ class News {
 
                 const authorElement = newsClone.querySelector<HTMLElement>('.news__meta-author');
                 if (authorElement) {
-                    authorElement.textContent = item.author || item.source.name || 'Unknown Author';
+                    authorElement.textContent = item.author || item.source.name || '';
                 }
 
                 const dateElement = newsClone.querySelector<HTMLElement>('.news__meta-date');
                 if (dateElement) {
-                    dateElement.textContent = (item.publishedAt || 'No Date Available')
+                    dateElement.textContent = (item.publishedAt || '')
                         .slice(0, 10)
                         .split('-')
                         .reverse()
@@ -40,17 +40,17 @@ class News {
 
                 const descriptionTitleElement = newsClone.querySelector<HTMLElement>('.news__description-title');
                 if (descriptionTitleElement) {
-                    descriptionTitleElement.textContent = item.title || 'Unknown title';
+                    descriptionTitleElement.textContent = item.title || '';
                 }
 
                 const descriptionSourceElement = newsClone.querySelector<HTMLElement>('.news__description-source');
                 if (descriptionSourceElement) {
-                    descriptionSourceElement.textContent = item.source.name || 'Unknown name';
+                    descriptionSourceElement.textContent = item.source.name || '';
                 }
 
                 const descriptionContentElement = newsClone.querySelector<HTMLElement>('.news__description-content');
                 if (descriptionContentElement) {
-                    descriptionContentElement.textContent = item.description || 'Unknown description';
+                    descriptionContentElement.textContent = item.description || '';
                 }
 
                 const readMoreElement = newsClone.querySelector<HTMLAnchorElement>('.news__read-more a');

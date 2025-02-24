@@ -1,11 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
 body {
     color: #fff;
-    background: #17181c;
+    /*background: #17181c;*/
+    background: rgba(23, 24, 28, 0.75);
     font-family: sans-serif;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    /*min-width: 303px;*/
+    min-height: 100%;
+}
+
+.container {
+    max-width: 1440px;
+    padding: 0 10px;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
 header {
+    margin-bottom: 20px;
     padding: 10px 30px;
+    /*background: #4CAF50;*/
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
 }
 
 header h1 {
@@ -13,23 +42,89 @@ header h1 {
     font-weight: 800;
 }
 
+main {
+    flex: 1;
+}
+
 footer {
-    height: 100px;
+    padding: 0 40px;
+    height: 80px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    /*background: rgba(76, 175, 80, 0.6);*/
 }
 footer .copyright {
-    font-size: 14px;
-    color: #333;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.5px;
     text-align: center;
 }
+
 footer .copyright a {
-    color: #444;
+    transition: 0.3s ease color;
+    letter-spacing: 0.5px;
+    color: rgb(76, 175, 80, 0.7);
 }
+
 footer .copyright a:hover {
-    color: #555;
+    color: rgba(225, 215, 24, 0.7);
 }
+
+footer .copyright__link {
+    text-decoration: none;
+}
+
 footer .copyright:before {
     content: '©';
+}
+
+footer .social {
+    max-width: 110px;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+footer .repository-link:before,
+footer .school-link:before {
+    content: '';
+    flex-shrink: 0;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.7;
+}
+
+footer .repository-link:before {
+    width: 30px;
+    height: 30px;
+    background-image: url(./assets/github.svg);
+}
+
+footer .school-link:before {
+    width: 60px;
+    height: 60px;
+    background-image: url(./assets/rsschool.svg);
+}
+
+.social__item a {
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.repository-link:hover  {
+    transform: scale(1.1);
+}
+
+.school-link:hover {
+    transform: scale(1.1);
+}
+
+ul {
+    list-style: none;
 }

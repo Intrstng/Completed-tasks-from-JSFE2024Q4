@@ -12,7 +12,7 @@ class Sources {
                 const itemNameElement = sourceClone.querySelector<HTMLElement>('.source__item-name');
                 const sourceItemElement = sourceClone.querySelector<HTMLElement>('.source__item');
                 if (itemNameElement) {
-                    itemNameElement.textContent = item.name || 'Unknown name';
+                    itemNameElement.textContent = item.name || '';
                 }
                 if (sourceItemElement) {
                     sourceItemElement.setAttribute('data-source-id', item.id || 'default-id');
