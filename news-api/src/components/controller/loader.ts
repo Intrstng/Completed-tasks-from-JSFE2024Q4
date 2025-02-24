@@ -57,10 +57,10 @@ class Loader {
         options: Options | object = {}
     ) {
         fetch(this.makeUrl(options, endpoint), { method })
-            .then(this.errorHandler)
-            .then(res => res.json())
-            .then(data => callback(data))
-            .catch(err => console.error(err));
+            .then((res: Response) => this.errorHandler(res))
+            .then((res: Response) => res.json() as Promise<ResponseCommon>)
+            .then((data: ResponseCommon) => callback(data))
+            .catch((err: Error) => console.error(err));
     }
 }
 
