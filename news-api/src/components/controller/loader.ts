@@ -1,7 +1,11 @@
 import { LoaderOptions } from './appLoader';
+import { Endpoint } from './controller';
 
-class Loader {
-    constructor(baseLink: string, options: LoaderOptions) {
+class Loader implements LoaderInterface {
+    constructor(
+        private readonly baseLink: string,
+        private readonly options: LoaderOptions
+    ) {
         this.baseLink = baseLink;
         this.options = options;
     }
@@ -15,7 +19,7 @@ class Loader {
         this.load(HttpMethod.GET, endpoint, callback, options);
     }
 
-    errorHandler(res) {
+    private errorHandler(res) {
         if (!res.ok) {
             if (res.status === HttpStatus.Unauthorized || res.status === HttpStatus.NotFound)
                 console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
@@ -25,7 +29,7 @@ class Loader {
         return res;
     }
 
-    makeUrl(options, endpoint) {
+    private makeUrl(options, endpoint) {
         const urlOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
@@ -36,7 +40,7 @@ class Loader {
         return url.slice(0, -1);
     }
 
-    load(method, endpoint, callback, options = {}) {
+    private load(method, endpoint, callback, options = {}) {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)
             .then(res => res.json())
@@ -49,16 +53,13 @@ export default Loader;
 
 
 interface LoaderInterface {
-    baseLink: string;
-    options: LoaderOptions;
-
-    getResp(params: { endpoint: string; options?: object }, callback?: (data: any) => void): void;
+    getResp(params: Params, callback: (data: any) => void): void;
     errorHandler(res: Response): Response;
-    makeUrl(options: object, endpoint: string): string;
-    load(method: HttpMethod, endpoint: string, callback: (data: any) => void, options?: object): void;
+    makeUrl(options: Options, endpoint: Endpoint): string;
+    load(method: HttpMethod, endpoint: Endpoint, callback: (data: any) => void, options?: Options): void;
 }
 
-HttpStatus.NotFound
+
 enum HttpStatus {
     OK = 200,
     Created = 201,
@@ -77,4 +78,13 @@ enum HttpMethod {
     PATCH = 'PATCH',
     OPTIONS = 'OPTIONS',
     HEAD = 'HEAD',
+}
+
+type Params = {
+    endpoint: Endpoint;
+    options?: Options
+}
+
+export type Options = {
+    sources: string | null
 }

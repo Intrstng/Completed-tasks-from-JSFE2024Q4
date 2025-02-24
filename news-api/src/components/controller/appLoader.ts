@@ -11,7 +11,7 @@ class AppLoader extends Loader {
 }
 
 export type LoaderOptions = {
-    apiKey: string;
+    apiKey: string | undefined;
 }
 
 export default AppLoader;

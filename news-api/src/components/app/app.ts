@@ -8,9 +8,12 @@ class App {
     }
 
     start() {
-        document
-            .querySelector('.sources')
-            .addEventListener('click', (e: MouseEvent) => this.controller.getNews(e, data => this.view.drawNews(data)));
+        const sourcesElement = document.querySelector('.sources');
+        if (sourcesElement) {
+            sourcesElement.addEventListener('click', (e: Event) => this.controller.getNews(e, data => this.view.drawNews(data)));
+        } else {
+            console.error("Element with class 'sources' not found.");
+        }
         this.controller.getSources(data => this.view.drawSources(data));
     }
 }
