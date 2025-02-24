@@ -6,7 +6,7 @@ import {
     MergedOptions,
     Options,
     Params,
-    ResponseCommon
+    ResponseCommon,
 } from '../../types';
 
 class Loader {
@@ -37,7 +37,7 @@ class Loader {
         return res;
     }
 
-    private makeUrl(options: Options | {}, endpoint: Endpoint): string {
+    private makeUrl(options: Options | object, endpoint: Endpoint): string {
         const urlOptions: MergedOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
@@ -54,7 +54,7 @@ class Loader {
         method: HttpMethod,
         endpoint: Endpoint,
         callback: (data: ResponseCommon) => void,
-        options: Options | {} = {}
+        options: Options | object = {}
     ) {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)

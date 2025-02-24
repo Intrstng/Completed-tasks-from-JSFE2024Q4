@@ -50,7 +50,7 @@ class News {
 
                 const descriptionContentElement = newsClone.querySelector<HTMLElement>('.news__description-content');
                 if (descriptionContentElement) {
-                    descriptionContentElement.textContent = item.description  || 'Unknown description';
+                    descriptionContentElement.textContent = item.description || 'Unknown description';
                 }
 
                 const readMoreElement = newsClone.querySelector<HTMLAnchorElement>('.news__read-more a');

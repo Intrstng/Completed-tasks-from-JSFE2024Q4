@@ -13,7 +13,9 @@ class App {
     start(): void {
         const sourcesElement = document.querySelector('.sources');
         if (sourcesElement) {
-            sourcesElement.addEventListener('click', (e: Event) => this.controller.getNews(e, data => this.view.drawNews(data)));
+            sourcesElement.addEventListener('click', (e: Event) =>
+                this.controller.getNews(e, data => this.view.drawNews(data))
+            );
         } else {
             console.error("Element with class 'sources' not found.");
         }
