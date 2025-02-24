@@ -1,7 +1,8 @@
 import './sources.css';
+import { SourceItem } from '../../controller/loader';
 
 class Sources {
-    draw(data: any[]): void {
+    draw(data: SourceItem[]): void {
         const fragment = document.createDocumentFragment();
         const sourceItemTemp = document.querySelector<HTMLTemplateElement>('#sourceItemTemp');
 
@@ -11,10 +12,10 @@ class Sources {
                 const itemNameElement = sourceClone.querySelector<HTMLElement>('.source__item-name');
                 const sourceItemElement = sourceClone.querySelector<HTMLElement>('.source__item');
                 if (itemNameElement) {
-                    itemNameElement.textContent = item.name;
+                    itemNameElement.textContent = item.name || 'Unknown name';
                 }
                 if (sourceItemElement) {
-                    sourceItemElement.setAttribute('data-source-id', item.id);
+                    sourceItemElement.setAttribute('data-source-id', item.id || 'default-id');
                 }
 
                 fragment.append(sourceClone);

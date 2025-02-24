@@ -1,4 +1,5 @@
 import AppLoader from './appLoader';
+import { ArticleResponse, SourceResponse } from './loader';
 
 class AppController extends AppLoader implements AppControllerInterface {
     public getSources(callback: GetSourcesCB): void {
@@ -43,8 +44,8 @@ interface AppControllerInterface {
     getNews(e: Event, callback: GetNewsCB): void;
 }
 
-type GetNewsCB = () => void;
-type GetSourcesCB = () => void;
+type GetSourcesCB = (data: SourceResponse) => void;
+type GetNewsCB = (data: ArticleResponse) => void;
 
 export enum Endpoint {
     SOURCES = 'sources',

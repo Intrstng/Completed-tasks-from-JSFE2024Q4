@@ -14,4 +14,9 @@ export type LoaderOptions = {
     apiKey: string | undefined;
 }
 
+export type MergedOptions = {
+    sources?: string | null;
+    apiKey?: string | undefined;
+};
+
 export default AppLoader;
