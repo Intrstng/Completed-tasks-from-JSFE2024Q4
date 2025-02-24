@@ -1,14 +1,22 @@
 .sources {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
-    height: auto;
     overflow: auto;
     align-items: center;
     justify-content: center;
-    font:
-        300 0.75em 'Fira Sans',
-        sans-serif;
+    font: 300 0.75em 'Fira Sans', sans-serif;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: auto;
+    max-width: 100vw;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    transition: transform 0.3s ease;
+    padding: 65px 20px 0;
+    z-index: 5;
+    transform: translateX(100%);
 }
 
 .source__item {
@@ -34,4 +42,8 @@
 .source__item-name {
     font-weight: 400;
     white-space: nowrap;
+}
+
+.sources.open {
+    transform: translateX(0);
 }

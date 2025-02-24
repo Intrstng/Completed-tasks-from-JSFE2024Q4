@@ -13,8 +13,16 @@ class App {
     start(): void {
         const sourcesElement = document.querySelector('.sources');
         if (sourcesElement) {
-            sourcesElement.addEventListener('click', (e: Event) =>
+            sourcesElement.addEventListener('click', (e: Event) => {
                 this.controller.getNews(e, data => this.view.drawNews(data))
+                const menuToggle = document.querySelector('.menu-toggle');
+                const sidebar = document.querySelector('.sources');
+                if (menuToggle && sidebar) {
+                    sidebar.classList.remove('open');
+                    sidebar.classList.add('closed');
+                    menuToggle.classList.toggle('active');
+                }
+            }
             );
         } else {
             console.error("Element with class 'sources' not found.");

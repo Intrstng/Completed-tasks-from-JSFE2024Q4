@@ -27,6 +27,18 @@ class Sources {
             } else {
                 console.error("Element with class 'sources' not found");
             }
+
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sources');
+
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', function () {
+                    sidebar.classList.toggle('open');
+                    sidebar.classList.toggle('closed');
+                    menuToggle.classList.toggle('active');
+                    menuToggle.textContent = sidebar.classList.contains('open') ? 'Hide menu' : 'Show menu';
+                });
+            }
         }
     }
 }
