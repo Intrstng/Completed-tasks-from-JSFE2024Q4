@@ -1,5 +1,5 @@
 import AppLoader from './appLoader';
-import { ArticleResponse, SourceResponse } from './loader';
+import { AppControllerInterface, Endpoint, GetNewsCB, GetSourcesCB } from '../../types';
 
 class AppController extends AppLoader implements AppControllerInterface {
     public getSources(callback: GetSourcesCB): void {
@@ -38,17 +38,3 @@ class AppController extends AppLoader implements AppControllerInterface {
 }
 
 export default AppController;
-
-interface AppControllerInterface {
-    getSources(callback: GetSourcesCB): void;
-    getNews(e: Event, callback: GetNewsCB): void;
-}
-
-type GetSourcesCB = (data: SourceResponse) => void;
-type GetNewsCB = (data: ArticleResponse) => void;
-
-export enum Endpoint {
-    SOURCES = 'sources',
-    EVERYTHING = 'everything',
-}
-

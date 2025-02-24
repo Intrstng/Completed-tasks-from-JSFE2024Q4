@@ -1,5 +1,5 @@
 import './sources.css';
-import { SourceItem } from '../../controller/loader';
+import { SourceItem } from '../../../types';
 
 class Sources {
     draw(data: SourceItem[]): void {

@@ -1,6 +1,6 @@
 import News from './news/news';
 import Sources from './sources/sources';
-import { ArticleItem, ArticleResponse, SourceItem, SourceResponse } from '../controller/loader';
+import { ArticleItem, ArticleResponse, SourceItem, SourceResponse } from '../../types';
 
 export class AppView {
     private news: News;

@@ -1,4 +1,5 @@
 import Loader from './loader';
+import { LoaderOptions } from '../../types';
 
 class AppLoader extends Loader {
     constructor() {
@@ -9,14 +10,5 @@ class AppLoader extends Loader {
         super(apiUrl, options);
     }
 }
-
-export type LoaderOptions = {
-    apiKey: string | undefined;
-}
-
-export type MergedOptions = {
-    sources?: string | null;
-    apiKey?: string | undefined;
-};
 
 export default AppLoader;

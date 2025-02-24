@@ -1,5 +1,5 @@
 import './news.css';
-import { ArticleItem } from '../../controller/loader';
+import { ArticleItem } from '../../../types';
 
 class News {
     draw(data: ArticleItem[]): void {
