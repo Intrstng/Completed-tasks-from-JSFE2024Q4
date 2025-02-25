@@ -14,16 +14,16 @@ class App {
         const sourcesElement = document.querySelector('.sources');
         if (sourcesElement) {
             sourcesElement.addEventListener('click', (e: Event) => {
-                this.controller.getNews(e, data => this.view.drawNews(data))
+                this.controller.getNews(e, data => this.view.drawNews(data));
                 const menuToggle = document.querySelector('.menu-toggle');
                 const sidebar = document.querySelector('.sources');
                 if (menuToggle && sidebar) {
                     sidebar.classList.remove('open');
                     sidebar.classList.add('closed');
                     menuToggle.classList.toggle('active');
+                    menuToggle.textContent = 'Show menu';
                 }
-            }
-            );
+            });
         } else {
             console.error("Element with class 'sources' not found.");
         }

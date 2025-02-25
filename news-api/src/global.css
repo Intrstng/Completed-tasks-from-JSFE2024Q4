@@ -10,7 +10,6 @@ html {
 
 body {
     color: #fff;
-    /*background: #17181c;*/
     background: rgba(23, 24, 28, 0.7);
     font-family: sans-serif;
     display: grid;
@@ -37,14 +36,13 @@ header h1 {
     font-weight: 800;
 }
 
-
 .menu-toggle {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     cursor: pointer;
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 40px;
     z-index: 10;
@@ -64,7 +62,6 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*background: rgba(76, 175, 80, 0.6);*/
 }
 footer .copyright {
     font-size: 1rem;
@@ -129,7 +126,7 @@ footer .school-link:before {
     transition: transform 0.3s;
 }
 
-.repository-link:hover  {
+.repository-link:hover {
     transform: scale(1.1);
 }
 
