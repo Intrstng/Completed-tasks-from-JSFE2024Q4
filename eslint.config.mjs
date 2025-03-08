@@ -80,7 +80,7 @@ export default tseslint.config(
         "**/webpack.dev.config.js",
         "**/webpack.prod.config.js",
         "**/eslint.config.mjs",
-        "**/commitlint.config.js",
+        "**/.commitlintrc.json",
         "node_modules/**",
         "dist/**",
         "public/**"],
