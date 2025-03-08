@@ -1,0 +1,1 @@
+//"stylelint-check2": npx stylelint "**/*.css"
