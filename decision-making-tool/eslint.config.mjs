@@ -39,12 +39,7 @@ export default tseslint.config(
       },
       rules: {
         "no-unused-expressions": "error",
-
-
         "@typescript-eslint/no-explicit-any": "error",
-
-
-
         "@typescript-eslint/consistent-type-assertions": [
           "error",
           { "assertionStyle": "never" }
@@ -57,9 +52,7 @@ export default tseslint.config(
         ],
         "@typescript-eslint/member-ordering": "error",
         "class-methods-use-this": "error",
-
-
-        'unicorn/better-regex': 'warn',
+        "unicorn/better-regex": "warn",
         "@typescript-eslint/consistent-type-definitions": ["error", "type"],
         "unicorn/no-array-callback-reference": "off",
         "unicorn/no-array-for-each": "off",
@@ -87,6 +80,7 @@ export default tseslint.config(
         "**/webpack.dev.config.js",
         "**/webpack.prod.config.js",
         "**/eslint.config.mjs",
+        "**/commitlint.config.js",
         "node_modules/**",
         "dist/**",
         "public/**"],

@@ -13,8 +13,7 @@
     "stylelint-fix": "npx stylelint --fix \"**/*.scss\"",
     "format-check": "npx prettier src --check --ignore-unknown",
     "format-fix": "npm run format-check -- --write --ignore-unknown",
-    "prepare": "husky",
-    "postinstall": "husky install"
+    "prepare": "husky"
   },
   "author": "Intrstng",
   "license": "ISC",
@@ -46,7 +45,6 @@
     "style-loader": "^4.0.0",
     "stylelint": "^16.15.0",
     "stylelint-config-clean-order": "^7.0.0",
-    "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard": "^37.0.0",
     "stylelint-config-standard-scss": "^14.0.0",
     "ts-loader": "^9.5.2",
@@ -58,19 +56,19 @@
     "webpack-merge": "^6.0.1"
   },
   "lint-staged": {
-    "src/**/*.{js,ts}": [
+    "**/*.{js,ts}": [
       "eslint --quiet --fix",
       "prettier --write --ignore-unknown"
     ],
-    "src/**/*.css": [
-      "stylint",
+    "**/*.css": [
+      "stylelint",
       "prettier --write --ignore-unknown"
     ],
-    "src/**/*.scss": [
+    "**/*.scss": [
       "stylelint --syntax=scss",
       "prettier --write --ignore-unknown"
     ],
-    "src/**/*.{json,html}": [
+    "**/*.{json,html}": [
       "prettier --write --ignore-unknown"
     ]
   }
