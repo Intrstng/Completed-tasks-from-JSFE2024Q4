@@ -13,7 +13,8 @@
     "stylelint-fix": "npx stylelint --fix \"**/*.scss\"",
     "format-check": "npx prettier src --check --ignore-unknown",
     "format-fix": "npm run format-check -- --write --ignore-unknown",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "husky install"
   },
   "author": "Intrstng",
   "license": "ISC",
