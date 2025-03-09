@@ -60,12 +60,8 @@
             "eslint --quiet --fix",
             "prettier --write --ignore-unknown"
         ],
-        "**/*.css": [
+        "**/*.{css,scss}": [
             "stylelint",
-            "prettier --write --ignore-unknown"
-        ],
-        "**/*.scss": [
-            "stylelint --syntax=scss",
             "prettier --write --ignore-unknown"
         ],
         "**/*.{json,html}": [
