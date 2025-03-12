@@ -12,12 +12,18 @@ class AppController extends AppLoader implements AppControllerInterface {
     }
 
     public getNews(e: Event, callback: GetNewsCB): void {
-        let target = e.target as HTMLElement;
-        const newsContainer = e.currentTarget as HTMLElement;
+        let target = e.target;
+        const newsContainer = e.currentTarget;
 
-        while (target !== newsContainer) {
-            if (target.classList.contains('source__item')) {
-                const sourceId = target.getAttribute('data-source-id');
+        if (!(target instanceof HTMLElement) || !(newsContainer instanceof HTMLElement)) {
+            return;
+        }
+
+        let currentTarget: EventTarget | null = target;
+
+        while (currentTarget && currentTarget !== newsContainer) {
+            if (currentTarget instanceof HTMLElement && currentTarget.classList.contains('source__item')) {
+                const sourceId = currentTarget.getAttribute('data-source-id');
                 if (sourceId && sourceId.trim() !== '' && newsContainer.getAttribute('data-source') !== sourceId) {
                     newsContainer.setAttribute('data-source', sourceId);
                     super.getResp(
@@ -32,8 +38,20 @@ class AppController extends AppLoader implements AppControllerInterface {
                 }
                 return;
             }
-            target = target.parentNode as HTMLElement;
+            if (currentTarget instanceof Node) {
+                currentTarget = currentTarget.parentNode;
+            } else {
+                break;
+            }
         }
+    }
+
+    public handlerMenu(callback: () => void): void {
+        callback();
+    }
+
+    public toggleMenu(callback: () => void): void {
+        callback();
     }
 }
 

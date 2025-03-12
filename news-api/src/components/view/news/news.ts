@@ -2,7 +2,7 @@ import './news.css';
 import { ArticleItem } from '../../../types';
 
 class News {
-    draw(data: ArticleItem[]): void {
+    public draw(data: ArticleItem[]): void {
         const news = data.length >= 10 ? data.filter((_item, idx) => idx < 10) : data;
 
         const fragment = document.createDocumentFragment();
@@ -10,7 +10,11 @@ class News {
 
         if (newsItemTemp) {
             news.forEach((item, idx) => {
-                const newsClone: DocumentFragment = newsItemTemp.content.cloneNode(true) as DocumentFragment;
+                const newsClone = newsItemTemp.content.cloneNode(true);
+
+                if (!(newsClone instanceof DocumentFragment)) {
+                    return;
+                }
 
                 if (idx % 2) {
                     const newsItemElement = newsClone.querySelector<HTMLElement>('.news__item');

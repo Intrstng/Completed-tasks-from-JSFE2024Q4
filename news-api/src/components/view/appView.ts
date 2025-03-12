@@ -1,8 +1,8 @@
 import News from './news/news';
 import Sources from './sources/sources';
-import { ArticleItem, ArticleResponse, SourceItem, SourceResponse } from '../../types';
+import { AppViewInterface, ArticleItem, ArticleResponse, SourceItem, SourceResponse } from '../../types';
 
-export class AppView {
+export class AppView implements AppViewInterface {
     private news: News;
     private sources: Sources;
 
@@ -11,15 +11,23 @@ export class AppView {
         this.sources = new Sources();
     }
 
-    drawNews(data: ArticleResponse): void {
+    public drawNews(data: ArticleResponse): void {
         const values: ArticleItem[] = data?.articles || [];
         this.news.draw(values);
     }
 
-    drawSources(data: SourceResponse): void {
+    public drawSources(data: SourceResponse): void {
         const values: SourceItem[] = data?.sources || [];
         this.sources.draw(values);
     }
+
+    public hideSourceMenu = (): void => {
+        this.sources.hideSourcesMenu();
+    };
+
+    public toggleSourceMenu = (): void => {
+        this.sources.toggleSourcesMenu();
+    };
 }
 
 export default AppView;

@@ -41,7 +41,25 @@ const baseConfig = {
             filename: 'index.html',
             title: 'News API',
         }),
-        new FaviconsWebpackPlugin('./src/assets/favicon.png'),
+        // new FaviconsWebpackPlugin('./src/assets/favicon.png'),
+        new FaviconsWebpackPlugin(
+        {
+            logo: './src/assets/favicon.png',
+            prefix: 'assets/',
+            favicons: {
+                appName: 'News API',
+                icons: {
+                    coast: false,
+                    yandex: false,
+                    appleIcon: false,
+                    appleStartup: false,
+                    android: false,
+                    windows: false,
+                    firefox: false,
+                }
+            }
+        }
+        ),
         new CleanWebpackPlugin(),
     ],
 };

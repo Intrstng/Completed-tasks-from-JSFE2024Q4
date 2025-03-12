@@ -4,7 +4,6 @@ import eslint from '@eslint/js';
 import pluginJs from "@eslint/js";
 import tseslint from 'typescript-eslint';
 import globals from "globals";
-import prettier from 'prettier';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default tseslint.config(
@@ -24,9 +23,6 @@ export default tseslint.config(
         }
       },
       rules: {
-        // indent: ["error", 2],
-        // "no-unused-vars": "warn",
-        // "no-undef": "warn",
         "no-debugger": "off",
         "no-console": "off",
         "class-methods-use-this": "off",
