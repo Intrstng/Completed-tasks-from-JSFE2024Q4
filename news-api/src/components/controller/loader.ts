@@ -41,14 +41,13 @@ class Loader implements LoaderInterface {
         const urlOptions: MergedOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
-        for (const key in urlOptions) {
-            if (urlOptions.hasOwnProperty(key)) {
-                const value = urlOptions[key];
-                if (value !== null && value !== undefined) {
-                    url += `${key}=${value}&`;
-                }
+        const keys: Array<keyof (Options & LoaderOptions)> = ['sources', 'apiKey'];
+
+        keys.forEach((key) => {
+            if (urlOptions[key] !== null && urlOptions[key] !== undefined) {
+                url += `${key}=${urlOptions[key]}&`;
             }
-        }
+        });
 
         return url.slice(0, -1);
     }
@@ -61,7 +60,7 @@ class Loader implements LoaderInterface {
     ) {
         fetch(this.makeUrl(options, endpoint), { method })
             .then((res: Response) => this.errorHandler(res))
-            .then((res: Response) => res.json<ResponseCommon>())
+            .then((res: Response) => res.json())
             .then((data: ResponseCommon) => callback(data))
             .catch((err: Error) => console.error(err));
     }
