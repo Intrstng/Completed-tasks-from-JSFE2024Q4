@@ -41,7 +41,6 @@ const baseConfig = {
             filename: 'index.html',
             title: 'News API',
         }),
-        // new FaviconsWebpackPlugin('./src/assets/favicon.png'),
         new FaviconsWebpackPlugin(
         {
             logo: './src/assets/favicon.png',
