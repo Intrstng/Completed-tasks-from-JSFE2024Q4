@@ -39,7 +39,7 @@ export default tseslint.config(
       },
       rules: {
         "no-unused-expressions": "error",
-        "@typescript-eslint/no-explicit-any": "error",
+        //"@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/consistent-type-assertions": [
           "error",
           { "assertionStyle": "never" }

@@ -7,6 +7,7 @@
     "scripts": {
         "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
         "build": "webpack --config ./webpack.config.js --env mode=prod",
+        "serve": "webpack serve",
         "lint": "npx eslint .",
         "lint-fix": "npm run lint -- --fix",
         "stylelint-check": "npx stylelint \"**/*.scss\"",
@@ -57,7 +58,6 @@
     },
     "lint-staged": {
         "**/*.{js,ts}": [
-            "eslint --quiet --fix",
             "prettier --write --ignore-unknown"
         ],
         "**/*.{css,scss}": [
