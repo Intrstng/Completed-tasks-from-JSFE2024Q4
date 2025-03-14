@@ -3,6 +3,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const baseConfig = {
     devtool: 'eval-source-map',
@@ -16,12 +17,16 @@ const baseConfig = {
                 exclude: /node_modules/,
             },
             {
+                test: /\.html$/,
+                use: 'html-loader',
+            },
+            {
                 test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 type: 'asset/resource',
             },
             {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
+                test: /\.scss$/i,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
             },
         ],
     },
@@ -39,7 +44,6 @@ const baseConfig = {
             filename: 'index.html',
             title: 'News API',
         }),
-        // new FaviconsWebpackPlugin('./src/assets/favicon.png'),
         new FaviconsWebpackPlugin({
             logo: './src/assets/favicon.png',
             prefix: 'assets/',
@@ -56,6 +60,7 @@ const baseConfig = {
                 },
             },
         }),
+        new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(),
     ],
 };

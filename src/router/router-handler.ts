@@ -2,7 +2,7 @@ import { Location, LocationEvent } from '../types';
 
 export default class RouterHandler {
     private params: any;
-    private readonly callback: () => void;
+    private readonly callback: (any) => void;
     private readonly handler: any;
     private readonly locationEvent: LocationEvent;
 

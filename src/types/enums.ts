@@ -13,3 +13,7 @@ export enum LocationEvent {
     POPSTATE = 'popstate',
     HASHCHANGE = 'hashchange',
 }
+
+export enum InputFieldCssClasses {
+    CONTAINER = 'field__container',
+}

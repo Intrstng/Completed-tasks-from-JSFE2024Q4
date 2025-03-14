@@ -15,28 +15,29 @@ export default class Router {
         });
     }
 
-    setHashHandler() {
+    setHashHandler(): void {
         this.handler.disable();
         this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.HASH);
     }
 
-    navigate(url) {
+    navigate(url): void {
         this.handler.navigate(url);
     }
 
-    urlChangedHandler(requestParams) {
-        const [resource] = requestParams;
-        const routeIndex = this.routes.findIndex(item => item.path === resource);
+    urlChangedHandler(requestParams): void {
+        // Check
+        const [path] = requestParams;
+        const routeIndex = this.routes.findIndex(item => item.path === path);
 
         if (routeIndex === -1) {
             this.redirectToNotFoundPage();
             return;
         }
 
-        this.routes[routeIndex].callback(requestParams.resource);
+        this.routes[routeIndex].callback(requestParams.resource); //this.routes[routeIndex].callback()
     }
 
-    redirectToNotFoundPage() {
+    redirectToNotFoundPage(): void {
         const notFoundPageIndex = this.routes.findIndex(item => item.path === Pages.NOT_FOUND);
 
         if (notFoundPageIndex !== -1) {
