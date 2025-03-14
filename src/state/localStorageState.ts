@@ -1,6 +1,6 @@
-import type { LocalStorageItem, StateInterface } from '../types';
+import type { LocalStorageItem, LocalStorageStateInterface } from '../types';
 
-export default class State implements StateInterface {
+export default class LocalStorageState implements LocalStorageStateInterface {
     private values: any;
     private readonly accessKey: string;
 
