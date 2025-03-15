@@ -5,8 +5,16 @@ export type LocalStorageItem = {
 export type AppState = {
     isTurning: boolean;
     mute: boolean;
-    list: [{ id: string; title: string; weight: string }];
+    list: Array<DecisionItem>;
     lastId: string;
+};
+
+export type JsonData = Pick<AppState, 'list' | 'lastId'>;
+
+export type DecisionItem = {
+    id: string;
+    title: string;
+    weight: string;
 };
 
 export type InputTypes =
@@ -46,3 +54,5 @@ export type ElementParams = {
 };
 
 export type Callback = ((event: Event) => void) | null;
+
+export type LoadDataCB = (data: JsonData) => void;
