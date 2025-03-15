@@ -1,11 +1,13 @@
 import './button.scss';
 
-import { Callback, ElementParams, InputTypes } from '../../types';
+import type { Callback, ElementParameters, InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class ButtonCreator extends CreatorElement {
-    createElement({ tag, classNames, textContent, callback, type }: ElementParams): void {
-        this.element = document.createElement('button');
+    public createElement({ tag, classNames, textContent, callback, type }: ElementParameters): void {
+        if (tag) {
+            this.element = document.createElement(tag);
+        }
 
         if (classNames && classNames.length > 0) {
             classNames.forEach(name => {
@@ -28,7 +30,7 @@ export default class ButtonCreator extends CreatorElement {
         }
     }
 
-    setCallback(callback: Callback = null): void {
+    public setCallback(callback: Callback = null): void {
         if (this.element) {
             this.element.addEventListener('click', (event: Event) => {
                 if (callback) {
@@ -40,15 +42,15 @@ export default class ButtonCreator extends CreatorElement {
         }
     }
 
-    private setButtonType(type: InputTypes): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('type', type);
+    public setTextContent(text: string = ''): void {
+        if (this.element) {
+            this.element.textContent = text;
         }
     }
 
-    protected setTextContent(text: string = ''): void {
-        if (this.element) {
-            this.element.textContent = text;
+    private setButtonType(type: InputTypes): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('type', type);
         }
     }
 }

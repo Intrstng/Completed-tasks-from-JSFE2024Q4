@@ -1,6 +1,6 @@
-import { ElementParams } from '../../types';
+import type { ElementParameters } from '../../../types';
 
-const buttons: Array<Pick<ElementParams, 'tag' | 'classNames' | 'textContent' | 'callback'>> = [
+const buttons: Array<Pick<ElementParameters, 'tag' | 'classNames' | 'textContent' | 'callback'>> = [
     {
         tag: 'button',
         classNames: [''],

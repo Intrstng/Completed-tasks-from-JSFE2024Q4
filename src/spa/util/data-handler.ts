@@ -1,6 +1,6 @@
-import { JsonData, LoadDataCB } from '../types';
+import type { JsonData, LoadDataCB } from '../../types';
 
-export class FileSaver {
+export class DataHandler {
     public saveData(jsonData: JsonData, fileName: string): void {
         const jsonString = JSON.stringify(jsonData, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
@@ -10,9 +10,9 @@ export class FileSaver {
         a.href = url;
         a.download = fileName;
 
-        document.body.appendChild(a);
+        document.body.append(a);
         a.click();
-        document.body.removeChild(a);
+        a.remove();
         URL.revokeObjectURL(url);
         console.log('File successfully saved:', fileName);
     }
@@ -29,8 +29,8 @@ export class FileSaver {
                     const file = target.files.item(0);
                     if (file) {
                         const reader = new FileReader();
-                        reader.onload = e => {
-                            const result = e.target;
+                        reader.addEventListener('load', event => {
+                            const result = event.target;
                             if (result && typeof result.result === 'string') {
                                 try {
                                     const jsonData: JsonData = JSON.parse(result.result);
@@ -39,7 +39,7 @@ export class FileSaver {
                                     console.error('Error parsing JSON:', error);
                                 }
                             }
-                        };
+                        });
                         reader.readAsText(file);
                     } else {
                         console.error('File is undefined.');

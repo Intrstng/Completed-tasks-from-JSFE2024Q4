@@ -1,6 +1,6 @@
 import './input-field.scss';
 
-import { Callback, ElementParams, InputTypes } from '../../types';
+import type { Callback, ElementParameters, InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class InputFieldCreator extends CreatorElement {
@@ -8,56 +8,47 @@ export default class InputFieldCreator extends CreatorElement {
     private labelElement: HTMLLabelElement | null = null;
     private inputElement: HTMLInputElement | null = null;
 
-    constructor(params: ElementParams) {
-        super(params);
+    constructor(parameters: ElementParameters) {
+        super(parameters);
     }
 
-    createElement({
-        tag,
-        classNames,
-        textContent,
-        callback,
-        hasLabel = true,
-        id,
-        placeholder,
-        type,
-        max,
-    }: ElementParams): void {
+    public createElement(parameters: ElementParameters): void {
         const fragment = document.createDocumentFragment();
-        if (hasLabel) {
+        if (parameters.hasLabel) {
             this.labelElement = document.createElement('label');
-            this.setTextContent(textContent);
-            this.setConnectionWithInput(id);
+            this.setTextContent(parameters.textContent);
+            this.setConnectionWithInput(parameters.id);
             fragment.append(this.labelElement);
         }
+
         this.inputElement = document.createElement('input');
 
-        if (classNames && classNames.length > 0) {
-            classNames.forEach(name => {
+        if (parameters.classNames && parameters.classNames.length > 0) {
+            parameters.classNames.forEach(name => {
                 if (this.inputElement) {
                     this.inputElement.classList.add(name);
                 }
             });
         }
 
-        if (id) {
-            this.setInputElementId(id);
+        if (parameters.id) {
+            this.setInputElementId(parameters.id);
         }
 
-        if (type === 'number') {
-            this.setInputType(type);
+        if (parameters.type === 'number') {
+            this.setInputType(parameters.type);
             this.setInputNumberMaxValue(this.maxValue);
         }
 
-        if (placeholder) {
-            this.setInputPlaceholder(placeholder);
-            this.setInputName(placeholder);
+        if (parameters.placeholder) {
+            this.setInputPlaceholder(parameters.placeholder);
+            this.setInputName(parameters.placeholder);
         }
 
-        if (callback) {
-            this.setCallback(callback);
+        if (parameters.callback) {
+            this.setCallback(parameters.callback);
         }
-        fragment.appendChild(this.inputElement);
+        fragment.append(this.inputElement);
         this.element = fragment;
     }
 
@@ -71,7 +62,7 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    protected setTextContent(text: string = ''): void {
+    public setTextContent(text: string = ''): void {
         if (this.labelElement) {
             this.labelElement.textContent = text;
         }
@@ -113,7 +104,7 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    setValue(value: string): void {
+    public setValue(value: string): void {
         if (this.inputElement) {
             this.inputElement.value = value;
         }

@@ -1,13 +1,13 @@
-import { Callback, ElementParams } from '../types';
+import type { Callback, ElementParameters } from '../../types';
 
 export default class CreatorElement {
-    element: HTMLElement | DocumentFragment | null;
-    constructor(params: ElementParams) {
+    public element: HTMLElement | DocumentFragment | null;
+    constructor(parameters: ElementParameters) {
         this.element = null;
-        this.createElement(params);
+        this.createElement(parameters);
     }
 
-    addInnerElement(element: HTMLElement | CreatorElement): void {
+    public addInnerElement(element: HTMLElement | CreatorElement): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 
@@ -21,11 +21,19 @@ export default class CreatorElement {
         }
     }
 
-    getElement(): HTMLElement | DocumentFragment | null {
+    public getElement(): HTMLElement | DocumentFragment | null {
         return this.element;
     }
 
-    createElement({ tag, classNames, textContent, callback, id }: ElementParams): void {
+    public setTextContent(text: string = ''): void {
+        if (this.element) {
+            this.element.textContent = text;
+        } else {
+            console.error('Cannot set element text content: element is null.');
+        }
+    }
+
+    public createElement({ tag, classNames, textContent, callback, id }: ElementParameters): void {
         if (tag) {
             this.element = document.createElement(tag);
         }
@@ -47,15 +55,23 @@ export default class CreatorElement {
         }
     }
 
+    protected setCallback(callback: Callback = null): void {
+        if (this.element && typeof callback === 'function') {
+            this.element.addEventListener('click', (event: Event) => callback(event));
+        } else if (!this.element) {
+            console.error('Cannot set event listener: element is null.');
+        }
+    }
+
     private setCssClasses(cssClasses: Array<string> = []): void {
-        if (this.element !== null) {
+        if (this.element === null) {
+            console.warn('Cannot set CSS classes: element is null.');
+        } else {
             cssClasses.forEach(cssClass => {
                 if (this.element && 'classList' in this.element) {
                     this.element.classList.add(cssClass);
                 }
             });
-        } else {
-            console.warn('Cannot set CSS classes: element is null.');
         }
     }
 
@@ -64,22 +80,6 @@ export default class CreatorElement {
             this.element.setAttribute('id', id);
         } else {
             console.error('Cannot set element id: element is null.');
-        }
-    }
-
-    protected setTextContent(text: string = ''): void {
-        if (this.element) {
-            this.element.textContent = text;
-        } else {
-            console.error('Cannot set element text content: element is null.');
-        }
-    }
-
-    protected setCallback(callback: Callback = null): void {
-        if (this.element && typeof callback === 'function') {
-            this.element.addEventListener('click', (event: Event) => callback(event));
-        } else if (!this.element) {
-            console.error('Cannot set event listener: element is null.');
         }
     }
 }

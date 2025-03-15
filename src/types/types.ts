@@ -1,5 +1,10 @@
+import type { Location, LocationEvent } from './enums';
+import type NotFoundView from '../spa/view/main/not-found/not-found-view';
+import type IndexView from '../spa/view/main/index/index-view';
+import type SelectorView from '../spa/view/main/selector/selector-view';
+
 export type LocalStorageItem = {
-    [key: string]: any;
+    [key: string]: AppState;
 };
 
 export type AppState = {
@@ -41,18 +46,39 @@ export type InputTypes =
     | 'url'
     | 'week';
 
-export type ElementParams = {
+export type ElementParameters = {
     tag?: string;
     id?: string;
     classNames?: Array<string>;
     textContent?: string;
-    callback?: () => void;
+    callback?: (() => void) | null;
     hasLabel?: boolean;
     type?: InputTypes;
     placeholder?: string;
-    max?: string;
 };
+
+export type RequestParameters = {
+    path: string;
+};
+
+export type RouterParameters = {
+    nameEvent: LocationEvent;
+    locationField: Location;
+};
+
+export type Route = {
+    path: string;
+    callback: () => Promise<void>;
+};
+
+export type HistoryState = {
+    url?: string;
+};
+
+export type ViewCommon = IndexView | SelectorView | NotFoundView;
 
 export type Callback = ((event: Event) => void) | null;
 
 export type LoadDataCB = (data: JsonData) => void;
+
+export type RouterCB = (parameters: RequestParameters) => void;

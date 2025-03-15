@@ -1,22 +1,80 @@
 import '../style.scss';
-import LocalStorageState from '../state/localStorageState';
+import LocalStorageState from './state/local-storage-state';
+import type { Route, ViewCommon } from '../types';
 import { Pages } from '../types';
-import Router from '../router/router';
+import Router from './router/router';
+import MainView from './view/main/main-view';
 
 export default class App {
+    private readonly appName: string = 'Decision Making Tool';
     private readonly keyToRecordInLS: string;
-    private router: any;
-    private main: any;
+    private readonly router: Router;
+    private main: MainView | null;
 
-    constructor() {}
+    constructor() {
+        this.main = null;
+        this.keyToRecordInLS = 'decisionMakingTool';
+        const state: LocalStorageState = new LocalStorageState(this.keyToRecordInLS);
 
-    createView() {}
+        const routes = this.createRoutes(state);
+        this.router = new Router(routes);
 
-    createRoutes(state) {}
+        // this.router.setHashHandler();
+        this.createView();
+    }
 
-    setContent(page, view) {}
+    public createView(): void {
+        this.main = new MainView(this.router);
+        const element = this.main.getHtmlElement();
+        if (element) {
+            document.body.append(element);
+        } else {
+            console.error('Main view element is null and cannot be appended to the body.');
+        }
+    }
 
-    init() {
-        console.log('Application initialized...');
+    public createRoutes(state: LocalStorageState): Array<Route> {
+        return [
+            {
+                path: ``,
+                callback: async (): Promise<void> => {
+                    const { default: IndexView } = await import('./view/main/index/index-view');
+                    this.setContent(new IndexView(state, this.router));
+                },
+            },
+            {
+                path: `${Pages.INDEX}`,
+                callback: async (): Promise<void> => {
+                    const { default: IndexView } = await import('./view/main/index/index-view');
+                    this.setContent(new IndexView(state, this.router));
+                },
+            },
+            {
+                path: `${Pages.SELECTOR}`,
+                callback: async (): Promise<void> => {
+                    const { default: SelectorView } = await import('./view/main/selector/selector-view');
+                    this.setContent(new SelectorView(state, this.router));
+                },
+            },
+            {
+                path: `${Pages.NOT_FOUND}`,
+                callback: async (): Promise<void> => {
+                    const { default: NotFoundView } = await import('./view/main/not-found/not-found-view');
+                    this.setContent(new NotFoundView());
+                },
+            },
+        ];
+    }
+
+    public setContent(view: ViewCommon): void {
+        if (this.main instanceof MainView) {
+            this.main.setContent(view);
+        } else {
+            console.error('Cannot set content: Main view is not initialized');
+        }
+    }
+
+    public init(): void {
+        console.log(`Application ${this.appName} initialized...`);
     }
 }
