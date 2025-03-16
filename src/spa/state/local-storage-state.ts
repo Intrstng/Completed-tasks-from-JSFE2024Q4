@@ -17,10 +17,14 @@ export default class LocalStorageState implements LocalStorageStateInterface {
         // return value ? JSON.stringify(value) : '';
     }
 
-    // public setState(state: AppState): void {
-    //     this.values = state;
-    //     console.log(this.values)
-    // }
+    public getState(): AppState {
+        return this.values;
+    }
+
+    public setState(state: AppState): void {
+        this.values = state;
+        console.log(this.values);
+    }
 
     public getLastId(): number {
         return this.values.lastId || 1;
@@ -59,18 +63,18 @@ export default class LocalStorageState implements LocalStorageStateInterface {
                 console.error('Failed to parse localStorage item:', error);
             }
         }
-        // this.values = {
-        //     list: [],
-        //     lastId: 0,
-        // };
         this.values = {
-            list: [
-                { id: '#1', title: 'rertert', weight: '32' },
-                { id: '#3', title: '7777', weight: '7' },
-                { id: '#4', title: '', weight: '' },
-            ],
-            lastId: 4,
+            list: [],
+            lastId: 0,
         };
+        // this.values = {
+        //     list: [
+        //         { id: '#1', title: 'rertert', weight: '32' },
+        //         { id: '#3', title: '7777', weight: '7' },
+        //         { id: '#4', title: '', weight: '' },
+        //     ],
+        //     lastId: 4,
+        // };
 
         this.saveState();
         return this.values;

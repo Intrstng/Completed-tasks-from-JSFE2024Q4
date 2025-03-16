@@ -33,7 +33,7 @@ export type ElementParameters = {
     title?: string;
 };
 
-export type Button = Pick<ElementParameters, 'tag' | 'classNames' | 'textContent' | 'callback'>;
+export type Button = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 
 export type ButtonsCollection = Array<Button>;
 

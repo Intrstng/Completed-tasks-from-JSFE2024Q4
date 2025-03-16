@@ -19,7 +19,7 @@ export default class App {
         const routes = this.createRoutes(state);
         this.router = new Router(routes);
 
-        // this.router.setHashHandler();
+        this.router.setHashHandler();
         this.createView();
     }
 

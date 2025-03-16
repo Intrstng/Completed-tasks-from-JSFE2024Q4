@@ -25,6 +25,15 @@ export default class CreatorElement {
         return this.element;
     }
 
+    public getElementId(): string {
+        if (this.element) {
+            return ('getAttribute' in this.element && this.element.getAttribute('id')) || '';
+        } else {
+            console.error('Cannot get id. Element is null.');
+            return '';
+        }
+    }
+
     public setTextContent(text: string = ''): void {
         if (this.element) {
             this.element.textContent = text;
@@ -59,6 +68,14 @@ export default class CreatorElement {
         }
     }
 
+    public setElementId(id: string = ''): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('id', id);
+        } else {
+            console.error('Cannot set element id: element is null.');
+        }
+    }
+
     protected setCallback(callback: Callback = null): void {
         if (this.element && typeof callback === 'function') {
             this.element.addEventListener('click', (event: Event) => callback(event));
@@ -76,14 +93,6 @@ export default class CreatorElement {
                     this.element.classList.add(cssClass);
                 }
             });
-        }
-    }
-
-    private setElementId(id: string = ''): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('id', id);
-        } else {
-            console.error('Cannot set element id: element is null.');
         }
     }
 

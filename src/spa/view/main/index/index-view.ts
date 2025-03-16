@@ -20,7 +20,6 @@ export default class IndexView extends View {
     private state: LocalStorageState;
     private listOptions: CreatorElement;
     private fileSaver: DataHandler;
-    private listItemsInGroup: number = 2;
 
     constructor(state: LocalStorageState, router: Router) {
         const parameters = {
@@ -66,7 +65,8 @@ export default class IndexView extends View {
 
             const listItem = new CreatorElement(listItemParameters);
             this.listOptions.addInnerElement(listItem);
-            this.addInputsGroup(inputs, this.state, listItem);
+            const listItemGroupId: string = listItemsCollection[i - 1].id.slice(1);
+            this.addInputsGroup(inputs, this.state, listItem, listItemGroupId);
         }
     }
 
@@ -101,13 +101,22 @@ export default class IndexView extends View {
     private addInputsGroup(
         inputsParameters: Array<ElementParameters>,
         state: LocalStorageState,
-        container: CreatorElement
+        container: CreatorElement,
+        id?: string
     ): void {
+        const parsedContainerId: Array<string> = container.getElementId().split('_');
+        const containerId: string = parsedContainerId.at(-1) || '';
+
         inputsParameters.forEach(inputParameters => {
             const callback = (event: Event) => this.keyupHandler(event, inputParameters.placeholder, state);
+
+            const textWithIdToLabel: string = id
+                ? `${inputParameters.textContent}${id}`
+                : `${inputParameters.textContent}${state.getLastId()}`;
+
             const inputParametersWithCB = {
                 ...inputParameters,
-                textContent: `${inputParameters.textContent}${state.getLastId()}`,
+                textContent: textWithIdToLabel,
                 callback,
             };
             const creatorInput = new InputFieldCreator(inputParametersWithCB);
@@ -118,20 +127,50 @@ export default class IndexView extends View {
             // }
 
             container.addInnerElement(creatorInput);
-            container.addInnerElement(creatorInput);
         });
-        this.addDeleteButton(container);
+        this.addDeleteButton(container, containerId);
     }
 
-    private addDeleteButton(container: CreatorElement): void {
+    private addDeleteButton(container: CreatorElement, containerId: string): void {
         const deleteButtonParameters: Button = {
+            id: `buttonDelete_#${this.state.getLastId()}`,
             tag: 'button',
             classNames: ['button', 'button-delete'],
             textContent: ButtonNames.DELETE,
-            callback: () => {},
+            callback: (): void => {
+                this.deleteListItem(containerId);
+            },
         };
         const deleteButton = new CreatorElement(deleteButtonParameters);
+        const deleteButtonId: string = `deleteButton_${containerId}`;
+        deleteButton.setElementId(deleteButtonId);
         container.addInnerElement(deleteButton);
+    }
+
+    private deleteAllListItems(): void {
+        const listElement = this.listOptions.getElement();
+        if (listElement) {
+            while (listElement.firstElementChild) {
+                listElement.firstElementChild.remove();
+            }
+        }
+    }
+
+    private resetState(): void {
+        const emptyState: AppState = {
+            list: [],
+            lastId: 0,
+        };
+        this.state.setState(emptyState);
+    }
+
+    private deleteListItem(id: string): void {
+        let state: AppState = this.state.getState();
+        state.list = state.list.filter(item => item.id !== id);
+        this.state.setState(state);
+
+        this.deleteAllListItems();
+        this.buildListItemGroup();
     }
 
     private addNewListRecord(): void {
@@ -160,6 +199,13 @@ export default class IndexView extends View {
 
             if (buttonParameters.textContent === ButtonNames.LOAD) {
                 callback = () => this.loadListFromFile();
+            }
+
+            if (buttonParameters.textContent === ButtonNames.CLEAR) {
+                callback = () => {
+                    this.deleteAllListItems();
+                    this.resetState();
+                };
             }
 
             const buttonParametersWithCB = {
