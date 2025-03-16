@@ -2,19 +2,16 @@ import type { Location, LocationEvent } from './enums';
 import type NotFoundView from '../spa/view/main/not-found/not-found-view';
 import type IndexView from '../spa/view/main/index/index-view';
 import type SelectorView from '../spa/view/main/selector/selector-view';
+import type { InputTypes } from './enums';
 
 export type LocalStorageItem = {
     [key: string]: AppState;
 };
 
 export type AppState = {
-    isTurning: boolean;
-    mute: boolean;
     list: Array<DecisionItem>;
-    lastId: string;
+    lastId: number;
 };
-
-export type JsonData = Pick<AppState, 'list' | 'lastId'>;
 
 export type DecisionItem = {
     id: string;
@@ -22,40 +19,21 @@ export type DecisionItem = {
     weight: string;
 };
 
-export type InputTypes =
-    | 'button'
-    | 'checkbox'
-    | 'color'
-    | 'date'
-    | 'datetime-local'
-    | 'email'
-    | 'file'
-    | 'hidden'
-    | 'image'
-    | 'month'
-    | 'number'
-    | 'password'
-    | 'radio'
-    | 'range'
-    | 'reset'
-    | 'search'
-    | 'submit'
-    | 'tel'
-    | 'text'
-    | 'time'
-    | 'url'
-    | 'week';
+export type JsonData = Pick<AppState, 'list' | 'lastId'>;
 
 export type ElementParameters = {
     tag?: string;
     id?: string;
     classNames?: Array<string>;
     textContent?: string;
-    callback?: (() => void) | null;
+    callback?: ((event: Event) => void) | null;
     hasLabel?: boolean;
     type?: InputTypes;
     placeholder?: string;
+    title?: string;
 };
+
+export type ButtonsCollection = Array<Pick<ElementParameters, 'tag' | 'classNames' | 'textContent' | 'callback'>>;
 
 export type RequestParameters = {
     path: string;

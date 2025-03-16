@@ -16,6 +16,7 @@ export default class InputFieldCreator extends CreatorElement {
         const fragment = document.createDocumentFragment();
         if (parameters.hasLabel) {
             this.labelElement = document.createElement('label');
+
             this.setTextContent(parameters.textContent);
             this.setConnectionWithInput(parameters.id);
             fragment.append(this.labelElement);

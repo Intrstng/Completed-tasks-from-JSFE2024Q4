@@ -7,7 +7,7 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    public addInnerElement(element: HTMLElement | CreatorElement): void {
+    public addInnerElement(element: HTMLElement | DocumentFragment | CreatorElement): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 
@@ -33,25 +33,29 @@ export default class CreatorElement {
         }
     }
 
-    public createElement({ tag, classNames, textContent, callback, id }: ElementParameters): void {
-        if (tag) {
-            this.element = document.createElement(tag);
+    public createElement(parameters: ElementParameters): void {
+        if (parameters.tag) {
+            this.element = document.createElement(parameters.tag);
         }
 
-        if (id) {
-            this.setElementId(id);
+        if (parameters.id) {
+            this.setElementId(parameters.id);
         }
 
-        if (classNames && classNames.length > 0) {
-            this.setCssClasses(classNames);
+        if (parameters.classNames && parameters.classNames.length > 0) {
+            this.setCssClasses(parameters.classNames);
         }
 
-        if (textContent) {
-            this.setTextContent(textContent);
+        if (parameters.textContent) {
+            this.setTextContent(parameters.textContent);
         }
 
-        if (callback) {
-            this.setCallback(callback);
+        if (parameters.title) {
+            this.setElementTitle(parameters.title);
+        }
+
+        if (parameters.callback) {
+            this.setCallback(parameters.callback);
         }
     }
 
@@ -80,6 +84,14 @@ export default class CreatorElement {
             this.element.setAttribute('id', id);
         } else {
             console.error('Cannot set element id: element is null.');
+        }
+    }
+
+    private setElementTitle(title: string): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('title', title);
+        } else {
+            console.error('Cannot set element title: element is null.');
         }
     }
 }

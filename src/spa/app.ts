@@ -1,7 +1,7 @@
 import '../style.scss';
 import LocalStorageState from './state/local-storage-state';
 import type { Route, ViewCommon } from '../types';
-import { Pages } from '../types';
+import { AppState, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
 
@@ -24,7 +24,7 @@ export default class App {
     }
 
     public createView(): void {
-        this.main = new MainView(this.router);
+        this.main = new MainView();
         const element = this.main.getHtmlElement();
         if (element) {
             document.body.append(element);
@@ -60,7 +60,7 @@ export default class App {
                 path: `${Pages.NOT_FOUND}`,
                 callback: async (): Promise<void> => {
                     const { default: NotFoundView } = await import('./view/main/not-found/not-found-view');
-                    this.setContent(new NotFoundView());
+                    this.setContent(new NotFoundView(this.router));
                 },
             },
         ];

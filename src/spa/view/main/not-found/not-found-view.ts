@@ -1,6 +1,7 @@
 import View from '../../view';
 import './not-found.scss';
 import type { ElementParameters } from '../../../../types';
+import type Router from '../../../router/router';
 
 const CssClasses = {
     ERROR: 'not-found',
@@ -8,13 +9,15 @@ const CssClasses = {
 
 export default class NotFoundView extends View {
     private notFoundMessage: string = 'Error 404. Page is not found.';
+    public router: Router;
 
-    constructor() {
+    constructor(router: Router) {
         const parameters: ElementParameters = {
             tag: 'section',
             classNames: [CssClasses.ERROR],
         };
         super(parameters);
+        this.router = router;
         this.configureView();
     }
 

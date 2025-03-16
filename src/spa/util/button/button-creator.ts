@@ -4,29 +4,29 @@ import type { Callback, ElementParameters, InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class ButtonCreator extends CreatorElement {
-    public createElement({ tag, classNames, textContent, callback, type }: ElementParameters): void {
-        if (tag) {
-            this.element = document.createElement(tag);
+    public createElement(parameters: ElementParameters): void {
+        if (parameters.tag) {
+            this.element = document.createElement(parameters.tag);
         }
 
-        if (classNames && classNames.length > 0) {
-            classNames.forEach(name => {
+        if (parameters.classNames && parameters.classNames.length > 0) {
+            parameters.classNames.forEach(name => {
                 if (this.element && 'classList' in this.element) {
                     this.element.classList.add(name);
                 }
             });
         }
 
-        if (callback) {
-            this.setCallback(callback);
+        if (parameters.callback) {
+            this.setCallback(parameters.callback);
         }
 
-        if (type === 'button') {
-            this.setButtonType(type);
+        if (parameters.type === 'button') {
+            this.setButtonType(parameters.type);
         }
 
-        if (textContent) {
-            this.setTextContent(textContent);
+        if (parameters.textContent) {
+            this.setTextContent(parameters.textContent);
         }
     }
 
