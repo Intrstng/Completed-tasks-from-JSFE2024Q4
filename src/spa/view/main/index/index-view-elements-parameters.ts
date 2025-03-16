@@ -1,5 +1,5 @@
 import type { ElementParameters } from '../../../../types';
-import { InputDescription, InputTypes } from '../../../../types';
+import { Button, InputDescription, InputTypes } from '../../../../types';
 import type { ButtonsCollection } from '../../../../types';
 import { ButtonNames } from '../../../../types';
 
@@ -20,7 +20,12 @@ export const listItemParameters: ElementParameters = {
     classNames: ['options-list-item'],
 };
 
-export const inputs: Array<ElementParameters> = [
+export const labelParameters: ElementParameters = {
+    tag: 'label',
+    classNames: ['label'],
+};
+
+export const inputsParameters: Array<ElementParameters> = [
     {
         id: 'inputTitle',
         tag: 'input',
@@ -33,48 +38,46 @@ export const inputs: Array<ElementParameters> = [
     {
         tag: 'input',
         classNames: ['input-class', 'weight-input'],
-        type: InputTypes.TEXT,
+        type: InputTypes.NUMBER,
         placeholder: InputDescription.WEIGHT,
     },
 ];
 
-export const buttons: ButtonsCollection = [
+export const buttonsParameters: ButtonsCollection = [
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.ADD,
-        callback: () => {},
     },
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.PASTE,
-        callback: (event: Event) => {
-            console.log('Button clicked', event);
-        },
     },
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.CLEAR,
-        callback: () => {},
     },
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.SAVE,
-        callback: () => {},
     },
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.LOAD,
-        callback: () => {},
     },
     {
         tag: 'button',
         classNames: ['button'],
         textContent: ButtonNames.START,
-        callback: () => {},
     },
 ];
+
+export const deleteButtonParameters: Button = {
+    tag: 'button',
+    classNames: ['button', 'button-delete'],
+    textContent: ButtonNames.DELETE,
+};

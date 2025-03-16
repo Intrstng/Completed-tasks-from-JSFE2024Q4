@@ -19,6 +19,8 @@ export type DecisionItem = {
     weight: string;
 };
 
+export type AppStateKey = keyof AppState;
+
 export type JsonData = Pick<AppState, 'list' | 'lastId'>;
 
 export type ElementParameters = {

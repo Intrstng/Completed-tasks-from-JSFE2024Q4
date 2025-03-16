@@ -1,7 +1,7 @@
 import '../style.scss';
 import LocalStorageState from './state/local-storage-state';
 import type { Route, ViewCommon } from '../types';
-import { AppState, Pages } from '../types';
+import { Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
 
@@ -19,7 +19,7 @@ export default class App {
         const routes = this.createRoutes(state);
         this.router = new Router(routes);
 
-        this.router.setHashHandler();
+        //this.router.setHashHandler();
         this.createView();
     }
 

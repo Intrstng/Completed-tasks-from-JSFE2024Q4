@@ -1,15 +1,22 @@
 import './index.scss';
-
 import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import { AppState, Button, ButtonNames } from '../../../../types';
+import { AppState, Button, ButtonNames, DecisionItem, InputDescription } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
-import { buttons, inputs, listItemParameters, listParameters, titleParameters } from './index-view-elements-parameters';
+import {
+    buttonsParameters,
+    deleteButtonParameters,
+    inputsParameters,
+    listItemParameters,
+    listParameters,
+    titleParameters,
+} from './index-view-elements-parameters';
 import { DataHandler } from '../../../util/data-handler';
+import LabelCreator from '../../../util/label/label-creator';
 
 const CssClasses = {
     INDEX: 'index',
@@ -17,9 +24,10 @@ const CssClasses = {
 
 export default class IndexView extends View {
     public router: Router;
-    private state: LocalStorageState;
-    private listOptions: CreatorElement;
+    private readonly state: LocalStorageState;
+    private readonly listOptions: CreatorElement;
     private fileSaver: DataHandler;
+    private readonly maxValue: number = 100;
 
     constructor(state: LocalStorageState, router: Router) {
         const parameters = {
@@ -31,17 +39,14 @@ export default class IndexView extends View {
         this.fileSaver = new DataHandler();
         this.state = state;
         this.listOptions = new CreatorElement(listParameters);
-        this.configureView(state);
+        this.configureView();
     }
 
-    configureView(state: LocalStorageState) {
+    configureView() {
         this.addTitle();
         this.addListOptions();
-
         this.buildListItemGroup();
-        // this.addInputs(inputs, state, (event: Event) => this.keyupHandler(event, 'text'))
-        //this.addInputs(inputs, state);
-        this.addButtons(buttons);
+        this.addButtons(buttonsParameters);
     }
 
     private addTitle(): void {
@@ -57,29 +62,27 @@ export default class IndexView extends View {
         const listItemsCollection = this.state.getList();
 
         for (let i = 1; i <= listItemsCollection.length; i += 1) {
-            const listItemParameters: ElementParameters = {
-                tag: 'li',
+            const newListItemParameters: ElementParameters = {
+                ...listItemParameters,
                 id: `listItem_${listItemsCollection[i - 1].id}`,
-                classNames: ['options-list-item'],
             };
 
-            const listItem = new CreatorElement(listItemParameters);
+            const listItem = new CreatorElement(newListItemParameters);
             this.listOptions.addInnerElement(listItem);
             const listItemGroupId: string = listItemsCollection[i - 1].id.slice(1);
-            this.addInputsGroup(inputs, this.state, listItem, listItemGroupId);
+            this.addInputsGroup(inputsParameters, this.state, listItem, listItemGroupId);
         }
     }
 
     private addNewListItemGroup(): void {
         this.state.incrementLastId();
         const newListItemParameters: ElementParameters = {
-            tag: 'li',
+            ...listItemParameters,
             id: `listItem_#${this.state.getLastId()}`,
-            classNames: ['options-list-item'],
         };
         const listItem = new CreatorElement(newListItemParameters);
         this.listOptions.addInnerElement(listItem);
-        this.addInputsGroup(inputs, this.state, listItem);
+        this.addInputsGroup(inputsParameters, this.state, listItem);
         this.addNewListRecord();
     }
 
@@ -92,9 +95,10 @@ export default class IndexView extends View {
     }
 
     private loadListFromFile(): void {
-        // To complete function logic
         this.fileSaver.loadData((data: AppState) => {
-            console.log('Loaded data:', data);
+            this.deleteAllListItems();
+            this.state.setState(data);
+            this.buildListItemGroup();
         });
     }
 
@@ -107,12 +111,12 @@ export default class IndexView extends View {
         const parsedContainerId: Array<string> = container.getElementId().split('_');
         const containerId: string = parsedContainerId.at(-1) || '';
 
-        inputsParameters.forEach(inputParameters => {
-            const callback = (event: Event) => this.keyupHandler(event, inputParameters.placeholder, state);
-
+        inputsParameters.forEach((inputParameters, index) => {
             const textWithIdToLabel: string = id
                 ? `${inputParameters.textContent}${id}`
                 : `${inputParameters.textContent}${state.getLastId()}`;
+
+            const callback = (event: Event) => this.keyupHandler(event, containerId, state, inputParameters);
 
             const inputParametersWithCB = {
                 ...inputParameters,
@@ -121,27 +125,49 @@ export default class IndexView extends View {
             };
             const creatorInput = new InputFieldCreator(inputParametersWithCB);
 
-            // if (inputParameters.placeholder) {
-            //     const value = state.getField(inputParameters.placeholder);
-            //     creatorInput.setValue(value);
-            // }
-
+            if (index === 0) {
+                const creatorLabel = new LabelCreator(inputParametersWithCB);
+                container.addInnerElement(creatorLabel);
+            }
             container.addInnerElement(creatorInput);
+            this.fillInputsFromSavedState(containerId, creatorInput, inputParameters);
         });
         this.addDeleteButton(container, containerId);
     }
 
+    private fillInputsFromSavedState(
+        id: string,
+        creatorInput: InputFieldCreator,
+        inputParameters: ElementParameters
+    ): void {
+        const list = this.state.getField('list');
+        let listItem: DecisionItem | undefined = { id: '', title: '', weight: '' };
+        if (Array.isArray(list)) {
+            listItem = list.find(item => item.id === id);
+        }
+
+        if (listItem) {
+            if (inputParameters.placeholder === InputDescription.TITLE) {
+                creatorInput.setValue(listItem.title);
+            } else if (
+                inputParameters.placeholder === InputDescription.WEIGHT &&
+                parseInt(listItem.weight, 10) > 0 &&
+                parseInt(listItem.weight, 10) < this.maxValue
+            ) {
+                creatorInput.setValue(listItem.weight);
+            }
+        }
+    }
+
     private addDeleteButton(container: CreatorElement, containerId: string): void {
-        const deleteButtonParameters: Button = {
+        const newDeleteButtonParameters: Button = {
+            ...deleteButtonParameters,
             id: `buttonDelete_#${this.state.getLastId()}`,
-            tag: 'button',
-            classNames: ['button', 'button-delete'],
-            textContent: ButtonNames.DELETE,
             callback: (): void => {
                 this.deleteListItem(containerId);
             },
         };
-        const deleteButton = new CreatorElement(deleteButtonParameters);
+        const deleteButton = new CreatorElement(newDeleteButtonParameters);
         const deleteButtonId: string = `deleteButton_${containerId}`;
         deleteButton.setElementId(deleteButtonId);
         container.addInnerElement(deleteButton);
@@ -189,7 +215,6 @@ export default class IndexView extends View {
             let callback: () => void = () => {};
 
             if (buttonParameters.textContent === ButtonNames.ADD) {
-                // callback = () => this.addInputs(inputs, this.state, );
                 callback = () => this.addNewListItemGroup();
             }
 
@@ -218,143 +243,9 @@ export default class IndexView extends View {
         });
     }
 
-    keyupHandler(event: Event, fieldName: string | undefined, state: LocalStorageState): void {
-        if (event.target instanceof HTMLInputElement && fieldName) {
-            this.state.setField(fieldName, event.target.value, state);
+    keyupHandler(event: Event, id: string | undefined, state: LocalStorageState, parameters: ElementParameters): void {
+        if (event.target instanceof HTMLInputElement && id) {
+            this.state.setField(id, event.target.value, state, parameters);
         }
     }
 }
-
-//
-//
-// import './index.scss';
-//
-// import View from '../../view';
-// import type LocalStorageState from '../../../state/local-storage-state';
-// import type Router from '../../../router/router';
-// import { ButtonNames, ButtonsCollection, ElementParameters } from '../../../../types';
-// import InputFieldCreator from '../../../util/input-field/input-field-creator';
-// import CreatorElement from '../../../util/creator-element';
-// import ButtonCreator from '../../../util/button/button-creator';
-// import { buttons } from '../../../util/button/buttons';
-// import { inputs } from '../../../util/input-field/inputs';
-//
-// const CssClasses = {
-//   INDEX: 'index',
-// };
-//
-// export default class IndexView extends View {
-//   public router: Router;
-//   private state: LocalStorageState;
-//
-//   constructor(state: LocalStorageState, router: Router) {
-//     const parameters = {
-//       tag: 'section',
-//       classNames: [CssClasses.INDEX],
-//     };
-//     super(parameters);
-//     this.router = router;
-//     this.state = state;
-//
-//     this.configureView(state);
-//   }
-//
-//   configureView(state: LocalStorageState) {
-//     let titleParams: ElementParameters = {
-//       tag: 'h1',
-//       classNames: ['title'],
-//       title: 'Decision Making Tool',
-//       textContent: 'Decision Making Tool',
-//     };
-//
-//     let creatorTitle = new CreatorElement(titleParams);
-//     this.viewElementCreator.addInnerElement(creatorTitle);
-//
-//     // this.addInputs(inputs, state, (event: Event) => this.keyupHandler(event, 'text'))
-//     this.addInputs(inputs, state)
-//     this.addButtons(buttons);
-//   }
-//
-//   keyupHandler(event: Event, fieldName: string | undefined, state: LocalStorageState): void {
-//     if (event.target instanceof HTMLInputElement && fieldName) {
-//       this.state.setField(fieldName, event.target.value, state);
-//     }
-//   }
-//
-//   private addInputs(inputsParameters: Array<ElementParameters>, state: LocalStorageState): void {
-//     inputsParameters.forEach((inputParameters) => {
-//       const callback = (event: Event) => this.keyupHandler(event, inputParameters.placeholder, state)
-//       const inputParametersWithCB = {
-//         ...inputParameters,
-//         textContent: `${inputParameters.textContent}${state.getLastId()}`,
-//         callback
-//       }
-//       const creatorInput = new InputFieldCreator(inputParametersWithCB);
-//
-//       if (inputParameters.placeholder) {
-//         const value = state.getField(inputParameters.placeholder);
-//         creatorInput.setValue(value);
-//       }
-//
-//       this.viewElementCreator.addInnerElement(creatorInput);
-//     })
-//   }
-//
-//   private addButtons(buttonsParameters: ButtonsCollection): void {
-//     buttonsParameters.forEach((buttonParameters) => {
-//       let callback: () => void = () => {};
-//
-//       if (buttonParameters.textContent === ButtonNames.ADD) {
-//         callback = () => this.addInputs(inputs, this.state);
-//       }
-//
-//       const buttonParametersWithCB = {
-//         ...buttonParameters,
-//         callback
-//       }
-//
-//       const creatorButton = new ButtonCreator(buttonParametersWithCB);
-//       this.viewElementCreator.addInnerElement(creatorButton);
-//     })
-//   }
-//
-//
-//
-//
-//
-//
-//   // configureView(state) {
-//   //   /**
-//   //    * @type {import('../../../util/element-creator').ElementParams}
-//   //    */
-//   //   let inputParams = {
-//   //     tag: 'input',
-//   //     classNames: [],
-//   //     textContent: FIELD_TEXT_ONE,
-//   //     callback: (event) => this.keyupHandler(event, FIELD_TEXT_ONE),
-//   //   };
-//   //   let creatorInput = new InputFieldCreator(inputParams);
-//   //   creatorInput.setValue(state.getField(FIELD_TEXT_ONE));
-//   //   this.viewElementCreator.addInnerElement(creatorInput);
-//   //
-//   //   inputParams = {
-//   //     tag: 'input',
-//   //     classNames: [],
-//   //     textContent: FIELD_TEXT_TWO,
-//   //     callback: (event) => this.keyupHandler(event, FIELD_TEXT_TWO),
-//   //   };
-//   //   creatorInput = new InputFieldCreator(inputParams);
-//   //   creatorInput.setValue(state.getField(FIELD_TEXT_TWO));
-//   //   this.viewElementCreator.addInnerElement(creatorInput);
-//   // }
-//   //
-//   // /**
-//   //  * @param {KeyboardEvent} event
-//   //  * @param {string} fieldName
-//   //  */
-//   // keyupHandler(event, fieldName) {
-//   //   if (event.target instanceof HTMLInputElement) {
-//   //     this.state.setField(fieldName, event.target.value);
-//   //   }
-//   // }
-// }

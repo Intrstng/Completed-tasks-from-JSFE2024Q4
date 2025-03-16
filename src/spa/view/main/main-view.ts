@@ -1,7 +1,5 @@
 import View from '../view';
-import type Router from '../../router/router';
 import type { ViewCommon } from '../../../types';
-import NotFoundView from './not-found/not-found-view';
 
 const CssClasses = {
     MAIN: 'main',
