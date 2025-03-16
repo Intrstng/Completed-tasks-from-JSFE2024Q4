@@ -81,3 +81,9 @@ export const deleteButtonParameters: Button = {
     classNames: ['button', 'button-delete'],
     textContent: ButtonNames.DELETE,
 };
+
+export const backToHomeButtonParameters: Button = {
+    tag: 'button',
+    classNames: ['button', 'button-home'],
+    textContent: ButtonNames.BACK,
+};

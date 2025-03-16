@@ -2,6 +2,8 @@ import View from '../../view';
 import './not-found.scss';
 import type { ElementParameters } from '../../../../types';
 import type Router from '../../../router/router';
+import ButtonCreator from '../../../util/button/button-creator';
+import { backToHomeButtonParameters } from '../index/index-view-elements-parameters';
 
 const CssClasses = {
     ERROR: 'not-found',
@@ -23,5 +25,10 @@ export default class NotFoundView extends View {
 
     public configureView(): void {
         this.viewElementCreator.setTextContent(this.notFoundMessage);
+
+        const creatorButton = new ButtonCreator(backToHomeButtonParameters);
+        const callback = (): void => this.router.navigate('index');
+        creatorButton.setCallback(callback);
+        this.viewElementCreator.addInnerElement(creatorButton);
     }
 }

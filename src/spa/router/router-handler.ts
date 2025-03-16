@@ -54,8 +54,9 @@ export default class RouterHandler {
     }
 
     private setHistory(url: string): void {
+        const formattedUrl = `/${url}`.replace(/\/+/g, '/');
         if (this.params.locationField === Location.PATHNAME) {
-            globalThis.history.pushState(null, '', `/${url}`);
+            globalThis.history.pushState(null, '', formattedUrl);
         } else {
             globalThis.location.href = `${globalThis.location.href.replace(/#(.*)$/, '')}#${url}`;
         }
