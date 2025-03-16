@@ -42,13 +42,13 @@ const baseConfig = {
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
-            title: 'News API',
+            title: 'Decision Making Tool',
         }),
         new FaviconsWebpackPlugin({
             logo: './src/assets/favicon.png',
             prefix: 'assets/',
             favicons: {
-                appName: 'News API',
+                appName: 'Decision Making Tool',
                 icons: {
                     coast: false,
                     yandex: false,

@@ -56,4 +56,5 @@ export enum ButtonNames {
     SAVE = 'Save list to file',
     LOAD = 'Load list from file',
     START = 'Start',
+    DELETE = 'Delete',
 }

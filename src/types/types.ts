@@ -33,7 +33,9 @@ export type ElementParameters = {
     title?: string;
 };
 
-export type ButtonsCollection = Array<Pick<ElementParameters, 'tag' | 'classNames' | 'textContent' | 'callback'>>;
+export type Button = Pick<ElementParameters, 'tag' | 'classNames' | 'textContent' | 'callback'>;
+
+export type ButtonsCollection = Array<Button>;
 
 export type RequestParameters = {
     path: string;

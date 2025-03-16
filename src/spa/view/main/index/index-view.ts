@@ -4,11 +4,12 @@ import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import { ButtonNames } from '../../../../types';
+import { AppState, Button, ButtonNames } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
 import { buttons, inputs, listItemParameters, listParameters, titleParameters } from './index-view-elements-parameters';
+import { DataHandler } from '../../../util/data-handler';
 
 const CssClasses = {
     INDEX: 'index',
@@ -18,6 +19,7 @@ export default class IndexView extends View {
     public router: Router;
     private state: LocalStorageState;
     private listOptions: CreatorElement;
+    private fileSaver: DataHandler;
     private listItemsInGroup: number = 2;
 
     constructor(state: LocalStorageState, router: Router) {
@@ -27,6 +29,7 @@ export default class IndexView extends View {
         };
         super(parameters);
         this.router = router;
+        this.fileSaver = new DataHandler();
         this.state = state;
         this.listOptions = new CreatorElement(listParameters);
         this.configureView(state);
@@ -80,6 +83,21 @@ export default class IndexView extends View {
         this.addNewListRecord();
     }
 
+    private saveListToFile(): void {
+        const listToSave: AppState = {
+            list: this.state.getList(),
+            lastId: this.state.getLastId(),
+        };
+        this.fileSaver.saveData(listToSave, this.fileSaver.fileName);
+    }
+
+    private loadListFromFile(): void {
+        // To complete function logic
+        this.fileSaver.loadData((data: AppState) => {
+            console.log('Loaded data:', data);
+        });
+    }
+
     private addInputsGroup(
         inputsParameters: Array<ElementParameters>,
         state: LocalStorageState,
@@ -100,7 +118,20 @@ export default class IndexView extends View {
             // }
 
             container.addInnerElement(creatorInput);
+            container.addInnerElement(creatorInput);
         });
+        this.addDeleteButton(container);
+    }
+
+    private addDeleteButton(container: CreatorElement): void {
+        const deleteButtonParameters: Button = {
+            tag: 'button',
+            classNames: ['button', 'button-delete'],
+            textContent: ButtonNames.DELETE,
+            callback: () => {},
+        };
+        const deleteButton = new CreatorElement(deleteButtonParameters);
+        container.addInnerElement(deleteButton);
     }
 
     private addNewListRecord(): void {
@@ -121,6 +152,14 @@ export default class IndexView extends View {
             if (buttonParameters.textContent === ButtonNames.ADD) {
                 // callback = () => this.addInputs(inputs, this.state, );
                 callback = () => this.addNewListItemGroup();
+            }
+
+            if (buttonParameters.textContent === ButtonNames.SAVE) {
+                callback = () => this.saveListToFile();
+            }
+
+            if (buttonParameters.textContent === ButtonNames.LOAD) {
+                callback = () => this.loadListFromFile();
             }
 
             const buttonParametersWithCB = {

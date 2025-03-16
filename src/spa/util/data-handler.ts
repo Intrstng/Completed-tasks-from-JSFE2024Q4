@@ -1,6 +1,7 @@
 import type { JsonData, LoadDataCB } from '../../types';
 
 export class DataHandler {
+    public fileName: string = 'option-list.json';
     public saveData(jsonData: JsonData, fileName: string): void {
         const jsonString = JSON.stringify(jsonData, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
@@ -55,18 +56,3 @@ export class DataHandler {
         input.click();
     }
 }
-
-// const fileSaver = new FileSaver();
-//
-// const data: JsonData = {
-//   list: [
-//     { id: "#1", title: "rertert", weight: "32" },
-//     { id: "#3", title: "7777", weight: "7" }
-//   ],
-//   lastId: 3
-// };
-// fileSaver.saveData(data, 'data.json');
-
-// fileSaver.loadData((data: JsonData) => {
-//   console.log('Loaded data:', data);
-// })
