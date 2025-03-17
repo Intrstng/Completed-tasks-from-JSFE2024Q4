@@ -53,7 +53,7 @@ export default class App {
                 path: `${Pages.SELECTOR}`,
                 callback: async (): Promise<void> => {
                     const { default: SelectorView } = await import('./view/main/selector/selector-view');
-                    this.setContent(new SelectorView(state, this.router));
+                    this.setContent(new SelectorView(this.router));
                 },
             },
             {

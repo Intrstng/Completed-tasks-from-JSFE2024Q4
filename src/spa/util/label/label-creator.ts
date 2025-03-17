@@ -10,7 +10,9 @@ export default class LabelCreator extends CreatorElement {
     public createElement(parameters: ElementParameters): void {
         this.element = document.createElement('label');
         this.setTextContent(parameters.textContent);
-        this.setConnectionWithInput(`${parameters.id}_${parameters.textContent}`);
+        if (parameters.textContent) {
+            this.setConnectionWithInput(`${parameters.id}_${parameters.textContent}`);
+        }
 
         if (parameters.classNames && parameters.classNames.length > 0) {
             parameters.classNames.forEach(name => {

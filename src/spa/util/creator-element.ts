@@ -7,7 +7,7 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    public addInnerElement(element: HTMLElement | DocumentFragment | CreatorElement): void {
+    public addInnerElement(element: HTMLElement | DocumentFragment | CreatorElement | SVGSVGElement): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 

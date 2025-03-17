@@ -29,15 +29,22 @@ export type ElementParameters = {
     classNames?: Array<string>;
     textContent?: string;
     callback?: ((event: Event) => void) | null;
-    hasLabel?: boolean;
     type?: InputTypes;
     placeholder?: string;
     title?: string;
+    min?: string;
+    max?: string;
+    value?: string;
 };
 
-export type Button = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
+export type CanvasParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent'> & {
+    width: string;
+    height: string;
+};
 
-export type ButtonsCollection = Array<Button>;
+export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
+
+export type ButtonsCollection = Array<ButtonParameters>;
 
 export type RequestParameters = {
     path: string;

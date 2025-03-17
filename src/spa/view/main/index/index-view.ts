@@ -3,14 +3,15 @@ import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import { AppState, Button, ButtonNames, DecisionItem, InputDescription } from '../../../../types';
+import { AppState, ButtonParameters, ButtonNames, DecisionItem, InputDescription } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
 import {
-    buttonsParameters,
+    mainButtonsParameters,
     deleteButtonParameters,
     inputsParameters,
+    labelParameters,
     listItemParameters,
     listParameters,
     titleParameters,
@@ -27,7 +28,6 @@ export default class IndexView extends View {
     private readonly state: LocalStorageState;
     private readonly listOptions: CreatorElement;
     private fileSaver: DataHandler;
-    private readonly maxValue: number = 100;
 
     constructor(state: LocalStorageState, router: Router) {
         const parameters = {
@@ -46,7 +46,7 @@ export default class IndexView extends View {
         this.addTitle();
         this.addListOptions();
         this.buildListItemGroup();
-        this.addButtons(buttonsParameters);
+        this.addButtons(mainButtonsParameters);
     }
 
     private addTitle(): void {
@@ -126,7 +126,12 @@ export default class IndexView extends View {
             const creatorInput = new InputFieldCreator(inputParametersWithCB);
 
             if (index === 0) {
-                const creatorLabel = new LabelCreator(inputParametersWithCB);
+                const newLabelParameters = {
+                    ...inputParameters,
+                    ...labelParameters,
+                    textContent: textWithIdToLabel,
+                };
+                const creatorLabel = new LabelCreator(newLabelParameters);
                 container.addInnerElement(creatorLabel);
             }
             container.addInnerElement(creatorInput);
@@ -147,20 +152,25 @@ export default class IndexView extends View {
         }
 
         if (listItem) {
+            const weightParameter: ElementParameters | undefined = inputsParameters.find(
+                parameters => parameters.placeholder === InputDescription.WEIGHT
+            );
+            const maxValue: number = weightParameter && weightParameter.max ? parseInt(weightParameter.max, 10) : 0;
+
             if (inputParameters.placeholder === InputDescription.TITLE) {
                 creatorInput.setValue(listItem.title);
             } else if (
                 inputParameters.placeholder === InputDescription.WEIGHT &&
                 parseInt(listItem.weight, 10) > 0 &&
-                parseInt(listItem.weight, 10) < this.maxValue
+                parseInt(listItem.weight, 10) < maxValue
             ) {
-                creatorInput.setValue(listItem.weight);
+                creatorInput.setValue(String(listItem.weight));
             }
         }
     }
 
     private addDeleteButton(container: CreatorElement, containerId: string): void {
-        const newDeleteButtonParameters: Button = {
+        const newDeleteButtonParameters: ButtonParameters = {
             ...deleteButtonParameters,
             id: `buttonDelete_#${this.state.getLastId()}`,
             callback: (): void => {

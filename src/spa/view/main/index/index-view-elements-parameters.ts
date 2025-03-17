@@ -1,5 +1,5 @@
-import type { ElementParameters } from '../../../../types';
-import { Button, InputDescription, InputTypes } from '../../../../types';
+import type { CanvasParameters, ElementParameters } from '../../../../types';
+import { ButtonParameters, InputDescription, InputTypes } from '../../../../types';
 import type { ButtonsCollection } from '../../../../types';
 import { ButtonNames } from '../../../../types';
 
@@ -25,25 +25,31 @@ export const labelParameters: ElementParameters = {
     classNames: ['label'],
 };
 
+export const formSelectorParameters: ElementParameters = {
+    tag: 'form',
+    classNames: ['form-selector'],
+};
+
 export const inputsParameters: Array<ElementParameters> = [
     {
         id: 'inputTitle',
         tag: 'input',
-        classNames: ['input-class', 'title-input'],
-        hasLabel: true,
+        classNames: ['input-class', 'input-title'],
         textContent: InputDescription.ID,
         type: InputTypes.TEXT,
         placeholder: InputDescription.TITLE,
     },
     {
         tag: 'input',
-        classNames: ['input-class', 'weight-input'],
+        classNames: ['input-class', 'input-weight'],
         type: InputTypes.NUMBER,
+        max: '1000',
+        min: '0',
         placeholder: InputDescription.WEIGHT,
     },
 ];
 
-export const buttonsParameters: ButtonsCollection = [
+export const mainButtonsParameters: ButtonsCollection = [
     {
         tag: 'button',
         classNames: ['button'],
@@ -76,14 +82,59 @@ export const buttonsParameters: ButtonsCollection = [
     },
 ];
 
-export const deleteButtonParameters: Button = {
+export const deleteButtonParameters: ButtonParameters = {
     tag: 'button',
     classNames: ['button', 'button-delete'],
     textContent: ButtonNames.DELETE,
 };
 
-export const backToHomeButtonParameters: Button = {
+export const backToHomeButtonParameters: ButtonParameters = {
     tag: 'button',
     classNames: ['button', 'button-home'],
     textContent: ButtonNames.BACK,
+};
+
+export const selectorButtons: Array<ButtonParameters> = [
+    { ...backToHomeButtonParameters },
+    {
+        tag: 'button',
+        classNames: ['button', 'button-sound'],
+        textContent: ButtonNames.SOUND_ON,
+    },
+];
+
+export const labelDurationParameters: ButtonParameters = {
+    tag: 'label',
+    classNames: ['label-duration'],
+};
+
+export const inputDurationParameters: ElementParameters = {
+    id: 'inputDuration',
+    tag: 'input',
+    classNames: ['input-class', 'input-duration'],
+    type: InputTypes.NUMBER,
+    placeholder: InputDescription.SEC,
+    min: '5',
+    value: '16',
+};
+
+export const selectorStartButtonParameters: ButtonParameters = {
+    tag: 'button',
+    classNames: ['button', 'button-selector-start'],
+    textContent: ButtonNames.START,
+};
+
+export const selectorPickedOption: ButtonParameters = {
+    tag: 'p',
+    classNames: ['picked-option'],
+    textContent: ButtonNames.START_SELECT,
+};
+
+export const canvasParameters: CanvasParameters = {
+    id: 'canvas',
+    tag: 'canvas',
+    classNames: ['canvas-selector'],
+    textContent: 'Decision Picker Wheel',
+    width: '512',
+    height: '512',
 };

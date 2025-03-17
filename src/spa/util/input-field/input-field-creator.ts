@@ -20,12 +20,22 @@ export default class InputFieldCreator extends CreatorElement {
         }
 
         if (parameters.id) {
-            this.setInputElementId(`${parameters.id}_${parameters.textContent}`);
+            if (parameters.textContent) {
+                this.setInputElementId(`${parameters.id}_${parameters.textContent}`);
+            } else {
+                this.setInputElementId(`${parameters.id}`);
+            }
         }
 
         if (parameters.type === 'number') {
-            this.setInputType(parameters.type);
-            this.setInputNumberMaxValue('100');
+            if (parameters.max) {
+                this.setInputType(parameters.type);
+                this.setInputNumberMaxValue(parameters.max);
+            }
+            if (parameters.min) {
+                this.setInputType(parameters.type);
+                this.setInputNumberMinValue(parameters.min);
+            }
         }
 
         if (parameters.placeholder) {
@@ -86,6 +96,14 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
+    private setInputNumberMinValue(value: string): void {
+        if (this.element) {
+            if ('setAttribute' in this.element) {
+                this.element.setAttribute('min', value);
+            }
+        }
+    }
+
     private setInputNumberMaxValue(value: string): void {
         if (this.element) {
             if ('setAttribute' in this.element) {
@@ -94,8 +112,8 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    public setValue(value: any): void {
-        if (this.element && this.element instanceof HTMLInputElement) {
+    public setValue(value: string | undefined): void {
+        if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
             this.element.value = value;
         } else {
             console.error('Element is not initialized or is not an input element.');

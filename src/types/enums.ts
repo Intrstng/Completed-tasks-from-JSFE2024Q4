@@ -22,6 +22,7 @@ export enum InputDescription {
     TITLE = 'Title',
     WEIGHT = 'Weight',
     ID = '#',
+    SEC = 'sec',
 }
 
 export enum InputTypes {
@@ -56,6 +57,9 @@ export enum ButtonNames {
     SAVE = 'Save list to file',
     LOAD = 'Load list from file',
     START = 'Start',
+    START_SELECT = 'PRESS START BUTTON',
     DELETE = 'Delete',
     BACK = 'Back to main page',
+    SOUND_ON = 'Sound: on',
+    SOUND_OFF = 'Sound: off',
 }

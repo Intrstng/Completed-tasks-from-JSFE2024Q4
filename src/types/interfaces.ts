@@ -6,3 +6,8 @@ export type LocalStorageStateInterface = {
     getField(key: AppStateKey): Array<DecisionItem> | number;
     setField(key: string, value: string, state: LocalStorageState, parameters: ElementParameters): void;
 };
+
+export interface PathData {
+    fill?: string;
+    d: string;
+}
