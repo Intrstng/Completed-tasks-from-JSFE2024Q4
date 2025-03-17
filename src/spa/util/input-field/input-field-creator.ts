@@ -43,12 +43,16 @@ export default class InputFieldCreator extends CreatorElement {
             this.setInputName(parameters.placeholder);
         }
 
+        if (parameters.required) {
+            this.setInputRequired(parameters.required);
+        }
+
         if (parameters.callback) {
             this.setCallback(parameters.callback);
         }
     }
 
-    protected setCallback(callback: Callback = null): void {
+    public setCallback(callback: Callback = null): void {
         if (this.element) {
             this.element.addEventListener('keyup', (event: Event) => {
                 if (callback) {
@@ -64,10 +68,46 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
+    private setInputType(type: InputTypes): void {
+        if (this.element) {
+            if ('setAttribute' in this.element) {
+                this.element.setAttribute('type', type);
+            }
+        }
+    }
+
+    public getValue(): string {
+        if (this.element) {
+            if ('getAttribute' in this.element) {
+                const value = this.element.getAttribute('value');
+                return value ? value : '';
+            }
+        }
+        return '';
+    }
+
+    public setValue(value: string | undefined): void {
+        if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
+            this.element.value = value;
+        } else {
+            console.error('Element is not initialized or is not an input element.');
+        }
+    }
+
     private setInputElementId(id: string = ''): void {
         if (this.element) {
             if ('setAttribute' in this.element) {
                 this.element.setAttribute('id', id);
+            }
+        }
+    }
+
+    private setInputRequired(required: boolean): void {
+        if (this.element && 'setAttribute' in this.element) {
+            if (required) {
+                this.element.setAttribute('required', '');
+            } else {
+                this.element.removeAttribute('required');
             }
         }
     }
@@ -88,14 +128,6 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    private setInputType(type: InputTypes): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('type', type);
-            }
-        }
-    }
-
     private setInputNumberMinValue(value: string): void {
         if (this.element) {
             if ('setAttribute' in this.element) {
@@ -109,14 +141,6 @@ export default class InputFieldCreator extends CreatorElement {
             if ('setAttribute' in this.element) {
                 this.element.setAttribute('max', value);
             }
-        }
-    }
-
-    public setValue(value: string | undefined): void {
-        if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
-            this.element.value = value;
-        } else {
-            console.error('Element is not initialized or is not an input element.');
         }
     }
 }

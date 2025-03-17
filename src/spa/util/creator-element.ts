@@ -1,13 +1,13 @@
 import type { Callback, ElementParameters } from '../../types';
 
 export default class CreatorElement {
-    public element: HTMLElement | DocumentFragment | null;
+    public element: HTMLElement | null;
     constructor(parameters: ElementParameters) {
         this.element = null;
         this.createElement(parameters);
     }
 
-    public addInnerElement(element: HTMLElement | DocumentFragment | CreatorElement | SVGSVGElement): void {
+    public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 
@@ -21,7 +21,7 @@ export default class CreatorElement {
         }
     }
 
-    public getElement(): HTMLElement | DocumentFragment | null {
+    public getElement(): HTMLElement | null {
         return this.element;
     }
 
@@ -68,6 +68,18 @@ export default class CreatorElement {
         }
     }
 
+    public setCssClasses(cssClasses: Array<string> = []): void {
+        if (this.element === null) {
+            console.warn('Cannot set CSS classes: element is null.');
+        } else {
+            cssClasses.forEach(cssClass => {
+                if (this.element && 'classList' in this.element) {
+                    this.element.classList.add(cssClass);
+                }
+            });
+        }
+    }
+
     public setElementId(id: string = ''): void {
         if (this.element && 'setAttribute' in this.element) {
             this.element.setAttribute('id', id);
@@ -81,18 +93,6 @@ export default class CreatorElement {
             this.element.addEventListener('click', (event: Event) => callback(event));
         } else if (!this.element) {
             console.error('Cannot set event listener: element is null.');
-        }
-    }
-
-    private setCssClasses(cssClasses: Array<string> = []): void {
-        if (this.element === null) {
-            console.warn('Cannot set CSS classes: element is null.');
-        } else {
-            cssClasses.forEach(cssClass => {
-                if (this.element && 'classList' in this.element) {
-                    this.element.classList.add(cssClass);
-                }
-            });
         }
     }
 

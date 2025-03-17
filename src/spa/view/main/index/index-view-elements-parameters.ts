@@ -115,7 +115,16 @@ export const inputDurationParameters: ElementParameters = {
     type: InputTypes.NUMBER,
     placeholder: InputDescription.SEC,
     min: '5',
+    max: '30',
+    required: true,
     value: '16',
+};
+
+export const tooltipDurationParameters: ButtonParameters = {
+    id: 'tooltipDuration',
+    tag: 'p',
+    classNames: ['tooltip', 'tooltip-hidden'],
+    textContent: ButtonNames.TOOLTIP_DURATION,
 };
 
 export const selectorStartButtonParameters: ButtonParameters = {
@@ -124,7 +133,7 @@ export const selectorStartButtonParameters: ButtonParameters = {
     textContent: ButtonNames.START,
 };
 
-export const selectorPickedOption: ButtonParameters = {
+export const selectorPickedParameters: ButtonParameters = {
     tag: 'p',
     classNames: ['picked-option'],
     textContent: ButtonNames.START_SELECT,

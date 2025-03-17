@@ -3,7 +3,7 @@ import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import { AppState, ButtonParameters, ButtonNames, DecisionItem, InputDescription } from '../../../../types';
+import { AppState, ButtonParameters, ButtonNames, DecisionItem, InputDescription, FieldKeys } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
@@ -145,7 +145,7 @@ export default class IndexView extends View {
         creatorInput: InputFieldCreator,
         inputParameters: ElementParameters
     ): void {
-        const list = this.state.getField('list');
+        const list = this.state.getField(FieldKeys.LIST);
         let listItem: DecisionItem | undefined = { id: '', title: '', weight: '' };
         if (Array.isArray(list)) {
             listItem = list.find(item => item.id === id);
@@ -155,7 +155,7 @@ export default class IndexView extends View {
             const weightParameter: ElementParameters | undefined = inputsParameters.find(
                 parameters => parameters.placeholder === InputDescription.WEIGHT
             );
-            const maxValue: number = weightParameter && weightParameter.max ? parseInt(weightParameter.max, 10) : 0;
+            const maxValue: number = weightParameter && weightParameter.max ? parseInt(weightParameter.max, 10) : 100;
 
             if (inputParameters.placeholder === InputDescription.TITLE) {
                 creatorInput.setValue(listItem.title);

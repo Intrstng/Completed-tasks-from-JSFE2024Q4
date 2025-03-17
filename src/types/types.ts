@@ -13,6 +13,11 @@ export type AppState = {
     lastId: number;
 };
 
+export type SelectorState = {
+    isMute: boolean;
+    duration: string | undefined;
+};
+
 export type DecisionItem = {
     id: string;
     title: string;
@@ -20,6 +25,8 @@ export type DecisionItem = {
 };
 
 export type AppStateKey = keyof AppState;
+
+export type SelectorStateKey = keyof SelectorState;
 
 export type JsonData = Pick<AppState, 'list' | 'lastId'>;
 
@@ -35,6 +42,7 @@ export type ElementParameters = {
     min?: string;
     max?: string;
     value?: string;
+    required?: boolean;
 };
 
 export type CanvasParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent'> & {

@@ -4,19 +4,23 @@ import type { Route, ViewCommon } from '../types';
 import { Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
+import LocalStorageSelector from './state/local-storage-selector';
 
 export default class App {
     private readonly appName: string = 'Decision Making Tool';
     private readonly keyToRecordInLS: string;
+    private readonly keyToRecordSelectorInLS: string;
     private readonly router: Router;
     private main: MainView | null;
 
     constructor() {
         this.main = null;
         this.keyToRecordInLS = 'decisionMakingTool';
+        this.keyToRecordSelectorInLS = 'decisionMakingToolSelector';
         const state: LocalStorageState = new LocalStorageState(this.keyToRecordInLS);
+        const selectorState: LocalStorageSelector = new LocalStorageSelector(this.keyToRecordSelectorInLS);
 
-        const routes = this.createRoutes(state);
+        const routes = this.createRoutes(state, selectorState);
         this.router = new Router(routes);
 
         //this.router.setHashHandler();
@@ -33,7 +37,7 @@ export default class App {
         }
     }
 
-    public createRoutes(state: LocalStorageState): Array<Route> {
+    public createRoutes(state: LocalStorageState, selectorState: LocalStorageSelector): Array<Route> {
         return [
             {
                 path: ``,
@@ -53,7 +57,7 @@ export default class App {
                 path: `${Pages.SELECTOR}`,
                 callback: async (): Promise<void> => {
                     const { default: SelectorView } = await import('./view/main/selector/selector-view');
-                    this.setContent(new SelectorView(this.router));
+                    this.setContent(new SelectorView(selectorState, this.router));
                 },
             },
             {

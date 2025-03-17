@@ -62,4 +62,12 @@ export enum ButtonNames {
     BACK = 'Back to main page',
     SOUND_ON = 'Sound: on',
     SOUND_OFF = 'Sound: off',
+    TOOLTIP_DURATION = 'Enter a value between 5 and 30',
+}
+
+export enum FieldKeys {
+    LIST = 'list',
+    LASTID = 'lastId',
+    ISMUTE = 'isMute',
+    DURATION = 'duration',
 }
