@@ -1,4 +1,4 @@
-html {
+* {
     box-sizing: border-box;
 }
 
@@ -6,9 +6,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 640px;
     height: 100vh;
-    //max-width: 1024px;
-    //max-height: 800px;
     margin: 0 auto;
+
+    background-color: #d52e3f;
 }

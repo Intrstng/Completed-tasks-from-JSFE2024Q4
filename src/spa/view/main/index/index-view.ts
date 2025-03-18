@@ -3,7 +3,15 @@ import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import { AppState, ButtonParameters, ButtonNames, DecisionItem, InputDescription, FieldKeys } from '../../../../types';
+import {
+    AppState,
+    ButtonParameters,
+    ButtonNames,
+    DecisionItem,
+    InputDescription,
+    FieldKeys,
+    Pages,
+} from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
@@ -15,6 +23,7 @@ import {
     listItemParameters,
     listParameters,
     titleParameters,
+    mainButtonsContainerParameters,
 } from './index-view-elements-parameters';
 import { DataHandler } from '../../../util/data-handler';
 import LabelCreator from '../../../util/label/label-creator';
@@ -75,6 +84,10 @@ export default class IndexView extends View {
     }
 
     private addNewListItemGroup(): void {
+        if (this.state.getList().length === 0) {
+            this.resetState();
+        }
+
         this.state.incrementLastId();
         const newListItemParameters: ElementParameters = {
             ...listItemParameters,
@@ -221,11 +234,20 @@ export default class IndexView extends View {
     }
 
     private addButtons(buttonsParameters: ButtonsCollection): void {
+        const buttonsContainer = new CreatorElement(mainButtonsContainerParameters);
+
         buttonsParameters.forEach(buttonParameters => {
             let callback: () => void = () => {};
 
             if (buttonParameters.textContent === ButtonNames.ADD) {
                 callback = () => this.addNewListItemGroup();
+            }
+
+            if (buttonParameters.textContent === ButtonNames.CLEAR) {
+                callback = () => {
+                    this.deleteAllListItems();
+                    this.resetState();
+                };
             }
 
             if (buttonParameters.textContent === ButtonNames.SAVE) {
@@ -236,11 +258,8 @@ export default class IndexView extends View {
                 callback = () => this.loadListFromFile();
             }
 
-            if (buttonParameters.textContent === ButtonNames.CLEAR) {
-                callback = () => {
-                    this.deleteAllListItems();
-                    this.resetState();
-                };
+            if (buttonParameters.textContent === ButtonNames.START) {
+                callback = () => this.navigateToSelectorPageByClickOnStartButton();
             }
 
             const buttonParametersWithCB = {
@@ -249,8 +268,22 @@ export default class IndexView extends View {
             };
 
             const creatorButton = new ButtonCreator(buttonParametersWithCB);
-            this.viewElementCreator.addInnerElement(creatorButton);
+            buttonsContainer.addInnerElement(creatorButton);
         });
+        this.viewElementCreator.addInnerElement(buttonsContainer);
+    }
+
+    navigateToSelectorPageByClickOnStartButton(): void {
+        console.log(this.state.getList());
+        const inputsValuesList: Array<DecisionItem> = this.state.getList();
+
+        const isInputsFilledCompletely: boolean = inputsValuesList
+            .filter(values => values.title || values.weight)
+            .every(values => values.title && values.weight && parseInt(values.weight, 10) > 0);
+
+        if (isInputsFilledCompletely) {
+            this.router.navigate(Pages.SELECTOR);
+        }
     }
 
     keyupHandler(event: Event, id: string | undefined, state: LocalStorageState, parameters: ElementParameters): void {

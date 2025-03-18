@@ -1,4 +1,3 @@
-import './canvas.scss';
 import CreatorElement from '../creator-element';
 import { CanvasParameters } from '../../../types';
 

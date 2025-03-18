@@ -20,11 +20,13 @@ import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import { generateSvg } from '../../../util/generate-svg';
 import CanvasCreator from '../../../util/canvas/canvas-creator';
 import LocalStorageSelector from '../../../state/local-storage-selector';
+import { drawCanvas } from '../../../util/canvas/draw-canvas';
 
 const CssClasses = {
     SELECTOR: 'selector',
     TOOLTIP: 'tooltip',
     TOOLTIP_HIDDEN: 'tooltip-hidden',
+    SOUND_OFF: 'button-sound-off',
 };
 
 export default class SelectorView extends View {
@@ -77,10 +79,14 @@ export default class SelectorView extends View {
                 buttonParameters.textContent === ButtonNames.SOUND_ON ||
                 buttonParameters.textContent === ButtonNames.SOUND_OFF
             ) {
-                if (this.isMute) {
+                const buttonElement = creatorButton.getElement();
+
+                if (this.isMute && buttonElement && 'classList' in buttonElement) {
                     creatorButton.setTextContent(ButtonNames.SOUND_ON);
-                } else {
+                    buttonElement.classList.remove(CssClasses.SOUND_OFF);
+                } else if (!this.isMute && buttonElement && 'classList' in buttonElement) {
                     creatorButton.setTextContent(ButtonNames.SOUND_OFF);
+                    buttonElement.classList.add(CssClasses.SOUND_OFF);
                 }
                 creatorButton.setCallback(this.toggleSound.bind(this));
             }
@@ -135,13 +141,23 @@ export default class SelectorView extends View {
         if (soundButton instanceof HTMLButtonElement) {
             this.isMute = !this.isMute;
             soundButton.textContent = this.isMute ? ButtonNames.SOUND_ON : ButtonNames.SOUND_OFF;
+            this.isMute
+                ? soundButton.classList.remove(CssClasses.SOUND_OFF)
+                : soundButton.classList.add(CssClasses.SOUND_OFF);
             this.selectorState.setField(FieldKeys.ISMUTE, this.isMute);
         }
     }
 
     startDecisionWheel(event: Event, toolTipElement: CreatorElement): void {
         event.preventDefault();
-
+        // Temporary solution
+        const canvasElement = this.canvas.getElement();
+        if (canvasElement instanceof HTMLCanvasElement) {
+            drawCanvas(canvasElement);
+        } else {
+            console.error('Canvas element is not an HTMLCanvasElement or is null');
+        }
+        //
         if (!this.validateInput(this.enteredDurationValue, inputDurationParameters)) {
             this.showFaultInputToolTip(toolTipElement);
         } else {
@@ -154,7 +170,7 @@ export default class SelectorView extends View {
     private showFaultInputToolTip(toolTipElement: CreatorElement): void {
         const tooltipElement = toolTipElement.getElement();
 
-        if (tooltipElement && tooltipElement && 'classList' in tooltipElement) {
+        if (tooltipElement && 'classList' in tooltipElement) {
             tooltipElement.classList.remove(CssClasses.TOOLTIP_HIDDEN);
             setTimeout(() => {
                 tooltipElement.classList.add(CssClasses.TOOLTIP_HIDDEN);

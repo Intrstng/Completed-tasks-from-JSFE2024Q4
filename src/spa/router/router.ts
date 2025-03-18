@@ -35,14 +35,6 @@ export default class Router {
             return;
         }
 
-        // try {
-        //     await this.routes[routeIndex].callback(); // or next line
-        //     // this.routes[routeIndex].callback(requestParams.resource);
-        // } catch (error) {
-        //     console.error('Error in route callback:', error);
-        //     this.redirectToNotFoundPage(); // Fallback to the not-found page in case of an error
-        // }
-
         this.routes[routeIndex]
             .callback()
             .then(() => {

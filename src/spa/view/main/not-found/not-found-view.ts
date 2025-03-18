@@ -3,15 +3,15 @@ import './not-found.scss';
 import type { ElementParameters } from '../../../../types';
 import type Router from '../../../router/router';
 import ButtonCreator from '../../../util/button/button-creator';
-import { backToHomeButtonParameters } from '../index/index-view-elements-parameters';
-import { Pages } from '../../../../types';
+import { backToHomeButtonParameters, notFoundTitleParameters } from '../index/index-view-elements-parameters';
+import { ButtonNames, Pages } from '../../../../types';
+import CreatorElement from '../../../util/creator-element';
 
 const CssClasses = {
     ERROR: 'not-found',
 };
 
 export default class NotFoundView extends View {
-    private notFoundMessage: string = 'Error 404. Page is not found.';
     public router: Router;
 
     constructor(router: Router) {
@@ -25,11 +25,13 @@ export default class NotFoundView extends View {
     }
 
     public configureView(): void {
-        this.viewElementCreator.setTextContent(this.notFoundMessage);
+        const creatorTitle = new CreatorElement(notFoundTitleParameters);
+        this.viewElementCreator.addInnerElement(creatorTitle);
 
         const creatorButton = new ButtonCreator(backToHomeButtonParameters);
         const callback = (): void => this.router.navigate(Pages.INDEX);
         creatorButton.setCallback(callback);
+
         this.viewElementCreator.addInnerElement(creatorButton);
     }
 }

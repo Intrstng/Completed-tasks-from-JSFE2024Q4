@@ -1,7 +1,7 @@
 import type { Callback, ElementParameters } from '../../types';
 
 export default class CreatorElement {
-    public element: HTMLElement | null;
+    public element: HTMLElement | HTMLCanvasElement | null;
     constructor(parameters: ElementParameters) {
         this.element = null;
         this.createElement(parameters);
@@ -21,7 +21,7 @@ export default class CreatorElement {
         }
     }
 
-    public getElement(): HTMLElement | null {
+    public getElement(): HTMLElement | HTMLCanvasElement | null {
         return this.element;
     }
 

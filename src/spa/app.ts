@@ -23,7 +23,7 @@ export default class App {
         const routes = this.createRoutes(state, selectorState);
         this.router = new Router(routes);
 
-        //this.router.setHashHandler();
+        this.router.setHashHandler();
         this.createView();
     }
 

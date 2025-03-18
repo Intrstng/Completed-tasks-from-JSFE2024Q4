@@ -1,4 +1,3 @@
-import './list.scss';
 import type { ElementParameters } from '../../../types';
 import CreatorElement from '../creator-element';
 

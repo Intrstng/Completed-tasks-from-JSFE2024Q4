@@ -10,6 +10,12 @@ export const titleParameters: ElementParameters = {
     textContent: 'Decision Making Tool',
 };
 
+export const notFoundTitleParameters: ElementParameters = {
+    tag: 'h1',
+    classNames: ['not-found-title'],
+    textContent: ButtonNames.ERROR,
+};
+
 export const listParameters: ElementParameters = {
     tag: 'ul',
     classNames: ['options-list'],
@@ -49,35 +55,40 @@ export const inputsParameters: Array<ElementParameters> = [
     },
 ];
 
+export const mainButtonsContainerParameters: ElementParameters = {
+    tag: 'div',
+    classNames: ['button-controls-container'],
+};
+
 export const mainButtonsParameters: ButtonsCollection = [
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.ADD,
     },
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.PASTE,
     },
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.CLEAR,
     },
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.SAVE,
     },
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.LOAD,
     },
     {
         tag: 'button',
-        classNames: ['button'],
+        classNames: ['button', 'button-controls'],
         textContent: ButtonNames.START,
     },
 ];

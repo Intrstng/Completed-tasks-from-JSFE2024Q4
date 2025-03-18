@@ -57,12 +57,13 @@ export enum ButtonNames {
     SAVE = 'Save list to file',
     LOAD = 'Load list from file',
     START = 'Start',
-    START_SELECT = 'PRESS START BUTTON',
+    START_SELECT = 'Press start button',
     DELETE = 'Delete',
     BACK = 'Back to main page',
     SOUND_ON = 'Sound: on',
     SOUND_OFF = 'Sound: off',
     TOOLTIP_DURATION = 'Enter a value between 5 and 30',
+    ERROR = 'Error 404. Page is not found',
 }
 
 export enum FieldKeys {
