@@ -1,7 +1,7 @@
 import type { Callback, ElementParameters } from '../../types';
 
 export default class CreatorElement {
-    public element: HTMLElement | HTMLCanvasElement | null;
+    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | null;
     constructor(parameters: ElementParameters) {
         this.element = null;
         this.createElement(parameters);

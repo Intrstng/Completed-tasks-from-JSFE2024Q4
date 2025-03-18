@@ -179,8 +179,10 @@ export default class SelectorView extends View {
     }
 
     validateInput(value: string, durationParameters: ElementParameters): boolean {
-        const minValue: number = durationParameters && durationParameters.min ? parseInt(durationParameters.min) : 0;
-        const maxValue: number = durationParameters && durationParameters.max ? parseInt(durationParameters.max) : 100;
+        const minValue: number =
+            durationParameters && durationParameters.min ? parseInt(durationParameters.min, 10) : 0;
+        const maxValue: number =
+            durationParameters && durationParameters.max ? parseInt(durationParameters.max, 10) : 100;
 
         return parseInt(value, 10) >= minValue && parseInt(value, 10) <= maxValue;
     }

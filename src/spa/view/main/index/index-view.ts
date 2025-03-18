@@ -24,6 +24,10 @@ import {
     listParameters,
     titleParameters,
     mainButtonsContainerParameters,
+    dialogStartParameters,
+    dialogContainerParameters,
+    dialogStartTextParameters,
+    dialogCloseButtonParameters,
 } from './index-view-elements-parameters';
 import { DataHandler } from '../../../util/data-handler';
 import LabelCreator from '../../../util/label/label-creator';
@@ -56,6 +60,8 @@ export default class IndexView extends View {
         this.addListOptions();
         this.buildListItemGroup();
         this.addButtons(mainButtonsParameters);
+        this.addDialogPasteList();
+        this.addDialogStart();
     }
 
     private addTitle(): void {
@@ -76,10 +82,10 @@ export default class IndexView extends View {
                 id: `listItem_${listItemsCollection[i - 1].id}`,
             };
 
-            const listItem = new CreatorElement(newListItemParameters);
-            this.listOptions.addInnerElement(listItem);
+            const creatorListItem = new CreatorElement(newListItemParameters);
+            this.listOptions.addInnerElement(creatorListItem);
             const listItemGroupId: string = listItemsCollection[i - 1].id.slice(1);
-            this.addInputsGroup(inputsParameters, this.state, listItem, listItemGroupId);
+            this.addInputsGroup(inputsParameters, this.state, creatorListItem, listItemGroupId);
         }
     }
 
@@ -93,9 +99,9 @@ export default class IndexView extends View {
             ...listItemParameters,
             id: `listItem_#${this.state.getLastId()}`,
         };
-        const listItem = new CreatorElement(newListItemParameters);
-        this.listOptions.addInnerElement(listItem);
-        this.addInputsGroup(inputsParameters, this.state, listItem);
+        const creatorListItem = new CreatorElement(newListItemParameters);
+        this.listOptions.addInnerElement(creatorListItem);
+        this.addInputsGroup(inputsParameters, this.state, creatorListItem);
         this.addNewListRecord();
     }
 
@@ -190,10 +196,10 @@ export default class IndexView extends View {
                 this.deleteListItem(containerId);
             },
         };
-        const deleteButton = new CreatorElement(newDeleteButtonParameters);
+        const creatorDeleteButton = new CreatorElement(newDeleteButtonParameters);
         const deleteButtonId: string = `deleteButton_${containerId}`;
-        deleteButton.setElementId(deleteButtonId);
-        container.addInnerElement(deleteButton);
+        creatorDeleteButton.setElementId(deleteButtonId);
+        container.addInnerElement(creatorDeleteButton);
     }
 
     private deleteAllListItems(): void {
@@ -273,21 +279,53 @@ export default class IndexView extends View {
         this.viewElementCreator.addInnerElement(buttonsContainer);
     }
 
+    addDialogPasteList(): void {
+        //console.log('Fill with logic to open PasteList dialog')
+    }
+
+    addDialogStart() {
+        const creatorDialogStart = new CreatorElement(dialogStartParameters);
+
+        const creatorDialogStartContainer = new CreatorElement(dialogContainerParameters);
+
+        const creatorDialogStartText = new CreatorElement(dialogStartTextParameters);
+
+        const creatorDialogCloseButton = new ButtonCreator(dialogCloseButtonParameters);
+        creatorDialogCloseButton.setCallback(() => this.closeDialogStart(creatorDialogStart));
+
+        creatorDialogStartContainer.addInnerElement(creatorDialogStartText);
+        creatorDialogStartContainer.addInnerElement(creatorDialogCloseButton);
+        creatorDialogStart.addInnerElement(creatorDialogStartContainer);
+        this.viewElementCreator.addInnerElement(creatorDialogStart);
+    }
+
+    closeDialogStart(creatorDialogStart: CreatorElement): void {
+        console.log((creatorDialogStart.getElement()!.style.display = 'none'));
+    }
+
     navigateToSelectorPageByClickOnStartButton(): void {
-        console.log(this.state.getList());
         const inputsValuesList: Array<DecisionItem> = this.state.getList();
 
-        const isInputsFilledCompletely: boolean = inputsValuesList
-            .filter(values => values.title || values.weight)
-            .every(values => values.title && values.weight && parseInt(values.weight, 10) > 0);
+        const isInputsFilledCompletely: Array<DecisionItem> = inputsValuesList.filter(
+            values =>
+                values.title && values.weight && parseInt(values.weight, 10) > 0 && parseInt(values.weight, 10) <= 1000
+        );
 
-        if (isInputsFilledCompletely) {
+        if (isInputsFilledCompletely.length >= 2) {
             this.router.navigate(Pages.SELECTOR);
         }
     }
 
     keyupHandler(event: Event, id: string | undefined, state: LocalStorageState, parameters: ElementParameters): void {
         if (event.target instanceof HTMLInputElement && id) {
+            if (event.target.value.includes('e') || event.target.value.includes('E')) {
+                event.target.value = event.target.value.replace(/e/gi, '');
+            }
+
+            if (event.target.type === 'number' && parseInt(event.target.value, 10) > 1000) {
+                event.target.value = event.target.value.slice(0, -1);
+            }
+
             this.state.setField(id, event.target.value, state, parameters);
         }
     }

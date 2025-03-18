@@ -158,3 +158,31 @@ export const canvasParameters: CanvasParameters = {
     width: '512',
     height: '512',
 };
+
+export const dialogPasteListParameters: ElementParameters = {
+    tag: 'dialog',
+    classNames: ['dialog-paste'],
+};
+
+export const dialogStartParameters: ElementParameters = {
+    tag: 'dialog',
+    classNames: ['dialog-start'],
+};
+
+export const dialogStartTextParameters: ElementParameters = {
+    tag: 'p',
+    classNames: ['dialog-text'],
+    textContent:
+        'Please add at least 2 valid options. An option is considered valid if its title is not empty and its weight is greater than 0.',
+};
+
+export const dialogCloseButtonParameters: ButtonParameters = {
+    tag: 'button',
+    classNames: ['button', 'button-dialog-close'],
+    textContent: ButtonNames.CLOSE,
+};
+
+export const dialogContainerParameters: ElementParameters = {
+    tag: 'div',
+    classNames: ['dialog-container'],
+};

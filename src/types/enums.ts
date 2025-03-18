@@ -64,6 +64,7 @@ export enum ButtonNames {
     SOUND_OFF = 'Sound: off',
     TOOLTIP_DURATION = 'Enter a value between 5 and 30',
     ERROR = 'Error 404. Page is not found',
+    CLOSE = 'Close',
 }
 
 export enum FieldKeys {
