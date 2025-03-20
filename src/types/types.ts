@@ -3,6 +3,9 @@ import type NotFoundView from '../spa/view/main/not-found/not-found-view';
 import type IndexView from '../spa/view/main/index/index-view';
 import type SelectorView from '../spa/view/main/selector/selector-view';
 import type { InputTypes } from './enums';
+import CreatorElement from '../spa/util/creator-element';
+import InputFieldCreator from '../spa/util/input-field/input-field-creator';
+import ButtonCreator from '../spa/util/button/button-creator';
 
 export type LocalStorageItem = {
     [key: string]: AppState;
@@ -43,6 +46,17 @@ export type ElementParameters = {
     max?: string;
     value?: string;
     required?: boolean;
+    rows?: string;
+    cols?: string;
+};
+
+export type DialogParameters = {
+    tag?: string;
+    id?: string;
+    classNames?: Array<string>;
+    open?: boolean;
+    content?: Array<ElementParameters>;
+    callback?: ((event: Event) => void) | null;
 };
 
 export type CanvasParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent'> & {
@@ -53,6 +67,10 @@ export type CanvasParameters = Pick<ElementParameters, 'id' | 'tag' | 'className
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 
 export type ButtonsCollection = Array<ButtonParameters>;
+
+export type DialogContentParameters = ElementParameters | ButtonParameters;
+
+export type DialogInnerElement = CreatorElement | InputFieldCreator | ButtonCreator;
 
 export type RequestParameters = {
     path: string;
@@ -79,3 +97,5 @@ export type Callback = ((event: Event) => void) | null;
 export type LoadDataCB = (data: JsonData) => void;
 
 export type RouterCB = (parameters: RequestParameters) => void;
+
+export type CallbackDialogSubmit = ((value: AppState) => void) | undefined;

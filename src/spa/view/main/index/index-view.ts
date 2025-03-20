@@ -11,6 +11,8 @@ import {
     InputDescription,
     FieldKeys,
     Pages,
+    DialogContentParameters,
+    CallbackDialogSubmit,
 } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
@@ -24,13 +26,14 @@ import {
     listParameters,
     titleParameters,
     mainButtonsContainerParameters,
-    dialogStartParameters,
-    dialogContainerParameters,
-    dialogStartTextParameters,
     dialogCloseButtonParameters,
+    dialogPasteListContentParameters,
+    dialogParameters,
+    dialogStartContentParameters,
 } from './index-view-elements-parameters';
 import { DataHandler } from '../../../util/data-handler';
 import LabelCreator from '../../../util/label/label-creator';
+import CreatorDialog from '../../../util/dialog/dialog-creator';
 
 const CssClasses = {
     INDEX: 'index',
@@ -60,8 +63,8 @@ export default class IndexView extends View {
         this.addListOptions();
         this.buildListItemGroup();
         this.addButtons(mainButtonsParameters);
-        this.addDialogPasteList();
-        this.addDialogStart();
+        // this.addDialog(dialogPasteListContentParameters);
+        // this.addDialog(dialogStartContentParameters);
     }
 
     private addTitle(): void {
@@ -249,6 +252,10 @@ export default class IndexView extends View {
                 callback = () => this.addNewListItemGroup();
             }
 
+            if (buttonParameters.textContent === ButtonNames.PASTE) {
+                callback = () => this.showDialog(ButtonNames.PASTE);
+            }
+
             if (buttonParameters.textContent === ButtonNames.CLEAR) {
                 callback = () => {
                     this.deleteAllListItems();
@@ -279,28 +286,11 @@ export default class IndexView extends View {
         this.viewElementCreator.addInnerElement(buttonsContainer);
     }
 
-    addDialogPasteList(): void {
-        //console.log('Fill with logic to open PasteList dialog')
-    }
+    addDialog(contentParameters: Array<DialogContentParameters>, callback?: CallbackDialogSubmit): CreatorDialog {
+        const dialog = new CreatorDialog(dialogParameters, contentParameters, callback);
 
-    addDialogStart() {
-        const creatorDialogStart = new CreatorElement(dialogStartParameters);
-
-        const creatorDialogStartContainer = new CreatorElement(dialogContainerParameters);
-
-        const creatorDialogStartText = new CreatorElement(dialogStartTextParameters);
-
-        const creatorDialogCloseButton = new ButtonCreator(dialogCloseButtonParameters);
-        creatorDialogCloseButton.setCallback(() => this.closeDialogStart(creatorDialogStart));
-
-        creatorDialogStartContainer.addInnerElement(creatorDialogStartText);
-        creatorDialogStartContainer.addInnerElement(creatorDialogCloseButton);
-        creatorDialogStart.addInnerElement(creatorDialogStartContainer);
-        this.viewElementCreator.addInnerElement(creatorDialogStart);
-    }
-
-    closeDialogStart(creatorDialogStart: CreatorElement): void {
-        console.log((creatorDialogStart.getElement()!.style.display = 'none'));
+        this.viewElementCreator.addInnerElement(dialog);
+        return dialog;
     }
 
     navigateToSelectorPageByClickOnStartButton(): void {
@@ -313,6 +303,45 @@ export default class IndexView extends View {
 
         if (isInputsFilledCompletely.length >= 2) {
             this.router.navigate(Pages.SELECTOR);
+        } else {
+            this.showDialog(ButtonNames.START);
+        }
+    }
+
+    setValuesFromPasteList(values: AppState): void {
+        console.log(values);
+        this.deleteAllListItems();
+        this.resetState();
+
+        this.state.setState(values);
+        this.buildListItemGroup();
+
+        // console.log(values)
+        // // this.deleteAllListItems();
+        // //this.resetState();
+        // const storedList: Array<DecisionItem> = this.state.getList();
+        // const storedLastId: number = this.state.getLastId();
+        // this.deleteAllListItems();
+        // this.resetState();
+        // console.log(storedList)
+        // const updatedList: AppState = {
+        //     list: [...storedList, ...values.list],
+        //     lastId: storedLastId + values.list.length,
+        // }
+        // console.log(updatedList)
+        // this.state.setState(updatedList);
+        // this.buildListItemGroup();
+    }
+
+    showDialog(type: ButtonNames): void {
+        let dialog: CreatorDialog | null = null;
+        if (type === ButtonNames.PASTE) {
+            dialog = this.addDialog(dialogPasteListContentParameters, this.setValuesFromPasteList.bind(this));
+        } else if (ButtonNames.START) {
+            dialog = this.addDialog(dialogStartContentParameters);
+        }
+        if (dialog) {
+            dialog.showDialog();
         }
     }
 

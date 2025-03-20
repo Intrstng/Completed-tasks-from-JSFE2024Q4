@@ -1,4 +1,5 @@
 import type { Callback, ElementParameters } from '../../types';
+import CreatorDialog from './dialog/dialog-creator';
 
 export default class CreatorElement {
     public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | null;
@@ -7,9 +8,10 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement): void {
+    public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement | CreatorDialog): void {
         if (this.element) {
-            const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
+            const elementToAppend =
+                element instanceof CreatorElement || element instanceof CreatorDialog ? element.getElement() : element;
 
             if (elementToAppend) {
                 this.element.append(elementToAppend);
@@ -28,6 +30,15 @@ export default class CreatorElement {
     public getElementId(): string {
         if (this.element) {
             return ('getAttribute' in this.element && this.element.getAttribute('id')) || '';
+        } else {
+            console.error('Cannot get id. Element is null.');
+            return '';
+        }
+    }
+
+    public getElementTag(): string {
+        if (this.element) {
+            return this.element.tagName.toLowerCase();
         } else {
             console.error('Cannot get id. Element is null.');
             return '';
@@ -63,6 +74,13 @@ export default class CreatorElement {
             this.setElementTitle(parameters.title);
         }
 
+        if (parameters.tag === 'textarea') {
+            this.setTextareaSize(parameters);
+            if (parameters.placeholder) {
+                this.setPlaceholder(parameters.placeholder);
+            }
+        }
+
         if (parameters.callback) {
             this.setCallback(parameters.callback);
         }
@@ -93,6 +111,26 @@ export default class CreatorElement {
             this.element.addEventListener('click', (event: Event) => callback(event));
         } else if (!this.element) {
             console.error('Cannot set event listener: element is null.');
+        }
+    }
+
+    private setTextareaSize(parameters: ElementParameters): void {
+        if (this.element && 'setAttribute' in this.element) {
+            const rows = parameters.rows !== undefined ? parameters.rows : '4';
+            const cols = parameters.cols !== undefined ? parameters.cols : '20';
+
+            this.element.setAttribute('rows', rows);
+            this.element.setAttribute('cols', cols);
+        } else {
+            console.error('Cannot set textarea size: element is null.');
+        }
+    }
+
+    private setPlaceholder(placeholder: string): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('placeholder', placeholder);
+        } else {
+            console.error('Cannot set placeholder: element is null.');
         }
     }
 

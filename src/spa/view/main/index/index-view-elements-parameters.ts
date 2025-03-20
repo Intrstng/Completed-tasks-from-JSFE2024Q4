@@ -1,5 +1,11 @@
 import type { CanvasParameters, ElementParameters } from '../../../../types';
-import { ButtonParameters, InputDescription, InputTypes } from '../../../../types';
+import {
+    ButtonParameters,
+    DialogContentParameters,
+    DialogParameters,
+    InputDescription,
+    InputTypes,
+} from '../../../../types';
 import type { ButtonsCollection } from '../../../../types';
 import { ButtonNames } from '../../../../types';
 
@@ -159,21 +165,9 @@ export const canvasParameters: CanvasParameters = {
     height: '512',
 };
 
-export const dialogPasteListParameters: ElementParameters = {
+export const dialogParameters: DialogParameters = {
     tag: 'dialog',
-    classNames: ['dialog-paste'],
-};
-
-export const dialogStartParameters: ElementParameters = {
-    tag: 'dialog',
-    classNames: ['dialog-start'],
-};
-
-export const dialogStartTextParameters: ElementParameters = {
-    tag: 'p',
-    classNames: ['dialog-text'],
-    textContent:
-        'Please add at least 2 valid options. An option is considered valid if its title is not empty and its weight is greater than 0.',
+    classNames: ['dialog', 'dialog-hidden'],
 };
 
 export const dialogCloseButtonParameters: ButtonParameters = {
@@ -182,7 +176,50 @@ export const dialogCloseButtonParameters: ButtonParameters = {
     textContent: ButtonNames.CLOSE,
 };
 
-export const dialogContainerParameters: ElementParameters = {
-    tag: 'div',
-    classNames: ['dialog-container'],
-};
+export const dialogPasteListContentParameters: Array<DialogContentParameters> = [
+    {
+        tag: 'div',
+        classNames: ['dialog-container-paste'],
+    },
+    {
+        tag: 'textarea',
+        classNames: ['dialog-paste-text'],
+        placeholder:
+            'Paste a list of new options in a CSV-like format:\n' +
+            '\n' +
+            'title,1                 -> | title                 | 1 |\n' +
+            'title with whitespace,2 -> | title with whitespace | 2 |\n' +
+            'title , with , commas,3 -> | title , with , commas | 3 |\n' +
+            'title with "quotes",4   -> | title with "quotes"   | 4 |',
+        rows: '10',
+        cols: '62',
+    },
+    {
+        tag: 'button',
+        classNames: ['button', 'button-dialog-close'],
+        textContent: ButtonNames.CANCEL,
+    },
+    {
+        tag: 'button',
+        classNames: ['button', 'button-dialog-confirm'],
+        textContent: ButtonNames.CONFIRM,
+    },
+];
+
+export const dialogStartContentParameters: Array<DialogContentParameters> = [
+    {
+        tag: 'div',
+        classNames: ['dialog-container-start'],
+    },
+    {
+        tag: 'p',
+        classNames: ['dialog-text-start'],
+        textContent:
+            'Please add at least 2 valid options. An option is considered valid if its title is not empty and its weight is greater than 0.',
+    },
+    {
+        tag: 'button',
+        classNames: ['button', 'button-dialog-close'],
+        textContent: ButtonNames.CLOSE,
+    },
+];
