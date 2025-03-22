@@ -1,5 +1,6 @@
-import { FieldKeys, SelectorState, SelectorStateKey } from '../../types';
+import type { FieldKeys, SelectorState, SelectorStateKey } from '../../types';
 import { inputDurationParameters } from '../view/main/index/index-view-elements-parameters';
+import { assertIsSelectorState } from '../util/assertion-functions/assertion-functions';
 
 export default class LocalStorageSelector {
     public values: SelectorState;
@@ -24,8 +25,8 @@ export default class LocalStorageSelector {
     }
 
     public setField(key: FieldKeys, value: boolean | string): void {
-        let currentState = this.values;
-        let newState: SelectorState = { ...currentState, [key]: value };
+        const currentState = this.values;
+        const newState: SelectorState = { ...currentState, [key]: value };
         this.setState(newState);
     }
 
@@ -33,7 +34,10 @@ export default class LocalStorageSelector {
         const selectorStorageItem: string | null = localStorage.getItem(this.accessKey);
         if (selectorStorageItem) {
             try {
-                return JSON.parse(selectorStorageItem);
+                const parsedData: unknown = JSON.parse(selectorStorageItem);
+
+                assertIsSelectorState(parsedData);
+                return parsedData;
             } catch (error) {
                 console.error('Failed to parse selector localStorage item:', error);
             }

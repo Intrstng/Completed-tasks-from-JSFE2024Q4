@@ -1,4 +1,4 @@
-import type { Callback, ElementParameters } from '../../types';
+import type { EventCallback, ElementParameters } from '../../types';
 import CreatorDialog from './dialog/dialog-creator';
 
 export default class CreatorElement {
@@ -106,7 +106,7 @@ export default class CreatorElement {
         }
     }
 
-    protected setCallback(callback: Callback = null): void {
+    protected setCallback(callback: EventCallback = null): void {
         if (this.element && typeof callback === 'function') {
             this.element.addEventListener('click', (event: Event) => callback(event));
         } else if (!this.element) {
@@ -116,8 +116,8 @@ export default class CreatorElement {
 
     private setTextareaSize(parameters: ElementParameters): void {
         if (this.element && 'setAttribute' in this.element) {
-            const rows = parameters.rows !== undefined ? parameters.rows : '4';
-            const cols = parameters.cols !== undefined ? parameters.cols : '20';
+            const rows = parameters.rows === undefined ? '4' : parameters.rows;
+            const cols = parameters.cols === undefined ? '20' : parameters.cols;
 
             this.element.setAttribute('rows', rows);
             this.element.setAttribute('cols', cols);

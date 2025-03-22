@@ -1,5 +1,6 @@
 import type { RouterCB, RouterParameters } from '../../types';
 import { Location, LocationEvent } from '../../types';
+import { isValidState } from '../util/assertion-functions/assertion-functions';
 
 export default class RouterHandler {
     private params: RouterParameters;
@@ -42,8 +43,8 @@ export default class RouterHandler {
         let url: string | null = null;
 
         if (this.params.locationField === Location.PATHNAME) {
-            if (event instanceof PopStateEvent) {
-                url = event.state && event.state.url ? event.state.url : null;
+            if (event instanceof PopStateEvent && isValidState(event.state)) {
+                url = event.state.url || null;
             }
         } else {
             const hash = globalThis.location.hash;
@@ -54,7 +55,7 @@ export default class RouterHandler {
     }
 
     private setHistory(url: string): void {
-        const formattedUrl = `/${url}`.replace(/\/+/g, '/');
+        const formattedUrl = `/${url}`.replaceAll(/\/+/g, '/');
         if (this.params.locationField === Location.PATHNAME) {
             globalThis.history.pushState(null, '', formattedUrl);
         } else {

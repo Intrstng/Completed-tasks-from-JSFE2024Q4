@@ -1,6 +1,7 @@
 import './input-field.scss';
 
-import type { Callback, ElementParameters, InputTypes } from '../../../types';
+import type { ElementParameters, EventCallback } from '../../../types';
+import { InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class InputFieldCreator extends CreatorElement {
@@ -10,7 +11,6 @@ export default class InputFieldCreator extends CreatorElement {
 
     public createElement(parameters: ElementParameters): void {
         this.element = document.createElement('input');
-
         if (parameters.classNames && parameters.classNames.length > 0) {
             parameters.classNames.forEach(name => {
                 if (this.element && 'classList' in this.element) {
@@ -18,7 +18,6 @@ export default class InputFieldCreator extends CreatorElement {
                 }
             });
         }
-
         if (parameters.id) {
             if (parameters.textContent) {
                 this.setInputElementId(`${parameters.id}_${parameters.textContent}`);
@@ -26,8 +25,7 @@ export default class InputFieldCreator extends CreatorElement {
                 this.setInputElementId(`${parameters.id}`);
             }
         }
-
-        if (parameters.type === 'number') {
+        if (parameters.type === InputTypes.NUMBER) {
             if (parameters.max) {
                 this.setInputType(parameters.type);
                 this.setInputNumberMaxValue(parameters.max);
@@ -37,22 +35,19 @@ export default class InputFieldCreator extends CreatorElement {
                 this.setInputNumberMinValue(parameters.min);
             }
         }
-
         if (parameters.placeholder) {
             this.setInputPlaceholder(parameters.placeholder);
             this.setInputName(parameters.placeholder);
         }
-
         if (parameters.required) {
             this.setInputRequired(parameters.required);
         }
-
         if (parameters.callback) {
             this.setCallback(parameters.callback);
         }
     }
 
-    public setCallback(callback: Callback = null): void {
+    public setCallback(callback: EventCallback = null): void {
         if (this.element) {
             this.element.addEventListener('keyup', (event: Event) => {
                 if (callback) {
@@ -68,24 +63,6 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    private setInputType(type: InputTypes): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('type', type);
-            }
-        }
-    }
-
-    public getValue(): string {
-        if (this.element) {
-            if ('getAttribute' in this.element) {
-                const value = this.element.getAttribute('value');
-                return value ? value : '';
-            }
-        }
-        return '';
-    }
-
     public setValue(value: string | undefined): void {
         if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
             this.element.value = value;
@@ -94,11 +71,15 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
+    private setInputType(type: InputTypes): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('type', type);
+        }
+    }
+
     private setInputElementId(id: string = ''): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('id', id);
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('id', id);
         }
     }
 
@@ -113,34 +94,26 @@ export default class InputFieldCreator extends CreatorElement {
     }
 
     private setInputPlaceholder(placeholder: string): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('placeholder', placeholder);
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('placeholder', placeholder);
         }
     }
 
     private setInputName(name: string): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('name', name.split(' ')[0].toLowerCase());
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('name', name.split(' ')[0].toLowerCase());
         }
     }
 
     private setInputNumberMinValue(value: string): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('min', value);
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('min', value);
         }
     }
 
     private setInputNumberMaxValue(value: string): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('max', value);
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('max', value);
         }
     }
 }

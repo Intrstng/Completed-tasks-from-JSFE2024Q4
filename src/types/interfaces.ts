@@ -1,5 +1,5 @@
 import type { AppStateKey } from './types';
-import { DecisionItem, ElementParameters } from './types';
+import type { DecisionItem, ElementParameters } from './types';
 import type LocalStorageState from '../spa/state/local-storage-state';
 
 export type LocalStorageStateInterface = {
@@ -7,7 +7,7 @@ export type LocalStorageStateInterface = {
     setField(key: string, value: string, state: LocalStorageState, parameters: ElementParameters): void;
 };
 
-export interface PathData {
+export type PathData = {
     fill?: string;
     d: string;
-}
+};

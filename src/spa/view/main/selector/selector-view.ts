@@ -14,13 +14,14 @@ import {
     tooltipDurationParameters,
 } from '../index/index-view-elements-parameters';
 import ButtonCreator from '../../../util/button/button-creator';
-import { ButtonNames, ElementParameters, FieldKeys, Pages } from '../../../../types';
+import type { ElementParameters } from '../../../../types';
+import { ButtonNames, FieldKeys, Pages } from '../../../../types';
 import LabelCreator from '../../../util/label/label-creator';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import { generateSvg } from '../../../util/generate-svg';
 import CanvasCreator from '../../../util/canvas/canvas-creator';
-import LocalStorageSelector from '../../../state/local-storage-selector';
-import { drawCanvas } from '../../../util/canvas/draw-canvas';
+import type LocalStorageSelector from '../../../state/local-storage-selector';
+import type LocalStorageState from '../../../state/local-storage-state';
 
 const CssClasses = {
     SELECTOR: 'selector',
@@ -36,7 +37,7 @@ export default class SelectorView extends View {
     private isMute: boolean;
     private enteredDurationValue: string = inputDurationParameters.value ?? '';
 
-    constructor(selectorState: LocalStorageSelector, router: Router) {
+    constructor(selectorState: LocalStorageSelector, appState: LocalStorageState, router: Router) {
         const parameters = {
             tag: 'section',
             classNames: [CssClasses.SELECTOR],
@@ -44,7 +45,7 @@ export default class SelectorView extends View {
         super(parameters);
         this.router = router;
         this.selectorState = selectorState;
-        this.canvas = new CanvasCreator(canvasParameters);
+        this.canvas = new CanvasCreator(canvasParameters, appState);
 
         const muteState = this.selectorState.getField(FieldKeys.ISMUTE);
         this.isMute = typeof muteState === 'boolean' ? muteState : false;
@@ -52,7 +53,27 @@ export default class SelectorView extends View {
         this.configureView();
     }
 
-    configureView() {
+    private static showFaultInputToolTip(toolTipElement: CreatorElement): void {
+        const tooltipElement = toolTipElement.getElement();
+
+        if (tooltipElement && 'classList' in tooltipElement) {
+            tooltipElement.classList.remove(CssClasses.TOOLTIP_HIDDEN);
+            setTimeout(() => {
+                tooltipElement.classList.add(CssClasses.TOOLTIP_HIDDEN);
+            }, 1500);
+        }
+    }
+
+    private static validateInput(value: string, durationParameters: ElementParameters): boolean {
+        const minValue: number =
+            durationParameters && durationParameters.min ? Number.parseInt(durationParameters.min, 10) : 0;
+        const maxValue: number =
+            durationParameters && durationParameters.max ? Number.parseInt(durationParameters.max, 10) : 100;
+
+        return Number.parseInt(value, 10) >= minValue && Number.parseInt(value, 10) <= maxValue;
+    }
+
+    private configureView(): void {
         this.addTitle();
         this.createControls();
         this.addPickedOption();
@@ -64,10 +85,7 @@ export default class SelectorView extends View {
         this.viewElementCreator.addInnerElement(creatorTitle);
     }
 
-    createControls(): void {
-        const creatorForm = new CreatorElement(formSelectorParameters);
-        this.viewElementCreator.addInnerElement(creatorForm);
-
+    private createFormWithInputs(form: CreatorElement): void {
         selectorButtons.forEach(buttonParameters => {
             const creatorButton = new ButtonCreator(buttonParameters);
 
@@ -91,8 +109,15 @@ export default class SelectorView extends View {
                 creatorButton.setCallback(this.toggleSound.bind(this));
             }
 
-            creatorForm.addInnerElement(creatorButton);
+            form.addInnerElement(creatorButton);
         });
+    }
+
+    private createControls(): void {
+        const creatorForm = new CreatorElement(formSelectorParameters);
+        this.viewElementCreator.addInnerElement(creatorForm);
+
+        this.createFormWithInputs(creatorForm);
 
         const creatorLabelDuration = new LabelCreator(labelDurationParameters);
 
@@ -104,7 +129,7 @@ export default class SelectorView extends View {
 
         creatorDurationInput.setValue(currentDuration);
 
-        const callback = (event: Event) => this.keyupHandler(event, inputDurationParameters);
+        const callback = (event: Event): void => this.keyupHandler(event, inputDurationParameters);
         creatorDurationInput.setCallback(callback);
 
         creatorLabelDuration.addInnerElement(svg);
@@ -129,69 +154,55 @@ export default class SelectorView extends View {
         this.viewElementCreator.addInnerElement(this.canvas);
     }
 
-    redirectToMainPage(event: Event): void {
+    private redirectToMainPage(event: Event): void {
         event.preventDefault();
         this.router.navigate(Pages.INDEX);
     }
 
-    toggleSound(event: Event): void {
+    private toggleSound(event: Event): void {
         event.preventDefault();
         const soundButton = event.currentTarget;
 
         if (soundButton instanceof HTMLButtonElement) {
             this.isMute = !this.isMute;
             soundButton.textContent = this.isMute ? ButtonNames.SOUND_ON : ButtonNames.SOUND_OFF;
-            this.isMute
-                ? soundButton.classList.remove(CssClasses.SOUND_OFF)
-                : soundButton.classList.add(CssClasses.SOUND_OFF);
+
+            if (this.isMute) {
+                soundButton.classList.remove(CssClasses.SOUND_OFF);
+            } else {
+                soundButton.classList.add(CssClasses.SOUND_OFF);
+            }
+
             this.selectorState.setField(FieldKeys.ISMUTE, this.isMute);
         }
     }
 
-    startDecisionWheel(event: Event, toolTipElement: CreatorElement): void {
+    private startDecisionWheel(event: Event, toolTipElement: CreatorElement): void {
         event.preventDefault();
         // Temporary solution
         const canvasElement = this.canvas.getElement();
         if (canvasElement instanceof HTMLCanvasElement) {
-            drawCanvas(canvasElement);
+            console.log('Here wheel starts turning...');
+            console.log(`Sound state is: ${this.isMute}`);
+            console.log(`Duration value is: ${this.enteredDurationValue}`);
         } else {
             console.error('Canvas element is not an HTMLCanvasElement or is null');
         }
         //
-        if (!this.validateInput(this.enteredDurationValue, inputDurationParameters)) {
-            this.showFaultInputToolTip(toolTipElement);
-        } else {
+        if (SelectorView.validateInput(this.enteredDurationValue, inputDurationParameters)) {
             console.log(
-                'Your input data is correct, but the canvas wheel is not implemented yet (tag <canvas> added in HTML). The wheel implementation will be coming soon.'
+                'Your input is correct, the wheel should have started spinning now, but the wheel rotation has not been implemented yet.'
             );
+        } else {
+            SelectorView.showFaultInputToolTip(toolTipElement);
         }
     }
 
-    private showFaultInputToolTip(toolTipElement: CreatorElement): void {
-        const tooltipElement = toolTipElement.getElement();
-
-        if (tooltipElement && 'classList' in tooltipElement) {
-            tooltipElement.classList.remove(CssClasses.TOOLTIP_HIDDEN);
-            setTimeout(() => {
-                tooltipElement.classList.add(CssClasses.TOOLTIP_HIDDEN);
-            }, 1500);
-        }
-    }
-
-    validateInput(value: string, durationParameters: ElementParameters): boolean {
-        const minValue: number =
-            durationParameters && durationParameters.min ? parseInt(durationParameters.min, 10) : 0;
-        const maxValue: number =
-            durationParameters && durationParameters.max ? parseInt(durationParameters.max, 10) : 100;
-
-        return parseInt(value, 10) >= minValue && parseInt(value, 10) <= maxValue;
-    }
-
-    keyupHandler(event: Event, durationParameters: ElementParameters): void {
+    private keyupHandler(event: Event, durationParameters: ElementParameters): void {
         if (event.target instanceof HTMLInputElement) {
             this.enteredDurationValue = event.target.value;
 
-            if (this.validateInput(event.target.value, durationParameters)) {
+            if (SelectorView.validateInput(event.target.value, durationParameters)) {
                 this.selectorState.setField(FieldKeys.DURATION, event.target.value);
             }
         }

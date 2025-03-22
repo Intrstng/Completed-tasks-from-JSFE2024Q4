@@ -1,10 +1,10 @@
 import View from '../../view';
 import './not-found.scss';
 import type { ElementParameters } from '../../../../types';
+import { Pages } from '../../../../types';
 import type Router from '../../../router/router';
 import ButtonCreator from '../../../util/button/button-creator';
 import { backToHomeButtonParameters, notFoundTitleParameters } from '../index/index-view-elements-parameters';
-import { ButtonNames, Pages } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 
 const CssClasses = {
@@ -29,9 +29,12 @@ export default class NotFoundView extends View {
         this.viewElementCreator.addInnerElement(creatorTitle);
 
         const creatorButton = new ButtonCreator(backToHomeButtonParameters);
-        const callback = (): void => this.router.navigate(Pages.INDEX);
-        creatorButton.setCallback(callback);
+        creatorButton.setCallback(this.handleBackToHome);
 
         this.viewElementCreator.addInnerElement(creatorButton);
     }
+
+    private handleBackToHome = (): void => {
+        this.router.navigate(Pages.INDEX);
+    };
 }

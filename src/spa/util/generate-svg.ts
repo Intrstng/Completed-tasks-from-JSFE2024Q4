@@ -1,4 +1,4 @@
-import { PathData } from '../../types';
+import type { PathData } from '../../types';
 
 export function generateSvg(): SVGSVGElement {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -26,7 +26,7 @@ export function generateSvg(): SVGSVGElement {
             path.setAttribute('fill', pathData.fill);
         }
         path.setAttribute('d', pathData.d);
-        svg.appendChild(path);
+        svg.append(path);
     });
     return svg;
 }

@@ -3,13 +3,9 @@ import type NotFoundView from '../spa/view/main/not-found/not-found-view';
 import type IndexView from '../spa/view/main/index/index-view';
 import type SelectorView from '../spa/view/main/selector/selector-view';
 import type { InputTypes } from './enums';
-import CreatorElement from '../spa/util/creator-element';
-import InputFieldCreator from '../spa/util/input-field/input-field-creator';
-import ButtonCreator from '../spa/util/button/button-creator';
-
-export type LocalStorageItem = {
-    [key: string]: AppState;
-};
+import type CreatorElement from '../spa/util/creator-element';
+import type InputFieldCreator from '../spa/util/input-field/input-field-creator';
+import type ButtonCreator from '../spa/util/button/button-creator';
 
 export type AppState = {
     list: Array<DecisionItem>;
@@ -86,16 +82,22 @@ export type Route = {
     callback: () => Promise<void>;
 };
 
-export type HistoryState = {
-    url?: string;
-};
-
 export type ViewCommon = IndexView | SelectorView | NotFoundView;
 
-export type Callback = ((event: Event) => void) | null;
+export type EventCallback = ((event: Event) => void) | null;
+
+export type Callback = () => void;
 
 export type LoadDataCB = (data: JsonData) => void;
 
 export type RouterCB = (parameters: RequestParameters) => void;
 
 export type CallbackDialogSubmit = ((value: AppState) => void) | undefined;
+
+export type PopStateEventState = {
+    url?: string;
+};
+
+export type LocalStorageItem = {
+    [key: string]: AppState;
+};

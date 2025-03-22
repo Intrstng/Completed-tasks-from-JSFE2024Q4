@@ -1,5 +1,6 @@
-import type { AppState, AppStateKey, LocalStorageStateInterface } from '../../types';
-import { DecisionItem, ElementParameters, InputDescription } from '../../types';
+import type { AppState, AppStateKey, DecisionItem, ElementParameters, LocalStorageStateInterface } from '../../types';
+import { InputDescription } from '../../types';
+import { assertIsDecisionJsonData } from '../util/assertion-functions/assertion-functions';
 
 export default class LocalStorageState implements LocalStorageStateInterface {
     public values: AppState;
@@ -36,7 +37,7 @@ export default class LocalStorageState implements LocalStorageStateInterface {
     }
 
     public setField(id: string, value: string, state: LocalStorageState, parameters: ElementParameters): void {
-        let currentState = state.getState();
+        const currentState = state.getState();
         let newState: AppState;
 
         if (parameters.placeholder === InputDescription.TITLE) {
@@ -59,16 +60,16 @@ export default class LocalStorageState implements LocalStorageStateInterface {
         const storageItem: string | null = localStorage.getItem(this.accessKey);
         if (storageItem) {
             try {
-                return JSON.parse(storageItem);
+                const parsedData: unknown = JSON.parse(storageItem);
+
+                assertIsDecisionJsonData(parsedData);
+                return parsedData;
             } catch (error) {
                 console.error('Failed to parse localStorage item:', error);
             }
         }
 
-        this.values = {
-            list: [],
-            lastId: 0,
-        };
+        this.values = { list: [{ id: '#1', title: '', weight: '' }], lastId: 1 };
 
         this.saveState();
         return this.values;

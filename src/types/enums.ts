@@ -75,3 +75,8 @@ export enum FieldKeys {
     ISMUTE = 'isMute',
     DURATION = 'duration',
 }
+
+export enum DataHandlerInput {
+    TYPE = 'file',
+    ACCEPT = 'application/json',
+}

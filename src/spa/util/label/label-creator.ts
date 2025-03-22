@@ -30,10 +30,8 @@ export default class LabelCreator extends CreatorElement {
     }
 
     private setConnectionWithInput(id: string = ''): void {
-        if (this.element) {
-            if ('setAttribute' in this.element) {
-                this.element.setAttribute('for', id);
-            }
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('for', id);
         }
     }
 }

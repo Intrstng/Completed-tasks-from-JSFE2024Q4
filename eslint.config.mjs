@@ -25,7 +25,7 @@ export default tseslint.config(
     {
       files: ["**/*.{js,mjs,cjs,ts}"],
       languageOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 2021,
         sourceType: "module",
         globals: {
           ...globals.browser,
@@ -39,7 +39,7 @@ export default tseslint.config(
       },
       rules: {
         "no-unused-expressions": "error",
-        //"@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/consistent-type-assertions": [
           "error",
           { "assertionStyle": "never" }
@@ -73,7 +73,7 @@ export default tseslint.config(
             }
           }
         ],
-        "max-lines-per-function": ["error", 20]
+        "max-lines-per-function": ["error", 40]
       },
     },
     {

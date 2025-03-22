@@ -1,33 +1,36 @@
 import './dialog.scss';
 
-import {
+import type {
     AppState,
-    ButtonNames,
-    Callback,
     CallbackDialogSubmit,
     DialogContentParameters,
     DialogInnerElement,
     DialogParameters,
-    ElementParameters,
+    EventCallback,
 } from '../../../types';
+import { ButtonNames } from '../../../types';
 import CreatorElement from '../creator-element';
-import LocalStorageState from '../../state/local-storage-state';
+import type LocalStorageState from '../../state/local-storage-state';
 
 export default class CreatorDialog {
     public element: HTMLDialogElement | null;
     public dialogContentContainer: HTMLElement | null = null;
-    private callbackDialogSubmit: CallbackDialogSubmit = () => {};
+    private callbackDialogSubmit: CallbackDialogSubmit;
     private temporaryInputValue: string;
+    private appState: AppState;
 
     constructor(
         dialogParameters: DialogParameters,
         contentDialogParameters: Array<DialogContentParameters>,
+        appState: LocalStorageState,
         callback?: CallbackDialogSubmit
     ) {
         this.element = null;
+        this.appState = appState.getState();
         this.dialogContentContainer = null;
         this.callbackDialogSubmit = callback;
         this.temporaryInputValue = '';
+        this.callbackDialogSubmit = callback || ((): void => {});
         this.createElement(dialogParameters, contentDialogParameters);
     }
 
@@ -54,7 +57,7 @@ export default class CreatorDialog {
         this.setContent(contentDialogParameters);
     }
 
-    public addInnerElement(element: HTMLElement | CreatorElement, parameters: ElementParameters): void {
+    public addInnerElement(element: HTMLElement | CreatorElement): void {
         if (this.element) {
             let elementToAppend: HTMLElement | null;
             if (element instanceof HTMLElement && element.tagName.toLowerCase() === 'div') {
@@ -98,7 +101,7 @@ export default class CreatorDialog {
                 (itemParameters: DialogContentParameters) => new CreatorElement(itemParameters)
             );
 
-            innerElements.forEach((innerElement, index) => {
+            innerElements.forEach(innerElement => {
                 const elementToAppend = innerElement.getElement();
 
                 if (elementToAppend) {
@@ -118,81 +121,12 @@ export default class CreatorDialog {
                         this.setKeyupHandler(this.setTemporaryInputValue.bind(this));
                     }
 
-                    this.addInnerElement(elementToAppend, contentParameters[index]);
+                    this.addInnerElement(elementToAppend);
                 }
             });
         } else {
             console.error('Cannot set dialog content: element is null.');
         }
-    }
-
-    confirmPasteListInput(event: Event): void {
-        const currentTarget = event.currentTarget;
-        const target = event.target;
-
-        if (!(currentTarget instanceof HTMLElement) || !(target instanceof HTMLElement)) {
-            return;
-        }
-        const isInputConfirmButton =
-            target instanceof HTMLElement && target.classList.contains('button-dialog-confirm');
-        if (isInputConfirmButton) {
-            const parsedInput: AppState = this.parseInputToObject(this.temporaryInputValue);
-
-            if (typeof this.callbackDialogSubmit === 'function') {
-                this.callbackDialogSubmit(parsedInput);
-            }
-        }
-
-        this.closeDialogByConfirmButton(event);
-    }
-
-    parseInputToObject(input: string): AppState {
-        const lines = input.trim().split('\n');
-
-        // const { list, lastId } = lines.reduce<AppState>(
-        //     (acc, line) => {
-        //       const [title, weight] = line.split(',').map(item => item.trim());
-        //
-        //       if (title && weight) {
-        //         acc.lastId += 1;
-        //         acc.list.push({
-        //           id: `#${acc.lastId}`,
-        //           title,
-        //           weight,
-        //         });
-        //       }
-        //
-        //       return acc;
-        //     },
-        //     { list: [], lastId: 0 }
-        // );
-
-        const { list, lastId } = lines.reduce<AppState>(
-            (acc, line) => {
-                // Define the regex pattern for validation
-                const pattern = /^\s*(.+?)\s*,\s*(\d+)\s*$/;
-                const match = line.match(pattern);
-
-                if (match) {
-                    const title = match[1].trim();
-                    const weight = match[2].trim();
-
-                    acc.lastId += 1;
-                    acc.list.push({
-                        id: `#${acc.lastId}`,
-                        title,
-                        weight,
-                    });
-                } else {
-                    console.error(`Invalid line format: "${line}"`);
-                }
-
-                return acc;
-            },
-            { list: [], lastId: 0 }
-        );
-
-        return { list, lastId };
     }
 
     public showDialog(): void {
@@ -263,6 +197,56 @@ export default class CreatorDialog {
         }
     }
 
+    private confirmPasteListInput(event: Event): void {
+        const currentTarget = event.currentTarget;
+        const target = event.target;
+
+        if (!(currentTarget instanceof HTMLElement) || !(target instanceof HTMLElement)) {
+            return;
+        }
+        const isInputConfirmButton =
+            target instanceof HTMLElement && target.classList.contains('button-dialog-confirm');
+        if (isInputConfirmButton) {
+            const parsedInput: AppState = this.parseInputToObject(this.temporaryInputValue);
+
+            if (typeof this.callbackDialogSubmit === 'function') {
+                this.callbackDialogSubmit(parsedInput);
+            }
+        }
+
+        this.closeDialogByConfirmButton(event);
+    }
+
+    private parseInputToObject(input: string): AppState {
+        const lines = input.trim().split('\n');
+
+        const { list, lastId } = lines.reduce<AppState>(
+            (acc, line) => {
+                const pattern = /^\s*(.+?)\s*,\s*(\d+)\s*$/;
+                const match = line.match(pattern);
+
+                if (match) {
+                    const title = match[1].trim();
+                    const weight = match[2].trim();
+
+                    acc.lastId += 1;
+                    acc.list.push({
+                        id: `#${acc.lastId}`,
+                        title,
+                        weight,
+                    });
+                } else {
+                    console.error(`Invalid line format: "${line}"`);
+                }
+
+                return acc;
+            },
+            { list: [], lastId: this.appState.lastId }
+        );
+
+        return { list, lastId };
+    }
+
     private setTemporaryInputValue(event: Event): void {
         const target = event.target;
 
@@ -273,7 +257,7 @@ export default class CreatorDialog {
         }
     }
 
-    setOnClickHandler(callback: Callback = null): void {
+    private setOnClickHandler(callback: EventCallback = null): void {
         if (this.element && typeof callback === 'function') {
             this.element.addEventListener('click', (event: Event) => callback(event));
         } else if (!this.element) {
@@ -281,7 +265,7 @@ export default class CreatorDialog {
         }
     }
 
-    setKeyupHandler(callback: Callback = null): void {
+    private setKeyupHandler(callback: EventCallback = null): void {
         if (this.element && typeof callback === 'function') {
             this.element.addEventListener('keyup', (event: Event) => callback(event));
         } else if (!this.element) {

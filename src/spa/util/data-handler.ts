@@ -1,10 +1,12 @@
 import type { JsonData, LoadDataCB } from '../../types';
+import { DataHandlerInput } from '../../types';
+import { assertIsDecisionJsonData } from './assertion-functions/assertion-functions';
 
 export class DataHandler {
     public fileName: string = 'option-list.json';
-    public saveData(jsonData: JsonData, fileName: string): void {
+    public static saveData(jsonData: JsonData, fileName: string): void {
         const jsonString = JSON.stringify(jsonData, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json' });
+        const blob = new Blob([jsonString], { type: DataHandlerInput.ACCEPT });
         const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
@@ -18,10 +20,10 @@ export class DataHandler {
         console.log('File successfully saved:', fileName);
     }
 
-    public loadData(callback: LoadDataCB): void {
+    public static loadData(callback: LoadDataCB): void {
         const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'application/json';
+        input.type = DataHandlerInput.TYPE;
+        input.accept = DataHandlerInput.ACCEPT;
 
         input.addEventListener('change', event => {
             if (event.target instanceof HTMLInputElement) {
@@ -29,19 +31,19 @@ export class DataHandler {
                 if (target.files && target.files.length > 0) {
                     const file = target.files.item(0);
                     if (file) {
-                        const reader = new FileReader();
-                        reader.addEventListener('load', event => {
-                            const result = event.target;
-                            if (result && typeof result.result === 'string') {
+                        file.text()
+                            .then(text => {
+                                const parsedData: unknown = JSON.parse(text);
                                 try {
-                                    const jsonData: JsonData = JSON.parse(result.result);
-                                    callback(jsonData);
+                                    assertIsDecisionJsonData(parsedData);
+                                    callback(parsedData);
                                 } catch (error) {
-                                    console.error('Error parsing JSON:', error);
+                                    console.error('Invalid JSON data:', error);
                                 }
-                            }
-                        });
-                        reader.readAsText(file);
+                            })
+                            .catch(error => {
+                                console.error('Error parsing JSON:', error);
+                            });
                     } else {
                         console.error('File is undefined.');
                     }

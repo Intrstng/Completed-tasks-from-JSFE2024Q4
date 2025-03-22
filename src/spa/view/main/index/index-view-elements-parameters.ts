@@ -1,11 +1,11 @@
-import type { CanvasParameters, ElementParameters } from '../../../../types';
-import {
+import type {
+    CanvasParameters,
+    ElementParameters,
     ButtonParameters,
     DialogContentParameters,
     DialogParameters,
-    InputDescription,
-    InputTypes,
 } from '../../../../types';
+import { InputDescription, InputTypes } from '../../../../types';
 import type { ButtonsCollection } from '../../../../types';
 import { ButtonNames } from '../../../../types';
 
@@ -219,7 +219,7 @@ export const dialogStartContentParameters: Array<DialogContentParameters> = [
     },
     {
         tag: 'button',
-        classNames: ['button', 'button-dialog-close'],
+        classNames: ['button', 'button-dialog-close', 'button-dialog-close-start'],
         textContent: ButtonNames.CLOSE,
     },
 ];

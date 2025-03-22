@@ -2,34 +2,32 @@ import './index.scss';
 import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
-import type { ButtonsCollection, ElementParameters } from '../../../../types';
-import {
+import type {
+    ButtonsCollection,
+    ElementParameters,
     AppState,
     ButtonParameters,
-    ButtonNames,
-    DecisionItem,
-    InputDescription,
-    FieldKeys,
-    Pages,
-    DialogContentParameters,
     CallbackDialogSubmit,
+    DecisionItem,
+    DialogContentParameters,
+    Callback,
 } from '../../../../types';
+import { ButtonNames, FieldKeys, InputDescription, Pages } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
 import {
-    mainButtonsParameters,
     deleteButtonParameters,
+    dialogParameters,
+    dialogPasteListContentParameters,
+    dialogStartContentParameters,
     inputsParameters,
     labelParameters,
     listItemParameters,
     listParameters,
-    titleParameters,
     mainButtonsContainerParameters,
-    dialogCloseButtonParameters,
-    dialogPasteListContentParameters,
-    dialogParameters,
-    dialogStartContentParameters,
+    mainButtonsParameters,
+    titleParameters,
 } from './index-view-elements-parameters';
 import { DataHandler } from '../../../util/data-handler';
 import LabelCreator from '../../../util/label/label-creator';
@@ -58,13 +56,11 @@ export default class IndexView extends View {
         this.configureView();
     }
 
-    configureView() {
+    private configureView(): void {
         this.addTitle();
         this.addListOptions();
         this.buildListItemGroup();
         this.addButtons(mainButtonsParameters);
-        // this.addDialog(dialogPasteListContentParameters);
-        // this.addDialog(dialogStartContentParameters);
     }
 
     private addTitle(): void {
@@ -113,11 +109,11 @@ export default class IndexView extends View {
             list: this.state.getList(),
             lastId: this.state.getLastId(),
         };
-        this.fileSaver.saveData(listToSave, this.fileSaver.fileName);
+        DataHandler.saveData(listToSave, this.fileSaver.fileName);
     }
 
     private loadListFromFile(): void {
-        this.fileSaver.loadData((data: AppState) => {
+        DataHandler.loadData((data: AppState) => {
             this.deleteAllListItems();
             this.state.setState(data);
             this.buildListItemGroup();
@@ -138,7 +134,7 @@ export default class IndexView extends View {
                 ? `${inputParameters.textContent}${id}`
                 : `${inputParameters.textContent}${state.getLastId()}`;
 
-            const callback = (event: Event) => this.keyupHandler(event, containerId, state, inputParameters);
+            const callback = (event: Event): void => this.keyupHandler(event, containerId, state, inputParameters);
 
             const inputParametersWithCB = {
                 ...inputParameters,
@@ -177,14 +173,15 @@ export default class IndexView extends View {
             const weightParameter: ElementParameters | undefined = inputsParameters.find(
                 parameters => parameters.placeholder === InputDescription.WEIGHT
             );
-            const maxValue: number = weightParameter && weightParameter.max ? parseInt(weightParameter.max, 10) : 100;
+            const maxValue: number =
+                weightParameter && weightParameter.max ? Number.parseInt(weightParameter.max, 10) : 100;
 
             if (inputParameters.placeholder === InputDescription.TITLE) {
                 creatorInput.setValue(listItem.title);
             } else if (
                 inputParameters.placeholder === InputDescription.WEIGHT &&
-                parseInt(listItem.weight, 10) > 0 &&
-                parseInt(listItem.weight, 10) < maxValue
+                Number.parseInt(listItem.weight, 10) > 0 &&
+                Number.parseInt(listItem.weight, 10) < maxValue
             ) {
                 creatorInput.setValue(String(listItem.weight));
             }
@@ -223,7 +220,7 @@ export default class IndexView extends View {
     }
 
     private deleteListItem(id: string): void {
-        let state: AppState = this.state.getState();
+        const state: AppState = this.state.getState();
         state.list = state.list.filter(item => item.id !== id);
         this.state.setState(state);
 
@@ -242,38 +239,40 @@ export default class IndexView extends View {
         listRecords.push(newListRecord);
     }
 
-    private addButtons(buttonsParameters: ButtonsCollection): void {
-        const buttonsContainer = new CreatorElement(mainButtonsContainerParameters);
-
-        buttonsParameters.forEach(buttonParameters => {
-            let callback: () => void = () => {};
-
-            if (buttonParameters.textContent === ButtonNames.ADD) {
-                callback = () => this.addNewListItemGroup();
+    private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
+        switch (buttonParameters.textContent) {
+            case ButtonNames.ADD: {
+                return () => this.addNewListItemGroup();
             }
-
-            if (buttonParameters.textContent === ButtonNames.PASTE) {
-                callback = () => this.showDialog(ButtonNames.PASTE);
+            case ButtonNames.PASTE: {
+                return () => this.showDialog(ButtonNames.PASTE);
             }
-
-            if (buttonParameters.textContent === ButtonNames.CLEAR) {
-                callback = () => {
+            case ButtonNames.CLEAR: {
+                return () => {
                     this.deleteAllListItems();
                     this.resetState();
                 };
             }
-
-            if (buttonParameters.textContent === ButtonNames.SAVE) {
-                callback = () => this.saveListToFile();
+            case ButtonNames.SAVE: {
+                return () => this.saveListToFile();
             }
-
-            if (buttonParameters.textContent === ButtonNames.LOAD) {
-                callback = () => this.loadListFromFile();
+            case ButtonNames.LOAD: {
+                return () => this.loadListFromFile();
             }
-
-            if (buttonParameters.textContent === ButtonNames.START) {
-                callback = () => this.navigateToSelectorPageByClickOnStartButton();
+            case ButtonNames.START: {
+                return () => this.navigateToSelectorPageByClickOnStartButton();
             }
+            default: {
+                return () => {};
+            }
+        }
+    };
+
+    private addButtons(buttonsParameters: ButtonsCollection): void {
+        const buttonsContainer = new CreatorElement(mainButtonsContainerParameters);
+
+        buttonsParameters.forEach(buttonParameters => {
+            const callback: Callback = this.createButtonCallback(buttonParameters);
 
             const buttonParametersWithCB = {
                 ...buttonParameters,
@@ -286,19 +285,25 @@ export default class IndexView extends View {
         this.viewElementCreator.addInnerElement(buttonsContainer);
     }
 
-    addDialog(contentParameters: Array<DialogContentParameters>, callback?: CallbackDialogSubmit): CreatorDialog {
-        const dialog = new CreatorDialog(dialogParameters, contentParameters, callback);
+    private addDialog(
+        contentParameters: Array<DialogContentParameters>,
+        callback?: CallbackDialogSubmit
+    ): CreatorDialog {
+        const dialog = new CreatorDialog(dialogParameters, contentParameters, this.state, callback);
 
         this.viewElementCreator.addInnerElement(dialog);
         return dialog;
     }
 
-    navigateToSelectorPageByClickOnStartButton(): void {
+    private navigateToSelectorPageByClickOnStartButton(): void {
         const inputsValuesList: Array<DecisionItem> = this.state.getList();
 
         const isInputsFilledCompletely: Array<DecisionItem> = inputsValuesList.filter(
             values =>
-                values.title && values.weight && parseInt(values.weight, 10) > 0 && parseInt(values.weight, 10) <= 1000
+                values.title &&
+                values.weight &&
+                Number.parseInt(values.weight, 10) > 0 &&
+                Number.parseInt(values.weight, 10) <= 1000
         );
 
         if (isInputsFilledCompletely.length >= 2) {
@@ -308,32 +313,32 @@ export default class IndexView extends View {
         }
     }
 
-    setValuesFromPasteList(values: AppState): void {
-        console.log(values);
-        this.deleteAllListItems();
-        this.resetState();
-
-        this.state.setState(values);
-        this.buildListItemGroup();
-
-        // console.log(values)
-        // // this.deleteAllListItems();
-        // //this.resetState();
-        // const storedList: Array<DecisionItem> = this.state.getList();
-        // const storedLastId: number = this.state.getLastId();
+    private setValuesFromPasteList(values: AppState): void {
+        // console.log(values);
         // this.deleteAllListItems();
         // this.resetState();
-        // console.log(storedList)
-        // const updatedList: AppState = {
-        //     list: [...storedList, ...values.list],
-        //     lastId: storedLastId + values.list.length,
-        // }
-        // console.log(updatedList)
-        // this.state.setState(updatedList);
+        //
+        // this.state.setState(values);
         // this.buildListItemGroup();
+
+        console.log('values', values);
+        // this.deleteAllListItems();
+        //this.resetState();
+        const storedList: Array<DecisionItem> = this.state.getList();
+        const storedLastId: number = this.state.getLastId();
+        this.deleteAllListItems();
+        this.resetState();
+        console.log(storedList);
+        const updatedList: AppState = {
+            list: [...storedList, ...values.list],
+            lastId: storedLastId + values.list.length,
+        };
+        console.log(updatedList);
+        this.state.setState(updatedList);
+        this.buildListItemGroup();
     }
 
-    showDialog(type: ButtonNames): void {
+    private showDialog(type: ButtonNames): void {
         let dialog: CreatorDialog | null = null;
         if (type === ButtonNames.PASTE) {
             dialog = this.addDialog(dialogPasteListContentParameters, this.setValuesFromPasteList.bind(this));
@@ -345,13 +350,21 @@ export default class IndexView extends View {
         }
     }
 
-    keyupHandler(event: Event, id: string | undefined, state: LocalStorageState, parameters: ElementParameters): void {
+    private keyupHandler(
+        event: Event,
+        id: string | undefined,
+        state: LocalStorageState,
+        parameters: ElementParameters
+    ): void {
         if (event.target instanceof HTMLInputElement && id) {
-            if (event.target.value.includes('e') || event.target.value.includes('E')) {
-                event.target.value = event.target.value.replace(/e/gi, '');
+            if (
+                (event.target.type === 'number' && event.target.value.includes('e')) ||
+                event.target.value.includes('E')
+            ) {
+                event.target.value = event.target.value.replaceAll(/e/gi, '');
             }
 
-            if (event.target.type === 'number' && parseInt(event.target.value, 10) > 1000) {
+            if (event.target.type === 'number' && Number.parseInt(event.target.value, 10) > 1000) {
                 event.target.value = event.target.value.slice(0, -1);
             }
 
