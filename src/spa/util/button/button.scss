@@ -1,0 +1,97 @@
+//.button-controls-container {
+//    display: flex;
+//    flex-wrap: wrap;
+//    align-items: flex-start;
+//    justify-content: space-between;
+//
+//    width: 100%;
+//
+//    .button-controls {
+//        width: 100%;
+//        margin-bottom: 0.45rem;
+//        padding: 0.7rem;
+//
+//        &:nth-child(4),
+//        &:nth-child(5) {
+//            width: 49.5%;
+//        }
+//
+//        &:nth-last-child(1) {
+//            margin-bottom: 0;
+//        }
+//    }
+//}
+//
+//.button {
+//    cursor: pointer;
+//
+//    padding: 0.4rem 0.6rem;
+//    border: none;
+//    border-radius: 0.25rem;
+//
+//    font-family: Corbel, sans-serif;
+//    font-weight: bold;
+//    color: rgb(255 255 255 / 90%);
+//    letter-spacing: 1px;
+//
+//    background-color: rgb(169 163 3 / 90%);
+//    box-shadow:
+//        rgb(50 50 93 / 25%) 0 13px 27px -5px,
+//        rgb(0 0 0 / 30%) 0 8px 16px -8px;
+//
+//    transition: 0.25s ease-in-out background-color;
+//
+//    &:hover {
+//        background-color: rgb(11 169 3 / 80%);
+//    }
+//
+//    &:active {
+//        background-color: rgb(8 117 2 / 80%);
+//    }
+//
+//    &:disabled {
+//        opacity: 0.6;
+//    }
+//}
+//
+//.button-delete {
+//    padding: 0.5rem 1.2rem;
+//    background-color: rgb(197 9 9 / 70%);
+//
+//    &:hover {
+//        background-color: rgb(169 28 3 / 80%);
+//    }
+//
+//    &:active {
+//        background-color: rgb(169 163 3 / 90%);
+//    }
+//}
+//
+//.button-home {
+//    padding: 0.7rem 1.5rem;
+//    background-color: rgb(11 169 3 / 80%);
+//    &:hover {
+//        background-color: rgba(54, 176, 111, 0.9);
+//    }
+//}
+//
+//.button-sound {
+//    background-color: #316f7b;
+//    transition: 0.25s ease-in-out background-color;
+//    &:hover {
+//        background-color: rgba(212, 225, 24, 0.7);
+//    }
+//}
+//
+//.button-sound-off {
+//    background-color: rgba(8, 83, 231, 0.8);
+//    color: rgba(252, 237, 216, 0.7);
+//    &:hover {
+//        background-color: #5f5625;
+//    }
+//}
+//
+//.button-selector-start {
+//    margin-top: 0.6rem;
+//    width: 100%;
+//}

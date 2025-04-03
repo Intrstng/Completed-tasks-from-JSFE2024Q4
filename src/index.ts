@@ -1,5 +1,4 @@
-function sum(a: number, b: number): number {
-    return a + b;
-}
+import AppSpa from './spa/app';
 
-console.log(sum(2, 3));
+const appSpa = new AppSpa();
+appSpa.init();

@@ -34,7 +34,7 @@ const baseConfig = {
         extensions: ['.ts', '.js'],
     },
     output: {
-        filename: 'index.js',
+        filename: 'race.js',
         path: path.resolve(__dirname, './dist'),
         assetModuleFilename: '[name][ext]',
     },
