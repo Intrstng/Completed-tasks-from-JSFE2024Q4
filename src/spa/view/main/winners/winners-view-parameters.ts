@@ -17,7 +17,7 @@ export const winnersSummaryParameters: ElementParameters = {
     classNames: [CssClasses.WINNERS_SUMMARY],
 };
 
-export const winnersWinnersCurrentParameters: ElementParameters = {
+export const winnersCurrentParameters: ElementParameters = {
     tag: 'h2',
     textContent: Description.WINNERS,
     classNames: [CssClasses.WINNERS_CURRENT],
@@ -72,9 +72,9 @@ export const tableHeadColumnsNames: Array<Description> = [
     Description.TIME,
 ];
 
-export const paginationControlsContainerParameters: ElementParameters = {
+export const paginationWinControlsContainerParameters: ElementParameters = {
     tag: 'div',
-    classNames: [CssClasses.PAGINATION_CONTAINER],
+    classNames: [CssClasses.PAGINATION_WIN_CONTAINER],
 };
 
 export const prevButtonWinnersParameters: ButtonParameters = {

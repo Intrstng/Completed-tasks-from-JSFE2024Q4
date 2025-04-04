@@ -62,7 +62,6 @@
     },
     "lint-staged": {
         "**/*.{js,ts}": [
-            "eslint --quiet --fix",
             "prettier --write --ignore-unknown"
         ],
         "**/*.{css,scss}": [

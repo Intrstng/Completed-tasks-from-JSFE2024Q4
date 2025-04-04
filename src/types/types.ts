@@ -52,7 +52,11 @@ export type TableRecord = {
 
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 
+export type ButtonsCollection = Array<ButtonParameters>;
+
 export type OrderButtonParametersWithCB = {
     ascButtonParametersWithCB: ElementParameters | null;
     descButtonParametersWithCB: ElementParameters | null;
 };
+
+export type Callback = () => void;

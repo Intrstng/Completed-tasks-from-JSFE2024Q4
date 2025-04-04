@@ -71,6 +71,13 @@ export enum Description {
     TIME = 'Best time (s)',
     ASC = 'asc',
     DESC = 'desc',
+    BRAND = 'Enter car brand',
+    COLOR = 'Select car color',
+}
+
+export enum InputUse {
+    CREATE = 'Create',
+    UPDATE = 'Update',
 }
 
 export enum CssClasses {
@@ -81,6 +88,8 @@ export enum CssClasses {
     ITEM_SELECTED = 'nav-item__selected',
     MAIN = 'main',
     GARAGE = 'garage',
+    GARAGE_SUMMARY = 'garage__summary',
+    GARAGE_CURRENT = 'garage__current',
     WINNERS = 'winners',
     WINNERS_SUMMARY = 'winners__summary',
     WINNERS_CURRENT = 'winners__current',
@@ -92,10 +101,21 @@ export enum CssClasses {
     TABLE_ROW = 'table__row',
     TABLE_HEAD_CELL = 'table__head-cell',
     TABLE_ROW_CELL = 'table__row-cell',
-    PAGINATION_CONTAINER = 'winners__pagination',
+    PAGINATION_GARAGE_CONTAINER = 'garage__pagination',
+    PAGINATION_WIN_CONTAINER = 'winners__pagination',
     BUTTON = 'button',
     BUTTON_PREV = 'prev-btn',
     BUTTON_NEXT = 'next-btn',
     BUTTON_ASC = 'asc-btn',
     BUTTON_DESC = 'desc-btn',
+    BUTTON_CONTROLS = 'controls-btn',
+    BUTTON_CREATE = 'create-btn',
+    BUTTON_UPDATE = 'update-btn',
+    BUTTON_START = 'start-btn',
+    BUTTON_BACK = 'back-btn',
+    BUTTON_SELECT = 'select-btn',
+    BUTTON_REMOVE = 'remove-btn',
+    INPUT = 'input-class',
+    BRAND = 'input-brand',
+    COLOR = 'input-color',
 }

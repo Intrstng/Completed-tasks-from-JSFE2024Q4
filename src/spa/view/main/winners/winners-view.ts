@@ -9,7 +9,7 @@ import {
     descButtonParameters,
     mockData,
     nextButtonWinnersParameters,
-    paginationControlsContainerParameters,
+    paginationWinControlsContainerParameters,
     prevButtonWinnersParameters,
     scoreTableContainerParameters,
     scoreTableParameters,
@@ -23,7 +23,7 @@ import {
     winnersPageCurrentParameters,
     winnersParameters,
     winnersSummaryParameters,
-    winnersWinnersCurrentParameters,
+    winnersCurrentParameters,
 } from './winners-view-parameters';
 import LocalStorageState from '../../../state/local-storage-state';
 
@@ -56,11 +56,11 @@ export default class WinnersView extends View {
     private addSummary(winners: number = 0, page: number = 1): void {
         const summaryCreator = new CreatorElement(winnersSummaryParameters);
 
-        this.winnersQuantity = new CreatorElement(winnersPageCurrentParameters);
-        const winnersQuantityText = winners === 0 ? '' : `(${winners})`;
-        this.winnersQuantity.setTextContent(`${Description.WINNERS} ${winnersQuantityText}`);
+        this.winnersQuantity = new CreatorElement(winnersCurrentParameters);
+        const winnersQuantityText = winners === 0 ? '' : ` (${winners})`;
+        this.winnersQuantity.setTextContent(`${Description.WINNERS}${winnersQuantityText}`);
 
-        this.winnersPage = new CreatorElement(winnersWinnersCurrentParameters);
+        this.winnersPage = new CreatorElement(winnersPageCurrentParameters);
         this.winnersPage.setTextContent(`${Description.PAGE} ${page}`);
 
         summaryCreator.addInnerElement(this.winnersQuantity);
@@ -173,7 +173,7 @@ export default class WinnersView extends View {
     }
 
     private createControls(): void {
-        const paginationControlsContainerCreator = new CreatorElement(paginationControlsContainerParameters);
+        const paginationControlsContainerCreator = new CreatorElement(paginationWinControlsContainerParameters);
 
         const prevButtonWinnersParametersWithCB: ElementParameters = {
             ...prevButtonWinnersParameters,
