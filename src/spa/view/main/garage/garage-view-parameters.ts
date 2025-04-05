@@ -131,6 +131,46 @@ export const labelParameters: ElementParameters = {
     classNames: ['label'],
 };
 
+export const raceBoardParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.BOARD],
+};
+
+export const carBlockParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.BLOCK],
+};
+
+export const carNameParameters: ElementParameters = {
+    tag: 'h3',
+    classNames: [CssClasses.NAME],
+};
+
+export const carRaceParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.RACE],
+};
+
+export const carRaceControlsParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.RACE_CONTROLS],
+};
+
+export const trackParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.TRACK],
+};
+
+export const carIconParameters: ElementParameters = {
+    tag: 'img',
+    classNames: [CssClasses.ICON],
+};
+
+export const finishParameters: ElementParameters = {
+    tag: 'div',
+    classNames: [CssClasses.FINISH],
+};
+
 export const paginationGarageControlsContainerParameters: ElementParameters = {
     tag: 'div',
     classNames: [CssClasses.PAGINATION_GARAGE_CONTAINER],

@@ -1,0 +1,18 @@
+<svg class="svg-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+    <g id="car_x2C__SUV_x2C__automobile">
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="2.917" x2="1.5" y1="16.5" y2="16.5"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="29.917" x2="28.5" y1="17.5" y2="17.5"/>
+        <path d="M5.764,10.621l-0.509,0.872C4.478,12.826,5.439,14.5,6.982,14.5H11.5" fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="10.463" x2="19.037" y1="23.5" y2="23.5"/>
+        <path d="M27.365,23.045L30.5,22l-0.379-4.918c-0.07-0.927-0.771-1.682-1.689-1.823L23.5,14.5l-3.718-4.055C18.646,9.206,17.041,8.5,15.359,8.5H6.161c-0.718,0-1.381,0.385-1.737,1.008L1.5,14.629v6.731c0,0.596,0.263,1.14,0.688,1.51" fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        <path d="M27.5,24c0,1.93-1.57,3.5-3.5,3.5s-3.5-1.57-3.5-3.5s1.57-3.5,3.5-3.5S27.5,22.07,27.5,24z" fill="none" stroke="#1695d4" stroke-miterlimit="10"/>
+        <path d="M10.5,24c0,1.93-1.57,3.5-3.5,3.5S3.5,25.93,3.5,24s1.57-3.5,3.5-3.5S10.5,22.07,10.5,24z" fill="none" stroke="#1695d4" stroke-miterlimit="10"/>
+        <circle cx="24" cy="24" fill="none" r="1.5" stroke="#1695d4" stroke-miterlimit="10"/>
+        <circle cx="7" cy="24" fill="none" r="1.5" stroke="#1695d4" stroke-miterlimit="10"/>
+        <polyline fill="none" points="13.704,10.539 14,14.5 23.5,14.5" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="19.5" x2="11.5" y1="21.5" y2="21.5"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="29.917" x2="28.5" y1="20.5" y2="20.5"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="3.516" x2="24" y1="27.5" y2="27.5"/>
+        <line fill="none" stroke="#1695d4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" x1="1.6" x2="1.5" y1="27.5" y2="27.5"/>
+    </g>
+</svg>

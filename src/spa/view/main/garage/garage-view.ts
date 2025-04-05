@@ -2,12 +2,19 @@ import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import type { Callback, ElementParameters } from '../../../../types';
-import { ButtonParameters, Description, InputTypes, InputUse } from '../../../../types';
+import { ButtonParameters, CallbackID, Car, COLORS, Description, InputTypes, InputUse } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
+    carBlockParameters,
+    carControlsButtonsParameters,
     carCreationBlockParameters,
     carCreationContainerParameters,
+    carNameParameters,
+    carRaceControlsParameters,
+    carRaceParameters,
     carUpdateBlockParameters,
+    createButtonParameters,
+    finishParameters,
     garageCurrentParameters,
     garagePageCurrentParameters,
     garageParameters,
@@ -19,31 +26,38 @@ import {
     nextButtonGarageParameters,
     paginationGarageControlsContainerParameters,
     prevButtonGarageParameters,
+    raceBoardParameters,
+    trackParameters,
+    updateButtonParameters,
 } from './garage-view-parameters';
 import LocalStorageState from '../../../state/local-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import LabelCreator from '../../../util/label/label-creator';
+import { getCallbackWithID } from '../../../util/assertion-functions/assertion-functions';
+import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
+import { svgElements } from '../../../util/createSvg/data';
+import { ShapeElement } from '../../../util/createSvg/types';
 
 const mockCars = [
     {
         name: 'Tesla',
-        color: '#e6e6fa',
+        color: '#e5e5af',
         id: 1,
     },
     {
         name: 'BMW',
-        color: '#fede00',
-        id: 2,
+        color: '#faad40',
+        id: 14,
     },
     {
-        name: 'Mersedes',
-        color: '#6c779f',
+        name: 'Opel',
+        color: '#6ce32f',
         id: 3,
     },
     {
-        name: 'Ford',
-        color: '#ef3c40',
-        id: 4,
+        name: 'Toyota',
+        color: '#ef9a21',
+        id: 5,
     },
 ];
 
@@ -53,11 +67,17 @@ export default class GarageView extends View {
     private readonly listOptions: CreatorElement;
     private garageQuantity: CreatorElement | null;
     private garagePage: CreatorElement | null;
+    private raceBoard: CreatorElement | null;
+    private carCreateLogo: SVGElement | null;
+    private carUpdateLogo: SVGElement | null;
 
     constructor(state: LocalStorageState, router: Router) {
         super(garageParameters);
         this.garageQuantity = null;
         this.garagePage = null;
+        this.raceBoard = null;
+        this.carCreateLogo = null;
+        this.carUpdateLogo = null;
         this.router = router;
 
         this.state = state;
@@ -65,9 +85,10 @@ export default class GarageView extends View {
     }
 
     private configureView(): void {
-        this.addSummary();
-        // this.addGarageControls()
+        //this.addGarageControls()
         this.addCarCreationControls();
+        this.addSummary();
+        this.createRaceBoard(mockCars);
         this.createPageControls();
     }
 
@@ -154,16 +175,16 @@ export default class GarageView extends View {
                 return () => this.updateCar();
             }
             case Description.START: {
-                return () => this.startRaceForCar();
+                return () => getCallbackWithID(buttonParameters, this.startRaceForCar);
             }
             case Description.BACK: {
-                return () => this.backFromRaceForCar();
+                return () => getCallbackWithID(buttonParameters, this.backFromRaceForCar);
             }
             case Description.SELECT: {
-                return () => this.selectCar();
+                return () => getCallbackWithID(buttonParameters, this.selectCar);
             }
             case Description.REMOVE: {
-                return () => this.removeCar();
+                return () => getCallbackWithID(buttonParameters, this.removeCar);
             }
             default: {
                 return () => {};
@@ -171,17 +192,18 @@ export default class GarageView extends View {
         }
     };
 
-    private startRaceForCar(): void {
-        console.log('startRaceForCar');
+    private startRaceForCar(id: number): void {
+        console.log('startRaceForCar', id);
+        changeSvgStrokeColor(String(id), 'red');
     }
-    private backFromRaceForCar(): void {
-        console.log('backFromRace');
+    private backFromRaceForCar(id: number): void {
+        console.log('backFromRace', id);
     }
-    private selectCar(): void {
-        console.log('selectCar');
+    private selectCar(id: number): void {
+        console.log('selectCar', id);
     }
-    private removeCar(): void {
-        console.log('removeCar');
+    private removeCar(id: number): void {
+        console.log('removeCar', id);
     }
 
     private startCommonRace(): void {
@@ -263,6 +285,16 @@ export default class GarageView extends View {
     //   return dialog;
     // }
 
+    private addCarBlockButton(container: CreatorElement, buttonParameters: ButtonParameters): void {
+        const callback: Callback = this.createButtonCallback(buttonParameters);
+        const buttonParametersWithCB = {
+            ...buttonParameters,
+            callback,
+        };
+        const buttonCreator = new CreatorElement(buttonParametersWithCB);
+        container.addInnerElement(buttonCreator.getElement());
+    }
+
     private addInputsCarBlock(container: CreatorElement, prefix: InputUse): void {
         inputsParameters.forEach(inputParameters => {
             const callback = (event: Event): void => this.keyupHandler(event, prefix, inputParameters);
@@ -304,17 +336,84 @@ export default class GarageView extends View {
         const carCreationContainerCreator = new CreatorElement(carCreationContainerParameters);
 
         const carCreationBlockCreator = new CreatorElement(carCreationBlockParameters);
-
         this.addInputsCarBlock(carCreationBlockCreator, InputUse.CREATE);
+        this.carCreateLogo = createSVG(svgElements, COLORS.BLACK, InputUse.CREATE);
+        carCreationBlockCreator.addInnerElement(this.carCreateLogo);
+        this.addCarBlockButton(carCreationBlockCreator, createButtonParameters);
 
         const carUpdateBlockCreator = new CreatorElement(carUpdateBlockParameters);
-
         this.addInputsCarBlock(carUpdateBlockCreator, InputUse.UPDATE);
+        this.carUpdateLogo = createSVG(svgElements, COLORS.BLACK, InputUse.UPDATE);
+        carUpdateBlockCreator.addInnerElement(this.carUpdateLogo);
+        this.addCarBlockButton(carUpdateBlockCreator, updateButtonParameters);
 
         carCreationContainerCreator.addInnerElement(carCreationBlockCreator.getElement());
         carCreationContainerCreator.addInnerElement(carUpdateBlockCreator.getElement());
         carCreationContainerCreator.addInnerElement(this.addGarageControls().getElement());
         this.viewElementCreator.addInnerElement(carCreationContainerCreator.getElement());
+    }
+
+    private createRaceBoard(carsData: Array<Car>): void {
+        this.raceBoard = new CreatorElement(raceBoardParameters);
+
+        carsData.forEach(car => {
+            this.createCarBlock(car, this.raceBoard);
+        });
+
+        this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+    }
+
+    private createCarBlock(carData: Car, container: CreatorElement): void {
+        const carBlockCreator = new CreatorElement(carBlockParameters);
+        carBlockCreator.setDataAttribute('id', String(carData.id));
+
+        const carNameParametersWithBrand = {
+            ...carNameParameters,
+            textContent: carData.name,
+        };
+        const carNameCreator = new CreatorElement(carNameParametersWithBrand);
+        carBlockCreator.addInnerElement(carNameCreator.getElement());
+
+        const carRaceCreator = new CreatorElement(carRaceParameters);
+        carBlockCreator.addInnerElement(carRaceCreator.getElement());
+
+        this.createCarControls(carData, carRaceCreator);
+        this.createCarTrack(carData, carRaceCreator);
+
+        container.addInnerElement(carBlockCreator.getElement());
+    }
+
+    private createCarControls(carData: Car, container: CreatorElement): void {
+        const carControls = new CreatorElement(carRaceControlsParameters);
+
+        carControlsButtonsParameters.forEach(buttonParameters => {
+            const buttonParametersID = {
+                ...buttonParameters,
+                id: String(carData.id),
+            };
+
+            const callback: Callback = this.createButtonCallback(buttonParametersID);
+
+            const buttonParametersWithCB = {
+                ...buttonParameters,
+                callback,
+            };
+            const buttonCreator = new CreatorElement(buttonParametersWithCB);
+            carControls.addInnerElement(buttonCreator.getElement());
+        });
+
+        container.addInnerElement(carControls.getElement());
+    }
+
+    private createCarTrack(carData: Car, container: CreatorElement): void {
+        const carTrackCreator = new CreatorElement(trackParameters);
+
+        const carIconCreator = createSVG(svgElements, carData.color, String(carData.id));
+        const finishCreator = new CreatorElement(finishParameters);
+
+        carTrackCreator.addInnerElement(carIconCreator);
+        carTrackCreator.addInnerElement(finishCreator.getElement());
+        container.addInnerElement(carTrackCreator.getElement());
     }
 
     private showDialog(type: any): void {

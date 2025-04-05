@@ -9,7 +9,7 @@ export default class CreatorElement {
     }
 
     //public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement | CreatorDialog): void {
-    public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement): void {
+    public addInnerElement(element: HTMLElement | CreatorElement | SVGElement): void {
         if (this.element) {
             const elementToAppend =
                 // element instanceof CreatorElement || element instanceof CreatorDialog ? element.getElement() : element;
@@ -97,6 +97,14 @@ export default class CreatorElement {
                     this.element.classList.add(cssClass);
                 }
             });
+        }
+    }
+
+    public setDataAttribute(datasetKey: string = 'key', datasetValue: string): void {
+        if (this.element && 'dataset' in this.element) {
+            this.element.dataset[datasetKey] = datasetValue;
+        } else {
+            console.error('Cannot set element dataset attribute: element is null.');
         }
     }
 

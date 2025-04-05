@@ -47,6 +47,14 @@ export enum DataHandlerInput {
     ACCEPT = 'application/json',
 }
 
+export enum COLORS {
+    BLACK = '#000000',
+    WHITE = '#FFFFFF',
+    GREEN = '#00FF00',
+    RED = '#FF0000',
+    BLUE = '#0000FF',
+}
+
 export enum Description {
     TO_GARAGE = 'To garage',
     TO_WINNERS = 'To winners',
@@ -118,4 +126,12 @@ export enum CssClasses {
     INPUT = 'input-class',
     BRAND = 'input-brand',
     COLOR = 'input-color',
+    BOARD = 'race-board',
+    BLOCK = 'car-block',
+    NAME = 'car-block__name',
+    RACE = 'car-block__race',
+    RACE_CONTROLS = 'car-block__controls',
+    TRACK = 'car-block__track',
+    ICON = 'car-block__icon',
+    FINISH = 'car-block__finish',
 }

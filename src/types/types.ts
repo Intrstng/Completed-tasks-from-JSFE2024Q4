@@ -29,7 +29,7 @@ export type ElementParameters = {
     id?: string;
     classNames?: Array<string>;
     textContent?: string;
-    callback?: ((event: Event) => void) | null;
+    callback?: EventCallback | null;
     type?: InputTypes;
     placeholder?: string;
     title?: string;
@@ -60,3 +60,13 @@ export type OrderButtonParametersWithCB = {
 };
 
 export type Callback = () => void;
+
+export type CallbackID = (id: number) => void;
+
+export type CreateButtonCB = Callback | CallbackID;
+
+export type Car = {
+    id: number;
+    name: string;
+    color: string;
+};
