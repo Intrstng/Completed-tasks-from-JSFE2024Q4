@@ -24,6 +24,29 @@ import LocalStorageState from '../../../state/local-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import LabelCreator from '../../../util/label/label-creator';
 
+const mockCars = [
+    {
+        name: 'Tesla',
+        color: '#e6e6fa',
+        id: 1,
+    },
+    {
+        name: 'BMW',
+        color: '#fede00',
+        id: 2,
+    },
+    {
+        name: 'Mersedes',
+        color: '#6c779f',
+        id: 3,
+    },
+    {
+        name: 'Ford',
+        color: '#ef3c40',
+        id: 4,
+    },
+];
+
 export default class GarageView extends View {
     public router: Router;
     private readonly state: LocalStorageState;
@@ -181,6 +204,38 @@ export default class GarageView extends View {
         console.log('update');
     }
 
+    private createCarName(event: Event): void {
+        const target = event.target;
+
+        if (target && target instanceof HTMLInputElement) {
+            console.log('create', target.value);
+        }
+    }
+
+    private updateCarName(event: Event): void {
+        const target = event.target;
+
+        if (target && target instanceof HTMLInputElement) {
+            console.log('update', target.value);
+        }
+    }
+
+    private createCarColor(event: Event): void {
+        const target = event.target;
+
+        if (target && target instanceof HTMLInputElement) {
+            console.log('create color', target.value);
+        }
+    }
+
+    private updateCarColor(event: Event): void {
+        const target = event.target;
+
+        if (target && target instanceof HTMLInputElement) {
+            console.log('update color', target.value);
+        }
+    }
+
     private deleteAllListItems(): void {
         const listElement = this.listOptions.getElement();
         if (listElement) {
@@ -198,32 +253,6 @@ export default class GarageView extends View {
         // this.state.setState(emptyState);
     }
 
-    private deleteListItem(id: string): void {
-        const state: any = this.state.getState();
-        // state.list = state.list.filter(item => item.id !== id);
-        // this.state.setState(state);
-        //
-        // this.deleteAllListItems();
-        // this.buildListItemGroup();
-    }
-
-    private addButtons(buttonsParameters: any): void {
-        // const buttonsContainer = new CreatorElement(mainButtonsContainerParameters);
-        //
-        // buttonsParameters.forEach(buttonParameters => {
-        //   const callback: Callback = this.createButtonCallback(buttonParameters);
-        //
-        //   const buttonParametersWithCB = {
-        //     ...buttonParameters,
-        //     callback,
-        //   };
-        //
-        //   const creatorButton = new ButtonCreator(buttonParametersWithCB);
-        //   buttonsContainer.addInnerElement(creatorButton);
-        // });
-        // this.viewElementCreator.addInnerElement(buttonsContainer);
-    }
-
     // private addDialog(
     //     contentParameters: Array<DialogContentParameters>,
     //     callback?: CallbackDialogSubmit
@@ -234,27 +263,40 @@ export default class GarageView extends View {
     //   return dialog;
     // }
 
-    private addInputsCarBlock(container: CreatorElement, prefix: string): void {
-        inputsParameters.forEach(inputParameter => {
-            const inputParameterWithCB = {
-                ...inputParameter,
-                id: `${inputParameter.id}${prefix}`,
-            };
-            const carInputCreator = new InputFieldCreator(inputParameterWithCB);
+    private addInputsCarBlock(container: CreatorElement, prefix: InputUse): void {
+        inputsParameters.forEach(inputParameters => {
+            const callback = (event: Event): void => this.keyupHandler(event, prefix, inputParameters);
+            if (inputParameters.type === InputTypes.TEXT) {
+                const inputParameterWithCB = {
+                    ...inputParameters,
+                    id: `${inputParameters.id}${prefix}`,
+                    callback,
+                };
+                const carInputNameCreator = new InputFieldCreator(inputParameterWithCB);
+                container.addInnerElement(carInputNameCreator.getElement());
+            }
 
-            if (inputParameter.type === InputTypes.COLOR) {
+            if (inputParameters.type === InputTypes.COLOR) {
+                const inputParameterWithID = {
+                    ...inputParameters,
+                    id: `${inputParameters.id}${prefix}`,
+                };
                 const newLabelParameters = {
-                    ...inputParameter,
+                    ...inputParameters,
                     ...labelParameters,
                     textContent: prefix,
                 };
-
+                const carInputColorCreator = new InputFieldCreator(inputParameterWithID);
                 const labelCreator = new LabelCreator(newLabelParameters);
                 labelCreator.setTextContent(Description.COLOR);
                 container.addInnerElement(labelCreator.getElement());
-            }
 
-            container.addInnerElement(carInputCreator.getElement());
+                prefix === InputUse.CREATE
+                    ? carInputColorCreator.getElement().addEventListener('input', this.createCarColor)
+                    : carInputColorCreator.getElement().addEventListener('input', this.updateCarColor);
+
+                container.addInnerElement(carInputColorCreator.getElement());
+            }
         });
     }
 
@@ -287,20 +329,22 @@ export default class GarageView extends View {
         // }
     }
 
-    private keyupHandler(event: Event, id: string | undefined, state: any, parameters: ElementParameters): void {
-        if (event.target instanceof HTMLInputElement && id) {
-            if (
-                (event.target.type === 'number' && event.target.value.includes('e')) ||
-                event.target.value.includes('E')
-            ) {
-                event.target.value = event.target.value.replaceAll(/e/gi, '');
-            }
-
-            if (event.target.type === 'number' && Number.parseInt(event.target.value, 10) > 1000) {
-                event.target.value = event.target.value.slice(0, -1);
-            }
-
-            //  this.state.setField(id, event.target.value, state, parameters);
+    private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {
+        console.log(event);
+        if (parameters.placeholder === Description.BRAND && prefix === InputUse.CREATE) {
+            this.createCarName(event);
+        } else if (parameters.placeholder === Description.BRAND && prefix === InputUse.UPDATE) {
+            this.updateCarName(event);
+        } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.CREATE) {
+            this.createCarColor(event);
+        } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.UPDATE) {
+            this.updateCarColor(event);
         }
+
+        // if (event.target instanceof HTMLInputElement && id) {
+        //
+        //
+        //     //  this.state.setField(id, event.target.value, state, parameters);
+        // }
     }
 }
