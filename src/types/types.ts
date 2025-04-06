@@ -99,6 +99,11 @@ export type Animation = {
     distance: number;
 };
 
+export type EngineData = {
+    velocity: number;
+    distance: number;
+};
+
 export type AppState = {
     [AppStateKeys.CARS]: Car[];
     [AppStateKeys.WINNERS]: Winner[];

@@ -2,15 +2,16 @@ import {
     AppState,
     AppStateKeys,
     Car,
+    CarStatus,
     Constants,
     ContentTypes,
+    EngineData,
     Http_Methods,
     HttpHeaderKeys,
     Paths,
     QueryParameterKeys,
     QueryParameters,
 } from '../../types';
-import { CONSTANTS } from '../state/initialState';
 import LocalStorageState from '../state/local-storage-state';
 
 export default class ApiController {
@@ -51,7 +52,7 @@ export default class ApiController {
             };
 
             this.state.setState(newState);
-        } catch (error) {
+        } catch (error: Error) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : error
@@ -72,7 +73,7 @@ export default class ApiController {
             }
 
             return await response.json();
-        } catch (error) {
+        } catch (error: Error) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : error
@@ -93,8 +94,9 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
             }
-        } catch (error) {
+        } catch (error: Error) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : error
@@ -115,15 +117,15 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
             }
 
             await response.json();
-            // const curPage = state.get('page');
             const currentPage: AppState[AppStateKeys] = this.state.getField(AppStateKeys.GARAGE_PAGE);
             if (currentPage instanceof Number && typeof currentPage === 'number' && isFinite(currentPage)) {
                 await this.getCars(currentPage);
             }
-        } catch (error) {
+        } catch (error: Error) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : error
@@ -140,8 +142,70 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
             }
-        } catch (error) {
+        } catch (error: Error) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : error
+            );
+            return undefined;
+        }
+    }
+
+    public async startEngine(id: number): Promise<EngineData | undefined> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.STARTED}`, {
+                method: Http_Methods.PATCH,
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+
+            return await response.json();
+        } catch (error: Error) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : error
+            );
+            return undefined;
+        }
+    }
+
+    public async stopEngine(id: number): Promise<void> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.STOPPED}`, {
+                method: Http_Methods.PATCH,
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+        } catch (error: Error) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : error
+            );
+            return undefined;
+        }
+    }
+
+    public async driveCar(id: number): Promise<{ success: boolean } | undefined> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.DRIVE}`, {
+                method: Http_Methods.PATCH,
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return { success: false };
+            }
+
+            return await response.json();
+        } catch (error: Error) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : error

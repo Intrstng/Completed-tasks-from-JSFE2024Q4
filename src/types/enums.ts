@@ -83,6 +83,12 @@ export enum HttpHeaderKeys {
     X_TOTAL_COUNT = 'X-Total-Count',
 }
 
+export enum CarStatus {
+    STARTED = 'status=started',
+    STOPPED = 'status=stopped',
+    DRIVE = 'status=drive',
+}
+
 export enum COLORS {
     BLACK = '#000000',
     WHITE = '#FFFFFF',
