@@ -25,7 +25,8 @@ import {
     winnersCurrentParameters,
 } from './winners-view-parameters';
 import LocalStorageState from '../../../state/local-storage-state';
-import { mockData, mockDataWinners } from '../../../state/initialState';
+import { mockData, mockDataWinners } from '../../../state/initial-state';
+import ApiController from '../../../api/api-controller';
 
 export default class WinnersView extends View {
     public router: Router;
@@ -33,15 +34,16 @@ export default class WinnersView extends View {
     private winnersQuantity: CreatorElement | null;
     private winnersPage: CreatorElement | null;
     private table: CreatorElement | null;
+    public api: ApiController;
 
-    constructor(state: LocalStorageState, router: Router) {
+    constructor(state: LocalStorageState, router: Router, api: ApiController) {
         super(winnersParameters);
         this.winnersQuantity = null;
         this.winnersPage = null;
         this.table = null;
         this.router = router;
         this.winnersState = state;
-
+        this.api = api;
         this.configureView();
     }
 

@@ -6,6 +6,8 @@ import Router from './router/router';
 import MainView from './view/main/main-view';
 import LocalStorageState from './state/local-storage-state';
 import HeaderView from './view/header/header-view';
+import ApiController from './api/api-controller';
+import { CONSTANTS, PATHS } from './state/initial-state';
 
 export default class App {
     private readonly appName: string = AppInfo.NAME;
@@ -14,11 +16,13 @@ export default class App {
     private header: HeaderView | null;
     private main: MainView | null;
     private readonly state: LocalStorageState;
+    public api: ApiController;
 
     constructor() {
         this.header = null;
         this.main = null;
         this.state = new LocalStorageState(this.keyToRecordInLS);
+        this.api = new ApiController(PATHS, this.state, CONSTANTS);
         const routes = this.createRoutes(this.state);
         this.router = new Router(routes);
 
@@ -45,21 +49,21 @@ export default class App {
                 path: ``,
                 callback: async (): Promise<void> => {
                     const { default: GarageView } = await import('./view/main/garage/garage-view');
-                    this.setContent(Pages.GARAGE, new GarageView(state, this.router));
+                    this.setContent(Pages.GARAGE, new GarageView(state, this.router, this.api));
                 },
             },
             {
                 path: `${Pages.GARAGE}`,
                 callback: async (): Promise<void> => {
                     const { default: GarageView } = await import('./view/main/garage/garage-view');
-                    this.setContent(Pages.GARAGE, new GarageView(state, this.router));
+                    this.setContent(Pages.GARAGE, new GarageView(state, this.router, this.api));
                 },
             },
             {
                 path: `${Pages.WINNERS}`,
                 callback: async (): Promise<void> => {
                     const { default: WinnersView } = await import('./view/main/winners/winners-view');
-                    this.setContent(Pages.WINNERS, new WinnersView(state, this.router));
+                    this.setContent(Pages.WINNERS, new WinnersView(state, this.router, this.api));
                 },
             },
         ];

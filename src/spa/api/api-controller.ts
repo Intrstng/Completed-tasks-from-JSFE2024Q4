@@ -5,12 +5,15 @@ import {
     CarStatus,
     Constants,
     ContentTypes,
+    Description,
     EngineData,
     Http_Methods,
     HttpHeaderKeys,
     Paths,
     QueryParameterKeys,
     QueryParameters,
+    SortOrderType,
+    Winner,
 } from '../../types';
 import LocalStorageState from '../state/local-storage-state';
 
@@ -20,8 +23,8 @@ export default class ApiController {
     private readonly state: LocalStorageState;
     private readonly constants: Constants;
 
-    constructor(baseUrl: string, paths: Paths, state: LocalStorageState, constants: Constants) {
-        this.baseUrl = baseUrl;
+    constructor(paths: Paths, state: LocalStorageState, constants: Constants) {
+        this.baseUrl = constants.baseURL;
         this.path = paths;
         this.state = state;
         this.constants = constants;
@@ -33,7 +36,7 @@ export default class ApiController {
                 { key: QueryParameterKeys.PAGE, value: page },
                 { key: QueryParameterKeys.LIMIT, value: this.constants.carsOnPage },
             ];
-
+            console.log(parameters);
             const response = await fetch(`${this.baseUrl}${this.path.garage}${this.getQueryString(parameters)}`);
 
             if (!response.ok) {
@@ -52,10 +55,10 @@ export default class ApiController {
             };
 
             this.state.setState(newState);
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -73,10 +76,10 @@ export default class ApiController {
             }
 
             return await response.json();
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -96,10 +99,10 @@ export default class ApiController {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -121,14 +124,16 @@ export default class ApiController {
             }
 
             await response.json();
-            const currentPage: AppState[AppStateKeys] = this.state.getField(AppStateKeys.GARAGE_PAGE);
-            if (currentPage instanceof Number && typeof currentPage === 'number' && isFinite(currentPage)) {
+            const currentPage: AppState[AppStateKeys] = this.state.getState()[AppStateKeys.GARAGE_PAGE];
+
+            if (typeof currentPage === 'number' && isFinite(currentPage)) {
+                console.log('Inside update api call');
                 await this.getCars(currentPage);
             }
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -144,10 +149,10 @@ export default class ApiController {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -165,10 +170,10 @@ export default class ApiController {
             }
 
             return await response.json();
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -184,10 +189,10 @@ export default class ApiController {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }
@@ -205,10 +210,139 @@ export default class ApiController {
             }
 
             return await response.json();
-        } catch (error: Error) {
+        } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
-                error instanceof Error ? error.message : error
+                error instanceof Error ? error.message : String(error)
+            );
+            return undefined;
+        }
+    }
+
+    public async getAllWinners(
+        sortType: string,
+        sortOrderType: SortOrderType = Description.ASC,
+        page: number
+    ): Promise<void> | undefined {
+        try {
+            const parameters: QueryParameters[] = [
+                { key: QueryParameterKeys.PAGE, value: page },
+                { key: QueryParameterKeys.SORT, value: sortType },
+                { key: QueryParameterKeys.ORDER, value: sortOrderType },
+                { key: QueryParameterKeys.LIMIT, value: this.constants.winnersOnPage },
+            ];
+
+            const response = await fetch(`${this.baseUrl}${this.path.winners}${this.getQueryString(parameters)}`);
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+
+            const winners = await response.json();
+            const winnersQuantity = Number(response.headers.get(HttpHeaderKeys.X_TOTAL_COUNT));
+
+            const winnersData = await Promise.all(winners.map((winner: Winner) => this.getCar(winner.id)));
+
+            const currentState: AppState = this.state.getState();
+
+            const newState: AppState = {
+                ...currentState,
+                winners,
+                winnersData,
+                winnersQuantity,
+            };
+
+            this.state.setState(newState);
+        } catch (error: unknown) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : String(error)
+            );
+            return undefined;
+        }
+    }
+
+    public async createWinner(data: Winner): Promise<void> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.winners}`, {
+                method: Http_Methods.POST,
+                headers: {
+                    [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+        } catch (error: unknown) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : String(error)
+            );
+            return undefined;
+        }
+    }
+
+    public async updateWinner(data: Partial<Winner>, id: number): Promise<void> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+                method: Http_Methods.PUT,
+                headers: {
+                    [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+        } catch (error: unknown) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : String(error)
+            );
+            return undefined;
+        }
+    }
+
+    public async deleteWinner(id: number): Promise<void> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+                method: Http_Methods.DELETE,
+            });
+
+            if (!response.ok) {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return undefined;
+            }
+        } catch (error: unknown) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : String(error)
+            );
+            return undefined;
+        }
+    }
+
+    public async checkWinner(id: number): Promise<Winner | boolean | undefined> | undefined {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+                method: Http_Methods.GET,
+            });
+
+            if (!response.ok) {
+                return false;
+            }
+
+            return await response.json();
+        } catch (error: unknown) {
+            console.error(
+                'Network error or unexpected issue occurred:',
+                error instanceof Error ? error.message : String(error)
             );
             return undefined;
         }

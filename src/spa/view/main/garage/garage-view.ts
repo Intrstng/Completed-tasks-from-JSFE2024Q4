@@ -1,7 +1,7 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { Callback, ElementParameters } from '../../../../types';
+import type { AppState, Callback, ElementParameters } from '../../../../types';
 import {
     AppStateKeys,
     ButtonParameters,
@@ -46,7 +46,8 @@ import { getCallbackWithID } from '../../../util/assertion-functions/assertion-f
 import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
 import { svgElements } from '../../../util/createSvg/data';
 import { ShapeElement } from '../../../util/createSvg/types';
-import { mockData } from '../../../state/initialState';
+import { mockData } from '../../../state/initial-state';
+import ApiController from '../../../api/api-controller';
 
 export default class GarageView extends View {
     public router: Router;
@@ -57,8 +58,9 @@ export default class GarageView extends View {
     private raceBoard: CreatorElement | null;
     private carCreateLogo: SVGElement | null;
     private carUpdateLogo: SVGElement | null;
+    public api: ApiController;
 
-    constructor(state: LocalStorageState, router: Router) {
+    constructor(state: LocalStorageState, router: Router, api: ApiController) {
         super(garageParameters);
         this.garageQuantity = null;
         this.garagePage = null;
@@ -66,12 +68,18 @@ export default class GarageView extends View {
         this.carCreateLogo = null;
         this.carUpdateLogo = null;
         this.router = router;
-
         this.state = state;
+        this.api = api;
         this.configureView();
     }
 
     private configureView(): void {
+        const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
+
+        if (typeof currentGaragePage === 'number' && isFinite(currentGaragePage)) {
+            this.api.getCars(this.state.getState()[AppStateKeys.GARAGE_PAGE]);
+        }
+
         //this.addGarageControls()
         this.addCarCreationControls();
         this.addSummary();

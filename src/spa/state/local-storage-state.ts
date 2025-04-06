@@ -1,6 +1,6 @@
 import type { AppState } from '../../types';
 import { AppStateKeys } from '../../types';
-import { INITIAL_STATE } from './initialState';
+import { INITIAL_STATE } from './initial-state';
 
 export default class LocalStorageState {
     public values: AppState;

@@ -133,6 +133,7 @@ export type Paths = {
 };
 
 export type Constants = {
+    baseURL: string;
     carsOnPage: number;
     winnersOnPage: number;
     carsToGenerate: number;
@@ -144,3 +145,5 @@ export type QueryParameters = {
     key: string;
     value: number | string;
 };
+
+export type SortOrderType = Description.ASC | Description.DESC;

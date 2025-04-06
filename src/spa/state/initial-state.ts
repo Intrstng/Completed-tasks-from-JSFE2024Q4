@@ -1,8 +1,6 @@
 import { AppState, Car, Constants, Description, Paths } from '../../types';
 
-const BASE_URL: string = 'http://127.0.0.1:3000';
-
-const PATHS: Paths = {
+export const PATHS: Paths = {
     garage: '/garage',
     winners: '/winners',
     engine: '/engine',
@@ -95,6 +93,7 @@ const carNames: Array<string> = [
 ];
 
 export const CONSTANTS: Constants = {
+    baseURL: 'http://127.0.0.1:3000',
     carsOnPage: 7,
     winnersOnPage: 10,
     carsToGenerate: 100,
@@ -104,22 +103,22 @@ export const CONSTANTS: Constants = {
 
 export const mockData: Array<Car> = [
     {
-        name: 'Tesla',
-        color: '#e5e5af',
+        name: 'Bugatti',
+        color: 'rgba(8,83,231,0.9)',
         id: 1,
     },
     {
-        name: 'BMW',
-        color: '#faad40',
+        name: 'Bentley',
+        color: '#fa40f1',
         id: 14,
     },
     {
-        name: 'Opel',
-        color: '#6ce32f',
+        name: 'Зил',
+        color: 'rgba(107,107,107,0.6)',
         id: 3,
     },
     {
-        name: 'Toyota',
+        name: 'Scion',
         color: '#ef9a21',
         id: 5,
     },
