@@ -1,7 +1,9 @@
-import type { ElementParameters } from '../../types';
+import type { AppState } from '../../types';
+import { AppStateKeys } from '../../types';
+import { INITIAL_STATE } from './initialState';
 
 export default class LocalStorageState {
-    public values: any;
+    public values: AppState;
     private readonly accessKey: string;
 
     constructor(key: string) {
@@ -10,33 +12,24 @@ export default class LocalStorageState {
         window.addEventListener('beforeunload', () => this.saveState());
     }
 
-    public getField(key: any): Array<any> | number {
+    public getField(key: AppStateKeys): AppState[AppStateKeys] {
         return this.values[key];
     }
 
-    public getState(): any {
+    public getState(): AppState {
         return this.values;
     }
 
-    public setState(state: any): void {
+    public setState(state: AppState): void {
         this.values = state;
     }
 
-    // public getLastId(): number {
-    //   return this.values.lastId || 1;
-    // }
-
-    public getList(): Array<any> {
-        return this.values.list;
-    }
-
-    public incrementLastId(): void {
-        this.values.lastId += 1;
-    }
-
-    public setField(id: string, value: string, state: LocalStorageState, parameters: ElementParameters): void {
-        const currentState = state.getState();
-        let newState: any;
+    public setField(key: AppStateKeys, value: AppState[AppStateKeys]): void {
+        const currentState = this.values;
+        const newState = {
+            ...currentState,
+            key: value,
+        };
 
         // if (parameters.placeholder === InputDescription.TITLE) {
         //   newState = {
@@ -49,12 +42,12 @@ export default class LocalStorageState {
         //     list: currentState.list.map(item => (item.id === id ? { ...item, weight: value } : item)),
         //   };
         // } else {
-        newState = { ...currentState };
+        //newState = { ...currentState };
         // }
         this.setState(newState);
     }
 
-    private loadState(): any {
+    private loadState(): AppState {
         const storageItem: string | null = localStorage.getItem(this.accessKey);
         if (storageItem) {
             try {
@@ -68,7 +61,7 @@ export default class LocalStorageState {
             }
         }
 
-        this.values = { list: [{ id: '#1', title: '', weight: '' }], lastId: 1 };
+        this.values = INITIAL_STATE;
 
         this.saveState();
         return this.values;

@@ -1,12 +1,5 @@
 import { ButtonParameters, CssClasses, Description, ElementParameters } from '../../../../types';
 
-export const titleWinnersParameters: ElementParameters = {
-    tag: 'h1',
-    classNames: [CssClasses.TITLE],
-    title: 'Async Race - Winners',
-    textContent: 'Async Race - Winners',
-};
-
 export const winnersParameters: ElementParameters = {
     tag: 'section',
     classNames: [CssClasses.WINNERS],
@@ -104,59 +97,3 @@ export const descButtonParameters: ButtonParameters = {
 export const spanParameters: ButtonParameters = {
     tag: 'span',
 };
-
-export const mockData = [
-    {
-        name: '2140',
-        color: 'Охра',
-        wins: 1,
-        time: 10,
-    },
-    {
-        name: '2138',
-        color: 'Рубин',
-        wins: 1,
-        time: 3378,
-    },
-];
-
-const carNames: Array<string> = [
-    'Base',
-    'Classic',
-    'Performance',
-    'Clubsport',
-    'Club',
-    'Sport',
-    'Interceptor',
-    'Cross',
-    'Gran-Turismo',
-    'Exclusive',
-    'Track-Pack',
-    'Premium',
-    'Premium-Plus',
-    'Luxury',
-    'Speed-Line',
-    'Turbo',
-    'Bi-turbo',
-    'Twin-scroll',
-    'Compressor',
-    'NOS',
-    'Stage-1',
-    'Stage-2',
-    'Stage-3',
-    '1.2',
-    '1.4',
-    '1.5',
-    '1.6',
-    '1.8',
-    '2.0',
-    '2.2',
-    '2.3',
-    '2.4',
-    '2.5',
-    '2.6',
-    '2.7',
-    '2.8',
-    '2.9',
-    '3.0',
-];

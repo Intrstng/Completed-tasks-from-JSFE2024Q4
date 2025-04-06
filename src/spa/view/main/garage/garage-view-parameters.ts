@@ -5,15 +5,7 @@ import {
     Description,
     ElementParameters,
     InputTypes,
-    InputUse,
 } from '../../../../types';
-
-export const titleParameters: ElementParameters = {
-    tag: 'h1',
-    classNames: ['title'],
-    title: 'Async Race - Garage',
-    textContent: 'Async Race - Garage',
-};
 
 export const garageParameters: ElementParameters = {
     tag: 'section',

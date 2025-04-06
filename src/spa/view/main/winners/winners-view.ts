@@ -7,7 +7,6 @@ import { Description, OrderButtonParametersWithCB, Pages, TableRecord } from '..
 import {
     ascButtonParameters,
     descButtonParameters,
-    mockData,
     nextButtonWinnersParameters,
     paginationWinControlsContainerParameters,
     prevButtonWinnersParameters,
@@ -26,6 +25,7 @@ import {
     winnersCurrentParameters,
 } from './winners-view-parameters';
 import LocalStorageState from '../../../state/local-storage-state';
+import { mockData, mockDataWinners } from '../../../state/initialState';
 
 export default class WinnersView extends View {
     public router: Router;
@@ -49,7 +49,7 @@ export default class WinnersView extends View {
         // this.createControls();
         // this.addPickedOption();
         this.addSummary();
-        this.addScoreTable(mockData); // Add argument
+        this.addScoreTable(mockDataWinners); // Add argument
         this.createControls();
     }
 

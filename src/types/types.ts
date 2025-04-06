@@ -1,4 +1,4 @@
-import { InputTypes, Location, LocationEvent } from './enums';
+import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
 import GarageView from '../spa/view/main/garage/garage-view';
 import WinnersView from '../spa/view/main/winners/winners-view';
 
@@ -69,4 +69,73 @@ export type Car = {
     id: number;
     name: string;
     color: string;
+};
+
+export type RaceWinner = {
+    name: string;
+    time: string;
+};
+
+export type Winner = {
+    id: number;
+    wins: number;
+    time: number;
+};
+
+export type Input = {
+    createName: string;
+    createColor: string;
+    updateName: string;
+    updateColor: string;
+};
+
+export type Buttons = {
+    start: boolean;
+    reset: boolean;
+};
+
+export type Animation = {
+    id: number;
+    distance: number;
+};
+
+export type AppState = {
+    [AppStateKeys.CARS]: Car[];
+    [AppStateKeys.WINNERS]: Winner[];
+    [AppStateKeys.ANIMATION]: Animation[];
+    [AppStateKeys.WINNERS_DATA]: Car[];
+    [AppStateKeys.SELECTED_CAR]: Car;
+    [AppStateKeys.CARS_QUANTITY]: number;
+    [AppStateKeys.WINNERS_QUANTITY]: number;
+    [AppStateKeys.MAIN_PAGE]: Description;
+    [AppStateKeys.GARAGE_PAGE]: number;
+    [AppStateKeys.WINNERS_PAGE]: number;
+    [AppStateKeys.ORDER_WINS]: Description;
+    [AppStateKeys.ORDER_TIME]: Description;
+    [AppStateKeys.SORT_TYPE]: string;
+    [AppStateKeys.WINNER]: RaceWinner;
+    [AppStateKeys.WINS_SORT_ACTIVE]: boolean;
+    [AppStateKeys.TIME_SORT_ACTIVE]: boolean;
+    [AppStateKeys.IS_UPDATE_ACTIVE]: boolean;
+    [AppStateKeys.INPUT_DATA]: Input;
+    [AppStateKeys.BUTTONS_STATE]: Buttons;
+};
+
+export type Paths = {
+    garage: '/garage';
+    winners: '/winners';
+    engine: '/engine';
+};
+
+export type Constants = {
+    carsOnPage: number;
+    winnersOnPage: number;
+    carsToGenerate: number;
+    brands: Array<string>;
+    models: Array<string>;
+};
+
+export type QueryParameters = {
+    key: string;
+    value: number | string;
 };

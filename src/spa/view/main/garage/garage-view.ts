@@ -2,7 +2,16 @@ import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import type { Callback, ElementParameters } from '../../../../types';
-import { ButtonParameters, CallbackID, Car, COLORS, Description, InputTypes, InputUse } from '../../../../types';
+import {
+    AppStateKeys,
+    ButtonParameters,
+    CallbackID,
+    Car,
+    COLORS,
+    Description,
+    InputTypes,
+    InputUse,
+} from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
     carBlockParameters,
@@ -37,29 +46,7 @@ import { getCallbackWithID } from '../../../util/assertion-functions/assertion-f
 import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
 import { svgElements } from '../../../util/createSvg/data';
 import { ShapeElement } from '../../../util/createSvg/types';
-
-const mockCars = [
-    {
-        name: 'Tesla',
-        color: '#e5e5af',
-        id: 1,
-    },
-    {
-        name: 'BMW',
-        color: '#faad40',
-        id: 14,
-    },
-    {
-        name: 'Opel',
-        color: '#6ce32f',
-        id: 3,
-    },
-    {
-        name: 'Toyota',
-        color: '#ef9a21',
-        id: 5,
-    },
-];
+import { mockData } from '../../../state/initialState';
 
 export default class GarageView extends View {
     public router: Router;
@@ -88,7 +75,8 @@ export default class GarageView extends View {
         //this.addGarageControls()
         this.addCarCreationControls();
         this.addSummary();
-        this.createRaceBoard(mockCars);
+
+        this.createRaceBoard(this.state.getState().cars);
         this.createPageControls();
     }
 

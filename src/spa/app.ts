@@ -1,7 +1,7 @@
 import '../style.scss';
 
 import type { Route, ViewCommon } from '../types';
-import { AppInfo, Pages } from '../types';
+import { AppInfo, AppStateKeys, Constants, Pages, Paths } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
 import LocalStorageState from './state/local-storage-state';
@@ -19,7 +19,6 @@ export default class App {
         this.header = null;
         this.main = null;
         this.state = new LocalStorageState(this.keyToRecordInLS);
-
         const routes = this.createRoutes(this.state);
         this.router = new Router(routes);
 
