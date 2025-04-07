@@ -59,7 +59,6 @@ export default class GarageView extends View {
     private garagePage: CreatorElement | null;
     private raceBoard: CreatorElement | null;
     private finish: CreatorElement | null;
-    private car: CreatorElement | null;
     private carAnimation: AnimationFrame;
     private inputCreateNameField: InputFieldCreator | null;
     private inputCreateColorField: InputFieldCreator | null;
@@ -75,7 +74,6 @@ export default class GarageView extends View {
         this.garagePage = null;
         this.raceBoard = null;
         this.finish = null;
-        this.car = null;
         this.carAnimation = { animationID: null, distance: 0 };
         this.inputCreateNameField = null;
         this.inputCreateColorField = null;
@@ -641,7 +639,7 @@ export default class GarageView extends View {
         return finishCenterPoint - carCenterPoint;
     }
 
-    private async startRaceCar(id: number, isCommonRace: boolean = false): Promise<void> {
+    private async startRaceCar(id: number, isDragRace: boolean = false): Promise<{ success: boolean } | undefined> {
         console.log('startRaceCar', id);
         const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
             `${CssClasses.SVG_ICON}-${id}`
@@ -675,13 +673,41 @@ export default class GarageView extends View {
         if (!response.success) {
             const currentAnimationID: number = this.carAnimation.animationID;
             if (currentAnimationID) {
+                changeSvgStrokeColor(String(id), COLORS.RED);
                 window.cancelAnimationFrame(currentAnimationID);
             }
         } else {
             // winner logic
-        }
+            const winnerName: string = this.state.getState()[AppStateKeys.WINNER].name;
+            if (isDragRace && winnerName === '') {
+                //if (winnerName === '') {
+                const winnerCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id); // Move to the top
 
-        changeSvgStrokeColor(String(id), COLORS.RED);
+                if (winnerCar) {
+                    const currentState: AppState = this.state.getState();
+                    const updatedState: AppState = {
+                        ...currentState,
+                        winner: { ...currentState.winner, name: winnerCar.name, time: String(raceTime) },
+                    };
+                    this.state.setState(updatedState);
+                    // Add logic to open modal window here...
+
+                    const winnerResponse = await this.api.checkWinner(id);
+
+                    if (typeof winnerResponse === 'boolean' && !winnerResponse) {
+                        const newWinner = { id, wins: 1, time: raceTime };
+                        await this.api.createWinner(newWinner);
+                    } else if (winnerResponse !== true) {
+                        if (typeof winnerResponse !== 'boolean') {
+                            const bestTime = raceTime < winnerResponse.time ? raceTime : winnerResponse.time;
+                            await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, id);
+                        }
+                    }
+                }
+            }
+            changeSvgStrokeColor(String(id), COLORS.YELLOW);
+        }
+        return response;
     }
 
     private animateCarRacing(car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {
