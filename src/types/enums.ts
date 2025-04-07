@@ -130,6 +130,13 @@ export enum InputUse {
     UPDATE = 'Update',
 }
 
+export enum InputFieldsKeys {
+    CREATE_NAME = 'createName',
+    CREATE_COLOR = 'createColor',
+    UPDATE_NAME = 'updateName',
+    UPDATE_COLOR = 'updateColor',
+}
+
 export enum AppStateKeys {
     CARS = 'cars',
     WINNERS = 'winners',

@@ -36,7 +36,6 @@ export default class ApiController {
                 { key: QueryParameterKeys.PAGE, value: page },
                 { key: QueryParameterKeys.LIMIT, value: this.constants.carsOnPage },
             ];
-            console.log(parameters);
             const response = await fetch(`${this.baseUrl}${this.path.garage}${this.getQueryString(parameters)}`);
 
             if (!response.ok) {
@@ -53,8 +52,7 @@ export default class ApiController {
                 carsQuantity,
                 cars: carsData,
             };
-
-            this.state.setState(newState);
+            await this.state.setState(newState);
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
@@ -99,6 +97,14 @@ export default class ApiController {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
+
+            // const newCar = await response.json();
+            // const currentState: AppState = this.state.getState();
+            // const newState: AppState = {
+            //     ...currentState,
+            //     cars: [...currentState.cars, newCar],
+            // };
+            // this.state.setState(newState);
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',

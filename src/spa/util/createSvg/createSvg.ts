@@ -28,8 +28,9 @@ export function createSVG(elements: Array<ShapeElement>, strokeColor: string, id
 }
 
 export function changeSvgStrokeColor(id: string, color: string): void {
+    const svgID = id.toLowerCase();
     const svgLines: SvgElementsCollection = document.querySelectorAll<SvgElements>(
-        `.svg-icon-${id} line, .svg-icon-${id} path, .svg-icon-${id} circle, .svg-icon-${id} polyline`
+        `.svg-icon-${svgID} line, .svg-icon-${svgID} path, .svg-icon-${svgID} circle, .svg-icon-${svgID} polyline`
     );
     svgLines.forEach(line => {
         line.setAttribute('stroke', color);

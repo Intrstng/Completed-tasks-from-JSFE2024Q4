@@ -14,6 +14,15 @@ export default class View {
         return this.viewElementCreator.getElement();
     }
 
+    public deleteAllItemsInContainer(container: CreatorElement): void {
+        const containerElement = container.getElement();
+        if (containerElement) {
+            while (containerElement.firstElementChild) {
+                containerElement.firstElementChild.remove();
+            }
+        }
+    }
+
     public createView({ tag, classNames }: ElementParameters): CreatorElement {
         const elementParameters = {
             tag,
