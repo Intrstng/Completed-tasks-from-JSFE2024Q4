@@ -1,11 +1,10 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { AppState, Callback, CarPayload, ElementParameters } from '../../../../types';
+import type { AppState, Callback, CarPayload, ElementParameters, Operator } from '../../../../types';
 import {
     AppStateKeys,
     ButtonParameters,
-    CallbackID,
     Car,
     COLORS,
     Description,
@@ -46,10 +45,9 @@ import LabelCreator from '../../../util/label/label-creator';
 import { getCallbackWithID } from '../../../util/assertion-functions/assertion-functions';
 import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
 import { svgElements } from '../../../util/createSvg/data';
-import { ShapeElement } from '../../../util/createSvg/types';
-import { CONSTANTS, mockData } from '../../../state/initial-state';
 import ApiController from '../../../api/api-controller';
 import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
+import { CONSTANTS } from '../../../state/initial-state';
 
 export default class GarageView extends View {
     public router: Router;
@@ -112,9 +110,10 @@ export default class GarageView extends View {
         this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
     }
 
-    private addSummary(page: number = 1): void {
+    private addSummary(): void {
         const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY] || 0;
         const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
+        const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
 
         const summaryCreator = new CreatorElement(garageSummaryParameters);
 
@@ -122,7 +121,7 @@ export default class GarageView extends View {
         this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
 
         this.garagePage = new CreatorElement(garagePageCurrentParameters);
-        this.garagePage.setTextContent(`${Description.PAGE} ${page}`);
+        this.garagePage.setTextContent(`${Description.PAGE} ${currentGaragePage}`);
 
         summaryCreator.addInnerElement(this.garageQuantity);
         summaryCreator.addInnerElement(this.garagePage);
@@ -130,13 +129,45 @@ export default class GarageView extends View {
         this.viewElementCreator.addInnerElement(summaryCreator);
     }
 
-    private prevGaragePage(): void {
-        console.log('prev garage');
+    private async prevGaragePage(): Promise<void> {
+        const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
+        this.incrementDecrementGaragePageValue(Description.DECREMENT, currentGaragePage);
+
+        this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
+
+        await this.getCarsForCurrentPage();
+        this.updateRaceBoardLayout();
     }
 
-    private nextGaragePage(): void {
-        console.log('next garage');
+    private async nextGaragePage(): Promise<void> {
+        const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
+        this.incrementDecrementGaragePageValue(Description.INCREMENT, currentGaragePage);
+
+        this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
+
+        await this.getCarsForCurrentPage();
+        this.updateRaceBoardLayout();
     }
+
+    private incrementDecrementGaragePageValue(operator: Operator, page: number): void {
+        if (typeof page === 'number' && isFinite(page)) {
+            const carsQuantity = this.state.getState()[AppStateKeys.CARS_QUANTITY];
+
+            if (operator === Description.INCREMENT && page < carsQuantity / CONSTANTS.carsOnPage) {
+                this.updatePropertyInState(AppStateKeys.GARAGE_PAGE, ++page);
+            } else if (operator === Description.DECREMENT && page > 1) {
+                this.updatePropertyInState(AppStateKeys.GARAGE_PAGE, --page);
+            }
+        }
+    }
+
+    // private async getCarsForCurrentPage(): Promise<void> {
+    //     const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
+    //
+    //     if (typeof currentGaragePage === 'number' && isFinite(currentGaragePage)) {
+    //         await this.api.getCars(currentGaragePage);
+    //     }
+    // }
 
     private createPageControls(): void {
         const paginationControlsContainerCreator = new CreatorElement(paginationGarageControlsContainerParameters);
@@ -377,6 +408,16 @@ export default class GarageView extends View {
         this.state.setState(updatedState);
     }
 
+    private updatePropertyInState(key: string, value: string | number | boolean): void {
+        const currentState: AppState = this.state.getState();
+
+        const updatedState: AppState = {
+            ...currentState,
+            [key]: value,
+        };
+        this.state.setState(updatedState);
+    }
+
     private updateCarName(event: Event): void {
         const target = event.target;
 
@@ -403,15 +444,6 @@ export default class GarageView extends View {
             this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, target.value);
         }
     }
-
-    // private deleteAllListItems(): void {
-    //     const listElement = this.listOptions.getElement();
-    //     if (listElement) {
-    //         while (listElement.firstElementChild) {
-    //             listElement.firstElementChild.remove();
-    //         }
-    //     }
-    // }
 
     private resetState(): void {
         const emptyState: any = {
@@ -494,12 +526,6 @@ export default class GarageView extends View {
             }
         });
     }
-    //
-    // const eventHandler = prefix === InputUse.CREATE
-    //     ? (event: Event) => this.createCarColor(event)
-    //     : (event: Event) => this.updateCarColor(event);
-    //
-    // carInputColorCreator.getElement().addEventListener('input', eventHandler);
 
     private addCarCreationControls(): void {
         const carCreationContainerCreator = new CreatorElement(carCreationContainerParameters);

@@ -153,3 +153,5 @@ export type CarPayload = {
 };
 
 export type SortOrderType = Description.ASC | Description.DESC;
+
+export type Operator = Description.INCREMENT | Description.DECREMENT;

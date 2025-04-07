@@ -123,6 +123,8 @@ export enum Description {
     DESC = 'desc',
     BRAND = 'Enter car brand',
     COLOR = 'Select car color',
+    INCREMENT = 'increment',
+    DECREMENT = 'decrement',
 }
 
 export enum InputUse {
