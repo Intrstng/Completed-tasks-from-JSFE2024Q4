@@ -138,7 +138,7 @@ export default class GarageView extends View {
 
     private async prevGaragePage(): Promise<void> {
         const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-        this.incrementDecrementGaragePageValue(Description.DECREMENT, currentGaragePage);
+        this.countGaragePageValue(Description.DECREMENT, currentGaragePage);
 
         this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
 
@@ -148,7 +148,7 @@ export default class GarageView extends View {
 
     private async nextGaragePage(): Promise<void> {
         const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-        this.incrementDecrementGaragePageValue(Description.INCREMENT, currentGaragePage);
+        this.countGaragePageValue(Description.INCREMENT, currentGaragePage);
 
         this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
 
@@ -156,7 +156,7 @@ export default class GarageView extends View {
         this.updateRaceBoardLayout();
     }
 
-    private incrementDecrementGaragePageValue(operator: Operator, page: number): void {
+    private countGaragePageValue(operator: Operator, page: number): void {
         if (typeof page === 'number' && isFinite(page)) {
             const carsQuantity = this.state.getState()[AppStateKeys.CARS_QUANTITY];
 
@@ -220,10 +220,10 @@ export default class GarageView extends View {
     private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
         switch (buttonParameters.textContent) {
             case Description.RACE: {
-                return () => this.startCommonRace();
+                return () => this.startDragRace();
             }
             case Description.RESET: {
-                return () => this.resetCommonRace();
+                return () => this.resetDragRace();
             }
             case Description.GENERATE: {
                 return () => this.generateCars();
@@ -252,9 +252,6 @@ export default class GarageView extends View {
         }
     };
 
-    private backFromRaceForCar(id: number): void {
-        console.log('backFromRace', id);
-    }
     private selectCar(id: number): void {
         const currentState: AppState = this.state.getState();
         const selectedCar: Car | undefined = currentState.cars.find(car => car.id === id);
@@ -290,14 +287,6 @@ export default class GarageView extends View {
         this.updateGarageQuantityLayout();
 
         this.updateRaceBoardLayout();
-    }
-
-    private startCommonRace(): void {
-        console.log('start');
-    }
-
-    private resetCommonRace(): void {
-        console.log('reset');
     }
 
     private async generateCars(): Promise<void> {
@@ -641,13 +630,21 @@ export default class GarageView extends View {
 
     private async startRaceCar(id: number, isDragRace: boolean = false): Promise<{ success: boolean } | undefined> {
         console.log('startRaceCar', id);
-        const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
-            `${CssClasses.SVG_ICON}-${id}`
-        );
-        let carIcon: HTMLElement | null = null;
-        if (carIconCollection.length > 0) {
-            carIcon = carIconCollection[0] as HTMLElement;
-        }
+        // const currentState: AppState = this.state.getState();
+        // const updatedState: AppState = {
+        //     ...currentState,
+        //     winner: {
+        //         ...currentState.winner,
+        //         name: '',
+        //         time: '',
+        //     }
+        // }
+        // this.state.setState(updatedState);
+
+        const winnerName: string = this.state.getState()[AppStateKeys.WINNER].name;
+
+        // this.updatePropertyInState(AppStateKeys.WINNER, '');
+        let carIcon: HTMLElement = this.getCarIconFromLayout(id);
         const trackDistance: number = this.getTrackDistance(carIcon);
 
         const carEngineData: EngineData | undefined = await this.api.startEngine(id);
@@ -678,7 +675,7 @@ export default class GarageView extends View {
             }
         } else {
             // winner logic
-            const winnerName: string = this.state.getState()[AppStateKeys.WINNER].name;
+            console.log('winnerName', winnerName);
             if (isDragRace && winnerName === '') {
                 //if (winnerName === '') {
                 const winnerCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id); // Move to the top
@@ -689,11 +686,11 @@ export default class GarageView extends View {
                         ...currentState,
                         winner: { ...currentState.winner, name: winnerCar.name, time: String(raceTime) },
                     };
+                    console.log(updatedState);
                     this.state.setState(updatedState);
                     // Add logic to open modal window here...
 
                     const winnerResponse = await this.api.checkWinner(id);
-
                     if (typeof winnerResponse === 'boolean' && !winnerResponse) {
                         const newWinner = { id, wins: 1, time: raceTime };
                         await this.api.createWinner(newWinner);
@@ -705,9 +702,52 @@ export default class GarageView extends View {
                     }
                 }
             }
-            changeSvgStrokeColor(String(id), COLORS.YELLOW);
+            // changeSvgStrokeColor(String(id), COLORS.YELLOW);
         }
         return response;
+    }
+
+    private startDragRace(): void {
+        console.log('start');
+        const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
+        const promises = allCars.map(car => this.startRaceCar(car.id, true));
+        Promise.all(promises).then(() => {
+            console.log('This race is finished!');
+        });
+    }
+
+    private resetDragRace(): void {
+        console.log('Reset drag race will be implemented soon...');
+        const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
+        allCars.forEach(car => this.backFromRaceForCar(car.id));
+    }
+
+    private async backFromRaceForCar(id: number): Promise<void> {
+        console.log('backFromRace', id);
+        const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id); // Move to the top
+
+        const currentAnimationID = this.carAnimation.animationID;
+        if (currentAnimationID) {
+            window.cancelAnimationFrame(currentAnimationID);
+        }
+        await this.api.stopEngine(id);
+        if (currentCar) {
+            const currentCarColor = currentCar.color;
+            changeSvgStrokeColor(String(id), currentCarColor);
+        }
+        const car = this.getCarIconFromLayout(id);
+        car.style.transform = `translateX(0px)`;
+    }
+
+    private getCarIconFromLayout(id: number): HTMLElement {
+        const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
+            `${CssClasses.SVG_ICON}-${id}`
+        );
+        let carIcon: HTMLElement | null = null;
+        if (carIconCollection.length > 0) {
+            carIcon = carIconCollection[0] as HTMLElement;
+        }
+        return carIcon;
     }
 
     private animateCarRacing(car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {

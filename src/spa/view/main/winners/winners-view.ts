@@ -2,8 +2,18 @@ import './winners.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
-import type { ElementParameters } from '../../../../types';
-import { Description, OrderButtonParametersWithCB, Pages, TableRecord } from '../../../../types';
+import type { AppState, ElementParameters } from '../../../../types';
+import {
+    AppStateKeys,
+    Car,
+    COLORS,
+    Description,
+    Operator,
+    OrderButtonParametersWithCB,
+    Pages,
+    TableRecord,
+    Winner,
+} from '../../../../types';
 import {
     ascButtonParameters,
     descButtonParameters,
@@ -19,14 +29,16 @@ import {
     tableHeadParameters,
     tableRowCellParameters,
     tableRowParameters,
+    winnersCurrentParameters,
     winnersPageCurrentParameters,
     winnersParameters,
     winnersSummaryParameters,
-    winnersCurrentParameters,
 } from './winners-view-parameters';
 import LocalStorageState from '../../../state/local-storage-state';
-import { mockData, mockDataWinners } from '../../../state/initial-state';
+import { CONSTANTS } from '../../../state/initial-state';
 import ApiController from '../../../api/api-controller';
+import { createSVG } from '../../../util/createSvg/createSvg';
+import { svgElements } from '../../../util/createSvg/data';
 
 export default class WinnersView extends View {
     public router: Router;
@@ -48,22 +60,38 @@ export default class WinnersView extends View {
     }
 
     private configureView(): void {
+        //this.getWinnersForCurrentPage();
+        console.log('Page');
         // this.createControls();
         // this.addPickedOption();
         this.addSummary();
-        this.addScoreTable(mockDataWinners); // Add argument
+        this.addScoreTable(); // Add argument
         this.createControls();
     }
 
-    private addSummary(winners: number = 0, page: number = 1): void {
+    private async getWinnersForCurrentPage(): Promise<void> {
+        const currentSortType = this.winnersState.getState()[AppStateKeys.SORT_TYPE];
+        const currentWinnersPage = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+        const currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
+
+        if (typeof currentWinnersPage === 'number' && isFinite(currentWinnersPage)) {
+            await this.api.getAllWinners(currentSortType, currentSortOrderTime, currentWinnersPage);
+        }
+        console.log(this.winnersState.getState());
+    }
+
+    private addSummary(): void {
+        const winnersQuantity: number = this.winnersState.getState()[AppStateKeys.WINNERS_QUANTITY] || 0;
+        const winnersQuantityText: string = winnersQuantity === 0 ? '' : ` (${winnersQuantity})`;
+        const currentWinnersPage = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+
         const summaryCreator = new CreatorElement(winnersSummaryParameters);
 
         this.winnersQuantity = new CreatorElement(winnersCurrentParameters);
-        const winnersQuantityText = winners === 0 ? '' : ` (${winners})`;
         this.winnersQuantity.setTextContent(`${Description.WINNERS}${winnersQuantityText}`);
 
         this.winnersPage = new CreatorElement(winnersPageCurrentParameters);
-        this.winnersPage.setTextContent(`${Description.PAGE} ${page}`);
+        this.winnersPage.setTextContent(`${Description.PAGE} ${currentWinnersPage}`);
 
         summaryCreator.addInnerElement(this.winnersQuantity);
         summaryCreator.addInnerElement(this.winnersPage);
@@ -131,17 +159,34 @@ export default class WinnersView extends View {
         this.table.addInnerElement(theadCreator.getElement());
     }
 
-    private generateTableBody(scores: Array<TableRecord>): void {
-        const tbodyCreator = new CreatorElement(tableBodyParameters);
+    private createTableRecords(cars: Array<Car>, winners: Array<Winner>): Array<TableRecord> {
+        return winners.map(winner => {
+            const car = cars.find(car => car && car.id === winner.id);
+            return {
+                wins: winner.wins,
+                time: winner.time / 1000,
+                name: car ? car.name : 'Unknown winners name',
+                color: car ? car.color : COLORS.BLACK,
+            };
+        });
+    }
 
-        scores.forEach((record, index) => {
+    private generateTableBody(): void {
+        const tbodyCreator = new CreatorElement(tableBodyParameters);
+        const winnersDataCollection: Array<Car> = this.winnersState.getState()[AppStateKeys.WINNERS_DATA];
+        const winnersCollection: Array<Winner> = this.winnersState.getState()[AppStateKeys.WINNERS];
+
+        const scoreRecords: Array<TableRecord> = this.createTableRecords(winnersDataCollection, winnersCollection);
+
+        scoreRecords.forEach((record, index) => {
             const rowCreator = new CreatorElement(tableRowParameters);
 
             const numberCellCreator = new CreatorElement(tableRowCellParameters);
             numberCellCreator.setTextContent(String(++index));
 
             const carCellCreator = new CreatorElement(tableRowCellParameters);
-            carCellCreator.setTextContent(record.color);
+            const carTableLogo = createSVG(svgElements, record.color, Description.TABLE);
+            carCellCreator.addInnerElement(carTableLogo);
 
             const nameCellCreator = new CreatorElement(tableRowCellParameters);
             nameCellCreator.setTextContent(record.name);
@@ -163,12 +208,12 @@ export default class WinnersView extends View {
         this.table.addInnerElement(tbodyCreator.getElement());
     }
 
-    private addScoreTable(scores: Array<TableRecord> = []): void {
+    private addScoreTable(): void {
         const scoreTableContainerCreator = new CreatorElement(scoreTableContainerParameters);
         this.table = new CreatorElement(scoreTableParameters);
 
         this.generateTableHead();
-        this.generateTableBody(scores);
+        this.generateTableBody();
 
         scoreTableContainerCreator.addInnerElement(this.table.getElement());
         this.viewElementCreator.addInnerElement(scoreTableContainerCreator);
@@ -197,12 +242,52 @@ export default class WinnersView extends View {
         this.viewElementCreator.addInnerElement(paginationControlsContainerCreator);
     }
 
+    private updatePropertyInState(key: string, value: string | number | boolean): void {
+        const currentState: AppState = this.winnersState.getState();
+
+        const updatedState: AppState = {
+            ...currentState,
+            [key]: value,
+        };
+        this.winnersState.setState(updatedState);
+    }
+
+    private countWinnersPageValue(operator: Operator, page: number): void {
+        if (typeof page === 'number' && isFinite(page)) {
+            const winnersQuantity = this.winnersState.getState()[AppStateKeys.WINNERS_QUANTITY];
+            console.log(winnersQuantity);
+            if (operator === Description.INCREMENT && page < winnersQuantity / CONSTANTS.winnersOnPage) {
+                this.updatePropertyInState(AppStateKeys.WINNERS_PAGE, ++page);
+            } else if (operator === Description.DECREMENT && page > 1) {
+                this.updatePropertyInState(AppStateKeys.WINNERS_PAGE, --page);
+            }
+        }
+    }
+
     private prevWinnersPage(): void {
         console.log('prev');
+        const currentWinnersPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+        this.countWinnersPageValue(Description.DECREMENT, currentWinnersPage);
+
+        this.winnersPage.setTextContent(
+            `${Description.PAGE} ${this.winnersState.getState()[AppStateKeys.WINNERS_PAGE]}`
+        );
+
+        // await this.getCarsForCurrentPage();
+        // this.updateRaceBoardLayout();
     }
 
     private nextWinnersPage(): void {
         console.log('next');
+        const currentWinnersPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+        this.countWinnersPageValue(Description.INCREMENT, currentWinnersPage);
+        console.log(this.winnersPage);
+        this.winnersPage.setTextContent(
+            `${Description.PAGE} ${this.winnersState.getState()[AppStateKeys.WINNERS_PAGE]}`
+        );
+        //
+        // await this.getCarsForCurrentPage();
+        // this.updateRaceBoardLayout();
     }
 
     private redirectToMainPage(event: Event): void {

@@ -44,13 +44,6 @@ export type ElementParameters = {
 
 export type ViewCommon = GarageView | WinnersView;
 
-export type TableRecord = {
-    wins: number;
-    time: number;
-    name: string;
-    color: string;
-};
-
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 
 export type ButtonsCollection = Array<ButtonParameters>;
@@ -81,6 +74,13 @@ export type Winner = {
     id: number;
     wins: number;
     time: number;
+};
+
+export type TableRecord = {
+    wins: number;
+    time: number;
+    name: string;
+    color: string;
 };
 
 export type Input = {

@@ -95,7 +95,7 @@ const carNames: Array<string> = [
 export const CONSTANTS: Constants = {
     baseURL: 'http://127.0.0.1:3000',
     carsOnPage: 7,
-    winnersOnPage: 10,
+    winnersOnPage: 5,
     carsToGenerate: 100,
     brands: carBrands,
     models: carNames,
@@ -141,7 +141,7 @@ export const INITIAL_STATE: AppState = {
     winnersPage: 1,
     orderWins: Description.ASC,
     orderTime: Description.ASC,
-    sortType: 'time',
+    sortType: Description.TIME,
     winner: {
         name: '',
         time: '',

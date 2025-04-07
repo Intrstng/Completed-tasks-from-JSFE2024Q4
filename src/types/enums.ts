@@ -126,6 +126,9 @@ export enum Description {
     COLOR = 'Select car color',
     INCREMENT = 'increment',
     DECREMENT = 'decrement',
+    SORT_TIME = 'time',
+    SORT_WINS = 'wins',
+    TABLE = 'table',
 }
 
 export enum InputUse {

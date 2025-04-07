@@ -227,7 +227,7 @@ export default class ApiController {
 
     public async getAllWinners(
         sortType: string,
-        sortOrderType: SortOrderType = Description.ASC,
+        sortOrderType: string = Description.ASC,
         page: number
     ): Promise<void> | undefined {
         try {

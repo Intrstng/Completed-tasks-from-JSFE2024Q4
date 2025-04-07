@@ -4,7 +4,8 @@ export const titleParameters: ElementParameters = {
     tag: 'h1',
     classNames: ['title'],
     title: 'Async Race',
-    textContent: 'Async Race',
+    textContent:
+        'Async Race. This task is not completed by me yet. Please check my work on the last day of cross-checking.',
 };
 
 export const headerParameters: ElementParameters = {
