@@ -95,6 +95,7 @@ export enum COLORS {
     GREEN = '#00FF00',
     RED = '#FF0000',
     BLUE = '#0000FF',
+    YELLOW = '#FFD700',
 }
 
 export enum Description {
@@ -168,9 +169,12 @@ export enum CssClasses {
     ITEM = 'nav-item',
     ITEM_SELECTED = 'nav-item__selected',
     MAIN = 'main',
+    CONTAINER = 'container',
     GARAGE = 'garage',
+    GARAGE_CONTAINER = 'garage-container',
     GARAGE_SUMMARY = 'garage__summary',
-    GARAGE_CURRENT = 'garage__current',
+    GARAGE_CURRENT = 'garage__current-total-cars',
+    PAGE_CURRENT = 'garage__current-page',
     WINNERS = 'winners',
     WINNERS_SUMMARY = 'winners__summary',
     WINNERS_CURRENT = 'winners__current',
@@ -207,4 +211,5 @@ export enum CssClasses {
     TRACK = 'car-block__track',
     ICON = 'car-block__icon',
     FINISH = 'car-block__finish',
+    SVG_ICON = 'svg-icon',
 }

@@ -1,0 +1,63 @@
+.garage {
+    &__summary {
+    }
+    &__current-total-cars {
+    }
+    &__current-page {
+    }
+}
+
+.race-board {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    background-color: #ffddab;
+    border: none;
+}
+
+.car-block {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    &__name {
+    }
+    &__race {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+    &__controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    &__track {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        padding-left: 8px;
+        border-top: 3px solid rgba(107, 107, 107, 0.6);
+        border-bottom: 3px solid rgba(107, 107, 107, 0.6);
+        border-radius: 5px;
+    }
+    &__finish {
+        width: 120px;
+        height: 60px;
+        margin-left: auto;
+        background: rgba(61, 61, 61, 0.6);
+    }
+    @media screen and (max-width: 640px) {
+        &__finish {
+            width: 100px;
+        }
+    }
+}
+
+.svg-icon {
+    width: 45px;
+    height: 45px;
+    transition: stroke 0.3s;
+}

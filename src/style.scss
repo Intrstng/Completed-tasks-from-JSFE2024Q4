@@ -1,3 +1,5 @@
+@use './spa/view/main/garage/garage.scss';
+
 * {
     box-sizing: border-box;
 }
@@ -5,24 +7,36 @@
 html,
 body {
     scrollbar-gutter: stable;
+    overflow-x: hidden;
 }
 
 body {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    //align-items: center;
+    //justify-content: center;
 
-    width: 100%;
-    max-width: 640px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0 auto;
 
-    background-color: #a4b97d;
+    background-color: #5f8b4c;
 }
 
-.svg-icon {
-    width: 50px;
-    height: 50px;
-    transition: stroke 0.3s;
+.container {
+    margin: 0 auto;
+    padding: 0 50px;
+    max-width: 1024px;
+}
+
+.main {
+    width: 100%;
+    flex-grow: 1;
+    margin-top: 30px;
+}
+
+.garage-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 15px;
 }

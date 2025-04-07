@@ -9,7 +9,7 @@ import {
 
 export const garageParameters: ElementParameters = {
     tag: 'section',
-    classNames: [CssClasses.GARAGE],
+    classNames: [CssClasses.GARAGE, CssClasses.GARAGE_CONTAINER],
 };
 
 export const garageSummaryParameters: ElementParameters = {
@@ -26,7 +26,7 @@ export const garageCurrentParameters: ElementParameters = {
 export const garagePageCurrentParameters: ElementParameters = {
     tag: 'h2',
     textContent: Description.PAGE,
-    classNames: [CssClasses.GARAGE_CURRENT],
+    classNames: [CssClasses.PAGE_CURRENT],
 };
 
 export const carCreationContainerParameters: ElementParameters = {

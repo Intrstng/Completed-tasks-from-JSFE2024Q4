@@ -1,12 +1,15 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { AppState, Callback, CarPayload, ElementParameters, Operator } from '../../../../types';
+import type { AppState, Callback, CarPayload, ElementParameters, EngineData, Operator } from '../../../../types';
 import {
+    Animation,
+    AnimationFrame,
     AppStateKeys,
     ButtonParameters,
     Car,
     COLORS,
+    CssClasses,
     Description,
     InputFieldsKeys,
     InputTypes,
@@ -55,6 +58,9 @@ export default class GarageView extends View {
     private garageQuantity: CreatorElement | null;
     private garagePage: CreatorElement | null;
     private raceBoard: CreatorElement | null;
+    private finish: CreatorElement | null;
+    private car: CreatorElement | null;
+    private carAnimation: AnimationFrame;
     private inputCreateNameField: InputFieldCreator | null;
     private inputCreateColorField: InputFieldCreator | null;
     private inputUpdateNameField: InputFieldCreator | null;
@@ -68,6 +74,9 @@ export default class GarageView extends View {
         this.garageQuantity = null;
         this.garagePage = null;
         this.raceBoard = null;
+        this.finish = null;
+        this.car = null;
+        this.carAnimation = { animationID: null, distance: 0 };
         this.inputCreateNameField = null;
         this.inputCreateColorField = null;
         this.inputUpdateNameField = null;
@@ -228,7 +237,7 @@ export default class GarageView extends View {
                 return () => this.updateCar();
             }
             case Description.START: {
-                return () => getCallbackWithID(buttonParameters, this.startRaceForCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.startRaceCar.bind(this));
             }
             case Description.BACK: {
                 return () => getCallbackWithID(buttonParameters, this.backFromRaceForCar.bind(this));
@@ -245,10 +254,6 @@ export default class GarageView extends View {
         }
     };
 
-    private startRaceForCar(id: number): void {
-        console.log('startRaceForCar', id);
-        changeSvgStrokeColor(String(id), 'red');
-    }
     private backFromRaceForCar(id: number): void {
         console.log('backFromRace', id);
     }
@@ -607,10 +612,10 @@ export default class GarageView extends View {
         const carTrackCreator = new CreatorElement(trackParameters);
 
         const carIconCreator = createSVG(svgElements, carData.color, String(carData.id));
-        const finishCreator = new CreatorElement(finishParameters);
+        this.finish = new CreatorElement(finishParameters);
 
         carTrackCreator.addInnerElement(carIconCreator);
-        carTrackCreator.addInnerElement(finishCreator.getElement());
+        carTrackCreator.addInnerElement(this.finish.getElement());
         container.addInnerElement(carTrackCreator.getElement());
     }
 
@@ -624,6 +629,84 @@ export default class GarageView extends View {
         // if (dialog) {
         //   dialog.showDialog();
         // }
+    }
+
+    private getTrackDistance(car: HTMLElement): number {
+        const carRect = car.getBoundingClientRect();
+        const finishRect = this.finish.getElement().getBoundingClientRect();
+
+        const carCenterPoint = carRect.left + carRect.width / 2;
+        const finishCenterPoint = finishRect.left + finishRect.width / 2;
+
+        return finishCenterPoint - carCenterPoint;
+    }
+
+    private async startRaceCar(id: number, isCommonRace: boolean = false): Promise<void> {
+        console.log('startRaceCar', id);
+        const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
+            `${CssClasses.SVG_ICON}-${id}`
+        );
+        let carIcon: HTMLElement | null = null;
+        if (carIconCollection.length > 0) {
+            carIcon = carIconCollection[0] as HTMLElement;
+        }
+        const trackDistance: number = this.getTrackDistance(carIcon);
+
+        const carEngineData: EngineData | undefined = await this.api.startEngine(id);
+        if (!carEngineData) return;
+
+        const { velocity, distance }: EngineData = carEngineData;
+        const raceTime: number = Math.round(distance / velocity);
+        this.carAnimation = this.animateCarRacing(carIcon, raceTime, trackDistance);
+
+        const response = await this.api.driveCar(id);
+        if (!response) return;
+
+        const animationDistance = Math.round(this.carAnimation.distance);
+        const animationCarState: Animation = { id, distance: animationDistance };
+
+        const currentAnimationState = this.state.getState();
+        const newAnimationState = {
+            ...currentAnimationState,
+            animation: [...currentAnimationState.animation, animationCarState],
+        };
+        this.state.setState(newAnimationState);
+
+        if (!response.success) {
+            const currentAnimationID: number = this.carAnimation.animationID;
+            if (currentAnimationID) {
+                window.cancelAnimationFrame(currentAnimationID);
+            }
+        } else {
+            // winner logic
+        }
+
+        changeSvgStrokeColor(String(id), COLORS.RED);
+    }
+
+    private animateCarRacing(car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {
+        let start: number | null = null;
+        const animationDataCollection: AnimationFrame = { animationID: null, distance: 0 };
+
+        const animate = (timestamp: number) => {
+            if (!start) {
+                start = timestamp;
+            }
+
+            const elapsed = timestamp - start;
+            const progress = Math.min(elapsed / duration, 1); // Ensure progress does not exceed 1
+            const left = trackDistance * progress; // The position based on progress
+
+            car.style.transform = `translateX(${left}px)`;
+            animationDataCollection.distance = left;
+
+            if (progress < 1) {
+                animationDataCollection.animationID = window.requestAnimationFrame(animate);
+            }
+        };
+
+        animationDataCollection.animationID = window.requestAnimationFrame(animate);
+        return animationDataCollection;
     }
 
     private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {

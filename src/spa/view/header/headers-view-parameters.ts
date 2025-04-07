@@ -3,8 +3,8 @@ import { CssClasses, Description, ElementParameters } from '../../../types';
 export const titleParameters: ElementParameters = {
     tag: 'h1',
     classNames: ['title'],
-    title: 'Async Race - Garage',
-    textContent: 'Async Race - Garage',
+    title: 'Async Race',
+    textContent: 'Async Race',
 };
 
 export const headerParameters: ElementParameters = {

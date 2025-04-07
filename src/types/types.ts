@@ -96,7 +96,12 @@ export type Buttons = {
 };
 
 export type Animation = {
-    id: number;
+    id: number | null;
+    distance: number;
+};
+
+export type AnimationFrame = {
+    animationID: number | null;
     distance: number;
 };
 
