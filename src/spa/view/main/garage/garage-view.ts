@@ -88,9 +88,9 @@ export default class GarageView extends View {
 
         //this.addGarageControls()
         this.addCarCreationControls();
-        this.addSummary();
         this.createPageControls();
-        this.createRaceBoard(this.state.getState().cars);
+        this.addSummary();
+        this.createRaceBoard(this.state.getState().cars, true);
     }
 
     private updateRaceBoardLayout(): void {
@@ -106,11 +106,19 @@ export default class GarageView extends View {
         }
     }
 
-    private addSummary(garage: number = 0, page: number = 1): void {
+    private updateGarageQuantityLayout(): void {
+        const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
+        const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
+        this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
+    }
+
+    private addSummary(page: number = 1): void {
+        const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY] || 0;
+        const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
+
         const summaryCreator = new CreatorElement(garageSummaryParameters);
 
         this.garageQuantity = new CreatorElement(garageCurrentParameters);
-        const garageQuantityText = garage === 0 ? '' : ` (${garage})`;
         this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
 
         this.garagePage = new CreatorElement(garagePageCurrentParameters);
@@ -245,6 +253,7 @@ export default class GarageView extends View {
         console.log('removeCar', id);
         await this.api.deleteCar(id);
         await this.getCarsForCurrentPage();
+        this.updateGarageQuantityLayout();
 
         this.updateRaceBoardLayout();
     }
@@ -265,6 +274,8 @@ export default class GarageView extends View {
             })
         );
         await this.getCarsForCurrentPage();
+        this.updateGarageQuantityLayout();
+
         this.updateRaceBoardLayout();
     }
 
@@ -285,6 +296,7 @@ export default class GarageView extends View {
         changeSvgStrokeColor(InputUse.CREATE, COLORS.BLACK);
 
         await this.getCarsForCurrentPage();
+        this.updateGarageQuantityLayout();
         // redraw layout
         this.updateRaceBoardLayout();
     }
@@ -510,8 +522,11 @@ export default class GarageView extends View {
         this.viewElementCreator.addInnerElement(carCreationContainerCreator.getElement());
     }
 
-    private createRaceBoard(carsData: Array<Car>): void {
-        this.raceBoard = new CreatorElement(raceBoardParameters);
+    private createRaceBoard(carsData: Array<Car>, isInitCall?: boolean): void {
+        if (isInitCall) {
+            this.raceBoard = new CreatorElement(raceBoardParameters);
+            this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+        }
 
         carsData.forEach(car => {
             this.createCarBlock(car, this.raceBoard);
