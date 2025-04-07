@@ -1,7 +1,7 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { AppState, Callback, ElementParameters } from '../../../../types';
+import type { AppState, Callback, CarPayload, ElementParameters } from '../../../../types';
 import {
     AppStateKeys,
     ButtonParameters,
@@ -47,8 +47,9 @@ import { getCallbackWithID } from '../../../util/assertion-functions/assertion-f
 import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
 import { svgElements } from '../../../util/createSvg/data';
 import { ShapeElement } from '../../../util/createSvg/types';
-import { mockData } from '../../../state/initial-state';
+import { CONSTANTS, mockData } from '../../../state/initial-state';
 import ApiController from '../../../api/api-controller';
+import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
 
 export default class GarageView extends View {
     public router: Router;
@@ -88,9 +89,8 @@ export default class GarageView extends View {
         //this.addGarageControls()
         this.addCarCreationControls();
         this.addSummary();
-
-        this.createRaceBoard(this.state.getState().cars);
         this.createPageControls();
+        this.createRaceBoard(this.state.getState().cars);
     }
 
     private updateRaceBoardLayout(): void {
@@ -241,8 +241,12 @@ export default class GarageView extends View {
         }
     }
 
-    private removeCar(id: number): void {
+    private async removeCar(id: number): Promise<void> {
         console.log('removeCar', id);
+        await this.api.deleteCar(id);
+        await this.getCarsForCurrentPage();
+
+        this.updateRaceBoardLayout();
     }
 
     private startCommonRace(): void {
@@ -253,8 +257,15 @@ export default class GarageView extends View {
         console.log('reset');
     }
 
-    private generateCars(): void {
-        console.log('generate');
+    private async generateCars(): Promise<void> {
+        const carsCollection: Array<CarPayload> = generateCarsCollection();
+        await Promise.all(
+            carsCollection.map(async item => {
+                await this.api.createCar(item);
+            })
+        );
+        await this.getCarsForCurrentPage();
+        this.updateRaceBoardLayout();
     }
 
     private async createCar(): Promise<void> {

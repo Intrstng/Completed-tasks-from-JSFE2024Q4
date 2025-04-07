@@ -1,6 +1,7 @@
 import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
 import GarageView from '../spa/view/main/garage/garage-view';
 import WinnersView from '../spa/view/main/winners/winners-view';
+import { stringifyLocal } from 'mini-css-extract-plugin/types/utils';
 
 export type Route = {
     path: string;
@@ -144,6 +145,11 @@ export type Constants = {
 export type QueryParameters = {
     key: string;
     value: number | string;
+};
+
+export type CarPayload = {
+    name: string;
+    color: string;
 };
 
 export type SortOrderType = Description.ASC | Description.DESC;
