@@ -39,12 +39,14 @@ import { CONSTANTS } from '../../../state/initial-state';
 import ApiController from '../../../api/api-controller';
 import { createSVG } from '../../../util/createSvg/createSvg';
 import { svgElements } from '../../../util/createSvg/data';
+import { raceBoardParameters } from '../garage/garage-view-parameters';
 
 export default class WinnersView extends View {
     public router: Router;
     private readonly winnersState: LocalStorageState;
     private winnersQuantity: CreatorElement | null;
     private winnersPage: CreatorElement | null;
+    private tableContainer: CreatorElement | null;
     private table: CreatorElement | null;
     public api: ApiController;
 
@@ -52,6 +54,7 @@ export default class WinnersView extends View {
         super(winnersParameters);
         this.winnersQuantity = null;
         this.winnersPage = null;
+        this.tableContainer = null;
         this.table = null;
         this.router = router;
         this.winnersState = state;
@@ -60,13 +63,13 @@ export default class WinnersView extends View {
     }
 
     private configureView(): void {
-        //this.getWinnersForCurrentPage();
+        this.getWinnersForCurrentPage();
         console.log('Page');
         // this.createControls();
         // this.addPickedOption();
         this.addSummary();
-        this.addScoreTable(); // Add argument
         this.createControls();
+        this.addScoreTable(true); // Add argument
     }
 
     private async getWinnersForCurrentPage(): Promise<void> {
@@ -208,16 +211,46 @@ export default class WinnersView extends View {
         this.table.addInnerElement(tbodyCreator.getElement());
     }
 
-    private addScoreTable(): void {
-        const scoreTableContainerCreator = new CreatorElement(scoreTableContainerParameters);
+    private addScoreTable(isInitCall?: boolean): void {
+        if (isInitCall) {
+            this.tableContainer = new CreatorElement(raceBoardParameters);
+            this.viewElementCreator.addInnerElement(this.tableContainer.getElement());
+        }
         this.table = new CreatorElement(scoreTableParameters);
 
         this.generateTableHead();
         this.generateTableBody();
 
-        scoreTableContainerCreator.addInnerElement(this.table.getElement());
-        this.viewElementCreator.addInnerElement(scoreTableContainerCreator);
+        this.tableContainer.addInnerElement(this.table.getElement());
+        this.viewElementCreator.addInnerElement(this.tableContainer);
     }
+
+    private updateTableLayout(): void {
+        this.deleteAllItemsInContainer(this.table);
+        this.addScoreTable();
+    }
+
+    public deleteAllItemsInContainer(container: CreatorElement): void {
+        const containerElement = container.getElement();
+        if (containerElement) {
+            while (containerElement.firstElementChild) {
+                containerElement.firstElementChild.remove();
+            }
+        }
+    }
+
+    // private createRaceBoard(carsData: Array<Car>, isInitCall?: boolean): void {
+    //     if (isInitCall) {
+    //         this.raceBoard = new CreatorElement(raceBoardParameters);
+    //         this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+    //     }
+    //
+    //     carsData.forEach(car => {
+    //         this.createCarBlock(car, this.raceBoard);
+    //     });
+    //
+    //     this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+    // }
 
     private createControls(): void {
         const paginationControlsContainerCreator = new CreatorElement(paginationWinControlsContainerParameters);
@@ -264,7 +297,7 @@ export default class WinnersView extends View {
         }
     }
 
-    private prevWinnersPage(): void {
+    private async prevWinnersPage(): Promise<void> {
         console.log('prev');
         const currentWinnersPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
         this.countWinnersPageValue(Description.DECREMENT, currentWinnersPage);
@@ -273,11 +306,11 @@ export default class WinnersView extends View {
             `${Description.PAGE} ${this.winnersState.getState()[AppStateKeys.WINNERS_PAGE]}`
         );
 
-        // await this.getCarsForCurrentPage();
-        // this.updateRaceBoardLayout();
+        await this.getWinnersForCurrentPage();
+        this.updateTableLayout();
     }
 
-    private nextWinnersPage(): void {
+    private async nextWinnersPage(): Promise<void> {
         console.log('next');
         const currentWinnersPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
         this.countWinnersPageValue(Description.INCREMENT, currentWinnersPage);
@@ -285,9 +318,9 @@ export default class WinnersView extends View {
         this.winnersPage.setTextContent(
             `${Description.PAGE} ${this.winnersState.getState()[AppStateKeys.WINNERS_PAGE]}`
         );
-        //
-        // await this.getCarsForCurrentPage();
-        // this.updateRaceBoardLayout();
+
+        await this.getWinnersForCurrentPage();
+        this.updateTableLayout();
     }
 
     private redirectToMainPage(event: Event): void {

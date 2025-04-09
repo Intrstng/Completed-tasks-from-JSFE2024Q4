@@ -95,7 +95,7 @@ const carNames: Array<string> = [
 export const CONSTANTS: Constants = {
     baseURL: 'http://127.0.0.1:3000',
     carsOnPage: 7,
-    winnersOnPage: 5,
+    winnersOnPage: 4,
     carsToGenerate: 100,
     brands: carBrands,
     models: carNames,
