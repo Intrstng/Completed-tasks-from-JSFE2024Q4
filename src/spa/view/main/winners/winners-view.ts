@@ -23,6 +23,7 @@ import {
     nextButtonWinnersParameters,
     paginationWinControlsContainerParameters,
     prevButtonWinnersParameters,
+    scoreTableContainerParameters,
     scoreTableParameters,
     spanParameters,
     tableBodyParameters,
@@ -265,9 +266,12 @@ export default class WinnersView extends View {
         try {
             if (scoreRecords.length === 0) {
                 let currentPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
-                this.updatePropertyInState(AppStateKeys.WINNERS_PAGE, --currentPage);
+                --currentPage;
+                currentPage = currentPage === 0 ? 1 : currentPage;
+                this.updatePropertyInState(AppStateKeys.WINNERS_PAGE, currentPage);
                 await this.getWinnersForCurrentPage();
                 this.updateTableLayout();
+                this.winnersPage.setTextContent(`${Description.PAGE} ${currentPage}`);
                 return;
             }
             scoreRecords.forEach((record, index) => {
@@ -305,7 +309,7 @@ export default class WinnersView extends View {
 
     private addScoreTable(isInitCall?: boolean): void {
         if (isInitCall) {
-            this.tableContainer = new CreatorElement(raceBoardParameters);
+            this.tableContainer = new CreatorElement(scoreTableContainerParameters);
             this.viewElementCreator.addInnerElement(this.tableContainer.getElement());
         }
         this.table = new CreatorElement(scoreTableParameters);
@@ -330,19 +334,6 @@ export default class WinnersView extends View {
             }
         }
     }
-
-    // private createRaceBoard(carsData: Array<Car>, isInitCall?: boolean): void {
-    //     if (isInitCall) {
-    //         this.raceBoard = new CreatorElement(raceBoardParameters);
-    //         this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
-    //     }
-    //
-    //     carsData.forEach(car => {
-    //         this.createCarBlock(car, this.raceBoard);
-    //     });
-    //
-    //     this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
-    // }
 
     private createControls(): void {
         const paginationControlsContainerCreator = new CreatorElement(paginationWinControlsContainerParameters);

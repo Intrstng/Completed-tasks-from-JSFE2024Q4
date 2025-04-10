@@ -267,66 +267,6 @@ export default class ApiController {
             return undefined;
         }
     }
-    //
-    //     public async getAllWinners(
-    //         sortType: string,
-    //         sortOrderType: string = Description.ASC,
-    //         page: number
-    //     ): Promise<void> | undefined {
-    //         try {
-    //             const parameters: QueryParameters[] = [
-    //                 { key: QueryParameterKeys.PAGE, value: page },
-    //                 { key: QueryParameterKeys.SORT, value: sortType },
-    //                 { key: QueryParameterKeys.ORDER, value: sortOrderType },
-    //                 { key: QueryParameterKeys.LIMIT, value: this.constants.winnersOnPage },
-    //             ];
-    //
-    //             const response = await fetch(`${this.baseUrl}${this.path.winners}${this.getQueryString(parameters)}`);
-    //
-    //             if (!response.ok) {
-    //                 console.error(`Error: ${response.status} - ${response.statusText}`);
-    //                 return undefined;
-    //             }
-    //
-    //             const winners = await response.json();
-    //             const winnersQuantity = Number(response.headers.get(HttpHeaderKeys.X_TOTAL_COUNT));
-    //
-    //             const winnersData = await Promise.all(winners.map((winner: Winner) => this.getCar(winner.id)));
-    //
-    //
-    //
-    //             const allSettledData = await Promise.allSettled(winners.map((winner: Winner) => this.getCar(winner.id)));
-    // console.log(allSettledData)
-    //             //let winnersData: Array<Car>
-    //
-    //             // if (Array.isArray(allSettledData)) {
-    //             //     winnersData = allSettledData.filter(res => res.s)
-    //             // }
-    //
-    // console.log('winnerssettled', allSettledData);
-    //
-    //             // const winnersData = allSettledData.filter(data => data.status === AllSettledStatus.FULLFILED).map(winnerData => winnerData.value)
-    //
-    //
-    //
-    //             const currentState: AppState = this.state.getState();
-    //
-    //             const newState: AppState = {
-    //                 ...currentState,
-    //                 winners,
-    //                 winnersData,
-    //                 winnersQuantity,
-    //             };
-    //
-    //             this.state.setState(newState);
-    //         } catch (error: unknown) {
-    //             console.error(
-    //                 'Network error or unexpected issue occurred:',
-    //                 error instanceof Error ? error.message : String(error)
-    //             );
-    //             return undefined;
-    //         }
-    //     }
 
     public async createWinner(data: Winner): Promise<void> | undefined {
         try {

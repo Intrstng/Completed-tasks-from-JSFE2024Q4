@@ -52,17 +52,17 @@ export const mainButtonsContainerParameters: ElementParameters = {
 export const mainControlsButtonsParameters: ButtonsCollection = [
     {
         tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS],
+        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_RACE],
         textContent: Description.RACE,
     },
     {
         tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS],
+        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_RESET],
         textContent: Description.RESET,
     },
     {
         tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS],
+        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_GENERATE],
         textContent: Description.GENERATE,
     },
 ];
@@ -151,11 +151,6 @@ export const carRaceControlsParameters: ElementParameters = {
 export const trackParameters: ElementParameters = {
     tag: 'div',
     classNames: [CssClasses.TRACK],
-};
-
-export const carIconParameters: ElementParameters = {
-    tag: 'img',
-    classNames: [CssClasses.ICON],
 };
 
 export const finishParameters: ElementParameters = {

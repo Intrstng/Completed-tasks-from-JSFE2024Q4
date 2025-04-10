@@ -1,26 +1,90 @@
 .garage {
+    &__pagination {
+        width: 12.5%;
+        margin: 0 auto 5px;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
     &__summary {
+        margin: 0 auto;
+        width: 60%;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
     }
-    &__current-total-cars {
-    }
+    &__current-total-cars,
     &__current-page {
+        margin: 0 auto;
+        text-transform: capitalize;
+        color: rgba(246, 248, 213, 0.75);
     }
 }
 
+.creation-car {
+    max-width: 580px;
+
+    &__create,
+    &__update {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .label {
+        cursor: pointer;
+        padding: 0;
+        font-family: Corbel, sans-serif;
+        font-weight: bold;
+        letter-spacing: 1px;
+        color: rgba(246, 248, 213, 0.75);
+        background-color: transparent;
+    }
+}
+
+.input-color {
+    padding: 0 !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background-color: transparent !important;
+    border: none;
+    cursor: pointer;
+}
+.input-color::-webkit-color-swatch {
+    border-radius: 5px;
+    border: none;
+}
+.input-color::-moz-color-swatch {
+    border-radius: 5px;
+    border: none;
+}
+
 .race-board {
+    margin: 0 0 30px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 30px;
-    background-color: #ffddab;
+    background-color: #f6f8d5;
     border: none;
+    border-radius: 30px;
+    padding: 10px 15px 15px 15px;
 }
 
 .car-block {
     padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     &__name {
+        font-family: Corbel, sans-serif;
+        color: #316f7b;
+        margin: 5px 0 0 0;
+        letter-spacing: 1px;
     }
     &__race {
         display: flex;
@@ -51,9 +115,18 @@
     }
     @media screen and (max-width: 640px) {
         &__finish {
-            width: 100px;
+            width: 80px;
         }
     }
+}
+
+.controls-btn-container {
+    margin: 25px 15px 0px;
+    max-width: 230px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .svg-icon {

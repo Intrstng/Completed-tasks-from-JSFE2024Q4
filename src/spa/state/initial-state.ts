@@ -142,10 +142,13 @@ export const INITIAL_STATE: AppState = {
     orderWins: Description.ASC,
     orderTime: Description.ASC,
     sortType: Description.SORT_TIME,
-    winner: {
-        name: '',
-        time: '',
-    },
+    winner: [
+        {
+            carID: 0,
+            name: '',
+            time: '',
+        },
+    ],
     winsSortActive: false,
     timeSortActive: false,
     isUpdateActive: false,

@@ -1,4 +1,7 @@
 .winners {
+    &__container {
+        margin: 20px 0 30px;
+    }
     &__summary {
         width: 100%;
         display: flex;
@@ -8,6 +11,8 @@
     }
     &__current {
         margin: 0 auto;
+        text-transform: capitalize;
+        color: rgba(246, 248, 213, 0.75);
     }
     &__pagination {
         width: 12.5%;
@@ -67,8 +72,16 @@ th {
 //  background-color: #f5f5f5;
 //}
 
+.race-board {
+    margin: 15px 0 40px;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #dbdbdb;
+}
+
 tbody tr:nth-child(even) {
-    background-color: rgba(148, 80, 52, 0.7);
+    background-color: #f5eedc;
 }
 
 .svg-icon-table {

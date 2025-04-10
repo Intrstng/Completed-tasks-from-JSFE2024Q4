@@ -66,6 +66,7 @@ export type Car = {
 };
 
 export type RaceWinner = {
+    carID: number;
     name: string;
     time: string;
 };
@@ -101,6 +102,7 @@ export type Animation = {
 };
 
 export type AnimationFrame = {
+    carID: number;
     animationID: number | null;
     distance: number;
 };
@@ -113,7 +115,7 @@ export type EngineData = {
 export type AppState = {
     [AppStateKeys.CARS]: Car[];
     [AppStateKeys.WINNERS]: Winner[];
-    [AppStateKeys.ANIMATION]: Animation[];
+    [AppStateKeys.ANIMATION]: AnimationFrame[];
     [AppStateKeys.WINNERS_DATA]: Car[];
     [AppStateKeys.SELECTED_CAR]: Car;
     [AppStateKeys.CARS_QUANTITY]: number;
@@ -124,7 +126,7 @@ export type AppState = {
     [AppStateKeys.ORDER_WINS]: Description.ASC | Description.DESC;
     [AppStateKeys.ORDER_TIME]: Description.ASC | Description.DESC;
     [AppStateKeys.SORT_TYPE]: Description.SORT_WINS | Description.SORT_TIME;
-    [AppStateKeys.WINNER]: RaceWinner;
+    [AppStateKeys.WINNER]: Array<RaceWinner>;
     [AppStateKeys.WINS_SORT_ACTIVE]: boolean;
     [AppStateKeys.TIME_SORT_ACTIVE]: boolean;
     [AppStateKeys.IS_UPDATE_ACTIVE]: boolean;
@@ -160,3 +162,9 @@ export type CarPayload = {
 export type SortOrderType = Description.ASC | Description.DESC;
 
 export type Operator = Description.INCREMENT | Description.DECREMENT;
+
+export type ResponseObject = {
+    success: boolean;
+    carID: number;
+    time: number;
+};
