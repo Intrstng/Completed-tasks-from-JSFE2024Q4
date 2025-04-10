@@ -129,6 +129,9 @@ export enum Description {
     SORT_TIME = 'time',
     SORT_WINS = 'wins',
     TABLE = 'table',
+    DISABLED = 'disabled',
+    ACTIVE = 'active',
+    INACTIVE = 'inactive',
 }
 
 export enum InputUse {
@@ -185,8 +188,10 @@ export enum CssClasses {
     WINNERS_TABLE = 'winners__table',
     TABLE = 'table',
     TABLE_HEAD = 'table__head',
+    TABLE_HEAD_NAME = 'table__head-name',
     TABLE_BODY = 'table__body',
     TABLE_ROW = 'table__row',
+    TABLE_ROW_NAME = 'table__row-name',
     TABLE_HEAD_CELL = 'table__head-cell',
     TABLE_ROW_CELL = 'table__row-cell',
     PAGINATION_GARAGE_CONTAINER = 'garage__pagination',
@@ -196,6 +201,8 @@ export enum CssClasses {
     BUTTON_NEXT = 'next-btn',
     BUTTON_ASC = 'asc-btn',
     BUTTON_DESC = 'desc-btn',
+    BUTTON_WINS = 'win',
+    BUTTON_TIME = 'time',
     BUTTON_CONTROLS = 'controls-btn',
     BUTTON_CREATE = 'create-btn',
     BUTTON_UPDATE = 'update-btn',
@@ -215,4 +222,12 @@ export enum CssClasses {
     ICON = 'car-block__icon',
     FINISH = 'car-block__finish',
     SVG_ICON = 'svg-icon',
+    HEAD = 'table__head-container',
+    ACTIVE = 'active',
+    INACTIVE = 'inactive',
+}
+
+export enum AllSettledStatus {
+    FULLFILED = 'fulfilled',
+    REJECTED = 'rejected',
 }

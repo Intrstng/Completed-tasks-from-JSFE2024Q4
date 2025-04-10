@@ -2,7 +2,7 @@ import type { AppState } from '../../types';
 import { AppStateKeys } from '../../types';
 import { INITIAL_STATE } from './initial-state';
 
-export default class LocalStorageState {
+export default class SessionStorageState {
     public values: AppState;
     private readonly accessKey: string;
 
@@ -55,6 +55,7 @@ export default class LocalStorageState {
                 //
                 // assertIsDecisionJsonData(parsedData);
                 // return parsedData;
+                console.log(JSON.parse(storageItem));
                 return JSON.parse(storageItem);
             } catch (error) {
                 console.error('Failed to parse localStorage item:', error);
@@ -68,6 +69,6 @@ export default class LocalStorageState {
     }
 
     private saveState(): void {
-        localStorage.setItem(this.accessKey, JSON.stringify(this.values));
+        sessionStorage.setItem(this.accessKey, JSON.stringify(this.values));
     }
 }

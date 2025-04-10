@@ -7,20 +7,22 @@ import {
     AppStateKeys,
     Car,
     COLORS,
+    CssClasses,
     Description,
     Operator,
     OrderButtonParametersWithCB,
-    Pages,
+    SortOrderType,
     TableRecord,
     Winner,
 } from '../../../../types';
 import {
-    ascButtonParameters,
-    descButtonParameters,
+    ascTimeButtonParameters,
+    ascWinsButtonParameters,
+    descTimeButtonParameters,
+    descWinsButtonParameters,
     nextButtonWinnersParameters,
     paginationWinControlsContainerParameters,
     prevButtonWinnersParameters,
-    scoreTableContainerParameters,
     scoreTableParameters,
     spanParameters,
     tableBodyParameters,
@@ -29,12 +31,13 @@ import {
     tableHeadParameters,
     tableRowCellParameters,
     tableRowParameters,
+    theadButtonsContainer,
     winnersCurrentParameters,
     winnersPageCurrentParameters,
     winnersParameters,
     winnersSummaryParameters,
 } from './winners-view-parameters';
-import LocalStorageState from '../../../state/local-storage-state';
+import LocalStorageState from '../../../state/session-storage-state';
 import { CONSTANTS } from '../../../state/initial-state';
 import ApiController from '../../../api/api-controller';
 import { createSVG } from '../../../util/createSvg/createSvg';
@@ -48,6 +51,12 @@ export default class WinnersView extends View {
     private winnersPage: CreatorElement | null;
     private tableContainer: CreatorElement | null;
     private table: CreatorElement | null;
+    private prevButton: CreatorElement | null;
+    private nextButton: CreatorElement | null;
+    private ascWinButton: CreatorElement | null;
+    private descWinButton: CreatorElement | null;
+    private ascTimeButton: CreatorElement | null;
+    private descTimeButton: CreatorElement | null;
     public api: ApiController;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
@@ -56,31 +65,65 @@ export default class WinnersView extends View {
         this.winnersPage = null;
         this.tableContainer = null;
         this.table = null;
+        this.prevButton = null;
+        this.nextButton = null;
+        this.ascWinButton = null;
+        this.descWinButton = null;
+        this.ascTimeButton = null;
+        this.descTimeButton = null;
         this.router = router;
         this.winnersState = state;
         this.api = api;
         this.configureView();
     }
 
-    private configureView(): void {
-        this.getWinnersForCurrentPage();
-        console.log('Page');
-        // this.createControls();
-        // this.addPickedOption();
+    private async configureView(): Promise<void> {
+        await this.getWinnersForCurrentPage();
         this.addSummary();
         this.createControls();
-        this.addScoreTable(true); // Add argument
+        this.addScoreTable(true);
     }
 
     private async getWinnersForCurrentPage(): Promise<void> {
         const currentSortType = this.winnersState.getState()[AppStateKeys.SORT_TYPE];
         const currentWinnersPage = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
-        const currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
+        let currentSortOrderTime: string;
+
+        if (currentSortType === Description.SORT_WINS) {
+            currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_WINS];
+        } else if (currentSortType === Description.SORT_TIME) {
+            currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
+        }
 
         if (typeof currentWinnersPage === 'number' && isFinite(currentWinnersPage)) {
             await this.api.getAllWinners(currentSortType, currentSortOrderTime, currentWinnersPage);
         }
-        console.log(this.winnersState.getState());
+    }
+
+    private async sortTableByWins(sortOrder: SortOrderType): Promise<void> {
+        this.updatePropertyInState(AppStateKeys.SORT_TYPE, Description.SORT_WINS);
+        this.updatePropertyInState(AppStateKeys.ORDER_WINS, sortOrder);
+        this.updatePropertyInState(AppStateKeys.WINS_SORT_ACTIVE, true);
+        this.updatePropertyInState(AppStateKeys.TIME_SORT_ACTIVE, false);
+
+        await this.getWinnersForCurrentPage();
+
+        this.toggleButtonActiveClass(this.ascWinButton);
+        this.toggleButtonActiveClass(this.descWinButton);
+        this.updateTableLayout();
+    }
+
+    private async sortTableByTime(sortOrder: SortOrderType): Promise<void> {
+        this.updatePropertyInState(AppStateKeys.SORT_TYPE, Description.SORT_TIME);
+        this.updatePropertyInState(AppStateKeys.ORDER_TIME, sortOrder);
+        this.updatePropertyInState(AppStateKeys.WINS_SORT_ACTIVE, false);
+        this.updatePropertyInState(AppStateKeys.TIME_SORT_ACTIVE, true);
+
+        await this.getWinnersForCurrentPage();
+
+        this.toggleButtonActiveClass(this.ascTimeButton);
+        this.toggleButtonActiveClass(this.descTimeButton);
+        this.updateTableLayout();
     }
 
     private addSummary(): void {
@@ -107,23 +150,23 @@ export default class WinnersView extends View {
         let descButtonParametersWithCB: ElementParameters | null = null;
         if (columnName === Description.WINS) {
             ascButtonParametersWithCB = {
-                ...ascButtonParameters,
-                callback: () => console.log('asc win'),
+                ...ascWinsButtonParameters,
+                callback: () => this.sortTableByWins(Description.ASC),
             };
             descButtonParametersWithCB = {
-                ...descButtonParameters,
-                callback: () => console.log('desc win'),
+                ...descWinsButtonParameters,
+                callback: () => this.sortTableByWins(Description.DESC),
             };
         }
 
         if (columnName === Description.TIME) {
             ascButtonParametersWithCB = {
-                ...ascButtonParameters,
-                callback: () => console.log('asc time'),
+                ...ascTimeButtonParameters,
+                callback: () => this.sortTableByTime(Description.ASC),
             };
             descButtonParametersWithCB = {
-                ...descButtonParameters,
-                callback: () => console.log('desc time'),
+                ...descTimeButtonParameters,
+                callback: () => this.sortTableByTime(Description.DESC),
             };
         }
 
@@ -136,21 +179,35 @@ export default class WinnersView extends View {
 
         tableHeadColumnsNames.forEach(columnName => {
             const headCellCreator = new CreatorElement(tableHeadCellParameters);
-
-            if (columnName === Description.WINS || columnName === Description.TIME) {
+            if (columnName === Description.NAME) {
+                headCellCreator.setCssClasses([CssClasses.TABLE_HEAD_NAME]);
+                headCellCreator.setTextContent(columnName);
+            } else if (columnName === Description.WINS || columnName === Description.TIME) {
                 const { ascButtonParametersWithCB, descButtonParametersWithCB } =
                     this.addOrderBtnCallbacksToParameters(columnName);
+                const theadCellContainerCreator = new CreatorElement(theadButtonsContainer);
+                let ascBtnCreator: CreatorElement | null;
+                let descBtnCreator: CreatorElement | null;
 
-                const ascBtnCreator = new CreatorElement(ascButtonParametersWithCB);
-
+                if (columnName === Description.WINS) {
+                    this.ascWinButton = new CreatorElement(ascButtonParametersWithCB);
+                    this.descWinButton = new CreatorElement(descButtonParametersWithCB);
+                    ascBtnCreator = this.ascWinButton;
+                    descBtnCreator = this.descWinButton;
+                } else if (columnName === Description.TIME) {
+                    this.ascTimeButton = new CreatorElement(ascButtonParametersWithCB);
+                    this.descTimeButton = new CreatorElement(descButtonParametersWithCB);
+                    ascBtnCreator = this.ascTimeButton;
+                    descBtnCreator = this.descTimeButton;
+                }
                 const textContentCreator = new CreatorElement(spanParameters);
                 textContentCreator.setTextContent(columnName);
 
-                const descBtnCreator = new CreatorElement(descButtonParametersWithCB);
+                theadCellContainerCreator.addInnerElement(ascBtnCreator.getElement());
+                theadCellContainerCreator.addInnerElement(textContentCreator.getElement());
+                theadCellContainerCreator.addInnerElement(descBtnCreator.getElement());
 
-                headCellCreator.addInnerElement(ascBtnCreator.getElement());
-                headCellCreator.addInnerElement(textContentCreator.getElement());
-                headCellCreator.addInnerElement(descBtnCreator.getElement());
+                headCellCreator.addInnerElement(theadCellContainerCreator.getElement());
             } else {
                 headCellCreator.setTextContent(columnName);
             }
@@ -160,54 +217,89 @@ export default class WinnersView extends View {
 
         theadCreator.addInnerElement(theadRowCreator.getElement());
         this.table.addInnerElement(theadCreator.getElement());
+        this.toggleActiveClassSortButton();
+    }
+
+    private toggleActiveClassSortButton(): void {
+        const currentSortType = this.winnersState.getState()[AppStateKeys.SORT_TYPE];
+        const currentOrderWins = this.winnersState.getState()[AppStateKeys.ORDER_WINS];
+        const currentOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
+
+        if (currentSortType === Description.SORT_WINS) {
+            console.log('1', currentSortType, currentOrderWins, currentOrderTime);
+            if (currentOrderWins === Description.ASC) {
+                this.toggleButtonActiveClass(this.ascWinButton);
+            } else if (currentOrderWins === Description.DESC) {
+                this.toggleButtonActiveClass(this.descWinButton);
+            }
+        } else if (currentSortType === Description.SORT_TIME) {
+            console.log('2', currentSortType, currentOrderWins, currentOrderTime);
+            if (currentOrderTime === Description.ASC) {
+                this.toggleButtonActiveClass(this.ascTimeButton);
+            } else if (currentOrderTime === Description.DESC) {
+                this.toggleButtonActiveClass(this.descTimeButton);
+            }
+        }
     }
 
     private createTableRecords(cars: Array<Car>, winners: Array<Winner>): Array<TableRecord> {
         return winners.map(winner => {
             const car = cars.find(car => car && car.id === winner.id);
-            return {
-                wins: winner.wins,
-                time: winner.time / 1000,
-                name: car ? car.name : 'Unknown winners name',
-                color: car ? car.color : COLORS.BLACK,
-            };
+            if (car) {
+                return {
+                    wins: winner.wins,
+                    time: winner.time / 1000,
+                    name: car ? car.name : 'Unknown winners name',
+                    color: car ? car.color : COLORS.BLACK,
+                };
+            }
         });
     }
 
-    private generateTableBody(): void {
+    private async generateTableBody(): Promise<void> {
         const tbodyCreator = new CreatorElement(tableBodyParameters);
         const winnersDataCollection: Array<Car> = this.winnersState.getState()[AppStateKeys.WINNERS_DATA];
         const winnersCollection: Array<Winner> = this.winnersState.getState()[AppStateKeys.WINNERS];
 
         const scoreRecords: Array<TableRecord> = this.createTableRecords(winnersDataCollection, winnersCollection);
+        try {
+            if (scoreRecords.length === 0) {
+                let currentPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+                this.updatePropertyInState(AppStateKeys.WINNERS_PAGE, --currentPage);
+                await this.getWinnersForCurrentPage();
+                this.updateTableLayout();
+                return;
+            }
+            scoreRecords.forEach((record, index) => {
+                const rowCreator = new CreatorElement(tableRowParameters);
 
-        scoreRecords.forEach((record, index) => {
-            const rowCreator = new CreatorElement(tableRowParameters);
+                const numberCellCreator = new CreatorElement(tableRowCellParameters);
+                numberCellCreator.setTextContent(String(++index));
 
-            const numberCellCreator = new CreatorElement(tableRowCellParameters);
-            numberCellCreator.setTextContent(String(++index));
+                const carCellCreator = new CreatorElement(tableRowCellParameters);
+                const carTableLogo = createSVG(svgElements, record.color, Description.TABLE);
+                carCellCreator.addInnerElement(carTableLogo);
 
-            const carCellCreator = new CreatorElement(tableRowCellParameters);
-            const carTableLogo = createSVG(svgElements, record.color, Description.TABLE);
-            carCellCreator.addInnerElement(carTableLogo);
+                const nameCellCreator = new CreatorElement(tableRowCellParameters);
+                nameCellCreator.setTextContent(record.name);
+                nameCellCreator.setCssClasses([CssClasses.TABLE_ROW_NAME]);
 
-            const nameCellCreator = new CreatorElement(tableRowCellParameters);
-            nameCellCreator.setTextContent(record.name);
+                const winsCellCreator = new CreatorElement(tableRowCellParameters);
+                winsCellCreator.setTextContent(String(record.wins));
 
-            const winsCellCreator = new CreatorElement(tableRowCellParameters);
-            winsCellCreator.setTextContent(String(record.wins));
+                const timeCellCreator = new CreatorElement(tableRowCellParameters);
+                timeCellCreator.setTextContent(String(record.time));
 
-            const timeCellCreator = new CreatorElement(tableRowCellParameters);
-            timeCellCreator.setTextContent(String(record.time));
-
-            rowCreator.addInnerElement(numberCellCreator.getElement());
-            rowCreator.addInnerElement(carCellCreator.getElement());
-            rowCreator.addInnerElement(nameCellCreator.getElement());
-            rowCreator.addInnerElement(winsCellCreator.getElement());
-            rowCreator.addInnerElement(timeCellCreator.getElement());
-            tbodyCreator.addInnerElement(rowCreator.getElement());
-        });
-
+                rowCreator.addInnerElement(numberCellCreator.getElement());
+                rowCreator.addInnerElement(carCellCreator.getElement());
+                rowCreator.addInnerElement(nameCellCreator.getElement());
+                rowCreator.addInnerElement(winsCellCreator.getElement());
+                rowCreator.addInnerElement(timeCellCreator.getElement());
+                tbodyCreator.addInnerElement(rowCreator.getElement());
+            });
+        } catch (error: unknown) {
+            console.error('Table row creation failed:', error instanceof Error ? error.message : String(error));
+        }
         this.table.addInnerElement(tbodyCreator.getElement());
     }
 
@@ -265,14 +357,32 @@ export default class WinnersView extends View {
             callback: () => this.nextWinnersPage(),
         };
 
-        const prevBtnCreator = new CreatorElement(prevButtonWinnersParametersWithCB);
-        const nextBtnCreator = new CreatorElement(nextButtonWinnersParametersWithCB);
+        this.prevButton = new CreatorElement(prevButtonWinnersParametersWithCB);
+        this.nextButton = new CreatorElement(nextButtonWinnersParametersWithCB);
+        this.toggleDisabledForPaginationButtons();
 
-        paginationControlsContainerCreator.addInnerElement(prevBtnCreator.getElement());
-
-        paginationControlsContainerCreator.addInnerElement(nextBtnCreator.getElement());
+        paginationControlsContainerCreator.addInnerElement(this.prevButton.getElement());
+        paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
 
         this.viewElementCreator.addInnerElement(paginationControlsContainerCreator);
+    }
+
+    private toggleDisabledForPaginationButtons(): void {
+        const currentWinnersPage: number = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
+        const totalWinners: number = this.winnersState.getState()[AppStateKeys.WINNERS_QUANTITY];
+
+        if (currentWinnersPage === 1) {
+            if (this.prevButton) {
+                this.prevButton.setDisabled(true);
+            }
+        } else {
+            if (this.prevButton) {
+                this.prevButton.setDisabled(false);
+            }
+        }
+        if (currentWinnersPage >= totalWinners / CONSTANTS.winnersOnPage) {
+            this.nextButton.setDisabled(true);
+        } else this.nextButton.setDisabled(false);
     }
 
     private updatePropertyInState(key: string, value: string | number | boolean): void {
@@ -283,6 +393,19 @@ export default class WinnersView extends View {
             [key]: value,
         };
         this.winnersState.setState(updatedState);
+    }
+
+    private toggleButtonActiveClass(button: CreatorElement): void {
+        const buttonElement: HTMLElement = button.getElement();
+        const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CssClasses.ACTIVE]);
+        console.log('toggleButtonActiveClass2', buttonElement, isActive);
+        if (isActive) {
+            buttonElement.classList.remove(CssClasses.ACTIVE);
+            buttonElement.classList.add(CssClasses.INACTIVE);
+        } else {
+            buttonElement.classList.add(CssClasses.ACTIVE);
+            buttonElement.classList.remove(CssClasses.INACTIVE);
+        }
     }
 
     private countWinnersPageValue(operator: Operator, page: number): void {
@@ -308,6 +431,7 @@ export default class WinnersView extends View {
 
         await this.getWinnersForCurrentPage();
         this.updateTableLayout();
+        this.toggleDisabledForPaginationButtons();
     }
 
     private async nextWinnersPage(): Promise<void> {
@@ -321,20 +445,6 @@ export default class WinnersView extends View {
 
         await this.getWinnersForCurrentPage();
         this.updateTableLayout();
+        this.toggleDisabledForPaginationButtons();
     }
-
-    private redirectToMainPage(event: Event): void {
-        event.preventDefault();
-        this.router.navigate(Pages.GARAGE);
-    }
-
-    // private keyupHandler(event: Event, durationParameters: ElementParameters): void {
-    //   if (event.target instanceof HTMLInputElement) {
-    //     this.enteredDurationValue = event.target.value;
-    //
-    //     if (SelectorView.validateInput(event.target.value, durationParameters)) {
-    //       this.selectorState.setField(FieldKeys.DURATION, event.target.value);
-    //     }
-    //   }
-    // }
 }

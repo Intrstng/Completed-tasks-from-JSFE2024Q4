@@ -1,4 +1,4 @@
-import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
+import { AllSettledStatus, AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
 import GarageView from '../spa/view/main/garage/garage-view';
 import WinnersView from '../spa/view/main/winners/winners-view';
 import { stringifyLocal } from 'mini-css-extract-plugin/types/utils';
@@ -121,9 +121,9 @@ export type AppState = {
     [AppStateKeys.MAIN_PAGE]: Description;
     [AppStateKeys.GARAGE_PAGE]: number;
     [AppStateKeys.WINNERS_PAGE]: number;
-    [AppStateKeys.ORDER_WINS]: Description;
-    [AppStateKeys.ORDER_TIME]: Description;
-    [AppStateKeys.SORT_TYPE]: string;
+    [AppStateKeys.ORDER_WINS]: Description.ASC | Description.DESC;
+    [AppStateKeys.ORDER_TIME]: Description.ASC | Description.DESC;
+    [AppStateKeys.SORT_TYPE]: Description.SORT_WINS | Description.SORT_TIME;
     [AppStateKeys.WINNER]: RaceWinner;
     [AppStateKeys.WINS_SORT_ACTIVE]: boolean;
     [AppStateKeys.TIME_SORT_ACTIVE]: boolean;

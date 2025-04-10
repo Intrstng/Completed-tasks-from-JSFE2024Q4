@@ -10,7 +10,7 @@ export const titleParameters: ElementParameters = {
 
 export const headerParameters: ElementParameters = {
     tag: 'header',
-    classNames: [CssClasses.HEADER],
+    classNames: [CssClasses.HEADER, CssClasses.CONTAINER],
 };
 
 export const navigationParameters: ElementParameters = {

@@ -1,6 +1,51 @@
+.winners {
+    &__summary {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__current {
+        margin: 0 auto;
+    }
+    &__pagination {
+        width: 12.5%;
+        margin: 20px auto 15px;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
+    &__row-cell {
+        text-align: center;
+        padding: 6px;
+    }
+    &__head-cell {
+        padding: 16px 6px;
+        text-align: center;
+
+        span {
+            margin: 0 8px;
+        }
+    }
+    &__head-name,
+    &__row-name {
+        width: 200px;
+    }
+    &__head-container {
+        min-width: 100px;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 thead {
@@ -24,21 +69,6 @@ th {
 
 tbody tr:nth-child(even) {
     background-color: rgba(148, 80, 52, 0.7);
-}
-
-.table__row-cell {
-    text-align: center;
-    padding: 6px;
-}
-
-.table__head-cell {
-    text-align: center;
-    //display: flex;
-    //align-items: center;
-    //justify-content: space-between;
-    span {
-        margin: 0 20px;
-    }
 }
 
 .svg-icon-table {

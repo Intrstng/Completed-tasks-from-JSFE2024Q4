@@ -1,4 +1,5 @@
 import type { EventCallback, ElementParameters } from '../../types';
+import { CssClasses } from '../../types';
 //import CreatorDialog from './dialog/dialog-creator';
 
 export default class CreatorElement {
@@ -108,6 +109,14 @@ export default class CreatorElement {
         }
     }
 
+    public setDisabled(value: boolean): void {
+        if (this.element instanceof HTMLButtonElement || this.element instanceof HTMLInputElement) {
+            this.element.disabled = value;
+        } else {
+            console.error('Cannot set element disabled attribute: element is null.');
+        }
+    }
+
     public setElementId(id: string = ''): void {
         if (this.element && 'setAttribute' in this.element) {
             this.element.setAttribute('id', id);
@@ -122,6 +131,10 @@ export default class CreatorElement {
         } else if (!this.element) {
             console.error('Cannot set event listener: element is null.');
         }
+    }
+
+    static hasClasses(element: HTMLElement, classes: Array<CssClasses>): boolean {
+        return classes.every(cls => element.classList.contains(cls));
     }
 
     private setTextareaSize(parameters: ElementParameters): void {

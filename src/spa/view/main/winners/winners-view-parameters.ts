@@ -72,25 +72,48 @@ export const paginationWinControlsContainerParameters: ElementParameters = {
 
 export const prevButtonWinnersParameters: ButtonParameters = {
     tag: 'button',
+    id: 'prevBtn',
     classNames: [CssClasses.BUTTON, CssClasses.BUTTON_PREV],
     textContent: Description.PREV,
 };
 
 export const nextButtonWinnersParameters: ButtonParameters = {
     tag: 'button',
+    id: 'nextBtn',
     classNames: [CssClasses.BUTTON, CssClasses.BUTTON_NEXT],
     textContent: Description.NEXT,
 };
 
-export const ascButtonParameters: ButtonParameters = {
+export const theadButtonsContainer: ButtonParameters = {
+    tag: 'div',
+    classNames: [CssClasses.HEAD],
+};
+
+export const ascWinsButtonParameters: ButtonParameters = {
     tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_ASC],
+    id: 'ascWin',
+    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_ASC, CssClasses.BUTTON_WINS, CssClasses.INACTIVE],
     textContent: Description.ASC,
 };
 
-export const descButtonParameters: ButtonParameters = {
+export const descWinsButtonParameters: ButtonParameters = {
     tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_DESC],
+    id: 'descWin',
+    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_DESC, CssClasses.BUTTON_WINS, CssClasses.INACTIVE],
+    textContent: Description.DESC,
+};
+
+export const ascTimeButtonParameters: ButtonParameters = {
+    tag: 'button',
+    id: 'ascTime',
+    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_ASC, CssClasses.BUTTON_TIME, CssClasses.INACTIVE],
+    textContent: Description.ASC,
+};
+
+export const descTimeButtonParameters: ButtonParameters = {
+    tag: 'button',
+    id: 'descTime',
+    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_DESC, CssClasses.BUTTON_TIME, CssClasses.INACTIVE],
     textContent: Description.DESC,
 };
 

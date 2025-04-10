@@ -42,7 +42,7 @@ import {
     trackParameters,
     updateButtonParameters,
 } from './garage-view-parameters';
-import LocalStorageState from '../../../state/local-storage-state';
+import LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import LabelCreator from '../../../util/label/label-creator';
 import { getCallbackWithID } from '../../../util/assertion-functions/assertion-functions';
@@ -88,8 +88,8 @@ export default class GarageView extends View {
         //this.deleteAllItemsInContainer(this.raceBoard)
     }
 
-    private configureView(): void {
-        this.getCarsForCurrentPage();
+    private async configureView(): Promise<void> {
+        await this.getCarsForCurrentPage();
 
         //this.addGarageControls()
         this.addCarCreationControls();
@@ -283,6 +283,7 @@ export default class GarageView extends View {
     private async removeCar(id: number): Promise<void> {
         console.log('removeCar', id);
         await this.api.deleteCar(id);
+        await this.api.deleteWinner(id);
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
 
@@ -655,6 +656,7 @@ export default class GarageView extends View {
         this.carAnimation = this.animateCarRacing(carIcon, raceTime, trackDistance);
 
         const response = await this.api.driveCar(id);
+
         if (!response) return;
 
         const animationDistance = Math.round(this.carAnimation.distance);
@@ -670,7 +672,7 @@ export default class GarageView extends View {
         if (!response.success) {
             const currentAnimationID: number = this.carAnimation.animationID;
             if (currentAnimationID) {
-                changeSvgStrokeColor(String(id), COLORS.RED);
+                // changeSvgStrokeColor(String(id), COLORS.RED);
                 window.cancelAnimationFrame(currentAnimationID);
             }
         } else {
@@ -686,7 +688,7 @@ export default class GarageView extends View {
                         ...currentState,
                         winner: { ...currentState.winner, name: winnerCar.name, time: String(raceTime) },
                     };
-                    console.log(updatedState);
+
                     this.state.setState(updatedState);
                     // Add logic to open modal window here...
 

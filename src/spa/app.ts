@@ -4,7 +4,7 @@ import type { Route, ViewCommon } from '../types';
 import { AppInfo, AppStateKeys, Constants, Pages, Paths } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
-import LocalStorageState from './state/local-storage-state';
+import LocalStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import ApiController from './api/api-controller';
 import { CONSTANTS, PATHS } from './state/initial-state';
