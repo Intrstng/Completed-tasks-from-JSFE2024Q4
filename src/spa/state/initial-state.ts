@@ -99,6 +99,8 @@ export const CONSTANTS: Constants = {
     carsToGenerate: 100,
     brands: carBrands,
     models: carNames,
+    dialogDelay: 3000,
+    milliseconds: 1000,
 };
 
 export const mockData: Array<Car> = [

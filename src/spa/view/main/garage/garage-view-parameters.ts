@@ -3,6 +3,7 @@ import {
     ButtonsCollection,
     CssClasses,
     Description,
+    DialogParameters,
     ElementParameters,
     InputTypes,
 } from '../../../../types';
@@ -174,3 +175,34 @@ export const nextButtonGarageParameters: ButtonParameters = {
     classNames: [CssClasses.BUTTON, CssClasses.BUTTON_NEXT],
     textContent: Description.NEXT,
 };
+
+export const dialogParameters: DialogParameters = {
+    tag: 'dialog',
+    classNames: ['dialog', 'dialog-hidden'],
+    open: false,
+};
+
+export const dialogContentParameters: Array<ElementParameters> = [
+    {
+        tag: 'p',
+        classNames: ['dialog__name-title'],
+        textContent: Description.WINNER,
+    },
+    {
+        tag: 'p',
+        id: Description.DIALOG_NAME,
+        textContent: Description.WINNER_TIME,
+        classNames: ['dialog__name'],
+    },
+    {
+        tag: 'p',
+        classNames: ['dialog__time-title'],
+        textContent: Description.WINNER_TIME,
+    },
+    {
+        tag: 'p',
+        id: Description.DIALOG_TIME,
+        textContent: Description.WINNER_TIME,
+        classNames: ['dialog__time'],
+    },
+];

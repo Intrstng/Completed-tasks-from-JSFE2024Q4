@@ -8,8 +8,8 @@ import type {
     ElementParameters,
     EngineData,
     Operator,
-    RaceWinner,
     ResponseObject,
+    Winner,
 } from '../../../../types';
 import {
     AnimationFrame,
@@ -22,6 +22,7 @@ import {
     InputFieldsKeys,
     InputTypes,
     InputUse,
+    RaceWinnerMessage,
 } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
@@ -34,6 +35,8 @@ import {
     carRaceParameters,
     carUpdateBlockParameters,
     createButtonParameters,
+    dialogContentParameters,
+    dialogParameters,
     finishParameters,
     garageCurrentParameters,
     garagePageCurrentParameters,
@@ -59,6 +62,7 @@ import { svgElements } from '../../../util/createSvg/data';
 import ApiController from '../../../api/api-controller';
 import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
 import { CONSTANTS } from '../../../state/initial-state';
+import CreatorDialog from '../../../util/dialog/dialog-creator';
 
 export default class GarageView extends View {
     public router: Router;
@@ -75,8 +79,8 @@ export default class GarageView extends View {
     private carUpdateLogo: SVGElement | null;
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
+    private dialog: CreatorDialog | null;
     public api: ApiController;
-    private raceWinner: Array<RaceWinner>;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
         super(garageParameters);
@@ -92,10 +96,10 @@ export default class GarageView extends View {
         this.carUpdateLogo = null;
         this.prevButton = null;
         this.nextButton = null;
+        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
         this.router = router;
         this.state = state;
         this.api = api;
-        this.raceWinner = [];
         this.configureView();
         //this.deleteAllItemsInContainer(this.raceBoard)
     }
@@ -108,6 +112,7 @@ export default class GarageView extends View {
         this.createPageControls();
         this.addSummary();
         this.createRaceBoard(this.state.getState().cars, true);
+        this.addDialog();
     }
 
     private updateRaceBoardLayout(): void {
@@ -314,6 +319,7 @@ export default class GarageView extends View {
         );
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
+        this.toggleDisabledForPaginationButtons();
 
         this.updateRaceBoardLayout();
     }
@@ -453,23 +459,9 @@ export default class GarageView extends View {
         }
     }
 
-    private resetState(): void {
-        const emptyState: any = {
-            list: [],
-            lastId: 0,
-        };
-        // this.state.setState(emptyState);
+    private addDialog(): void {
+        this.viewElementCreator.addInnerElement(this.dialog.getElement());
     }
-
-    // private addDialog(
-    //     contentParameters: Array<DialogContentParameters>,
-    //     callback?: CallbackDialogSubmit
-    // ): CreatorDialog {
-    //   const dialog = new CreatorDialog(dialogParameters, contentParameters, this.state, callback);
-    //
-    //   this.viewElementCreator.addInnerElement(dialog);
-    //   return dialog;
-    // }
 
     private addCarBlockButton(container: CreatorElement, buttonParameters: ButtonParameters): void {
         const callback: Callback = this.createButtonCallback(buttonParameters);
@@ -637,18 +629,6 @@ export default class GarageView extends View {
         container.addInnerElement(carTrackCreator.getElement());
     }
 
-    private showDialog(type: any): void {
-        // let dialog: CreatorDialog | null = null;
-        // if (type === ButtonNames.PASTE) {
-        //   dialog = this.addDialog(dialogPasteListContentParameters, this.setValuesFromPasteList.bind(this));
-        // } else if (ButtonNames.START) {
-        //   dialog = this.addDialog(dialogStartContentParameters);
-        // }
-        // if (dialog) {
-        //   dialog.showDialog();
-        // }
-    }
-
     private getTrackDistance(car: HTMLElement): number {
         const carRect = car.getBoundingClientRect();
         const finishRect = this.finish.getElement().getBoundingClientRect();
@@ -727,8 +707,11 @@ export default class GarageView extends View {
                 } else {
                     console.warn('Response does not contain carID:', response);
                 }
-
-                console.log('This race is finished!');
+                const currentWinnerData: RaceWinnerMessage = {
+                    carID: response.carID,
+                    time: String(response.time / CONSTANTS.milliseconds),
+                };
+                this.showWinnersMessage(currentWinnerData);
             })
             .catch(error => {
                 if (error instanceof AggregateError) {
@@ -737,6 +720,16 @@ export default class GarageView extends View {
                     console.error('An unexpected error occurred:', error);
                 }
             });
+    }
+
+    private showWinnersMessage(data: RaceWinnerMessage): void {
+        const winnersCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === data.carID);
+        const winnersName = winnersCar.name || Description.WINNER;
+
+        this.dialog.setDialogNameField(winnersName);
+        this.dialog.setDialogTimeField(String(data.time));
+        this.dialog.showDialog();
+        this.dialog.closeDialogByTimeout(CONSTANTS.dialogDelay);
     }
 
     private resetDragRace(): void {
@@ -852,11 +845,5 @@ export default class GarageView extends View {
         } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.UPDATE) {
             this.updateCarColor(event, parameters.id);
         }
-
-        // if (event.target instanceof HTMLInputElement && id) {
-        //
-        //
-        //     //  this.state.setField(id, event.target.value, state, parameters);
-        // }
     }
 }

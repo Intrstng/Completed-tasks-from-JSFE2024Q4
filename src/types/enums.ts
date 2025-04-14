@@ -103,6 +103,8 @@ export enum Description {
     TO_WINNERS = 'To winners',
     GARAGE = 'garage',
     WINNERS = 'winners',
+    WINNER = 'winner',
+    WINNER_TIME = 'time:',
     CREATE = 'Create car',
     UPDATE = 'Update car',
     GENERATE = 'Generate cars',
@@ -132,6 +134,9 @@ export enum Description {
     DISABLED = 'disabled',
     ACTIVE = 'active',
     INACTIVE = 'inactive',
+    DIALOG_NAME = 'dialogName',
+    DIALOG_TIME = 'dialogTime',
+    OPEN = 'open',
 }
 
 export enum InputUse {
@@ -228,6 +233,8 @@ export enum CssClasses {
     HEAD = 'table__head-container',
     ACTIVE = 'active',
     INACTIVE = 'inactive',
+    DIALOG = 'dialog',
+    DIALOG_HIDDEN = 'dialog-hidden',
 }
 
 export enum AllSettledStatus {

@@ -42,6 +42,10 @@ export type ElementParameters = {
     cols?: string;
 };
 
+export type DialogParameters = ElementParameters & {
+    open: boolean;
+};
+
 export type ViewCommon = GarageView | WinnersView;
 
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
@@ -70,6 +74,8 @@ export type RaceWinner = {
     name: string;
     time: string;
 };
+
+export type RaceWinnerMessage = Omit<RaceWinner, 'name'>;
 
 export type Winner = {
     id: number;
@@ -147,6 +153,8 @@ export type Constants = {
     carsToGenerate: number;
     brands: Array<string>;
     models: Array<string>;
+    dialogDelay: number;
+    milliseconds: number;
 };
 
 export type QueryParameters = {

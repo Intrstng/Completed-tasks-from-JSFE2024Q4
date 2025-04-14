@@ -249,7 +249,7 @@ export default class WinnersView extends View {
             if (car) {
                 return {
                     wins: winner.wins,
-                    time: winner.time / 1000,
+                    time: winner.time / CONSTANTS.milliseconds,
                     name: car ? car.name : 'Unknown winners name',
                     color: car ? car.color : COLORS.BLACK,
                 };

@@ -3,86 +3,51 @@
     backdrop-filter: blur(0.25rem);
 }
 
-//body {
-//  overflow: hidden;
-//}
-
 body:has(dialog[open]) {
     overflow: hidden;
+    background-color: #4d55cc;
 }
 
-dialog {
-    padding: 0;
+.dialog {
+    padding: 30px 28px;
     border: none;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.8);
     box-shadow:
         rgba(0, 0, 0, 0.25) 0px 54px 55px,
         rgba(0, 0, 0, 0.12) 0px -12px 30px,
         rgba(0, 0, 0, 0.12) 0px 4px 6px,
         rgba(0, 0, 0, 0.17) 0px 12px 13px,
         rgba(0, 0, 0, 0.09) 0px -3px 5px;
-
-    .button,
-    .dialog-paste-text {
-        outline: none;
-    }
-
-    .dialog-container-paste,
-    .dialog-container-start {
-        text-align: center;
-        background-color: #fcedd8;
-        padding: 1.2rem 2rem 1rem;
-    }
-    .dialog-text-start {
-        padding: 0;
-        margin: 0 auto 1rem;
-        line-height: 1.5rem;
-        font-family: Niconne, cursive, sans-serif;
+    &__name-title,
+    &__time-title {
+        margin: 0 auto;
+        font-family: Corbel, sans-serif;
         letter-spacing: 1px;
+        font-weight: bold;
+        font-size: 24px;
+        text-transform: capitalize;
+        color: #316f7b;
     }
-    .dialog-container-paste {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        grid-template-columns: 1fr;
-        gap: 10px;
+    &__name,
+    &__time {
+        margin: 14px auto;
+        font-family: Corbel, sans-serif;
+        letter-spacing: 1px;
+        font-weight: bold;
+        font-size: 24px;
+        color: #f2613f;
     }
+    &__time {
+        margin-bottom: 0;
+    }
+}
 
-    .dialog-paste-text {
-        padding: 1rem;
-        border: none;
-        border-radius: 1rem;
-        width: 100%;
-        resize: none;
-        background-color: rgba(107, 107, 107, 0.6);
-        overflow: hidden;
-        outline: none;
-        text-align: left;
-        color: #fcedd8;
-        &::placeholder {
-            color: #fcedd8;
-        }
-    }
-    .button-dialog-close,
-    .button-dialog-confirm {
-        transition: 0.25s ease-in-out background-color;
-        width: 100%;
-    }
-
-    .button-dialog-close {
-        background-color: rgb(197 9 9 / 70%);
-        &:hover {
-            background-color: rgb(169 163 3 / 90%);
-        }
-    }
-
-    .button-dialog-close.button-dialog-close-start {
-        width: 10%;
-    }
-
-    .button-dialog-confirm {
-        background-color: rgb(11 169 3 / 80%);
-        &:hover {
-            background-color: #316f7b;
-        }
-    }
+.dialog-hidden {
+    display: none;
 }
