@@ -1,4 +1,5 @@
 import { ButtonParameters, CssClasses, Description, ElementParameters } from '../../../../types';
+import { CSS_BUTTON } from '../../../util/button/button-classes';
 
 export const winnersParameters: ElementParameters = {
     tag: 'section',
@@ -30,6 +31,11 @@ export const scoreTableContainerParameters: ElementParameters = {
 export const scoreTableParameters: ElementParameters = {
     tag: 'table',
     classNames: [CssClasses.WINNERS_TABLE, CssClasses.TABLE],
+};
+
+export const theadButtonsContainer: ButtonParameters = {
+    tag: 'div',
+    classNames: [CssClasses.HEAD],
 };
 
 export const tableHeadParameters: ElementParameters = {
@@ -68,53 +74,6 @@ export const tableHeadColumnsNames: Array<Description> = [
 export const paginationWinControlsContainerParameters: ElementParameters = {
     tag: 'div',
     classNames: [CssClasses.PAGINATION_WIN_CONTAINER],
-};
-
-export const prevButtonWinnersParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'prevBtn',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_PREV],
-    textContent: Description.PREV,
-};
-
-export const nextButtonWinnersParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'nextBtn',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_NEXT],
-    textContent: Description.NEXT,
-};
-
-export const theadButtonsContainer: ButtonParameters = {
-    tag: 'div',
-    classNames: [CssClasses.HEAD],
-};
-
-export const ascWinsButtonParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'ascWin',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_ASC, CssClasses.BUTTON_WINS, CssClasses.INACTIVE],
-    textContent: Description.ASC,
-};
-
-export const descWinsButtonParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'descWin',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_DESC, CssClasses.BUTTON_WINS, CssClasses.INACTIVE],
-    textContent: Description.DESC,
-};
-
-export const ascTimeButtonParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'ascTime',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_ASC, CssClasses.BUTTON_TIME, CssClasses.INACTIVE],
-    textContent: Description.ASC,
-};
-
-export const descTimeButtonParameters: ButtonParameters = {
-    tag: 'button',
-    id: 'descTime',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_DESC, CssClasses.BUTTON_TIME, CssClasses.INACTIVE],
-    textContent: Description.DESC,
 };
 
 export const spanParameters: ButtonParameters = {

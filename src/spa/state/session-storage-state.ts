@@ -24,27 +24,12 @@ export default class SessionStorageState {
         this.values = state;
     }
 
-    public setField(key: AppStateKeys, value: AppState[AppStateKeys]): void {
-        const currentState = this.values;
-        const newState = {
-            ...currentState,
-            key: value,
+    public updatePropertyInState(key: string, value: string | number | boolean): void {
+        const updatedState: AppState = {
+            ...this.values,
+            [key]: value,
         };
-
-        // if (parameters.placeholder === InputDescription.TITLE) {
-        //   newState = {
-        //     ...currentState,
-        //     list: currentState.list.map(item => (item.id === id ? { ...item, title: value } : item)),
-        //   };
-        // } else if (parameters.placeholder === InputDescription.WEIGHT) {
-        //   newState = {
-        //     ...currentState,
-        //     list: currentState.list.map(item => (item.id === id ? { ...item, weight: value } : item)),
-        //   };
-        // } else {
-        //newState = { ...currentState };
-        // }
-        this.setState(newState);
+        this.setState(updatedState);
     }
 
     private loadState(): AppState {

@@ -1,7 +1,7 @@
-import { AllSettledStatus, AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
+import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
 import GarageView from '../spa/view/main/garage/garage-view';
 import WinnersView from '../spa/view/main/winners/winners-view';
-import { stringifyLocal } from 'mini-css-extract-plugin/types/utils';
+import CreatorElement from '../spa/util/creator-element';
 
 export type Route = {
     path: string;
@@ -61,7 +61,13 @@ export type Callback = () => void;
 
 export type CallbackID = (id: number) => void;
 
-export type CreateButtonCB = Callback | CallbackID;
+export type ToggleActiveButtonCallback = (button: CreatorElement) => void;
+
+export type CreateTableRecordsCB = (cars: Array<Car>, winners: Array<Winner>) => Array<TableRecord>;
+
+export type AddOrderBtnCallbacksToParametersCB = (columnName: Description) => OrderButtonParametersWithCB;
+
+export type ToggleButtonActiveClassCB = (button: CreatorElement) => void;
 
 export type Car = {
     id: number;
@@ -177,3 +183,5 @@ export type ResponseObject = {
     carID: number;
     time: number;
 };
+
+export type Css_Classes = { [key: string]: string };

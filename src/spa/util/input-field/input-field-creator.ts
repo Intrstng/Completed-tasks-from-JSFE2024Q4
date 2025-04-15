@@ -1,7 +1,7 @@
 import './input-field.scss';
 
 import type { ElementParameters, EventCallback } from '../../../types';
-import { COLORS, InputTypes } from '../../../types';
+import { InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class InputFieldCreator extends CreatorElement {
@@ -66,7 +66,7 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    public setValue(value: string | COLORS | undefined): void {
+    public setValue(value: string | undefined): void {
         if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
             this.element.value = value;
         } else {

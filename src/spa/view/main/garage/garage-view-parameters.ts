@@ -7,27 +7,30 @@ import {
     ElementParameters,
     InputTypes,
 } from '../../../../types';
+import { CSS_GARAGE } from './garage-classes';
+import { CSS_DIALOG } from '../../../util/dialog/dialog-classes';
+import { CSS_BUTTON } from '../../../util/button/button-classes';
 
 export const garageParameters: ElementParameters = {
     tag: 'section',
-    classNames: [CssClasses.GARAGE, CssClasses.GARAGE_CONTAINER],
+    classNames: [CSS_GARAGE.GARAGE, CSS_GARAGE.GARAGE_CONTAINER],
 };
 
 export const garageSummaryParameters: ElementParameters = {
     tag: 'div',
-    classNames: [CssClasses.GARAGE_SUMMARY],
+    classNames: [CSS_GARAGE.GARAGE_SUMMARY],
 };
 
 export const garageCurrentParameters: ElementParameters = {
     tag: 'h2',
     textContent: Description.GARAGE,
-    classNames: [CssClasses.GARAGE_CURRENT],
+    classNames: [CSS_GARAGE.GARAGE_CURRENT],
 };
 
 export const garagePageCurrentParameters: ElementParameters = {
     tag: 'h2',
     textContent: Description.PAGE,
-    classNames: [CssClasses.PAGE_CURRENT],
+    classNames: [CSS_GARAGE.PAGE_CURRENT],
 };
 
 export const carCreationContainerParameters: ElementParameters = {
@@ -43,64 +46,6 @@ export const carCreationBlockParameters: ElementParameters = {
 export const carUpdateBlockParameters: ElementParameters = {
     tag: 'div',
     classNames: ['creation-car__update'],
-};
-
-export const mainButtonsContainerParameters: ElementParameters = {
-    tag: 'div',
-    classNames: ['controls-btn-container'],
-};
-
-export const mainControlsButtonsParameters: ButtonsCollection = [
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_RACE],
-        textContent: Description.RACE,
-    },
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_RESET],
-        textContent: Description.RESET,
-    },
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CONTROLS, CssClasses.BUTTON_GENERATE],
-        textContent: Description.GENERATE,
-    },
-];
-
-export const carControlsButtonsParameters: ButtonsCollection = [
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_START],
-        textContent: Description.START,
-    },
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_BACK],
-        textContent: Description.BACK,
-    },
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_SELECT],
-        textContent: Description.SELECT,
-    },
-    {
-        tag: 'button',
-        classNames: [CssClasses.BUTTON, CssClasses.BUTTON_REMOVE],
-        textContent: Description.REMOVE,
-    },
-];
-
-export const createButtonParameters: ButtonParameters = {
-    tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_CREATE],
-    textContent: Description.CREATE,
-};
-
-export const updateButtonParameters: ButtonParameters = {
-    tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_UPDATE],
-    textContent: Description.UPDATE,
 };
 
 export const inputsParameters: Array<ElementParameters> = [
@@ -163,44 +108,3 @@ export const paginationGarageControlsContainerParameters: ElementParameters = {
     tag: 'div',
     classNames: [CssClasses.PAGINATION_GARAGE_CONTAINER],
 };
-
-export const prevButtonGarageParameters: ButtonParameters = {
-    tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_PREV],
-    textContent: Description.PREV,
-};
-
-export const nextButtonGarageParameters: ButtonParameters = {
-    tag: 'button',
-    classNames: [CssClasses.BUTTON, CssClasses.BUTTON_NEXT],
-    textContent: Description.NEXT,
-};
-
-export const dialogParameters: DialogParameters = {
-    tag: 'dialog',
-    classNames: ['dialog', 'dialog-hidden'],
-    open: false,
-};
-
-export const dialogContentParameters: Array<ElementParameters> = [
-    {
-        tag: 'p',
-        classNames: ['dialog__name-title'],
-        textContent: Description.FINISHED,
-    },
-    {
-        tag: 'p',
-        id: Description.DIALOG_NAME,
-        classNames: ['dialog__name'],
-    },
-    {
-        tag: 'p',
-        classNames: ['dialog__time-title'],
-        textContent: Description.WINNER_TIME,
-    },
-    {
-        tag: 'p',
-        id: Description.DIALOG_TIME,
-        classNames: ['dialog__time'],
-    },
-];

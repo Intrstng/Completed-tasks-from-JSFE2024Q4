@@ -9,14 +9,12 @@ import type {
     EngineData,
     Operator,
     ResponseObject,
-    Winner,
 } from '../../../../types';
 import {
     AnimationFrame,
     AppStateKeys,
     ButtonParameters,
     Car,
-    COLORS,
     CssClasses,
     Description,
     InputFieldsKeys,
@@ -27,16 +25,12 @@ import {
 import CreatorElement from '../../../util/creator-element';
 import {
     carBlockParameters,
-    carControlsButtonsParameters,
     carCreationBlockParameters,
     carCreationContainerParameters,
     carNameParameters,
     carRaceControlsParameters,
     carRaceParameters,
     carUpdateBlockParameters,
-    createButtonParameters,
-    dialogContentParameters,
-    dialogParameters,
     finishParameters,
     garageCurrentParameters,
     garagePageCurrentParameters,
@@ -44,14 +38,9 @@ import {
     garageSummaryParameters,
     inputsParameters,
     labelParameters,
-    mainButtonsContainerParameters,
-    mainControlsButtonsParameters,
-    nextButtonGarageParameters,
     paginationGarageControlsContainerParameters,
-    prevButtonGarageParameters,
     raceBoardParameters,
     trackParameters,
-    updateButtonParameters,
 } from './garage-view-parameters';
 import LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
@@ -72,6 +61,18 @@ import {
     toggleDisabledManageCarButtons,
     togglePaginationButtons,
 } from '../../../util/button/button-disable-toggle';
+import { COLORS } from '../../../../constants/constants';
+import { CSS_BUTTON } from '../../../util/button/button-classes';
+import {
+    carControlsButtonsParameters,
+    createButtonParameters,
+    mainButtonsContainerParameters,
+    mainControlsButtonsParameters,
+    nextButtonGarageParameters,
+    prevButtonGarageParameters,
+    updateButtonParameters,
+} from '../../../util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
+import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
 
 export default class GarageView extends View {
     public router: Router;
@@ -110,13 +111,10 @@ export default class GarageView extends View {
         this.state = state;
         this.api = api;
         this.configureView();
-        //this.deleteAllItemsInContainer(this.raceBoard)
     }
 
     private async configureView(): Promise<void> {
         await this.getCarsForCurrentPage();
-
-        //this.addGarageControls()
         this.addCarCreationControls();
         this.createPageControls();
         this.addSummary();
@@ -290,18 +288,14 @@ export default class GarageView extends View {
             this.inputUpdateNameField.setValue(selectedCar.name);
             this.inputUpdateColorField.setValue(selectedCar.color);
             changeSvgStrokeColor(InputUse.UPDATE, selectedCar.color);
-            console.log(this.state.getState());
             this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_NAME, selectedCar.name);
             this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, selectedCar.color);
-
-            console.log(this.state.getState());
         } else {
             console.log(`Car with id: ${id} not found`);
         }
     }
 
     private async removeCar(id: number): Promise<void> {
-        console.log('removeCar', id);
         await this.api.deleteCar(id);
         await this.api.deleteWinner(id);
         await this.getCarsForCurrentPage();
@@ -331,14 +325,14 @@ export default class GarageView extends View {
 
         const carPayload = {
             name,
-            color: color || COLORS.BLACK,
+            color: color || COLORS.black,
         };
 
         await this.api.createCar(carPayload);
 
         this.clearValuesInInputFields(InputUse.CREATE);
         this.clearInputFieldsValuesInState(InputUse.CREATE);
-        changeSvgStrokeColor(InputUse.CREATE, COLORS.BLACK);
+        changeSvgStrokeColor(InputUse.CREATE, COLORS.black);
 
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
@@ -355,14 +349,14 @@ export default class GarageView extends View {
 
         const carPayload = {
             name,
-            color: color || COLORS.BLACK,
+            color: color || COLORS.black,
         };
 
         await this.api.updateCar(carPayload, selectedCarID);
         this.clearValuesInInputFields(InputUse.UPDATE);
         this.clearInputFieldsValuesInState(InputUse.UPDATE);
         this.clearSelectedCarStateProperty();
-        changeSvgStrokeColor(InputUse.UPDATE, COLORS.BLACK);
+        changeSvgStrokeColor(InputUse.UPDATE, COLORS.black);
 
         this.updateRaceBoardLayout();
     }
@@ -380,10 +374,10 @@ export default class GarageView extends View {
     private clearValuesInInputFields(inputsUse: InputUse): void {
         if (inputsUse === InputUse.CREATE) {
             this.inputCreateNameField.setValue('');
-            this.inputCreateColorField.setValue(COLORS.BLACK);
+            this.inputCreateColorField.setValue(COLORS.black);
         } else if (inputsUse === InputUse.UPDATE) {
             this.inputUpdateNameField.setValue('');
-            this.inputUpdateColorField.setValue(COLORS.BLACK);
+            this.inputUpdateColorField.setValue(COLORS.black);
         }
     }
 
@@ -443,7 +437,6 @@ export default class GarageView extends View {
         const target = event.target;
 
         if (target && target instanceof HTMLInputElement) {
-            console.log(idName, target.value);
             changeSvgStrokeColor(idName, target.value);
             this.updateInputFieldStateProperty(InputFieldsKeys.CREATE_COLOR, target.value);
         }
@@ -531,13 +524,13 @@ export default class GarageView extends View {
 
         const carCreationBlockCreator = new CreatorElement(carCreationBlockParameters);
         this.addInputsCarBlock(carCreationBlockCreator, InputUse.CREATE);
-        this.carCreateLogo = createSVG(svgElements, COLORS.BLACK, InputUse.CREATE);
+        this.carCreateLogo = createSVG(svgElements, COLORS.black, InputUse.CREATE);
         carCreationBlockCreator.addInnerElement(this.carCreateLogo);
         this.addCarBlockButton(carCreationBlockCreator, createButtonParameters);
 
         const carUpdateBlockCreator = new CreatorElement(carUpdateBlockParameters);
         this.addInputsCarBlock(carUpdateBlockCreator, InputUse.UPDATE);
-        this.carUpdateLogo = createSVG(svgElements, COLORS.BLACK, InputUse.UPDATE);
+        this.carUpdateLogo = createSVG(svgElements, COLORS.black, InputUse.UPDATE);
         carUpdateBlockCreator.addInnerElement(this.carUpdateLogo);
         this.addCarBlockButton(carUpdateBlockCreator, updateButtonParameters);
 
@@ -641,7 +634,6 @@ export default class GarageView extends View {
     }
 
     private async startRaceCar(id: number, isDragRace?: boolean): Promise<ResponseObject | undefined> {
-        console.log('startRaceCar', id);
         toggleDisabledAllCarButtons(id, true);
         toggleDisabledDragRaceControlButtons(true);
         raceButtonToggleDisable(true);
@@ -670,15 +662,14 @@ export default class GarageView extends View {
         if (!response.success) {
             const currentAnimationID: number = currentAnimation.animationID;
             if (currentAnimationID) {
-                changeSvgStrokeColor(String(id), COLORS.RED);
+                changeSvgStrokeColor(String(id), COLORS.red);
                 window.cancelAnimationFrame(currentAnimationID);
                 if (isDragRace) {
                     throw new Error('Car`s engine is broken...');
                 }
             }
         }
-        console.log('Car finished!');
-        const carBackButtonID: string = `${CssClasses.BUTTON_BACK}-${id}`;
+        const carBackButtonID: string = `${CSS_BUTTON.BUTTON_BACK}-${id}`;
         carButtonToggleDisable(carBackButtonID, false);
         toggleDisabledDragRaceControlButtons(false);
         return {
@@ -689,8 +680,6 @@ export default class GarageView extends View {
     }
 
     private async startDragRace(): Promise<void> {
-        console.log('start');
-        // allGarageButtonsToggleDisable(true);
         toggleDisabledManageCarButtons(true);
         raceButtonToggleDisable(true);
         togglePaginationButtons(true);
@@ -711,12 +700,9 @@ export default class GarageView extends View {
                     } else if (winnerResponse !== true) {
                         if (typeof winnerResponse !== 'boolean') {
                             const bestTime = time < winnerResponse.time ? time : winnerResponse.time;
-                            console.log('bestTime', bestTime);
                             await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
                         }
                     }
-
-                    console.log('Car ID:', carID);
                 } else {
                     console.warn('Response does not contain carID:', response);
                 }
@@ -749,7 +735,6 @@ export default class GarageView extends View {
     }
 
     private resetDragRace(): void {
-        console.log('Reset drag race will be implemented soon...');
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
         allCars.forEach(car => this.backFromRaceForCar(car.id));
     }
@@ -773,32 +758,34 @@ export default class GarageView extends View {
     }
 
     private async backFromRaceForCar(id: number): Promise<void> {
-        console.log('backFromRace', id);
-        toggleDisabledAllCarButtons(id, false);
-        toggleDisabledDragRaceControlButtons(false);
-        raceButtonToggleDisable(false);
-        const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
-        const currentState: AppState = this.state.getState();
-        let carAnimationCollection: Array<AnimationFrame> = currentState[AppStateKeys.ANIMATION];
-        const currentAnimationID = carAnimationCollection.find(animation => animation.carID === id);
+        try {
+            toggleDisabledAllCarButtons(id, false);
+            toggleDisabledDragRaceControlButtons(false);
+            raceButtonToggleDisable(false);
+            const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
+            const currentState: AppState = this.state.getState();
+            let carAnimationCollection: Array<AnimationFrame> = currentState[AppStateKeys.ANIMATION];
+            const currentAnimationID = carAnimationCollection.find(animation => animation.carID === id);
 
-        if (currentAnimationID) {
-            window.cancelAnimationFrame(currentAnimationID.animationID);
-            carAnimationCollection = carAnimationCollection.filter(animation => animation.carID !== id);
-            const updatedState: AppState = {
-                ...currentState,
-                animation: carAnimationCollection,
-            };
-            this.state.setState(updatedState);
-            console.log(this.state.getState());
+            if (currentAnimationID) {
+                window.cancelAnimationFrame(currentAnimationID.animationID);
+                carAnimationCollection = carAnimationCollection.filter(animation => animation.carID !== id);
+                const updatedState: AppState = {
+                    ...currentState,
+                    animation: carAnimationCollection,
+                };
+                this.state.setState(updatedState);
+            }
+            await this.api.stopEngine(id);
+            if (currentCar) {
+                const currentCarColor = currentCar.color;
+                changeSvgStrokeColor(String(id), currentCarColor);
+            }
+            const car = this.getCarIconFromLayout(id);
+            car.style.transform = `translateX(0px)`;
+        } catch (error: unknown) {
+            console.error('Error occurred:', error instanceof Error ? error.message : String(error));
         }
-        await this.api.stopEngine(id);
-        if (currentCar) {
-            const currentCarColor = currentCar.color;
-            changeSvgStrokeColor(String(id), currentCarColor);
-        }
-        const car = this.getCarIconFromLayout(id);
-        car.style.transform = `translateX(0px)`;
     }
 
     private getCarIconFromLayout(id: number): HTMLElement {

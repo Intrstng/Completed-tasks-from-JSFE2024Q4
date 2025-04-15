@@ -1,4 +1,5 @@
 @use './spa/view/main/garage/garage.scss';
+@use './spa/util/button/button.scss';
 
 * {
     box-sizing: border-box;
@@ -34,102 +35,6 @@ body {
     width: 100%;
     flex-grow: 1;
     margin-top: 30px;
-}
-
-.garage-container {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.button {
-    cursor: pointer;
-
-    padding: 0.4rem 0.6rem;
-    border: none;
-    border-radius: 0.25rem;
-
-    font-family: Corbel, sans-serif;
-    font-weight: bold;
-    color: rgb(255 255 255 / 90%);
-    letter-spacing: 1px;
-
-    background-color: rgb(169 163 3 / 90%);
-    box-shadow:
-        rgb(50 50 93 / 25%) 0 13px 27px -5px,
-        rgb(0 0 0 / 30%) 0 8px 16px -8px;
-
-    transition: 0.25s ease-in-out all;
-
-    &:hover {
-        background-color: rgba(15, 217, 5, 0.8);
-    }
-
-    &:active {
-        background-color: rgb(8 117 2 / 80%);
-    }
-
-    &:disabled {
-        opacity: 0.6;
-    }
-}
-
-.asc-btn,
-.desc-btn {
-    background-color: rgb(49, 111, 123);
-    border: 1px rgba(201, 201, 201, 0.5) solid;
-    &:hover {
-        background-color: rgba(49, 111, 123, 0.8);
-        border: 1px #f6f8d5 solid;
-    }
-
-    &:active {
-        background-color: rgb(8 117 2 / 80%);
-    }
-
-    &:disabled {
-        background-color: rgb(164, 185, 125);
-    }
-}
-
-.create-btn {
-    width: 100px;
-    background-color: #205781;
-}
-
-.update-btn {
-    width: 100px;
-    color: #333333;
-    background-color: #f6f8d5;
-}
-
-.generate-btn {
-    background-color: #dda853;
-}
-
-.start-btn {
-    background-color: #4d55cc;
-}
-
-.race-btn {
-    background-color: #640d5f;
-}
-
-.select-btn {
-    background-color: #4f959d;
-}
-
-.remove-btn {
-    background-color: #f2613f;
-}
-
-.back-btn {
-    background-color: #fc7f7f;
-}
-
-.reset-btn {
-    background-color: #d84b6f;
 }
 
 .active {

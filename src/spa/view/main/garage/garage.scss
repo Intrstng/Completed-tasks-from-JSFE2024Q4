@@ -1,3 +1,10 @@
+.garage-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
 .garage {
     &__pagination {
         width: 12.5%;

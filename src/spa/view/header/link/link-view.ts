@@ -2,7 +2,7 @@ import './link.scss';
 import View from '../../view';
 import { LinkElements, PageParameters } from '../types';
 import { linkParameters } from '../headers-view-parameters';
-import { CssClasses } from '../../../../types';
+import { CSS_HEADER } from '../header-classes';
 
 export default class LinkView extends View {
     private readonly linkElements: LinkElements;
@@ -15,14 +15,14 @@ export default class LinkView extends View {
 
     public setNotSelectedStatus(): void {
         const element = this.viewElementCreator.getElement();
-        element.classList.remove(CssClasses.ITEM_SELECTED);
+        element.classList.remove(CSS_HEADER.ITEM_SELECTED);
     }
 
     public setSelectedStatus(): void {
         this.linkElements.forEach(linkElement => linkElement.setNotSelectedStatus());
 
         const element = this.viewElementCreator.getElement();
-        element.classList.add(CssClasses.ITEM_SELECTED);
+        element.classList.add(CSS_HEADER.ITEM_SELECTED);
     }
 
     private configureView(pageParam: PageParameters): void {

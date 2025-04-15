@@ -96,14 +96,6 @@ export default class ApiController {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
-
-            // const newCar = await response.json();
-            // const currentState: AppState = this.state.getState();
-            // const newState: AppState = {
-            //     ...currentState,
-            //     cars: [...currentState.cars, newCar],
-            // };
-            // this.state.setState(newState);
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
@@ -132,7 +124,6 @@ export default class ApiController {
             const currentPage: AppState[AppStateKeys] = this.state.getState()[AppStateKeys.GARAGE_PAGE];
 
             if (typeof currentPage === 'number' && isFinite(currentPage)) {
-                console.log('Inside update api call');
                 await this.getCars(currentPage);
             }
         } catch (error: unknown) {

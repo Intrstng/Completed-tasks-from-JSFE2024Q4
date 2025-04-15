@@ -1,20 +1,22 @@
-import { CssClasses } from '../../../types';
+import { AppStateKeys, CssClasses, Description } from '../../../types';
+import { CSS_BUTTON } from './button-classes';
+import CreatorElement from '../creator-element';
 
 export function toggleDisabledAllCarButtons(id: number, isDisabled: boolean): void {
-    const carStartButtonID = `${CssClasses.BUTTON_START}-${id}`;
-    const carSelectButtonID = `${CssClasses.BUTTON_SELECT}-${id}`;
-    const carRemoveButtonID = `${CssClasses.BUTTON_REMOVE}-${id}`;
-    const carBackButtonID = `${CssClasses.BUTTON_BACK}-${id}`;
+    const carStartButtonID = `${CSS_BUTTON.BUTTON_START}-${id}`;
+    const carSelectButtonID = `${CSS_BUTTON.BUTTON_SELECT}-${id}`;
+    const carRemoveButtonID = `${CSS_BUTTON.BUTTON_REMOVE}-${id}`;
+    const carBackButtonID = `${CSS_BUTTON.BUTTON_BACK}-${id}`;
     [carStartButtonID, carSelectButtonID, carRemoveButtonID, carBackButtonID].forEach(buttonID => {
         carButtonToggleDisable(buttonID, isDisabled);
     });
 }
 
 export function toggleDisabledDragRaceControlButtons(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CssClasses.BUTTON_CONTROLS);
+    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON_CONTROLS);
     if (buttons.length > 0) {
         Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement && !button.classList.contains(CssClasses.BUTTON_RACE)) {
+            if (button instanceof HTMLButtonElement && !button.classList.contains(CSS_BUTTON.BUTTON_RACE)) {
                 button.disabled = isDisabled;
             }
         });
@@ -22,8 +24,8 @@ export function toggleDisabledDragRaceControlButtons(isDisabled: boolean): void 
 }
 
 export function toggleDisabledManageCarButtons(isDisabled: boolean): void {
-    const createCarButton: Element = document.getElementsByClassName(CssClasses.BUTTON_CREATE)[0];
-    const updateCarButton: Element = document.getElementsByClassName(CssClasses.BUTTON_UPDATE)[0];
+    const createCarButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_CREATE)[0];
+    const updateCarButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_UPDATE)[0];
     let buttons: HTMLButtonElement[] = [];
     if (createCarButton instanceof HTMLButtonElement && updateCarButton instanceof HTMLButtonElement) {
         buttons = [createCarButton, updateCarButton];
@@ -38,7 +40,7 @@ export function toggleDisabledManageCarButtons(isDisabled: boolean): void {
 }
 
 export function raceButtonToggleDisable(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CssClasses.BUTTON_RACE);
+    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON_RACE);
     if (buttons.length > 0) {
         Array.from(buttons).forEach(button => {
             console.log(button);
@@ -50,8 +52,8 @@ export function raceButtonToggleDisable(isDisabled: boolean): void {
 }
 
 export function togglePaginationButtons(isDisabled: boolean): void {
-    const prevPageButton: Element = document.getElementsByClassName(CssClasses.BUTTON_PREV)[0];
-    const nextPageButton: Element = document.getElementsByClassName(CssClasses.BUTTON_NEXT)[0];
+    const prevPageButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_PREV)[0];
+    const nextPageButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_NEXT)[0];
     let buttons: HTMLButtonElement[] = [];
     if (prevPageButton instanceof HTMLButtonElement && nextPageButton instanceof HTMLButtonElement) {
         buttons = [prevPageButton, nextPageButton];
@@ -73,12 +75,24 @@ export function carButtonToggleDisable(buttonID: string, isDisabled: boolean): v
 }
 
 export function allGarageButtonsToggleDisable(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CssClasses.BUTTON);
+    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON);
     if (buttons.length > 0) {
         Array.from(buttons).forEach(button => {
             if (button instanceof HTMLButtonElement) {
                 button.disabled = isDisabled;
             }
         });
+    }
+}
+
+export function toggleButtonActiveClass(button: CreatorElement): void {
+    const buttonElement: HTMLElement = button.getElement();
+    const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CssClasses.ACTIVE]);
+    if (isActive) {
+        buttonElement.classList.remove(CssClasses.ACTIVE);
+        buttonElement.classList.add(CssClasses.INACTIVE);
+    } else {
+        buttonElement.classList.add(CssClasses.ACTIVE);
+        buttonElement.classList.remove(CssClasses.INACTIVE);
     }
 }

@@ -1,4 +1,5 @@
 import { CssClasses, Description, ElementParameters } from '../../../types';
+import { CSS_HEADER } from './header-classes';
 
 export const titleParameters: ElementParameters = {
     tag: 'h1',
@@ -9,19 +10,19 @@ export const titleParameters: ElementParameters = {
 
 export const headerParameters: ElementParameters = {
     tag: 'header',
-    classNames: [CssClasses.HEADER, CssClasses.CONTAINER],
+    classNames: [CSS_HEADER.HEADER, CSS_HEADER.CONTAINER],
 };
 
 export const navigationParameters: ElementParameters = {
     tag: 'nav',
-    classNames: [CssClasses.NAV],
+    classNames: [CSS_HEADER.NAV],
     textContent: '',
     callback: null,
 };
 
 export const linkParameters: ElementParameters = {
     tag: 'a',
-    classNames: [CssClasses.ITEM],
+    classNames: [CSS_HEADER.ITEM],
 };
 
 export const LinkNames = {

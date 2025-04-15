@@ -2,6 +2,7 @@ import './dialog.scss';
 
 import { CssClasses, Description, DialogParameters, ElementParameters } from '../../../types';
 import CreatorElement from '../creator-element';
+import { CSS_DIALOG } from './dialog-classes';
 
 export default class CreatorDialog {
     public dialog: HTMLDialogElement | null;
@@ -102,7 +103,7 @@ export default class CreatorDialog {
     public showDialog(): void {
         if (this.dialog instanceof HTMLDialogElement) {
             this.dialog.showModal();
-            this.dialog.classList.remove(CssClasses.DIALOG_HIDDEN);
+            this.dialog.classList.remove(CSS_DIALOG.HIDDEN);
         } else {
             console.error('Cannot call showModal: element is not a dialog');
         }
@@ -117,7 +118,7 @@ export default class CreatorDialog {
         setTimeout(() => {
             if (this.dialog instanceof HTMLDialogElement) {
                 this.dialog.close();
-                this.dialog.classList.add(CssClasses.DIALOG_HIDDEN);
+                this.dialog.classList.add(CSS_DIALOG.HIDDEN);
                 this.resetDialogFieldsValues();
             }
         }, delay);

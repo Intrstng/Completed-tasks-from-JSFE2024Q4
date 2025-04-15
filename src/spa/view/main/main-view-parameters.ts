@@ -1,6 +1,6 @@
-import { CssClasses } from '../../../types';
+import { CSS_MAIN } from './main-classes';
 
 export const mainParameters = {
     tag: 'main',
-    classNames: [CssClasses.MAIN, CssClasses.CONTAINER],
+    classNames: [CSS_MAIN.MAIN, CSS_MAIN.CONTAINER],
 };

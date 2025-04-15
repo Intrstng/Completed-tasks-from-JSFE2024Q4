@@ -89,15 +89,6 @@ export enum CarStatus {
     DRIVE = 'status=drive',
 }
 
-export enum COLORS {
-    BLACK = '#000000',
-    WHITE = '#FFFFFF',
-    GREEN = '#00FF00',
-    RED = '#FF0000',
-    BLUE = '#0000FF',
-    YELLOW = '#FFD700',
-}
-
 export enum Description {
     TO_GARAGE = 'To garage',
     TO_WINNERS = 'To winners',
@@ -175,21 +166,11 @@ export enum AppStateKeys {
 }
 
 export enum CssClasses {
-    HEADER = 'header',
-    TITLE = 'title',
-    NAV = 'nav',
-    ITEM = 'nav-item',
-    ITEM_SELECTED = 'nav-item__selected',
-    MAIN = 'main',
-    CONTAINER = 'container',
-    GARAGE = 'garage',
-    GARAGE_CONTAINER = 'garage-container',
-    GARAGE_SUMMARY = 'garage__summary',
-    GARAGE_CURRENT = 'garage__current-total-cars',
-    PAGE_CURRENT = 'garage__current-page',
     WINNERS = 'winners',
     WINNERS_SUMMARY = 'winners__summary',
     WINNERS_CURRENT = 'winners__current',
+    PAGINATION_WIN_CONTAINER = 'winners__pagination',
+
     TABLE_CONTAINER = 'winners__container',
     WINNERS_TABLE = 'winners__table',
     TABLE = 'table',
@@ -200,25 +181,10 @@ export enum CssClasses {
     TABLE_ROW_NAME = 'table__row-name',
     TABLE_HEAD_CELL = 'table__head-cell',
     TABLE_ROW_CELL = 'table__row-cell',
+    HEAD = 'table__head-container',
+
     PAGINATION_GARAGE_CONTAINER = 'garage__pagination',
-    PAGINATION_WIN_CONTAINER = 'winners__pagination',
-    BUTTON = 'button',
-    BUTTON_PREV = 'prev-btn',
-    BUTTON_NEXT = 'next-btn',
-    BUTTON_ASC = 'asc-btn',
-    BUTTON_DESC = 'desc-btn',
-    BUTTON_WINS = 'win',
-    BUTTON_TIME = 'time',
-    BUTTON_CONTROLS = 'controls-btn',
-    BUTTON_CREATE = 'create-btn',
-    BUTTON_UPDATE = 'update-btn',
-    BUTTON_RACE = 'race-btn',
-    BUTTON_RESET = 'reset-btn',
-    BUTTON_GENERATE = 'generate-btn',
-    BUTTON_START = 'start-btn',
-    BUTTON_BACK = 'back-btn',
-    BUTTON_SELECT = 'select-btn',
-    BUTTON_REMOVE = 'remove-btn',
+
     INPUT = 'input-class',
     BRAND = 'input-brand',
     COLOR = 'input-color',
@@ -231,14 +197,7 @@ export enum CssClasses {
     ICON = 'car-block__icon',
     FINISH = 'car-block__finish',
     SVG_ICON = 'svg-icon',
-    HEAD = 'table__head-container',
+
     ACTIVE = 'active',
     INACTIVE = 'inactive',
-    DIALOG = 'dialog',
-    DIALOG_HIDDEN = 'dialog-hidden',
-}
-
-export enum AllSettledStatus {
-    FULLFILED = 'fulfilled',
-    REJECTED = 'rejected',
 }
