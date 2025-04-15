@@ -3,7 +3,7 @@ import { CssClasses } from '../../types';
 //import CreatorDialog from './dialog/dialog-creator';
 
 export default class CreatorElement {
-    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | null;
+    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
     constructor(parameters: ElementParameters) {
         this.element = null;
         this.createElement(parameters);

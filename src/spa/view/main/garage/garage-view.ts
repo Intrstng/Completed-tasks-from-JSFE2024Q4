@@ -63,6 +63,15 @@ import ApiController from '../../../api/api-controller';
 import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
 import { CONSTANTS } from '../../../state/initial-state';
 import CreatorDialog from '../../../util/dialog/dialog-creator';
+import {
+    allGarageButtonsToggleDisable,
+    carButtonToggleDisable,
+    raceButtonToggleDisable,
+    toggleDisabledAllCarButtons,
+    toggleDisabledDragRaceControlButtons,
+    toggleDisabledManageCarButtons,
+    togglePaginationButtons,
+} from '../../../util/button/button-disable-toggle';
 
 export default class GarageView extends View {
     public router: Router;
@@ -187,14 +196,6 @@ export default class GarageView extends View {
         }
     }
 
-    // private async getCarsForCurrentPage(): Promise<void> {
-    //     const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-    //
-    //     if (typeof currentGaragePage === 'number' && isFinite(currentGaragePage)) {
-    //         await this.api.getCars(currentGaragePage);
-    //     }
-    // }
-
     private createPageControls(): void {
         const paginationControlsContainerCreator = new CreatorElement(paginationGarageControlsContainerParameters);
 
@@ -234,7 +235,6 @@ export default class GarageView extends View {
             mainButtonsContainerCreator.addInnerElement(buttonCreator.getElement());
         });
         return mainButtonsContainerCreator;
-        //this.viewElementCreator.addInnerElement(mainButtonsContainerCreator);
     }
 
     private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
@@ -286,7 +286,7 @@ export default class GarageView extends View {
                 },
             };
             this.state.setState(newState);
-            // fill input fields
+
             this.inputUpdateNameField.setValue(selectedCar.name);
             this.inputUpdateColorField.setValue(selectedCar.color);
             changeSvgStrokeColor(InputUse.UPDATE, selectedCar.color);
@@ -363,7 +363,6 @@ export default class GarageView extends View {
         this.clearInputFieldsValuesInState(InputUse.UPDATE);
         this.clearSelectedCarStateProperty();
         changeSvgStrokeColor(InputUse.UPDATE, COLORS.BLACK);
-        // await this.getCarsForCurrentPage()
 
         this.updateRaceBoardLayout();
     }
@@ -609,8 +608,10 @@ export default class GarageView extends View {
 
             const buttonParametersWithCB = {
                 ...buttonParameters,
+                id: `${buttonParameters.classNames[1]}-${carData.id}`,
                 callback,
             };
+
             const buttonCreator = new CreatorElement(buttonParametersWithCB);
             carControls.addInnerElement(buttonCreator.getElement());
         });
@@ -641,6 +642,9 @@ export default class GarageView extends View {
 
     private async startRaceCar(id: number, isDragRace?: boolean): Promise<ResponseObject | undefined> {
         console.log('startRaceCar', id);
+        toggleDisabledAllCarButtons(id, true);
+        toggleDisabledDragRaceControlButtons(true);
+        raceButtonToggleDisable(true);
         let carIcon: HTMLElement = this.getCarIconFromLayout(id);
         const trackDistance: number = this.getTrackDistance(carIcon);
 
@@ -673,6 +677,10 @@ export default class GarageView extends View {
                 }
             }
         }
+        console.log('Car finished!');
+        const carBackButtonID: string = `${CssClasses.BUTTON_BACK}-${id}`;
+        carButtonToggleDisable(carBackButtonID, false);
+        toggleDisabledDragRaceControlButtons(false);
         return {
             ...response,
             carID: id,
@@ -682,6 +690,11 @@ export default class GarageView extends View {
 
     private async startDragRace(): Promise<void> {
         console.log('start');
+        // allGarageButtonsToggleDisable(true);
+        toggleDisabledManageCarButtons(true);
+        raceButtonToggleDisable(true);
+        togglePaginationButtons(true);
+
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
         const promises: Promise<ResponseObject>[] = allCars.map(car => this.startRaceCar(car.id, true));
 
@@ -712,6 +725,9 @@ export default class GarageView extends View {
                     time: String(response.time / CONSTANTS.milliseconds),
                 };
                 this.showWinnersMessage(currentWinnerData);
+                allGarageButtonsToggleDisable(false);
+                this.toggleDisabledForPaginationButtons();
+                raceButtonToggleDisable(true);
             })
             .catch(error => {
                 if (error instanceof AggregateError) {
@@ -758,6 +774,9 @@ export default class GarageView extends View {
 
     private async backFromRaceForCar(id: number): Promise<void> {
         console.log('backFromRace', id);
+        toggleDisabledAllCarButtons(id, false);
+        toggleDisabledDragRaceControlButtons(false);
+        raceButtonToggleDisable(false);
         const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
         const currentState: AppState = this.state.getState();
         let carAnimationCollection: Array<AnimationFrame> = currentState[AppStateKeys.ANIMATION];
@@ -781,23 +800,6 @@ export default class GarageView extends View {
         const car = this.getCarIconFromLayout(id);
         car.style.transform = `translateX(0px)`;
     }
-
-    // private async backFromRaceForCar(id: number): Promise<void> {
-    //     console.log('backFromRace', id);
-    //     const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id); // Move to the top
-    //
-    //    // const currentAnimationID = this.carAnimation.animationID;
-    //    //  if (currentAnimationID) {
-    //    //      window.cancelAnimationFrame(currentAnimationID);
-    //    //  }
-    //     await this.api.stopEngine(id);
-    //     if (currentCar) {
-    //         const currentCarColor = currentCar.color;
-    //         changeSvgStrokeColor(String(id), currentCarColor);
-    //     }
-    //     const car = this.getCarIconFromLayout(id);
-    //     car.style.transform = `translateX(0px)`;
-    // }
 
     private getCarIconFromLayout(id: number): HTMLElement {
         const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(

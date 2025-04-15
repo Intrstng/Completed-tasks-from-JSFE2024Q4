@@ -137,6 +137,7 @@ export enum Description {
     DIALOG_NAME = 'dialogName',
     DIALOG_TIME = 'dialogTime',
     OPEN = 'open',
+    FINISHED = 'Finished first:',
 }
 
 export enum InputUse {

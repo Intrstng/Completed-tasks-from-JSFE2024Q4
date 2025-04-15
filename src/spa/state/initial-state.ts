@@ -99,7 +99,8 @@ export const CONSTANTS: Constants = {
     carsToGenerate: 100,
     brands: carBrands,
     models: carNames,
-    dialogDelay: 3000,
+    dialogDelay: 4000,
+    resetRaceDelay: 7000,
     milliseconds: 1000,
 };
 

@@ -186,12 +186,11 @@ export const dialogContentParameters: Array<ElementParameters> = [
     {
         tag: 'p',
         classNames: ['dialog__name-title'],
-        textContent: Description.WINNER,
+        textContent: Description.FINISHED,
     },
     {
         tag: 'p',
         id: Description.DIALOG_NAME,
-        textContent: Description.WINNER_TIME,
         classNames: ['dialog__name'],
     },
     {
@@ -202,7 +201,6 @@ export const dialogContentParameters: Array<ElementParameters> = [
     {
         tag: 'p',
         id: Description.DIALOG_TIME,
-        textContent: Description.WINNER_TIME,
         classNames: ['dialog__time'],
     },
 ];

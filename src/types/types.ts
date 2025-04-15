@@ -154,6 +154,7 @@ export type Constants = {
     brands: Array<string>;
     models: Array<string>;
     dialogDelay: number;
+    resetRaceDelay: number;
     milliseconds: number;
 };
 
