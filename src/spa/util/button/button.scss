@@ -81,6 +81,10 @@
 
 .back-btn {
     background-color: #ff9a9a;
+    &:disabled {
+        background-color: rgb(212, 225, 24);
+        opacity: 0.45;
+    }
 }
 
 .reset-btn {

@@ -68,6 +68,7 @@ import {
 } from '../../../util/pagination/garage-view-pagination/garage-view-pagination-parameters';
 import { PaginationController } from '../../../util/pagination/pagination-controller';
 import { CarController } from '../../../util/car/car-controller';
+import { RaceController } from '../../../util/race/race-controller';
 
 export default class GarageView extends View {
     public router: Router;
@@ -84,9 +85,9 @@ export default class GarageView extends View {
     private carUpdateLogo: SVGElement | null;
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
-    private dialog: CreatorDialog | null;
     private paginationController: PaginationController | null;
     private carController: CarController | null;
+    private raceController: RaceController | null;
     public api: ApiController;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
@@ -103,7 +104,6 @@ export default class GarageView extends View {
         this.carUpdateLogo = null;
         this.prevButton = null;
         this.nextButton = null;
-        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
         this.router = router;
         this.state = state;
         this.api = api;
@@ -142,12 +142,7 @@ export default class GarageView extends View {
         this.paginationController.createControls();
         this.addSummary();
         this.createRaceBoard(this.state.getState().cars, true);
-        this.addDialog();
-    }
-
-    private updateRaceBoardLayout(): void {
-        this.deleteAllItemsInContainer(this.raceBoard);
-        this.createRaceBoard(this.state.getState().cars);
+        this.raceController.addDialog();
     }
 
     private async getCarsForCurrentPage(): Promise<void> {
@@ -156,12 +151,6 @@ export default class GarageView extends View {
         if (typeof currentGaragePage === 'number' && isFinite(currentGaragePage)) {
             await this.api.getCars(currentGaragePage);
         }
-    }
-
-    private updateGarageQuantityLayout(): void {
-        const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
-        const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
-        this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
     }
 
     private addSummary(): void {
@@ -202,10 +191,10 @@ export default class GarageView extends View {
     private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
         switch (buttonParameters.textContent) {
             case Description.RACE: {
-                return () => this.startDragRace();
+                return () => this.raceController.startDragRace();
             }
             case Description.RESET: {
-                return () => this.resetDragRace();
+                return () => this.raceController.resetDragRace();
             }
             case Description.GENERATE: {
                 return () => this.generateCars();
@@ -217,10 +206,10 @@ export default class GarageView extends View {
                 return () => this.carController.updateCar();
             }
             case Description.START: {
-                return () => getCallbackWithID(buttonParameters, this.startRaceCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.raceController.startRaceCar.bind(this));
             }
             case Description.BACK: {
-                return () => getCallbackWithID(buttonParameters, this.backFromRaceForCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.raceController.backFromRaceForCar.bind(this));
             }
             case Description.SELECT: {
                 return () => getCallbackWithID(buttonParameters, this.carController.selectCar.bind(this));
@@ -234,6 +223,17 @@ export default class GarageView extends View {
         }
     };
 
+    private updateRaceBoardLayout(): void {
+        this.deleteAllItemsInContainer(this.raceBoard);
+        this.createRaceBoard(this.state.getState().cars);
+    }
+
+    private updateGarageQuantityLayout(): void {
+        const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
+        const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
+        this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
+    }
+
     private async generateCars(): Promise<void> {
         const carsCollection: Array<CarPayload> = generateCarsCollection();
         await Promise.all(
@@ -246,10 +246,6 @@ export default class GarageView extends View {
         this.paginationController.toggleDisabledForPaginationButtons();
 
         this.updateRaceBoardLayout();
-    }
-
-    private addDialog(): void {
-        this.viewElementCreator.addInnerElement(this.dialog.getElement());
     }
 
     private addCarBlockButton(container: CreatorElement, buttonParameters: ButtonParameters): void {
@@ -415,181 +411,18 @@ export default class GarageView extends View {
         const carIconCreator = createSVG(svgElements, carData.color, String(carData.id));
         this.finish = new CreatorElement(finishParameters);
 
+        this.raceController = new RaceController(
+            this.state,
+            this.api,
+            this.carController,
+            this.paginationController,
+            this.viewElementCreator,
+            this.finish
+        );
+
         carTrackCreator.addInnerElement(carIconCreator);
         carTrackCreator.addInnerElement(this.finish.getElement());
         container.addInnerElement(carTrackCreator.getElement());
-    }
-
-    private getTrackDistance(car: HTMLElement): number {
-        const carRect = car.getBoundingClientRect();
-        const finishRect = this.finish.getElement().getBoundingClientRect();
-
-        const carCenterPoint = carRect.left + carRect.width / 2;
-        const finishCenterPoint = finishRect.left + finishRect.width / 2;
-
-        return finishCenterPoint - carCenterPoint;
-    }
-
-    private async startRaceCar(id: number, isDragRace?: boolean): Promise<ResponseObject | undefined> {
-        toggleDisabledAllCarButtons(id, true);
-        toggleDisabledDragRaceControlButtons(true);
-        raceButtonToggleDisable(true);
-        let carIcon: HTMLElement = this.carController.getCarIconFromLayout(id);
-        const trackDistance: number = this.getTrackDistance(carIcon);
-
-        const carEngineData: EngineData | undefined = await this.api.startEngine(id);
-        if (!carEngineData) return;
-
-        const { velocity, distance }: EngineData = carEngineData;
-        const raceTime: number = Math.round(distance / velocity);
-
-        const currentAnimation: AnimationFrame = this.animateCarRacing(id, carIcon, raceTime, trackDistance);
-
-        const response = await this.api.driveCar(id);
-
-        if (!response) return;
-
-        const currentAnimationState = this.state.getState();
-        const newAnimationState = {
-            ...currentAnimationState,
-            animation: [...currentAnimationState.animation, currentAnimation],
-        };
-        this.state.setState(newAnimationState);
-
-        if (!response.success) {
-            const currentAnimationID: number = currentAnimation.animationID;
-            if (currentAnimationID) {
-                changeSvgStrokeColor(String(id), COLORS.red);
-                window.cancelAnimationFrame(currentAnimationID);
-                if (isDragRace) {
-                    throw new Error('Car`s engine is broken...');
-                }
-            }
-        }
-        const carBackButtonID: string = `${CSS_BUTTON.BUTTON_BACK}-${id}`;
-        carButtonToggleDisable(carBackButtonID, false);
-        toggleDisabledDragRaceControlButtons(false);
-        return {
-            ...response,
-            carID: id,
-            time: raceTime,
-        };
-    }
-
-    private async startDragRace(): Promise<void> {
-        toggleDisabledManageCarButtons(true);
-        raceButtonToggleDisable(true);
-        togglePaginationButtons(true);
-
-        const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
-        const promises: Promise<ResponseObject>[] = allCars.map(car => this.startRaceCar(car.id, true));
-
-        Promise.any(promises)
-            .then(async (response: ResponseObject) => {
-                if (response && response.carID !== undefined) {
-                    const carID: number = response.carID;
-                    const time: number = response.time;
-                    const winnerResponse = await this.api.checkWinner(carID);
-
-                    if (typeof winnerResponse === 'boolean' && !winnerResponse) {
-                        const newApiWinner = { id: carID, wins: 1, time };
-                        await this.api.createWinner(newApiWinner);
-                    } else if (winnerResponse !== true) {
-                        if (typeof winnerResponse !== 'boolean') {
-                            const bestTime = time < winnerResponse.time ? time : winnerResponse.time;
-                            await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
-                        }
-                    }
-                } else {
-                    console.warn('Response does not contain carID:', response);
-                }
-                const currentWinnerData: RaceWinnerMessage = {
-                    carID: response.carID,
-                    time: String(response.time / CONSTANTS.milliseconds),
-                };
-                this.showWinnersMessage(currentWinnerData);
-                allGarageButtonsToggleDisable(false);
-                this.paginationController.toggleDisabledForPaginationButtons();
-                raceButtonToggleDisable(true);
-            })
-            .catch(error => {
-                if (error instanceof AggregateError) {
-                    console.error('All promises were rejected:', error.errors);
-                } else {
-                    console.error('An unexpected error occurred:', error);
-                }
-            });
-    }
-
-    private showWinnersMessage(data: RaceWinnerMessage): void {
-        const winnersCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === data.carID);
-        const winnersName = winnersCar.name || Description.WINNER;
-
-        this.dialog.setDialogNameField(winnersName);
-        this.dialog.setDialogTimeField(String(data.time));
-        this.dialog.showDialog();
-        this.dialog.closeDialogByTimeout(CONSTANTS.dialogDelay);
-    }
-
-    private resetDragRace(): void {
-        const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
-        allCars.forEach(car => this.backFromRaceForCar(car.id));
-    }
-
-    private async backFromRaceForCar(id: number): Promise<void> {
-        try {
-            toggleDisabledAllCarButtons(id, false);
-            toggleDisabledDragRaceControlButtons(false);
-            raceButtonToggleDisable(false);
-            const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
-            const currentState: AppState = this.state.getState();
-            let carAnimationCollection: Array<AnimationFrame> = currentState[AppStateKeys.ANIMATION];
-            const currentAnimationID = carAnimationCollection.find(animation => animation.carID === id);
-
-            if (currentAnimationID) {
-                window.cancelAnimationFrame(currentAnimationID.animationID);
-                carAnimationCollection = carAnimationCollection.filter(animation => animation.carID !== id);
-                const updatedState: AppState = {
-                    ...currentState,
-                    animation: carAnimationCollection,
-                };
-                this.state.setState(updatedState);
-            }
-            await this.api.stopEngine(id);
-            if (currentCar) {
-                const currentCarColor = currentCar.color;
-                changeSvgStrokeColor(String(id), currentCarColor);
-            }
-            const car = this.carController.getCarIconFromLayout(id);
-            car.style.transform = `translateX(0px)`;
-        } catch (error: unknown) {
-            console.error('Error occurred:', error instanceof Error ? error.message : String(error));
-        }
-    }
-
-    private animateCarRacing(carID: number, car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {
-        let start: number | null = null;
-        const animationDataCollection: AnimationFrame = { carID, animationID: null, distance: 0 };
-
-        const animate = (timestamp: number) => {
-            if (!start) {
-                start = timestamp;
-            }
-
-            const elapsed = timestamp - start;
-            const progress = Math.min(elapsed / duration, 1); // Ensure progress does not exceed 1
-            const left = trackDistance * progress; // The position based on progress
-
-            car.style.transform = `translateX(${left}px)`;
-            animationDataCollection.distance = Math.round(left);
-
-            if (progress < 1) {
-                animationDataCollection.animationID = window.requestAnimationFrame(animate);
-            }
-        };
-
-        animationDataCollection.animationID = window.requestAnimationFrame(animate);
-        return animationDataCollection;
     }
 
     private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {

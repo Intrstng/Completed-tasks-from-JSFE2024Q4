@@ -42,7 +42,6 @@ export function raceButtonToggleDisable(isDisabled: boolean): void {
     const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON_RACE);
     if (buttons.length > 0) {
         Array.from(buttons).forEach(button => {
-            console.log(button);
             if (button instanceof HTMLButtonElement) {
                 button.disabled = isDisabled;
             }

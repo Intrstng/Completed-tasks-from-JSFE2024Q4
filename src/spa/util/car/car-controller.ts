@@ -64,14 +64,23 @@ export class CarController {
         }
     }
 
-    public async removeCar(id: number): Promise<void> {
+    public removeCar = async (id: number): Promise<void> => {
         await this.api.deleteCar(id);
         await this.api.deleteWinner(id);
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
 
+        const currenSelectedCar = this.state.getState()[AppStateKeys.SELECTED_CAR];
+
+        if (currenSelectedCar.id === id) {
+            this.clearValuesInInputFields(InputUse.UPDATE);
+            this.clearInputFieldsValuesInState(InputUse.UPDATE);
+            this.clearSelectedCarStateProperty();
+            changeSvgStrokeColor(InputUse.UPDATE, COLORS.black);
+        }
+
         this.updateRaceBoardLayout();
-    }
+    };
 
     public async createCar(): Promise<void> {
         const name: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_NAME];
