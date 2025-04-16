@@ -35,11 +35,13 @@ import {
     descWinsButtonParameters,
 } from '../button/button-parameters/winners-view-parameters/winners-view-button-parameters';
 import { CSS_TABLE } from './table-classes';
+import { toggleButtonActiveClassAssertion } from '../assertion-functions/assertion-functions';
+import { CONSTANTS } from '../../state/initial-state';
 
 export default class Table {
     private readonly state: SessionStorageState;
     private readonly winnersPage: CreatorElement | null;
-    private container: CreatorElement | null;
+    private readonly container: CreatorElement | null;
     private tableContainer: CreatorElement | null;
     private table: CreatorElement | null;
     private ascWinButton: CreatorElement | null;
@@ -68,22 +70,65 @@ export default class Table {
         this.updateTableLayout = updateTableLayoutCB;
     }
 
-    public getTableCreator(): CreatorElement {
+    private static buildTableBodyRows(
+        scoreRecords: Array<TableRecord>,
+        tbody: CreatorElement,
+        currentPage: number
+    ): void {
+        scoreRecords.forEach((record, index) => {
+            const rowCreator = new CreatorElement(tableRowParameters);
+
+            const numberCellCreator = new CreatorElement(tableRowCellParameters);
+
+            const displayIndex = (currentPage - 1) * CONSTANTS.winnersOnPage + (index + 1);
+
+            numberCellCreator.setTextContent(String(displayIndex));
+
+            const carCellCreator = new CreatorElement(tableRowCellParameters);
+            const carTableLogo = createSvg(svgElements, record.color, Description.TABLE);
+            carCellCreator.addInnerElement(carTableLogo);
+
+            const nameCellCreator = new CreatorElement(tableRowCellParameters);
+            nameCellCreator.setTextContent(record.name);
+            nameCellCreator.setCssClasses([CSS_TABLE.TABLE_ROW_NAME]);
+
+            const winsCellCreator = new CreatorElement(tableRowCellParameters);
+            winsCellCreator.setTextContent(String(record.wins));
+
+            const timeCellCreator = new CreatorElement(tableRowCellParameters);
+            timeCellCreator.setTextContent(String(record.time));
+
+            rowCreator.addInnerElement(numberCellCreator.getElement());
+            rowCreator.addInnerElement(carCellCreator.getElement());
+            rowCreator.addInnerElement(nameCellCreator.getElement());
+            rowCreator.addInnerElement(winsCellCreator.getElement());
+            rowCreator.addInnerElement(timeCellCreator.getElement());
+            tbody.addInnerElement(rowCreator.getElement());
+        });
+    }
+
+    public getTableCreator(): CreatorElement | null {
         return this.table;
     }
 
     public addScoreTable(isInitCall?: boolean): void {
         if (isInitCall) {
             this.tableContainer = new CreatorElement(scoreTableContainerParameters);
-            this.container.addInnerElement(this.tableContainer.getElement());
+            if (this.container instanceof CreatorElement) {
+                this.container.addInnerElement(this.tableContainer.getElement());
+            }
         }
         this.table = new CreatorElement(scoreTableParameters);
 
         this.generateTableHead();
         this.generateTableBody();
 
-        this.tableContainer.addInnerElement(this.table.getElement());
-        this.container.addInnerElement(this.tableContainer);
+        if (this.tableContainer instanceof CreatorElement) {
+            this.tableContainer.addInnerElement(this.table.getElement());
+        }
+        if (this.container instanceof CreatorElement) {
+            this.container.addInnerElement(this.tableContainer);
+        }
     }
 
     private generateTableHead(): void {
@@ -116,20 +161,24 @@ export default class Table {
                 const textContentCreator = new CreatorElement(spanParameters);
                 textContentCreator.setTextContent(columnName);
 
-                theadCellContainerCreator.addInnerElement(ascButtonCreator.getElement());
+                if (ascButtonCreator instanceof CreatorElement) {
+                    theadCellContainerCreator.addInnerElement(ascButtonCreator.getElement());
+                }
                 theadCellContainerCreator.addInnerElement(textContentCreator.getElement());
-                theadCellContainerCreator.addInnerElement(descButtonCreator.getElement());
-
+                if (descButtonCreator instanceof CreatorElement) {
+                    theadCellContainerCreator.addInnerElement(descButtonCreator.getElement());
+                }
                 headCellCreator.addInnerElement(theadCellContainerCreator.getElement());
             } else {
                 headCellCreator.setTextContent(columnName);
             }
-
             theadRowCreator.addInnerElement(headCellCreator.getElement());
         });
 
         theadCreator.addInnerElement(theadRowCreator.getElement());
-        this.table.addInnerElement(theadCreator.getElement());
+        if (this.table instanceof CreatorElement) {
+            this.table.addInnerElement(theadCreator.getElement());
+        }
         this.toggleActiveClassSortButton();
     }
 
@@ -138,49 +187,35 @@ export default class Table {
         const winnersDataCollection: Array<Car> = this.state.getState()[AppStateKeys.WINNERS_DATA];
         const winnersCollection: Array<Winner> = this.state.getState()[AppStateKeys.WINNERS];
 
-        const scoreRecords: Array<TableRecord> = this.createTableRecords(winnersDataCollection, winnersCollection);
+        let scoreRecords: Array<TableRecord>;
+        if (this.createTableRecords) {
+            scoreRecords = this.createTableRecords(winnersDataCollection, winnersCollection);
+        }
         try {
+            let currentPage: number = this.state.getState()[AppStateKeys.WINNERS_PAGE];
             if (scoreRecords.length === 0) {
-                let currentPage: number = this.state.getState()[AppStateKeys.WINNERS_PAGE];
                 --currentPage;
                 currentPage = currentPage === 0 ? 1 : currentPage;
                 this.state.updatePropertyInState(AppStateKeys.WINNERS_PAGE, currentPage);
-                await this.getWinnersForCurrentPage();
-                this.updateTableLayout();
-                this.winnersPage.setTextContent(`${Description.PAGE} ${currentPage}`);
+                if (this.getWinnersForCurrentPage) {
+                    await this.getWinnersForCurrentPage();
+                }
+                if (this.updateTableLayout) {
+                    this.updateTableLayout();
+                }
+                if (this.winnersPage instanceof CreatorElement) {
+                    this.winnersPage.setTextContent(`${Description.PAGE} ${currentPage}`);
+                }
                 return;
             }
-            scoreRecords.forEach((record, index) => {
-                const rowCreator = new CreatorElement(tableRowParameters);
 
-                const numberCellCreator = new CreatorElement(tableRowCellParameters);
-                numberCellCreator.setTextContent(String(++index));
-
-                const carCellCreator = new CreatorElement(tableRowCellParameters);
-                const carTableLogo = createSvg(svgElements, record.color, Description.TABLE);
-                carCellCreator.addInnerElement(carTableLogo);
-
-                const nameCellCreator = new CreatorElement(tableRowCellParameters);
-                nameCellCreator.setTextContent(record.name);
-                nameCellCreator.setCssClasses([CSS_TABLE.TABLE_ROW_NAME]);
-
-                const winsCellCreator = new CreatorElement(tableRowCellParameters);
-                winsCellCreator.setTextContent(String(record.wins));
-
-                const timeCellCreator = new CreatorElement(tableRowCellParameters);
-                timeCellCreator.setTextContent(String(record.time));
-
-                rowCreator.addInnerElement(numberCellCreator.getElement());
-                rowCreator.addInnerElement(carCellCreator.getElement());
-                rowCreator.addInnerElement(nameCellCreator.getElement());
-                rowCreator.addInnerElement(winsCellCreator.getElement());
-                rowCreator.addInnerElement(timeCellCreator.getElement());
-                tbodyCreator.addInnerElement(rowCreator.getElement());
-            });
+            Table.buildTableBodyRows(scoreRecords, tbodyCreator, currentPage);
         } catch (error: unknown) {
             console.error('Table row creation failed:', error instanceof Error ? error.message : String(error));
         }
-        this.table.addInnerElement(tbodyCreator.getElement());
+        if (this.table instanceof CreatorElement) {
+            this.table.addInnerElement(tbodyCreator.getElement());
+        }
     }
 
     private addOrderBtnCallbacksToParameters(columnName: Description): OrderButtonParametersWithCB {
@@ -217,11 +252,16 @@ export default class Table {
         this.state.updatePropertyInState(AppStateKeys.WINS_SORT_ACTIVE, true);
         this.state.updatePropertyInState(AppStateKeys.TIME_SORT_ACTIVE, false);
 
-        await this.getWinnersForCurrentPage();
+        if (this.getWinnersForCurrentPage) {
+            await this.getWinnersForCurrentPage();
+        }
 
-        this.toggleButtonActiveClass(this.ascWinButton);
-        this.toggleButtonActiveClass(this.descWinButton);
-        this.updateTableLayout();
+        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascWinButton);
+        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descWinButton);
+
+        if (this.updateTableLayout) {
+            this.updateTableLayout();
+        }
     }
 
     private async sortTableByTime(sortOrder: SortOrderType): Promise<void> {
@@ -230,11 +270,16 @@ export default class Table {
         this.state.updatePropertyInState(AppStateKeys.WINS_SORT_ACTIVE, false);
         this.state.updatePropertyInState(AppStateKeys.TIME_SORT_ACTIVE, true);
 
-        await this.getWinnersForCurrentPage();
+        if (this.getWinnersForCurrentPage) {
+            await this.getWinnersForCurrentPage();
+        }
 
-        this.toggleButtonActiveClass(this.ascTimeButton);
-        this.toggleButtonActiveClass(this.descTimeButton);
-        this.updateTableLayout();
+        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascTimeButton);
+        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descTimeButton);
+
+        if (this.updateTableLayout) {
+            this.updateTableLayout();
+        }
     }
 
     private toggleActiveClassSortButton(): void {
@@ -244,15 +289,15 @@ export default class Table {
 
         if (currentSortType === Description.SORT_WINS) {
             if (currentOrderWins === Description.ASC) {
-                this.toggleButtonActiveClass(this.ascWinButton);
+                toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascWinButton);
             } else if (currentOrderWins === Description.DESC) {
-                this.toggleButtonActiveClass(this.descWinButton);
+                toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descWinButton);
             }
         } else if (currentSortType === Description.SORT_TIME) {
             if (currentOrderTime === Description.ASC) {
-                this.toggleButtonActiveClass(this.ascTimeButton);
+                toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascTimeButton);
             } else if (currentOrderTime === Description.DESC) {
-                this.toggleButtonActiveClass(this.descTimeButton);
+                toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descTimeButton);
             }
         }
     }

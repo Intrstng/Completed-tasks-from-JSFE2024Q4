@@ -10,8 +10,13 @@ export default class View {
         this.viewElementCreator = this.createView(parameters || defaultElementParameters);
     }
 
-    public static deleteAllItemsInContainer(container: CreatorElement): void {
-        const containerElement = container.getElement();
+    public static deleteAllItemsInContainer(container: CreatorElement | null): void {
+        let containerElement: HTMLElement | HTMLCanvasElement | null;
+
+        if (container) {
+            containerElement = container.getElement();
+        }
+
         if (containerElement) {
             while (containerElement.firstElementChild) {
                 containerElement.firstElementChild.remove();

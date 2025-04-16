@@ -82,12 +82,12 @@ export function allGarageButtonsToggleDisable(isDisabled: boolean): void {
 }
 
 export function toggleButtonActiveClass(button: CreatorElement): void {
-    const buttonElement: HTMLElement = button.getElement();
+    const buttonElement: HTMLElement | HTMLCanvasElement | null = button.getElement();
     const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CSS_BUTTON.ACTIVE]);
-    if (isActive) {
+    if (isActive && 'classList' in buttonElement) {
         buttonElement.classList.remove(CSS_BUTTON.ACTIVE);
         buttonElement.classList.add(CSS_BUTTON.INACTIVE);
-    } else {
+    } else if ('classList' in buttonElement) {
         buttonElement.classList.add(CSS_BUTTON.ACTIVE);
         buttonElement.classList.remove(CSS_BUTTON.INACTIVE);
     }

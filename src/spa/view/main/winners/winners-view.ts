@@ -27,7 +27,7 @@ export default class WinnersView extends View {
     private readonly winnersState: SessionStorageState;
     private winnersQuantity: CreatorElement | null;
     private readonly winnersPage: CreatorElement | null;
-    private table: Table | null;
+    private readonly table: Table | null;
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
     private ascWinButton: CreatorElement | null;
@@ -35,7 +35,7 @@ export default class WinnersView extends View {
     private ascTimeButton: CreatorElement | null;
     private descTimeButton: CreatorElement | null;
     private readonly toggleButtonActiveClass: ToggleActiveButtonCallback;
-    private paginationController: PaginationController | null;
+    private readonly paginationController: PaginationController | null;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {
         super(winnersParameters);
@@ -96,7 +96,7 @@ export default class WinnersView extends View {
             currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
         }
 
-        if (typeof currentWinnersPage === 'number' && Number.isFinite(currentWinnersPage)) {
+        if (Number.isFinite(currentWinnersPage)) {
             await this.api.getAllWinners(currentSortType, currentSortOrderTime, currentWinnersPage);
         }
     }
@@ -111,7 +111,9 @@ export default class WinnersView extends View {
         this.winnersQuantity = new CreatorElement(winnersCurrentParameters);
         this.winnersQuantity.setTextContent(`${Description.WINNERS}${winnersQuantityText}`);
 
-        this.winnersPage.setTextContent(`${Description.PAGE} ${currentWinnersPage}`);
+        if (this.winnersPage instanceof CreatorElement) {
+            this.winnersPage.setTextContent(`${Description.PAGE} ${currentWinnersPage}`);
+        }
 
         summaryCreator.addInnerElement(this.winnersQuantity);
         summaryCreator.addInnerElement(this.winnersPage);
@@ -120,7 +122,9 @@ export default class WinnersView extends View {
     }
 
     private updateTableLayout(): void {
-        View.deleteAllItemsInContainer(this.table.getTableCreator());
-        this.table.addScoreTable();
+        if (this.table instanceof Table) {
+            View.deleteAllItemsInContainer(this.table.getTableCreator());
+            this.table.addScoreTable();
+        }
     }
 }

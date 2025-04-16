@@ -26,7 +26,6 @@ export default class Router {
     }
 
     public urlChangedHandler(requestParameters: RequestParameters): void {
-        // Check
         const { path } = requestParameters;
         const routeIndex = this.routes.findIndex(item => item.path === path);
 

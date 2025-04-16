@@ -8,8 +8,10 @@ import type {
     PopStateEventState,
     Winner,
     Pages,
+    ToggleButtonActiveClassCB,
 } from '../../../types';
 import { Description } from '../../../types';
+import CreatorElement from '../creator-element';
 
 export function isValidState(state: unknown): state is PopStateEventState {
     return typeof state === 'object' && state !== null && 'url' in state;
@@ -74,4 +76,13 @@ export function isWinnerArray(data: unknown): data is Winner[] {
 
 export function isValidPage(value: unknown): value is Pages {
     return value === Description.TO_GARAGE || value === Description.TO_WINNERS;
+}
+
+export function toggleButtonActiveClassAssertion(
+    toggleCB: ToggleButtonActiveClassCB,
+    button: CreatorElement | null
+): void {
+    if (toggleCB && button && button instanceof CreatorElement) {
+        toggleCB(button);
+    }
 }

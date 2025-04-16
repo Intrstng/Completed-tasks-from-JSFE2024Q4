@@ -69,11 +69,15 @@ export default class CreatorDialog {
     }
 
     public setDialogNameField(value: string): void {
-        this.dialogName.textContent = value;
+        if ('textContent' in this.dialogName) {
+            this.dialogName.textContent = value;
+        }
     }
 
     public setDialogTimeField(value: string): void {
-        this.dialogTime.textContent = `${value} seconds`;
+        if ('textContent' in this.dialogTime) {
+            this.dialogTime.textContent = `${value} seconds`;
+        }
     }
 
     public setContent(contentParameters: Array<ElementParameters>): void {

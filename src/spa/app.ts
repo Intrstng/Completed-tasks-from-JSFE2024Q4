@@ -34,8 +34,8 @@ export default class App {
         this.header = new HeaderView(this.router);
         this.main = new MainView();
 
-        const headerElement: HTMLElement = this.header.getHtmlElement();
-        const mainElement: HTMLElement = this.main.getHtmlElement();
+        const headerElement: HTMLElement | null = this.header.getHtmlElement();
+        const mainElement: HTMLElement | null = this.main.getHtmlElement();
         if (headerElement && mainElement) {
             document.body.append(headerElement, mainElement);
         } else {
@@ -71,7 +71,9 @@ export default class App {
 
     public setContent(page: Pages, view: ViewCommon): void {
         if (this.main instanceof MainView) {
-            this.header.setSelectedItem(page);
+            if (this.header instanceof HeaderView) {
+                this.header.setSelectedItem(page);
+            }
             this.main.setContent(view);
         } else {
             console.error('Cannot set content: Main view is not initialized');

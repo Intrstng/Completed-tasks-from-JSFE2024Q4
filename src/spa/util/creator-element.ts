@@ -7,11 +7,11 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    public static hasClasses(element: HTMLElement, classes: string[]): boolean {
-        return classes.every(cls => element.classList.contains(cls));
+    public static hasClasses(element: HTMLElement | HTMLCanvasElement | null, classes: string[]): boolean {
+        return classes.every(cls => element && element.classList.contains(cls));
     }
 
-    public addInnerElement(element: HTMLElement | CreatorElement | SVGElement): void {
+    public addInnerElement(element: HTMLElement | CreatorElement | SVGElement | null): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 
@@ -52,6 +52,12 @@ export default class CreatorElement {
             this.element.textContent = text;
         } else {
             console.error('Cannot set element text content: element is null.');
+        }
+    }
+
+    public getTextContent(): string | null {
+        if (this.element) {
+            return this.element.textContent || '';
         }
     }
 

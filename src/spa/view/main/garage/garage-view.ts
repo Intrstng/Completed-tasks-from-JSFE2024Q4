@@ -141,7 +141,7 @@ export default class GarageView extends View {
     private async getCarsForCurrentPage(): Promise<void> {
         const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
 
-        if (typeof currentGaragePage === 'number' && Number.isFinite(currentGaragePage)) {
+        if (Number.isFinite(currentGaragePage)) {
             await this.api.getCars(currentGaragePage);
         }
     }
@@ -156,7 +156,9 @@ export default class GarageView extends View {
         this.garageQuantity = new CreatorElement(garageCurrentParameters);
         this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
 
-        this.garagePage.setTextContent(`${Description.PAGE} ${currentGaragePage}`);
+        if (this.garagePage instanceof CreatorElement) {
+            this.garagePage.setTextContent(`${Description.PAGE} ${currentGaragePage}`);
+        }
 
         summaryCreator.addInnerElement(this.garageQuantity);
         summaryCreator.addInnerElement(this.garagePage);
@@ -184,31 +186,31 @@ export default class GarageView extends View {
     private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
         switch (buttonParameters.textContent) {
             case Description.RACE: {
-                return () => this.raceController.startDragRace();
+                return () => this.raceController?.startDragRace();
             }
             case Description.RESET: {
-                return () => this.raceController.resetDragRace();
+                return () => this.raceController?.resetDragRace();
             }
             case Description.GENERATE: {
                 return () => this.generateCars();
             }
             case Description.CREATE: {
-                return () => this.carController.createCar();
+                return () => this.carController?.createCar();
             }
             case Description.UPDATE: {
-                return () => this.carController.updateCar();
+                return () => this.carController?.updateCar();
             }
             case Description.START: {
-                return () => getCallbackWithID(buttonParameters, this.raceController.startRaceCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.raceController?.startRaceCar.bind(this));
             }
             case Description.BACK: {
-                return () => getCallbackWithID(buttonParameters, this.raceController.backFromRaceForCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.raceController?.backFromRaceForCar.bind(this));
             }
             case Description.SELECT: {
-                return () => getCallbackWithID(buttonParameters, this.carController.selectCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.carController?.selectCar.bind(this));
             }
             case Description.REMOVE: {
-                return () => getCallbackWithID(buttonParameters, this.carController.removeCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.carController?.removeCar.bind(this));
             }
             default: {
                 return () => {};

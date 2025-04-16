@@ -38,15 +38,15 @@ export class PaginationController {
     }
 
     public createControls(): void {
-        const paginationControlsContainerCreator = new CreatorElement(this.paginationParameters.container);
+        const paginationControlsContainerCreator = new CreatorElement(this.paginationParameters?.container);
 
         const previousButtonParametersWithCB: ElementParameters = {
-            ...this.paginationParameters.prevBtn,
+            ...this.paginationParameters?.prevBtn,
             callback: () => this.prevPage(),
         };
 
         const nextButtonParametersWithCB: ElementParameters = {
-            ...this.paginationParameters.nextBtn,
+            ...this.paginationParameters?.nextBtn,
             callback: () => this.nextPage(),
         };
 
@@ -58,12 +58,19 @@ export class PaginationController {
 
         paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
 
-        this.paginationContainer.addInnerElement(paginationControlsContainerCreator);
+        if (this.paginationContainer instanceof CreatorElement) {
+            this.paginationContainer.addInnerElement(paginationControlsContainerCreator);
+        }
     }
 
     public toggleDisabledForPaginationButtons(): void {
-        const currentPage: number = this.state.getState()[this.pageStateKeys.currentPage];
-        const totalCars: number = this.state.getState()[this.pageStateKeys.itemsTotal];
+        let currentPage: number;
+        let totalCars: number;
+
+        if (this.pageStateKeys) {
+            currentPage = this.state.getState()[this.pageStateKeys?.currentPage];
+            totalCars = this.state.getState()[this.pageStateKeys?.itemsTotal];
+        }
 
         if (currentPage === 1) {
             if (this.prevButton) {
@@ -74,40 +81,69 @@ export class PaginationController {
                 this.prevButton.setDisabled(false);
             }
         }
-        if (currentPage >= totalCars / this.itemsOnPage) {
+        if (currentPage >= totalCars / this.itemsOnPage && this.nextButton instanceof CreatorElement) {
             this.nextButton.setDisabled(true);
-        } else this.nextButton.setDisabled(false);
+        } else if (this.nextButton instanceof CreatorElement) {
+            this.nextButton.setDisabled(false);
+        }
     }
 
     private async prevPage(): Promise<void> {
-        const currentPage: number = this.state.getState()[this.pageStateKeys.currentPage];
+        let currentPage: number;
+
+        if (this.pageStateKeys) {
+            currentPage = this.state.getState()[this.pageStateKeys.currentPage];
+        }
+
         this.countPageValue(Description.DECREMENT, currentPage);
 
-        this.page.setTextContent(`${Description.PAGE} ${this.state.getState()[this.pageStateKeys.currentPage]}`);
+        if (this.page instanceof CreatorElement && this.pageStateKeys) {
+            this.page.setTextContent(`${Description.PAGE} ${this.state.getState()[this.pageStateKeys.currentPage]}`);
+        }
 
-        await this.getDataForCurrentPage();
-        this.updateLayout();
+        if (this.getDataForCurrentPage) {
+            await this.getDataForCurrentPage();
+        }
+        if (this.updateLayout) {
+            this.updateLayout();
+        }
         this.toggleDisabledForPaginationButtons();
     }
 
     private async nextPage(): Promise<void> {
-        const currentPage: number = this.state.getState()[this.pageStateKeys.currentPage];
+        let currentPage: number;
+
+        if (this.pageStateKeys) {
+            currentPage = this.state.getState()[this.pageStateKeys.currentPage];
+        }
+
         this.countPageValue(Description.INCREMENT, currentPage);
 
-        this.page.setTextContent(`${Description.PAGE} ${this.state.getState()[this.pageStateKeys.currentPage]}`);
+        if (this.page instanceof CreatorElement && this.pageStateKeys) {
+            this.page.setTextContent(`${Description.PAGE} ${this.state.getState()[this.pageStateKeys.currentPage]}`);
+        }
 
-        await this.getDataForCurrentPage();
-        this.updateLayout();
+        if (this.getDataForCurrentPage) {
+            await this.getDataForCurrentPage();
+        }
+        if (this.updateLayout) {
+            this.updateLayout();
+        }
         this.toggleDisabledForPaginationButtons();
     }
 
     private countPageValue(operator: Operator, page: number): void {
-        if (typeof page === 'number' && Number.isFinite(page)) {
-            const itemsQuantity = this.state.getState()[this.pageStateKeys.itemsTotal];
+        if (Number.isFinite(page)) {
+            let itemsQuantity: number;
+            if (this.pageStateKeys) {
+                itemsQuantity = this.state.getState()[this.pageStateKeys.itemsTotal];
+            }
 
             if (operator === Description.INCREMENT && page < itemsQuantity / this.itemsOnPage) {
-                this.state.updatePropertyInState(this.pageStateKeys.currentPage, ++page);
-            } else if (operator === Description.DECREMENT && page > 1) {
+                if (this.pageStateKeys) {
+                    this.state.updatePropertyInState(this.pageStateKeys.currentPage, ++page);
+                }
+            } else if (operator === Description.DECREMENT && page > 1 && this.pageStateKeys) {
                 this.state.updatePropertyInState(this.pageStateKeys.currentPage, --page);
             }
         }
