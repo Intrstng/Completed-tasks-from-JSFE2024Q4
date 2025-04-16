@@ -1,21 +1,12 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type {
-    AppState,
-    Callback,
-    CarPayload,
-    ElementParameters,
-    EngineData,
-    Operator,
-    ResponseObject,
-} from '../../../../types';
+import type { AppState, Callback, CarPayload, ElementParameters, EngineData, ResponseObject } from '../../../../types';
 import {
     AnimationFrame,
     AppStateKeys,
     ButtonParameters,
     Car,
-    CssClasses,
     Description,
     InputFieldsKeys,
     InputTypes,
@@ -36,9 +27,6 @@ import {
     garagePageCurrentParameters,
     garageParameters,
     garageSummaryParameters,
-    inputsParameters,
-    labelParameters,
-    paginationGarageControlsContainerParameters,
     raceBoardParameters,
     trackParameters,
 } from './garage-view-parameters';
@@ -68,17 +56,23 @@ import {
     createButtonParameters,
     mainButtonsContainerParameters,
     mainControlsButtonsParameters,
-    nextButtonGarageParameters,
-    prevButtonGarageParameters,
     updateButtonParameters,
 } from '../../../util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
 import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
+import { inputsParameters } from '../../../util/input-field/input-view-parameters';
+import { labelParameters } from '../../../util/label/label-view-parameters';
+import { CSS_GARAGE } from './garage-classes';
+import {
+    pageGarageStateKeys,
+    paginationGarageParameters,
+} from '../../../util/pagination/garage-view-pagination/garage-view-pagination-parameters';
+import { PaginationController } from '../../../util/pagination/pagination-controller';
 
 export default class GarageView extends View {
     public router: Router;
     private readonly state: LocalStorageState;
     private garageQuantity: CreatorElement | null;
-    private garagePage: CreatorElement | null;
+    private readonly garagePage: CreatorElement | null;
     private raceBoard: CreatorElement | null;
     private finish: CreatorElement | null;
     private inputCreateNameField: InputFieldCreator | null;
@@ -90,6 +84,7 @@ export default class GarageView extends View {
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
     private dialog: CreatorDialog | null;
+    private paginationController: PaginationController | null;
     public api: ApiController;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
@@ -110,13 +105,26 @@ export default class GarageView extends View {
         this.router = router;
         this.state = state;
         this.api = api;
+        this.garagePage = new CreatorElement(garagePageCurrentParameters);
+
+        this.paginationController = new PaginationController(
+            state,
+            this.garagePage,
+            this.viewElementCreator,
+            this.getCarsForCurrentPage.bind(this),
+            this.updateRaceBoardLayout.bind(this),
+            paginationGarageParameters,
+            pageGarageStateKeys,
+            CONSTANTS.carsOnPage
+        );
+
         this.configureView();
     }
 
     private async configureView(): Promise<void> {
         await this.getCarsForCurrentPage();
         this.addCarCreationControls();
-        this.createPageControls();
+        this.paginationController.createControls();
         this.addSummary();
         this.createRaceBoard(this.state.getState().cars, true);
         this.addDialog();
@@ -151,71 +159,12 @@ export default class GarageView extends View {
         this.garageQuantity = new CreatorElement(garageCurrentParameters);
         this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
 
-        this.garagePage = new CreatorElement(garagePageCurrentParameters);
         this.garagePage.setTextContent(`${Description.PAGE} ${currentGaragePage}`);
 
         summaryCreator.addInnerElement(this.garageQuantity);
         summaryCreator.addInnerElement(this.garagePage);
 
         this.viewElementCreator.addInnerElement(summaryCreator);
-    }
-
-    private async prevGaragePage(): Promise<void> {
-        const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-        this.countGaragePageValue(Description.DECREMENT, currentGaragePage);
-
-        this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
-
-        await this.getCarsForCurrentPage();
-        this.updateRaceBoardLayout();
-        this.toggleDisabledForPaginationButtons();
-    }
-
-    private async nextGaragePage(): Promise<void> {
-        const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-        this.countGaragePageValue(Description.INCREMENT, currentGaragePage);
-
-        this.garagePage.setTextContent(`${Description.PAGE} ${this.state.getState()[AppStateKeys.GARAGE_PAGE]}`);
-
-        await this.getCarsForCurrentPage();
-        this.updateRaceBoardLayout();
-        this.toggleDisabledForPaginationButtons();
-    }
-
-    private countGaragePageValue(operator: Operator, page: number): void {
-        if (typeof page === 'number' && isFinite(page)) {
-            const carsQuantity = this.state.getState()[AppStateKeys.CARS_QUANTITY];
-
-            if (operator === Description.INCREMENT && page < carsQuantity / CONSTANTS.carsOnPage) {
-                this.updatePropertyInState(AppStateKeys.GARAGE_PAGE, ++page);
-            } else if (operator === Description.DECREMENT && page > 1) {
-                this.updatePropertyInState(AppStateKeys.GARAGE_PAGE, --page);
-            }
-        }
-    }
-
-    private createPageControls(): void {
-        const paginationControlsContainerCreator = new CreatorElement(paginationGarageControlsContainerParameters);
-
-        const prevButtonGarageParametersWithCB: ElementParameters = {
-            ...prevButtonGarageParameters,
-            callback: () => this.prevGaragePage(),
-        };
-
-        const nextButtonGarageParametersWithCB: ElementParameters = {
-            ...nextButtonGarageParameters,
-            callback: () => this.nextGaragePage(),
-        };
-
-        this.prevButton = new CreatorElement(prevButtonGarageParametersWithCB);
-        this.nextButton = new CreatorElement(nextButtonGarageParametersWithCB);
-        this.toggleDisabledForPaginationButtons();
-
-        paginationControlsContainerCreator.addInnerElement(this.prevButton.getElement());
-
-        paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
-
-        this.viewElementCreator.addInnerElement(paginationControlsContainerCreator);
     }
 
     private addGarageControls(): CreatorElement {
@@ -313,7 +262,7 @@ export default class GarageView extends View {
         );
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
-        this.toggleDisabledForPaginationButtons();
+        this.paginationController.toggleDisabledForPaginationButtons();
 
         this.updateRaceBoardLayout();
     }
@@ -411,16 +360,6 @@ export default class GarageView extends View {
                 ...currentState.inputData,
                 [key]: value,
             },
-        };
-        this.state.setState(updatedState);
-    }
-
-    private updatePropertyInState(key: string, value: string | number | boolean): void {
-        const currentState: AppState = this.state.getState();
-
-        const updatedState: AppState = {
-            ...currentState,
-            [key]: value,
         };
         this.state.setState(updatedState);
     }
@@ -551,7 +490,7 @@ export default class GarageView extends View {
                 let currentPage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
                 --currentPage;
                 currentPage = currentPage === 0 ? 1 : currentPage;
-                this.updatePropertyInState(AppStateKeys.GARAGE_PAGE, currentPage);
+                this.state.updatePropertyInState(AppStateKeys.GARAGE_PAGE, currentPage);
                 await this.getCarsForCurrentPage();
                 this.updateRaceBoardLayout();
                 this.garagePage.setTextContent(`${Description.PAGE} ${currentPage}`);
@@ -712,7 +651,7 @@ export default class GarageView extends View {
                 };
                 this.showWinnersMessage(currentWinnerData);
                 allGarageButtonsToggleDisable(false);
-                this.toggleDisabledForPaginationButtons();
+                this.paginationController.toggleDisabledForPaginationButtons();
                 raceButtonToggleDisable(true);
             })
             .catch(error => {
@@ -737,24 +676,6 @@ export default class GarageView extends View {
     private resetDragRace(): void {
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
         allCars.forEach(car => this.backFromRaceForCar(car.id));
-    }
-
-    private toggleDisabledForPaginationButtons(): void {
-        const currentGaragePage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
-        const totalCars: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
-
-        if (currentGaragePage === 1) {
-            if (this.prevButton) {
-                this.prevButton.setDisabled(true);
-            }
-        } else {
-            if (this.prevButton) {
-                this.prevButton.setDisabled(false);
-            }
-        }
-        if (currentGaragePage >= totalCars / CONSTANTS.carsOnPage) {
-            this.nextButton.setDisabled(true);
-        } else this.nextButton.setDisabled(false);
     }
 
     private async backFromRaceForCar(id: number): Promise<void> {
@@ -790,7 +711,7 @@ export default class GarageView extends View {
 
     private getCarIconFromLayout(id: number): HTMLElement {
         const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
-            `${CssClasses.SVG_ICON}-${id}`
+            `${CSS_GARAGE.SVG_ICON}-${id}`
         );
         let carIcon: HTMLElement | null = null;
         if (carIconCollection.length > 0) {

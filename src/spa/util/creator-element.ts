@@ -1,6 +1,4 @@
 import type { EventCallback, ElementParameters } from '../../types';
-import { CssClasses } from '../../types';
-//import CreatorDialog from './dialog/dialog-creator';
 
 export default class CreatorElement {
     public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
@@ -9,12 +7,13 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    //public addInnerElement(element: HTMLElement | CreatorElement | SVGSVGElement | CreatorDialog): void {
+    static hasClasses(element: HTMLElement, classes: string[]): boolean {
+        return classes.every(cls => element.classList.contains(cls));
+    }
+
     public addInnerElement(element: HTMLElement | CreatorElement | SVGElement): void {
         if (this.element) {
-            const elementToAppend =
-                // element instanceof CreatorElement || element instanceof CreatorDialog ? element.getElement() : element;
-                element instanceof CreatorElement ? element.getElement() : element;
+            const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;
 
             if (elementToAppend) {
                 this.element.append(elementToAppend);
@@ -131,10 +130,6 @@ export default class CreatorElement {
         } else if (!this.element) {
             console.error('Cannot set event listener: element is null.');
         }
-    }
-
-    static hasClasses(element: HTMLElement, classes: Array<CssClasses>): boolean {
-        return classes.every(cls => element.classList.contains(cls));
     }
 
     private setTextareaSize(parameters: ElementParameters): void {

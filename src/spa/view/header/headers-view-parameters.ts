@@ -1,11 +1,11 @@
-import { CssClasses, Description, ElementParameters } from '../../../types';
+import { Description, ElementParameters } from '../../../types';
 import { CSS_HEADER } from './header-classes';
 
 export const titleParameters: ElementParameters = {
     tag: 'h1',
-    classNames: ['title'],
-    title: 'Async Race',
-    textContent: 'Async Race',
+    classNames: [CSS_HEADER.TITLE],
+    title: Description.APP_NAME,
+    textContent: Description.APP_NAME,
 };
 
 export const headerParameters: ElementParameters = {

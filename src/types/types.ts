@@ -2,6 +2,12 @@ import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from '
 import GarageView from '../spa/view/main/garage/garage-view';
 import WinnersView from '../spa/view/main/winners/winners-view';
 import CreatorElement from '../spa/util/creator-element';
+import { paginationGarageControlsContainerParameters } from '../spa/util/pagination/garage-view-pagination/garage-view-pagination-parameters';
+import {
+    nextButtonGarageParameters,
+    prevButtonGarageParameters,
+} from '../spa/util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
+import { CONSTANTS } from '../spa/state/initial-state';
 
 export type Route = {
     path: string;
@@ -185,3 +191,18 @@ export type ResponseObject = {
 };
 
 export type Css_Classes = { [key: string]: string };
+
+export type PaginationParameters = {
+    container: ElementParameters;
+    prevBtn: ElementParameters;
+    nextBtn: ElementParameters;
+};
+
+export type CurrentPage = AppStateKeys.GARAGE_PAGE | AppStateKeys.WINNERS_PAGE;
+
+export type ItemsTotal = AppStateKeys.CARS_QUANTITY | AppStateKeys.WINNERS_QUANTITY;
+
+export type PageStateKeys = {
+    currentPage: CurrentPage;
+    itemsTotal: ItemsTotal;
+};

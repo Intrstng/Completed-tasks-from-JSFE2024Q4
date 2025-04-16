@@ -1,4 +1,9 @@
-import { AppState, Car, Constants, Description, Paths } from '../../types';
+import { AppState, AppStateKeys, Car, Constants, Description, Paths } from '../../types';
+import { paginationGarageControlsContainerParameters } from '../util/pagination/garage-view-pagination/garage-view-pagination-parameters';
+import {
+    nextButtonGarageParameters,
+    prevButtonGarageParameters,
+} from '../util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
 
 export const PATHS: Paths = {
     garage: '/garage',

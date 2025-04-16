@@ -3,7 +3,6 @@ import {
     Callback,
     Car,
     CreateTableRecordsCB,
-    CssClasses,
     Description,
     ElementParameters,
     OrderButtonParametersWithCB,
@@ -24,7 +23,7 @@ import {
     tableRowCellParameters,
     tableRowParameters,
     theadButtonsContainer,
-} from '../../view/main/winners/winners-view-parameters';
+} from './table-view-parameters';
 import { createSVG } from '../createSvg/createSvg';
 import { svgElements } from '../createSvg/data';
 import { createTableRecords } from './create-table-records';
@@ -36,6 +35,7 @@ import {
     descTimeButtonParameters,
     descWinsButtonParameters,
 } from '../button/button-parameters/winners-view-parameters/winners-view-button-parameters';
+import { CSS_TABLE } from './table-classes';
 
 export default class Table {
     private readonly state: SessionStorageState;
@@ -94,7 +94,7 @@ export default class Table {
         tableHeadColumnsNames.forEach(columnName => {
             const headCellCreator = new CreatorElement(tableHeadCellParameters);
             if (columnName === Description.NAME) {
-                headCellCreator.setCssClasses([CssClasses.TABLE_HEAD_NAME]);
+                headCellCreator.setCssClasses([CSS_TABLE.TABLE_HEAD_NAME]);
                 headCellCreator.setTextContent(columnName);
             } else if (columnName === Description.WINS || columnName === Description.TIME) {
                 const { ascButtonParametersWithCB, descButtonParametersWithCB } =
@@ -163,7 +163,7 @@ export default class Table {
 
                 const nameCellCreator = new CreatorElement(tableRowCellParameters);
                 nameCellCreator.setTextContent(record.name);
-                nameCellCreator.setCssClasses([CssClasses.TABLE_ROW_NAME]);
+                nameCellCreator.setCssClasses([CSS_TABLE.TABLE_ROW_NAME]);
 
                 const winsCellCreator = new CreatorElement(tableRowCellParameters);
                 winsCellCreator.setTextContent(String(record.wins));

@@ -3,7 +3,7 @@ import { CSS_BUTTON } from '../../button-classes';
 
 export const mainButtonsContainerParameters: ElementParameters = {
     tag: 'div',
-    classNames: ['controls-btn-container'],
+    classNames: [CSS_BUTTON.BUTTON_CONTROLS_CONTAINER],
 };
 
 export const mainControlsButtonsParameters: ButtonsCollection = [

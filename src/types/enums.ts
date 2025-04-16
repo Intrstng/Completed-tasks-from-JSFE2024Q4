@@ -90,6 +90,7 @@ export enum CarStatus {
 }
 
 export enum Description {
+    APP_NAME = 'Async Race',
     TO_GARAGE = 'To garage',
     TO_WINNERS = 'To winners',
     GARAGE = 'garage',
@@ -163,41 +164,4 @@ export enum AppStateKeys {
     IS_UPDATE_ACTIVE = 'isUpdateActive',
     INPUT_DATA = 'inputData',
     BUTTONS_STATE = 'buttonsState',
-}
-
-export enum CssClasses {
-    WINNERS = 'winners',
-    WINNERS_SUMMARY = 'winners__summary',
-    WINNERS_CURRENT = 'winners__current',
-    PAGINATION_WIN_CONTAINER = 'winners__pagination',
-
-    TABLE_CONTAINER = 'winners__container',
-    WINNERS_TABLE = 'winners__table',
-    TABLE = 'table',
-    TABLE_HEAD = 'table__head',
-    TABLE_HEAD_NAME = 'table__head-name',
-    TABLE_BODY = 'table__body',
-    TABLE_ROW = 'table__row',
-    TABLE_ROW_NAME = 'table__row-name',
-    TABLE_HEAD_CELL = 'table__head-cell',
-    TABLE_ROW_CELL = 'table__row-cell',
-    HEAD = 'table__head-container',
-
-    PAGINATION_GARAGE_CONTAINER = 'garage__pagination',
-
-    INPUT = 'input-class',
-    BRAND = 'input-brand',
-    COLOR = 'input-color',
-    BOARD = 'race-board',
-    BLOCK = 'car-block',
-    NAME = 'car-block__name',
-    RACE = 'car-block__race',
-    RACE_CONTROLS = 'car-block__controls',
-    TRACK = 'car-block__track',
-    ICON = 'car-block__icon',
-    FINISH = 'car-block__finish',
-    SVG_ICON = 'svg-icon',
-
-    ACTIVE = 'active',
-    INACTIVE = 'inactive',
 }

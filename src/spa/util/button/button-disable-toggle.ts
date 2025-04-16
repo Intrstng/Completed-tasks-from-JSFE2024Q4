@@ -1,4 +1,3 @@
-import { AppStateKeys, CssClasses, Description } from '../../../types';
 import { CSS_BUTTON } from './button-classes';
 import CreatorElement from '../creator-element';
 
@@ -87,12 +86,12 @@ export function allGarageButtonsToggleDisable(isDisabled: boolean): void {
 
 export function toggleButtonActiveClass(button: CreatorElement): void {
     const buttonElement: HTMLElement = button.getElement();
-    const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CssClasses.ACTIVE]);
+    const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CSS_BUTTON.ACTIVE]);
     if (isActive) {
-        buttonElement.classList.remove(CssClasses.ACTIVE);
-        buttonElement.classList.add(CssClasses.INACTIVE);
+        buttonElement.classList.remove(CSS_BUTTON.ACTIVE);
+        buttonElement.classList.add(CSS_BUTTON.INACTIVE);
     } else {
-        buttonElement.classList.add(CssClasses.ACTIVE);
-        buttonElement.classList.remove(CssClasses.INACTIVE);
+        buttonElement.classList.add(CSS_BUTTON.ACTIVE);
+        buttonElement.classList.remove(CSS_BUTTON.INACTIVE);
     }
 }

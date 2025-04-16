@@ -12,8 +12,13 @@ import {
 import SessionStorageState from '../../../state/session-storage-state';
 import ApiController from '../../../api/api-controller';
 import { toggleButtonActiveClass } from '../../../util/button/button-disable-toggle';
-import { WinnersPaginationController } from '../../../util/pagination/winners-view-pagination/winners-view-pagination';
 import Table from '../../../util/table/table';
+import { CONSTANTS } from '../../../state/initial-state';
+import {
+    pageWinnersStateKeys,
+    paginationWinnersParameters,
+} from '../../../util/pagination/winners-view-pagination/winners-view-pagination-parameters';
+import { PaginationController } from '../../../util/pagination/pagination-controller';
 
 export default class WinnersView extends View {
     public router: Router;
@@ -28,7 +33,7 @@ export default class WinnersView extends View {
     private ascTimeButton: CreatorElement | null;
     private descTimeButton: CreatorElement | null;
     private readonly toggleButtonActiveClass: ToggleActiveButtonCallback;
-    private paginationController: WinnersPaginationController | null;
+    private paginationController: PaginationController | null;
     public api: ApiController;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {
@@ -41,17 +46,20 @@ export default class WinnersView extends View {
         this.ascTimeButton = null;
         this.descTimeButton = null;
         this.router = router;
-        this.api = api;
         this.winnersState = state;
+        this.api = api;
         this.winnersPage = new CreatorElement(winnersPageCurrentParameters);
         this.toggleButtonActiveClass = toggleButtonActiveClass;
 
-        this.paginationController = new WinnersPaginationController(
+        this.paginationController = new PaginationController(
             state,
             this.winnersPage,
             this.viewElementCreator,
             this.getWinnersForCurrentPage.bind(this),
-            this.updateTableLayout.bind(this)
+            this.updateTableLayout.bind(this),
+            paginationWinnersParameters,
+            pageWinnersStateKeys,
+            CONSTANTS.winnersOnPage
         );
 
         this.table = new Table(

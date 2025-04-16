@@ -1,6 +1,6 @@
 import './dialog.scss';
 
-import { CssClasses, Description, DialogParameters, ElementParameters } from '../../../types';
+import { Description, DialogParameters, ElementParameters } from '../../../types';
 import CreatorElement from '../creator-element';
 import { CSS_DIALOG } from './dialog-classes';
 
