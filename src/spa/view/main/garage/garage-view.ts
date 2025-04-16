@@ -67,6 +67,7 @@ import {
     paginationGarageParameters,
 } from '../../../util/pagination/garage-view-pagination/garage-view-pagination-parameters';
 import { PaginationController } from '../../../util/pagination/pagination-controller';
+import { CarController } from '../../../util/car/car-controller';
 
 export default class GarageView extends View {
     public router: Router;
@@ -85,6 +86,7 @@ export default class GarageView extends View {
     private nextButton: CreatorElement | null;
     private dialog: CreatorDialog | null;
     private paginationController: PaginationController | null;
+    private carController: CarController | null;
     public api: ApiController;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
@@ -124,6 +126,19 @@ export default class GarageView extends View {
     private async configureView(): Promise<void> {
         await this.getCarsForCurrentPage();
         this.addCarCreationControls();
+
+        this.carController = new CarController(
+            this.state,
+            this.api,
+            this.inputCreateNameField,
+            this.inputCreateColorField,
+            this.inputUpdateNameField,
+            this.inputUpdateColorField,
+            this.getCarsForCurrentPage.bind(this),
+            this.updateGarageQuantityLayout.bind(this),
+            this.updateRaceBoardLayout.bind(this)
+        );
+
         this.paginationController.createControls();
         this.addSummary();
         this.createRaceBoard(this.state.getState().cars, true);
@@ -196,10 +211,10 @@ export default class GarageView extends View {
                 return () => this.generateCars();
             }
             case Description.CREATE: {
-                return () => this.createCar();
+                return () => this.carController.createCar();
             }
             case Description.UPDATE: {
-                return () => this.updateCar();
+                return () => this.carController.updateCar();
             }
             case Description.START: {
                 return () => getCallbackWithID(buttonParameters, this.startRaceCar.bind(this));
@@ -208,50 +223,16 @@ export default class GarageView extends View {
                 return () => getCallbackWithID(buttonParameters, this.backFromRaceForCar.bind(this));
             }
             case Description.SELECT: {
-                return () => getCallbackWithID(buttonParameters, this.selectCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.carController.selectCar.bind(this));
             }
             case Description.REMOVE: {
-                return () => getCallbackWithID(buttonParameters, this.removeCar.bind(this));
+                return () => getCallbackWithID(buttonParameters, this.carController.removeCar.bind(this));
             }
             default: {
                 return () => {};
             }
         }
     };
-
-    private selectCar(id: number): void {
-        const currentState: AppState = this.state.getState();
-        const selectedCar: Car | undefined = currentState.cars.find(car => car.id === id);
-
-        if (selectedCar) {
-            const newState: AppState = {
-                ...currentState,
-                selectedCar: {
-                    id,
-                    name: selectedCar.name,
-                    color: selectedCar.color,
-                },
-            };
-            this.state.setState(newState);
-
-            this.inputUpdateNameField.setValue(selectedCar.name);
-            this.inputUpdateColorField.setValue(selectedCar.color);
-            changeSvgStrokeColor(InputUse.UPDATE, selectedCar.color);
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_NAME, selectedCar.name);
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, selectedCar.color);
-        } else {
-            console.log(`Car with id: ${id} not found`);
-        }
-    }
-
-    private async removeCar(id: number): Promise<void> {
-        await this.api.deleteCar(id);
-        await this.api.deleteWinner(id);
-        await this.getCarsForCurrentPage();
-        this.updateGarageQuantityLayout();
-
-        this.updateRaceBoardLayout();
-    }
 
     private async generateCars(): Promise<void> {
         const carsCollection: Array<CarPayload> = generateCarsCollection();
@@ -265,129 +246,6 @@ export default class GarageView extends View {
         this.paginationController.toggleDisabledForPaginationButtons();
 
         this.updateRaceBoardLayout();
-    }
-
-    private async createCar(): Promise<void> {
-        const name: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_NAME];
-
-        let color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_COLOR];
-
-        const carPayload = {
-            name,
-            color: color || COLORS.black,
-        };
-
-        await this.api.createCar(carPayload);
-
-        this.clearValuesInInputFields(InputUse.CREATE);
-        this.clearInputFieldsValuesInState(InputUse.CREATE);
-        changeSvgStrokeColor(InputUse.CREATE, COLORS.black);
-
-        await this.getCarsForCurrentPage();
-        this.updateGarageQuantityLayout();
-
-        this.updateRaceBoardLayout();
-    }
-
-    private async updateCar(): Promise<void> {
-        const name: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.UPDATE_NAME];
-
-        let color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.UPDATE_COLOR];
-
-        let selectedCarID: number = this.state.getState()[AppStateKeys.SELECTED_CAR]['id'];
-
-        const carPayload = {
-            name,
-            color: color || COLORS.black,
-        };
-
-        await this.api.updateCar(carPayload, selectedCarID);
-        this.clearValuesInInputFields(InputUse.UPDATE);
-        this.clearInputFieldsValuesInState(InputUse.UPDATE);
-        this.clearSelectedCarStateProperty();
-        changeSvgStrokeColor(InputUse.UPDATE, COLORS.black);
-
-        this.updateRaceBoardLayout();
-    }
-
-    private clearInputFieldsValuesInState(inputsUse: InputUse): void {
-        if (inputsUse === InputUse.CREATE) {
-            this.updateInputFieldStateProperty(InputFieldsKeys.CREATE_NAME, '');
-            this.updateInputFieldStateProperty(InputFieldsKeys.CREATE_COLOR, '');
-        } else if (inputsUse === InputUse.UPDATE) {
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_NAME, '');
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, '');
-        }
-    }
-
-    private clearValuesInInputFields(inputsUse: InputUse): void {
-        if (inputsUse === InputUse.CREATE) {
-            this.inputCreateNameField.setValue('');
-            this.inputCreateColorField.setValue(COLORS.black);
-        } else if (inputsUse === InputUse.UPDATE) {
-            this.inputUpdateNameField.setValue('');
-            this.inputUpdateColorField.setValue(COLORS.black);
-        }
-    }
-
-    private createCarName(event: Event): void {
-        const target = event.target;
-
-        if (target && target instanceof HTMLInputElement) {
-            this.updateInputFieldStateProperty(InputFieldsKeys.CREATE_NAME, target.value);
-        }
-    }
-
-    private clearSelectedCarStateProperty(): void {
-        const currentState: AppState = this.state.getState();
-        const updatedState: AppState = {
-            ...currentState,
-            selectedCar: {
-                id: 0,
-                name: '',
-                color: '',
-            },
-        };
-        this.state.setState(updatedState);
-    }
-
-    private updateInputFieldStateProperty(key: string, value: string): void {
-        const currentState: AppState = this.state.getState();
-
-        const updatedState: AppState = {
-            ...currentState,
-            inputData: {
-                ...currentState.inputData,
-                [key]: value,
-            },
-        };
-        this.state.setState(updatedState);
-    }
-
-    private updateCarName(event: Event): void {
-        const target = event.target;
-
-        if (target && target instanceof HTMLInputElement) {
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_NAME, target.value);
-        }
-    }
-
-    private createCarColor(event: Event, idName: string): void {
-        const target = event.target;
-
-        if (target && target instanceof HTMLInputElement) {
-            changeSvgStrokeColor(idName, target.value);
-            this.updateInputFieldStateProperty(InputFieldsKeys.CREATE_COLOR, target.value);
-        }
-    }
-
-    private updateCarColor(event: Event, idName: string): void {
-        const target = event.target;
-
-        if (target && target instanceof HTMLInputElement) {
-            changeSvgStrokeColor(idName, target.value);
-            this.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, target.value);
-        }
     }
 
     private addDialog(): void {
@@ -449,8 +307,8 @@ export default class GarageView extends View {
 
                 const eventHandler =
                     prefix === InputUse.CREATE
-                        ? (event: Event) => this.createCarColor(event, prefix)
-                        : (event: Event) => this.updateCarColor(event, prefix);
+                        ? (event: Event) => this.carController.createCarColor(event, prefix)
+                        : (event: Event) => this.carController.updateCarColor(event, prefix);
 
                 carInputColorCreator.getElement().addEventListener('input', eventHandler);
                 container.addInnerElement(carInputColorCreator.getElement());
@@ -576,7 +434,7 @@ export default class GarageView extends View {
         toggleDisabledAllCarButtons(id, true);
         toggleDisabledDragRaceControlButtons(true);
         raceButtonToggleDisable(true);
-        let carIcon: HTMLElement = this.getCarIconFromLayout(id);
+        let carIcon: HTMLElement = this.carController.getCarIconFromLayout(id);
         const trackDistance: number = this.getTrackDistance(carIcon);
 
         const carEngineData: EngineData | undefined = await this.api.startEngine(id);
@@ -702,22 +560,11 @@ export default class GarageView extends View {
                 const currentCarColor = currentCar.color;
                 changeSvgStrokeColor(String(id), currentCarColor);
             }
-            const car = this.getCarIconFromLayout(id);
+            const car = this.carController.getCarIconFromLayout(id);
             car.style.transform = `translateX(0px)`;
         } catch (error: unknown) {
             console.error('Error occurred:', error instanceof Error ? error.message : String(error));
         }
-    }
-
-    private getCarIconFromLayout(id: number): HTMLElement {
-        const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
-            `${CSS_GARAGE.SVG_ICON}-${id}`
-        );
-        let carIcon: HTMLElement | null = null;
-        if (carIconCollection.length > 0) {
-            carIcon = carIconCollection[0] as HTMLElement;
-        }
-        return carIcon;
     }
 
     private animateCarRacing(carID: number, car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {
@@ -747,13 +594,13 @@ export default class GarageView extends View {
 
     private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {
         if (parameters.placeholder === Description.BRAND && prefix === InputUse.CREATE) {
-            this.createCarName(event);
+            this.carController.createCarName(event);
         } else if (parameters.placeholder === Description.BRAND && prefix === InputUse.UPDATE) {
-            this.updateCarName(event);
+            this.carController.updateCarName(event);
         } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.CREATE) {
-            this.createCarColor(event, parameters.id);
+            this.carController.createCarColor(event, parameters.id);
         } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.UPDATE) {
-            this.updateCarColor(event, parameters.id);
+            this.carController.updateCarColor(event, parameters.id);
         }
     }
 }
