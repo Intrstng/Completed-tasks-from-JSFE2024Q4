@@ -1,15 +1,9 @@
-import {
-    AppStateKeys,
-    CurrentPage,
-    ElementParameters,
-    ItemsTotal,
-    PageStateKeys,
-    PaginationParameters,
-} from '../../../../types';
+import type { ElementParameters, PageStateKeys, PaginationParameters } from '../../../../types';
+import { AppStateKeys } from '../../../../types';
 import { CSS_PAGINATION_GARAGE } from './garage-pagination-classes';
 import {
     nextButtonGarageParameters,
-    prevButtonGarageParameters,
+    previousButtonGarageParameters,
 } from '../../button/button-parameters/garage-view-buttons/garage-view-button-parameters';
 
 export const paginationGarageControlsContainerParameters: ElementParameters = {
@@ -19,7 +13,7 @@ export const paginationGarageControlsContainerParameters: ElementParameters = {
 
 export const paginationGarageParameters: PaginationParameters = {
     container: paginationGarageControlsContainerParameters,
-    prevBtn: prevButtonGarageParameters,
+    prevBtn: previousButtonGarageParameters,
     nextBtn: nextButtonGarageParameters,
 };
 

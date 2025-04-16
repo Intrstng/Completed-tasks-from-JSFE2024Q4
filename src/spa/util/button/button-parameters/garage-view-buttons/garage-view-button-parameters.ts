@@ -1,4 +1,5 @@
-import { ButtonParameters, ButtonsCollection, Description, ElementParameters } from '../../../../../types';
+import type { ButtonParameters, ButtonsCollection, ElementParameters } from '../../../../../types';
+import { Description } from '../../../../../types';
 import { CSS_BUTTON } from '../../button-classes';
 
 export const mainButtonsContainerParameters: ElementParameters = {
@@ -59,7 +60,7 @@ export const updateButtonParameters: ButtonParameters = {
     textContent: Description.UPDATE,
 };
 
-export const prevButtonGarageParameters: ButtonParameters = {
+export const previousButtonGarageParameters: ButtonParameters = {
     tag: 'button',
     classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_PREV],
     textContent: Description.PREV,

@@ -1,5 +1,5 @@
-@use './spa/view/main/garage/garage.scss';
-@use './spa/util/button/button.scss';
+@use './spa/view/main/garage/garage';
+@use './spa/util/button/button';
 
 * {
     box-sizing: border-box;
@@ -18,22 +18,25 @@ body {
     justify-content: center;
 
     min-height: 100vh;
+
     font-family: Corbel, sans-serif;
+
     background-color: #5f8b4c;
-    @media screen and (max-width: 640px) {
+
+    @media screen and (width <= 640px) {
         font-size: 0.8rem;
     }
 }
 
 .container {
+    max-width: 1024px;
     margin: 0 auto;
     padding: 0 5px;
-    max-width: 1024px;
 }
 
 .main {
-    width: 100%;
     flex-grow: 1;
+    width: 100%;
     margin-top: 30px;
 }
 

@@ -7,7 +7,7 @@ export default class CreatorElement {
         this.createElement(parameters);
     }
 
-    static hasClasses(element: HTMLElement, classes: string[]): boolean {
+    public static hasClasses(element: HTMLElement, classes: string[]): boolean {
         return classes.every(cls => element.classList.contains(cls));
     }
 

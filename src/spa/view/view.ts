@@ -10,17 +10,17 @@ export default class View {
         this.viewElementCreator = this.createView(parameters || defaultElementParameters);
     }
 
-    public getHtmlElement(): HTMLElement | null {
-        return this.viewElementCreator.getElement();
-    }
-
-    public deleteAllItemsInContainer(container: CreatorElement): void {
+    public static deleteAllItemsInContainer(container: CreatorElement): void {
         const containerElement = container.getElement();
         if (containerElement) {
             while (containerElement.firstElementChild) {
                 containerElement.firstElementChild.remove();
             }
         }
+    }
+
+    public getHtmlElement(): HTMLElement | null {
+        return this.viewElementCreator.getElement();
     }
 
     public createView({ tag, classNames }: ElementParameters): CreatorElement {

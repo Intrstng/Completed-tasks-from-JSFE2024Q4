@@ -1,33 +1,36 @@
 .garage-container {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: column wrap;
     gap: 15px;
 }
 
 .garage {
     &__pagination {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+
         width: 12.5%;
         margin: 0 auto 5px;
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
     }
+
     &__summary {
-        margin: 0 auto;
-        width: 60%;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
         justify-content: space-between;
+
+        width: 60%;
+        margin: 0 auto;
     }
+
     &__current-total-cars,
     &__current-page {
         margin: 0 auto;
+        color: rgb(246 248 213 / 75%);
         text-transform: capitalize;
-        color: rgba(246, 248, 213, 0.75);
     }
 }
 
@@ -41,86 +44,101 @@
         align-items: center;
         justify-content: space-between;
     }
+
     .label {
         cursor: pointer;
+
         padding: 0;
+
         font-family: Corbel, sans-serif;
         font-weight: bold;
+        color: rgb(246 248 213 / 75%);
         letter-spacing: 1px;
-        color: rgba(246, 248, 213, 0.75);
+
         background-color: transparent;
     }
 }
 
 .input-color {
-    padding: 0 !important;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    cursor: pointer;
+
     width: 25px;
     height: 25px;
+    padding: 0 !important;
+    border: none;
+
+    appearance: none;
     background-color: transparent !important;
-    border: none;
-    cursor: pointer;
 }
+
 .input-color::-webkit-color-swatch {
-    border-radius: 5px;
     border: none;
+    border-radius: 5px;
 }
+
 .input-color::-moz-color-swatch {
-    border-radius: 5px;
     border: none;
+    border-radius: 5px;
 }
 
 .race-board {
-    margin: 0 0 30px;
     display: flex;
     flex-direction: column;
-    background-color: #f6f8d5;
+
+    margin: 0 0 30px;
+    padding: 10px 15px 15px;
     border: none;
     border-radius: 30px;
-    padding: 10px 15px 15px 15px;
+
+    background-color: #f6f8d5;
 }
 
 .car-block {
-    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 10px 12px;
+
     &__name {
+        margin: 5px 0 0;
         font-family: Corbel, sans-serif;
         color: #316f7b;
-        margin: 5px 0 0 0;
         letter-spacing: 1px;
     }
+
     &__race {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
         gap: 10px;
+        align-items: center;
+        justify-content: space-between;
     }
+
     &__controls {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 5px;
     }
+
     &__track {
-        flex: 1;
         display: flex;
+        flex: 1;
         align-items: center;
+
         height: 60px;
         padding-left: 8px;
-        border-top: 3px solid rgba(107, 107, 107, 0.6);
-        border-bottom: 3px solid rgba(107, 107, 107, 0.6);
+        border-top: 3px solid rgb(107 107 107 / 60%);
+        border-bottom: 3px solid rgb(107 107 107 / 60%);
         border-radius: 5px;
     }
+
     &__finish {
         width: 120px;
         height: 60px;
         margin-left: auto;
-        background: rgba(61, 61, 61, 0.6);
+        background: rgb(61 61 61 / 60%);
     }
-    @media screen and (max-width: 640px) {
+
+    @media screen and (width <= 640px) {
         &__finish {
             width: 80px;
         }
@@ -128,12 +146,13 @@
 }
 
 .controls-btn-container {
-    margin: 25px 15px 0px;
-    max-width: 230px;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
+
+    max-width: 230px;
+    margin: 25px 15px 0;
 }
 
 .svg-icon {

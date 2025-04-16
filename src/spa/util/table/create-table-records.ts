@@ -1,4 +1,4 @@
-import { Car, TableRecord, Winner } from '../../../types';
+import type { Car, TableRecord, Winner } from '../../../types';
 import { CONSTANTS } from '../../state/initial-state';
 import { COLORS } from '../../../constants/constants';
 

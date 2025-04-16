@@ -1,5 +1,5 @@
-import { Pages } from '../../../types';
-import LinkView from './link/link-view';
+import type { Pages } from '../../../types';
+import type LinkView from './link/link-view';
 
 export type PageParameters = {
     name: Pages;

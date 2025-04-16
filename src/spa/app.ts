@@ -1,7 +1,7 @@
 import '../style.scss';
 
 import type { Route, ViewCommon } from '../types';
-import { AppInfo, AppStateKeys, Constants, Pages, Paths } from '../types';
+import { AppInfo, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
 import LocalStorageState from './state/session-storage-state';
@@ -10,13 +10,13 @@ import ApiController from './api/api-controller';
 import { CONSTANTS, PATHS } from './state/initial-state';
 
 export default class App {
+    public api: ApiController;
     private readonly appName: string = AppInfo.NAME;
     private readonly keyToRecordInLS: string = AppInfo.KEY_LS;
     private readonly router: Router;
     private header: HeaderView | null;
     private main: MainView | null;
     private readonly state: LocalStorageState;
-    public api: ApiController;
 
     constructor() {
         this.header = null;

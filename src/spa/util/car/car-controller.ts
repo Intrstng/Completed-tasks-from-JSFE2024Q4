@@ -1,18 +1,18 @@
-import SessionStorageState from '../../state/session-storage-state';
-import { AppState, AppStateKeys, Callback, Car, InputFieldsKeys, InputUse } from '../../../types';
-import { changeSvgStrokeColor } from '../createSvg/createSvg';
+import type SessionStorageState from '../../state/session-storage-state';
+import type { AppState, Callback, Car } from '../../../types';
+import { AppStateKeys, InputFieldsKeys, InputUse } from '../../../types';
+import { changeSvgStrokeColor } from '../create-svg/create-svg';
 import { COLORS } from '../../../constants/constants';
-import { CSS_GARAGE } from '../../view/main/garage/garage-classes';
-import ApiController from '../../api/api-controller';
+import type ApiController from '../../api/api-controller';
 import InputFieldCreator from '../input-field/input-field-creator';
 
 export class CarController {
     private readonly state: SessionStorageState;
     private api: ApiController;
-    private inputCreateNameField: InputFieldCreator | null;
-    private inputCreateColorField: InputFieldCreator | null;
-    private inputUpdateNameField: InputFieldCreator | null;
-    private inputUpdateColorField: InputFieldCreator | null;
+    private readonly inputCreateNameField: InputFieldCreator | null;
+    private readonly inputCreateColorField: InputFieldCreator | null;
+    private readonly inputUpdateNameField: InputFieldCreator | null;
+    private readonly inputUpdateColorField: InputFieldCreator | null;
     private readonly getCarsForCurrentPage: Callback | null;
     private readonly updateGarageQuantityLayout: Callback | null;
     private readonly updateRaceBoardLayout: Callback | null;
@@ -20,10 +20,10 @@ export class CarController {
     constructor(
         state: SessionStorageState,
         api: ApiController,
-        inputCreateNameField: InputFieldCreator,
-        inputCreateColorField: InputFieldCreator,
-        inputUpdateNameField: InputFieldCreator,
-        inputUpdateColorField: InputFieldCreator,
+        inputCreateNameField: InputFieldCreator | null,
+        inputCreateColorField: InputFieldCreator | null,
+        inputUpdateNameField: InputFieldCreator | null,
+        inputUpdateColorField: InputFieldCreator | null,
         getApiData: Callback,
         updateGarageQuantityLayout: Callback,
         updateRaceBoardLayout: Callback
@@ -54,8 +54,12 @@ export class CarController {
             };
             this.state.setState(newState);
 
-            this.inputUpdateNameField.setValue(selectedCar.name);
-            this.inputUpdateColorField.setValue(selectedCar.color);
+            if (this.inputUpdateNameField instanceof InputFieldCreator) {
+                this.inputUpdateNameField.setValue(selectedCar.name);
+            }
+            if (this.inputUpdateColorField instanceof InputFieldCreator) {
+                this.inputUpdateColorField.setValue(selectedCar.color);
+            }
             changeSvgStrokeColor(InputUse.UPDATE, selectedCar.color);
             this.state.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_NAME, selectedCar.name);
             this.state.updateInputFieldStateProperty(InputFieldsKeys.UPDATE_COLOR, selectedCar.color);
@@ -67,8 +71,12 @@ export class CarController {
     public removeCar = async (id: number): Promise<void> => {
         await this.api.deleteCar(id);
         await this.api.deleteWinner(id);
-        await this.getCarsForCurrentPage();
-        this.updateGarageQuantityLayout();
+        if (this.getCarsForCurrentPage) {
+            await this.getCarsForCurrentPage();
+        }
+        if (this.updateGarageQuantityLayout) {
+            this.updateGarageQuantityLayout();
+        }
 
         const currenSelectedCar = this.state.getState()[AppStateKeys.SELECTED_CAR];
 
@@ -79,13 +87,15 @@ export class CarController {
             changeSvgStrokeColor(InputUse.UPDATE, COLORS.black);
         }
 
-        this.updateRaceBoardLayout();
+        if (this.updateRaceBoardLayout) {
+            this.updateRaceBoardLayout();
+        }
     };
 
     public async createCar(): Promise<void> {
         const name: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_NAME];
 
-        let color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_COLOR];
+        const color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.CREATE_COLOR];
 
         const carPayload = {
             name,
@@ -98,18 +108,24 @@ export class CarController {
         this.clearInputFieldsValuesInState(InputUse.CREATE);
         changeSvgStrokeColor(InputUse.CREATE, COLORS.black);
 
-        await this.getCarsForCurrentPage();
-        this.updateGarageQuantityLayout();
+        if (this.getCarsForCurrentPage) {
+            await this.getCarsForCurrentPage();
+        }
+        if (this.updateGarageQuantityLayout) {
+            this.updateGarageQuantityLayout();
+        }
 
-        this.updateRaceBoardLayout();
+        if (this.updateRaceBoardLayout) {
+            this.updateRaceBoardLayout();
+        }
     }
 
     public async updateCar(): Promise<void> {
         const name: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.UPDATE_NAME];
 
-        let color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.UPDATE_COLOR];
+        const color: string = this.state.getState()[AppStateKeys.INPUT_DATA][InputFieldsKeys.UPDATE_COLOR];
 
-        let selectedCarID: number = this.state.getState()[AppStateKeys.SELECTED_CAR]['id'];
+        const selectedCarID: number = this.state.getState()[AppStateKeys.SELECTED_CAR]['id'];
 
         const carPayload = {
             name,
@@ -122,7 +138,9 @@ export class CarController {
         this.clearSelectedCarStateProperty();
         changeSvgStrokeColor(InputUse.UPDATE, COLORS.black);
 
-        this.updateRaceBoardLayout();
+        if (this.updateRaceBoardLayout) {
+            this.updateRaceBoardLayout();
+        }
     }
 
     public createCarName(event: Event): void {
@@ -159,24 +177,21 @@ export class CarController {
         }
     }
 
-    public getCarIconFromLayout(id: number): HTMLElement {
-        const carIconCollection: HTMLCollectionOf<Element> = document.getElementsByClassName(
-            `${CSS_GARAGE.SVG_ICON}-${id}`
-        );
-        let carIcon: HTMLElement | null = null;
-        if (carIconCollection.length > 0) {
-            carIcon = carIconCollection[0] as HTMLElement;
-        }
-        return carIcon;
-    }
-
     private clearValuesInInputFields(inputsUse: InputUse): void {
         if (inputsUse === InputUse.CREATE) {
-            this.inputCreateNameField.setValue('');
-            this.inputCreateColorField.setValue(COLORS.black);
+            if (this.inputCreateNameField instanceof InputFieldCreator) {
+                this.inputCreateNameField.setValue('');
+            }
+            if (this.inputCreateColorField instanceof InputFieldCreator) {
+                this.inputCreateColorField.setValue(COLORS.black);
+            }
         } else if (inputsUse === InputUse.UPDATE) {
-            this.inputUpdateNameField.setValue('');
-            this.inputUpdateColorField.setValue(COLORS.black);
+            if (this.inputUpdateNameField instanceof InputFieldCreator) {
+                this.inputUpdateNameField.setValue('');
+            }
+            if (this.inputUpdateColorField instanceof InputFieldCreator) {
+                this.inputUpdateColorField.setValue(COLORS.black);
+            }
         }
     }
 

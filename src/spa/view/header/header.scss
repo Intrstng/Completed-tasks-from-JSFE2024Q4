@@ -1,58 +1,62 @@
 .header {
-    height: 10%;
-    box-sizing: border-box;
     display: none;
     flex-direction: column;
     justify-content: space-around;
-    border: 2px rgba(131, 131, 130, 0.7) solid;
-    border-radius: 20px;
+
+    box-sizing: border-box;
+    height: 10%;
     padding: 10px 20px;
+    border: 2px rgb(131 131 130 / 70%) solid;
+    border-radius: 20px;
 }
 
 .header,
 .nav {
     display: flex;
     align-items: center;
+
     width: 100%;
     margin: 10px;
+
     background-color: #f6f8d5;
 }
 
 .title {
-    font-weight: bold;
     font-family: Corbel, sans-serif;
+    font-weight: bold;
     color: #205781;
     letter-spacing: 1px;
 }
 
 .nav {
-    padding: 10px;
     flex-direction: row;
     justify-content: space-around;
+
+    padding: 10px;
     border: 1px #205781 solid;
     border-radius: 12px;
 }
 
 .nav-item {
-    padding: 4px;
     position: relative;
-    text-decoration: none;
-    color: #205781;
-    font-weight: bold;
+
+    padding: 4px;
+
     font-family: Corbel, sans-serif;
     font-size: 16px;
+    font-weight: bold;
+    color: #205781;
+    text-decoration: none;
     letter-spacing: 1px;
+
     transition: 0.25s ease all;
 }
 
 .nav-item:hover {
     cursor: pointer;
+    color: rgb(221 168 83 / 60%);
 }
 
-.nav-item:hover {
-    color: rgba(221, 168, 83, 0.6);
-}
-
-.nav-item__selected {
+.nav-item-selected {
     color: #dda853;
 }

@@ -2,16 +2,17 @@ import './header.scss';
 import View from '../view';
 import LinkView from './link/link-view';
 import CreatorElement from '../../util/creator-element';
-import { Pages } from '../../../types';
-import Router from '../../router/router';
+import type { Pages } from '../../../types';
+import type Router from '../../router/router';
 import {
-    titleParameters,
     headerParameters,
-    navigationParameters,
     LinkNames,
+    navigationParameters,
     PagesNames,
+    titleParameters,
 } from './headers-view-parameters';
-import { LinkElements, PageParameters } from './types';
+import type { LinkElements, PageParameters } from './types';
+import { isValidPage } from '../../util/assertion-functions/assertion-functions';
 
 export default class HeaderView extends View {
     public headerLinkElements: LinkElements;
@@ -38,13 +39,25 @@ export default class HeaderView extends View {
         this.viewElementCreator.addInnerElement(creatorNav);
 
         Object.keys(LinkNames).forEach(key => {
-            const pageParam: PageParameters = {
-                name: LinkNames[key],
-                callback: () => router.navigate(PagesNames[key]),
+            const keyLinkNames: unknown = LinkNames[key];
+
+            if (!isValidPage(keyLinkNames)) {
+                throw new Error(`Invalid key: ${key}`);
+            }
+
+            const pageParameter: PageParameters = {
+                name: keyLinkNames,
+                callback: (): void => router.navigate(PagesNames[key]),
             };
-            const linkElement = new LinkView(pageParam, this.headerLinkElements);
-            creatorNav.addInnerElement(linkElement.getHtmlElement());
-            this.headerLinkElements.set(PagesNames[key], linkElement);
+
+            const linkElementCreator = new LinkView(pageParameter, this.headerLinkElements);
+            const linkElement: HTMLElement | null = linkElementCreator.getHtmlElement();
+
+            if (linkElement) {
+                creatorNav.addInnerElement(linkElement);
+            }
+
+            this.headerLinkElements.set(PagesNames[key], linkElementCreator);
         });
 
         this.viewElementCreator.addInnerElement(creatorNav);

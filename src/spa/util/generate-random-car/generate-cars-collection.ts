@@ -1,4 +1,4 @@
-import { CarPayload } from '../../../types';
+import type { CarPayload } from '../../../types';
 import { CONSTANTS } from '../../state/initial-state';
 import { getRandomCarName } from './generate-random-car-name';
 import { generateRandomColor } from './generate-random-color';

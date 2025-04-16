@@ -1,4 +1,5 @@
-import { Description, DialogParameters, ElementParameters } from '../../../types';
+import type { DialogParameters, ElementParameters } from '../../../types';
+import { Description } from '../../../types';
 import { CSS_DIALOG } from './dialog-classes';
 
 export const dialogParameters: DialogParameters = {

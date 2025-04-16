@@ -1,7 +1,8 @@
-import { ButtonParameters, Description } from '../../../../../types';
+import type { ButtonParameters } from '../../../../../types';
+import { Description } from '../../../../../types';
 import { CSS_BUTTON } from '../../button-classes';
 
-export const prevButtonWinnersParameters: ButtonParameters = {
+export const previousButtonWinnersParameters: ButtonParameters = {
     tag: 'button',
     id: 'prevBtn',
     classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_PREV],

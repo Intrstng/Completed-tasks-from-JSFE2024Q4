@@ -1,9 +1,5 @@
-import { AppState, AppStateKeys, Car, Constants, Description, Paths } from '../../types';
-import { paginationGarageControlsContainerParameters } from '../util/pagination/garage-view-pagination/garage-view-pagination-parameters';
-import {
-    nextButtonGarageParameters,
-    prevButtonGarageParameters,
-} from '../util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
+import type { AppState, Car, Constants, Paths } from '../../types';
+import { Description } from '../../types';
 
 export const PATHS: Paths = {
     garage: '/garage',
@@ -171,60 +167,3 @@ export const INITIAL_STATE: AppState = {
         reset: false,
     },
 };
-
-export const mockDataWinners = [
-    {
-        id: 1,
-        name: '2140',
-        color: 'Охра',
-        wins: 1,
-        time: 10,
-    },
-    {
-        name: '2138',
-        color: 'Рубин',
-        wins: 1,
-        time: 3378,
-    },
-];
-
-const carModels: Array<string> = [
-    'Base',
-    'Classic',
-    'Performance',
-    'Clubsport',
-    'Club',
-    'Sport',
-    'Interceptor',
-    'Cross',
-    'Gran-Turismo',
-    'Exclusive',
-    'Track-Pack',
-    'Premium',
-    'Premium-Plus',
-    'Luxury',
-    'Speed-Line',
-    'Turbo',
-    'Bi-turbo',
-    'Twin-scroll',
-    'Compressor',
-    'NOS',
-    'Stage-1',
-    'Stage-2',
-    'Stage-3',
-    '1.2',
-    '1.4',
-    '1.5',
-    '1.6',
-    '1.8',
-    '2.0',
-    '2.2',
-    '2.3',
-    '2.4',
-    '2.5',
-    '2.6',
-    '2.7',
-    '2.8',
-    '2.9',
-    '3.0',
-];

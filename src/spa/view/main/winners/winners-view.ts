@@ -2,15 +2,16 @@ import './winners.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
-import { AppStateKeys, Description, ToggleActiveButtonCallback } from '../../../../types';
+import type { ToggleActiveButtonCallback } from '../../../../types';
+import { AppStateKeys, Description } from '../../../../types';
 import {
     winnersCurrentParameters,
     winnersPageCurrentParameters,
     winnersParameters,
     winnersSummaryParameters,
 } from './winners-view-parameters';
-import SessionStorageState from '../../../state/session-storage-state';
-import ApiController from '../../../api/api-controller';
+import type SessionStorageState from '../../../state/session-storage-state';
+import type ApiController from '../../../api/api-controller';
 import { toggleButtonActiveClass } from '../../../util/button/button-disable-toggle';
 import Table from '../../../util/table/table';
 import { CONSTANTS } from '../../../state/initial-state';
@@ -22,6 +23,7 @@ import { PaginationController } from '../../../util/pagination/pagination-contro
 
 export default class WinnersView extends View {
     public router: Router;
+    public api: ApiController;
     private readonly winnersState: SessionStorageState;
     private winnersQuantity: CreatorElement | null;
     private readonly winnersPage: CreatorElement | null;
@@ -34,7 +36,6 @@ export default class WinnersView extends View {
     private descTimeButton: CreatorElement | null;
     private readonly toggleButtonActiveClass: ToggleActiveButtonCallback;
     private paginationController: PaginationController | null;
-    public api: ApiController;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {
         super(winnersParameters);
@@ -76,8 +77,12 @@ export default class WinnersView extends View {
     private async configureView(): Promise<void> {
         await this.getWinnersForCurrentPage();
         this.addSummary();
-        this.paginationController.createControls();
-        this.table.addScoreTable(true);
+        if (this.paginationController instanceof PaginationController) {
+            this.paginationController.createControls();
+        }
+        if (this.table instanceof Table) {
+            this.table.addScoreTable(true);
+        }
     }
 
     private async getWinnersForCurrentPage(): Promise<void> {
@@ -91,7 +96,7 @@ export default class WinnersView extends View {
             currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
         }
 
-        if (typeof currentWinnersPage === 'number' && isFinite(currentWinnersPage)) {
+        if (typeof currentWinnersPage === 'number' && Number.isFinite(currentWinnersPage)) {
             await this.api.getAllWinners(currentSortType, currentSortOrderTime, currentWinnersPage);
         }
     }
@@ -115,7 +120,7 @@ export default class WinnersView extends View {
     }
 
     private updateTableLayout(): void {
-        this.deleteAllItemsInContainer(this.table.getTableCreator());
+        View.deleteAllItemsInContainer(this.table.getTableCreator());
         this.table.addScoreTable();
     }
 }

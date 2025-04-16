@@ -1,9 +1,12 @@
-import { ShapeElement, SvgElements, SvgElementsCollection } from './types';
+import { CSS_GARAGE } from '../../view/main/garage/garage-classes';
+import type { ShapeElement, SvgElements, SvgElementsCollection } from './types';
 
-export function createSVG(elements: Array<ShapeElement>, strokeColor: string, id?: string): SVGElement {
+export function createSvg(elements: Array<ShapeElement>, strokeColor: string, id?: string): SVGElement {
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('class', `svg-icon svg-icon-${id.toLowerCase()}`);
+    if (id != null) {
+        svg.setAttribute('class', `svg-icon svg-icon-${id.toLowerCase()}`);
+    }
     svg.setAttribute('viewBox', '0 0 32 32');
     svg.setAttribute('fill', 'none');
 
@@ -19,10 +22,10 @@ export function createSVG(elements: Array<ShapeElement>, strokeColor: string, id
                 element.setAttribute(key, value);
             }
         }
-        g.appendChild(element);
+        g.append(element);
     });
 
-    svg.appendChild(g);
+    svg.append(g);
 
     return svg;
 }
@@ -35,4 +38,14 @@ export function changeSvgStrokeColor(id: string, color: string): void {
     svgLines.forEach(line => {
         line.setAttribute('stroke', color);
     });
+}
+
+export function getCarIconFromLayout(id: number): HTMLElement | null {
+    const carIconCollection: NodeListOf<Element> = document.querySelectorAll(`.${CSS_GARAGE.SVG_ICON}-${id}`);
+    let carIcon: HTMLElement | null = null;
+    if (carIconCollection.length > 0) {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        carIcon = carIconCollection[0] as HTMLElement;
+    }
+    return carIcon;
 }

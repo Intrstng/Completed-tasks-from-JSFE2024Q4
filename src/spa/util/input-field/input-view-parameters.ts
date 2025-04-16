@@ -1,4 +1,5 @@
-import { Description, ElementParameters, InputTypes } from '../../../types';
+import type { ElementParameters } from '../../../types';
+import { Description, InputTypes } from '../../../types';
 import { CSS_INPUT } from './input-classes';
 
 export const inputsParameters: Array<ElementParameters> = [

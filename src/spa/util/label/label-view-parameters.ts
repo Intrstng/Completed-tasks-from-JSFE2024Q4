@@ -1,4 +1,4 @@
-import { ElementParameters } from '../../../types';
+import type { ElementParameters } from '../../../types';
 import { CSS_LABEL } from './label-classes';
 
 export const labelParameters: ElementParameters = {

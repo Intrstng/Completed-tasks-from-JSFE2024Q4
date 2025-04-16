@@ -12,75 +12,73 @@ export function toggleDisabledAllCarButtons(id: number, isDisabled: boolean): vo
 }
 
 export function toggleDisabledDragRaceControlButtons(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON_CONTROLS);
-    if (buttons.length > 0) {
-        Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement && !button.classList.contains(CSS_BUTTON.BUTTON_RACE)) {
-                button.disabled = isDisabled;
-            }
-        });
-    }
+    const buttons = document.querySelectorAll(`.${CSS_BUTTON.BUTTON_CONTROLS}`);
+    buttons.forEach(button => {
+        if (button instanceof HTMLButtonElement && !button.classList.contains(CSS_BUTTON.BUTTON_RACE)) {
+            button.disabled = isDisabled;
+        }
+    });
 }
 
 export function toggleDisabledManageCarButtons(isDisabled: boolean): void {
-    const createCarButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_CREATE)[0];
-    const updateCarButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_UPDATE)[0];
-    let buttons: HTMLButtonElement[] = [];
-    if (createCarButton instanceof HTMLButtonElement && updateCarButton instanceof HTMLButtonElement) {
-        buttons = [createCarButton, updateCarButton];
+    const createCarButton = document.querySelector(`.${CSS_BUTTON.BUTTON_CREATE}`);
+    const updateCarButton = document.querySelector(`.${CSS_BUTTON.BUTTON_UPDATE}`);
+
+    const buttons: HTMLButtonElement[] = [];
+
+    if (createCarButton instanceof HTMLButtonElement) {
+        buttons.push(createCarButton);
     }
-    if (buttons.length > 0) {
-        Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement) {
-                button.disabled = isDisabled;
-            }
-        });
+    if (updateCarButton instanceof HTMLButtonElement) {
+        buttons.push(updateCarButton);
     }
+
+    buttons.forEach(button => {
+        button.disabled = isDisabled;
+    });
 }
 
 export function raceButtonToggleDisable(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON_RACE);
-    if (buttons.length > 0) {
-        Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement) {
-                button.disabled = isDisabled;
-            }
-        });
-    }
+    const buttons = document.querySelectorAll(`.${CSS_BUTTON.BUTTON_RACE}`);
+    buttons.forEach(button => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = isDisabled;
+        }
+    });
 }
 
 export function togglePaginationButtons(isDisabled: boolean): void {
-    const prevPageButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_PREV)[0];
-    const nextPageButton: Element = document.getElementsByClassName(CSS_BUTTON.BUTTON_NEXT)[0];
-    let buttons: HTMLButtonElement[] = [];
-    if (prevPageButton instanceof HTMLButtonElement && nextPageButton instanceof HTMLButtonElement) {
-        buttons = [prevPageButton, nextPageButton];
+    const previousPageButton = document.querySelector(`.${CSS_BUTTON.BUTTON_PREV}`);
+    const nextPageButton = document.querySelector(`.${CSS_BUTTON.BUTTON_NEXT}`);
+
+    const buttons: HTMLButtonElement[] = [];
+
+    if (previousPageButton instanceof HTMLButtonElement) {
+        buttons.push(previousPageButton);
     }
-    if (buttons.length > 0) {
-        Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement) {
-                button.disabled = isDisabled;
-            }
-        });
+    if (nextPageButton instanceof HTMLButtonElement) {
+        buttons.push(nextPageButton);
     }
+
+    buttons.forEach(button => {
+        button.disabled = isDisabled;
+    });
 }
 
 export function carButtonToggleDisable(buttonID: string, isDisabled: boolean): void {
-    const button = document.getElementById(buttonID);
+    const button = document.querySelector<HTMLButtonElement>(`#${buttonID}`);
     if (button instanceof HTMLButtonElement) {
         button.disabled = isDisabled;
     }
 }
 
 export function allGarageButtonsToggleDisable(isDisabled: boolean): void {
-    const buttons = document.getElementsByClassName(CSS_BUTTON.BUTTON);
-    if (buttons.length > 0) {
-        Array.from(buttons).forEach(button => {
-            if (button instanceof HTMLButtonElement) {
-                button.disabled = isDisabled;
-            }
-        });
-    }
+    const buttons = document.querySelectorAll(`.${CSS_BUTTON.BUTTON}`);
+    buttons.forEach(button => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = isDisabled;
+        }
+    });
 }
 
 export function toggleButtonActiveClass(button: CreatorElement): void {

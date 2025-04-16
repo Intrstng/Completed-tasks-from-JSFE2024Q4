@@ -1,15 +1,15 @@
-import SessionStorageState from '../../state/session-storage-state';
-import ApiController from '../../api/api-controller';
-import {
+import type SessionStorageState from '../../state/session-storage-state';
+import type ApiController from '../../api/api-controller';
+import type {
+    AnimateCarRacingCB,
     AnimationFrame,
     AppState,
-    AppStateKeys,
     Car,
-    Description,
     EngineData,
     RaceWinnerMessage,
     ResponseObject,
 } from '../../../types';
+import { AppStateKeys, Description } from '../../../types';
 import {
     allGarageButtonsToggleDisable,
     carButtonToggleDisable,
@@ -19,24 +19,27 @@ import {
     toggleDisabledManageCarButtons,
     togglePaginationButtons,
 } from '../button/button-disable-toggle';
-import { changeSvgStrokeColor } from '../createSvg/createSvg';
+import { changeSvgStrokeColor } from '../create-svg/create-svg';
 import { COLORS } from '../../../constants/constants';
 import { CSS_BUTTON } from '../button/button-classes';
 import { CONSTANTS } from '../../state/initial-state';
 import CreatorElement from '../creator-element';
-import { CarController } from '../car/car-controller';
+import type { CarController } from '../car/car-controller';
 import { PaginationController } from '../pagination/pagination-controller';
 import CreatorDialog from '../dialog/dialog-creator';
-import { dialogContentParameters, dialogParameters } from '../dialog/dialog-view-parameters';
+import { getCarIconFromLayout } from '../create-svg/create-svg';
+import { animateCarRacing } from './animate-car-racing';
 
 export class RaceController {
     private readonly state: SessionStorageState;
     private api: ApiController;
     private carController: CarController | null;
     private paginationController: PaginationController | null;
-    private finishCreator: CreatorElement | null;
+    private readonly finishCreator: CreatorElement | null;
     private dialogContainer: CreatorElement | null;
-    private dialog: CreatorDialog | null;
+    private readonly dialog: CreatorDialog | null;
+    private readonly getCarIconFromLayout: (id: number) => HTMLElement | null;
+    private animateCarRacing: AnimateCarRacingCB | null;
 
     constructor(
         state: SessionStorageState,
@@ -44,7 +47,8 @@ export class RaceController {
         carController: CarController,
         paginationController: PaginationController,
         dialogContainer: CreatorElement,
-        finish: CreatorElement
+        finish: CreatorElement,
+        dialog: CreatorDialog
     ) {
         this.state = state;
         this.api = api;
@@ -52,20 +56,29 @@ export class RaceController {
         this.paginationController = paginationController;
         this.dialogContainer = dialogContainer;
         this.finishCreator = finish;
-
-        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
-    }
-
-    public addDialog(): void {
-        this.dialogContainer.addInnerElement(this.dialog.getElement());
+        this.dialog = dialog;
+        this.getCarIconFromLayout = getCarIconFromLayout;
+        this.animateCarRacing = animateCarRacing;
     }
 
     public getTrackDistance(car: HTMLElement): number {
-        const carRect = car.getBoundingClientRect();
-        const finishRect = this.finishCreator.getElement().getBoundingClientRect();
+        const carRect: DOMRect = car.getBoundingClientRect();
+        let finishRect: DOMRect | null = null;
+        if (this.finishCreator instanceof CreatorElement) {
+            const element = this.finishCreator.getElement();
+            if (element) {
+                finishRect = element.getBoundingClientRect();
+            } else {
+                console.error('Element is null');
+            }
+        }
 
         const carCenterPoint = carRect.left + carRect.width / 2;
-        const finishCenterPoint = finishRect.left + finishRect.width / 2;
+        let finishCenterPoint: number;
+
+        if (finishRect) {
+            finishCenterPoint = finishRect.left + finishRect.width / 2;
+        }
 
         return finishCenterPoint - carCenterPoint;
     }
@@ -74,8 +87,12 @@ export class RaceController {
         toggleDisabledAllCarButtons(id, true);
         toggleDisabledDragRaceControlButtons(true);
         raceButtonToggleDisable(true);
-        let carIcon: HTMLElement = this.carController.getCarIconFromLayout(id);
-        const trackDistance: number = this.getTrackDistance(carIcon);
+        const carIcon: HTMLElement | null = this.getCarIconFromLayout(id);
+        let trackDistance: number;
+
+        if (carIcon) {
+            trackDistance = this.getTrackDistance(carIcon);
+        }
 
         const carEngineData: EngineData | undefined = await this.api.startEngine(id);
         if (!carEngineData) return;
@@ -97,10 +114,10 @@ export class RaceController {
         this.state.setState(newAnimationState);
 
         if (!response.success) {
-            const currentAnimationID: number = currentAnimation.animationID;
+            const currentAnimationID: number | null = currentAnimation.animationID;
             if (currentAnimationID) {
                 changeSvgStrokeColor(String(id), COLORS.red);
-                window.cancelAnimationFrame(currentAnimationID);
+                globalThis.cancelAnimationFrame(currentAnimationID);
                 if (isDragRace) {
                     throw new Error('Car`s engine is broken...');
                 }
@@ -116,7 +133,7 @@ export class RaceController {
         };
     };
 
-    public async startDragRace(): Promise<void> {
+    public startDragRace(): void {
         toggleDisabledManageCarButtons(true);
         raceButtonToggleDisable(true);
         togglePaginationButtons(true);
@@ -134,9 +151,10 @@ export class RaceController {
                     if (typeof winnerResponse === 'boolean' && !winnerResponse) {
                         const newApiWinner = { id: carID, wins: 1, time };
                         await this.api.createWinner(newApiWinner);
-                    } else if (winnerResponse !== true) {
-                        if (typeof winnerResponse !== 'boolean') {
-                            const bestTime = time < winnerResponse.time ? time : winnerResponse.time;
+                    } else if (winnerResponse !== true && typeof winnerResponse !== 'boolean') {
+                        let bestTime: number;
+                        if (winnerResponse) {
+                            bestTime = Math.min(time, winnerResponse.time);
                             await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
                         }
                     }
@@ -149,7 +167,9 @@ export class RaceController {
                 };
                 this.showWinnersMessage(currentWinnerData);
                 allGarageButtonsToggleDisable(false);
-                this.paginationController.toggleDisabledForPaginationButtons();
+                if (this.paginationController instanceof PaginationController) {
+                    this.paginationController.toggleDisabledForPaginationButtons();
+                }
                 raceButtonToggleDisable(true);
             })
             .catch(error => {
@@ -161,12 +181,13 @@ export class RaceController {
             });
     }
 
-    public resetDragRace(): void {
+    public async resetDragRace(): Promise<void> {
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
-        allCars.forEach(car => this.backFromRaceForCar(car.id));
+        const promises = allCars.map(car => this.backFromRaceForCar(car.id));
+        await Promise.all(promises);
     }
 
-    public async backFromRaceForCar(id: number): Promise<void> {
+    public backFromRaceForCar = async (id: number): Promise<void> => {
         try {
             toggleDisabledAllCarButtons(id, false);
             toggleDisabledDragRaceControlButtons(false);
@@ -177,7 +198,9 @@ export class RaceController {
             const currentAnimationID = carAnimationCollection.find(animation => animation.carID === id);
 
             if (currentAnimationID) {
-                window.cancelAnimationFrame(currentAnimationID.animationID);
+                if (typeof currentAnimationID.animationID === 'number') {
+                    globalThis.cancelAnimationFrame(currentAnimationID.animationID);
+                }
                 carAnimationCollection = carAnimationCollection.filter(animation => animation.carID !== id);
                 const updatedState: AppState = {
                     ...currentState,
@@ -190,45 +213,24 @@ export class RaceController {
                 const currentCarColor = currentCar.color;
                 changeSvgStrokeColor(String(id), currentCarColor);
             }
-            const car = this.carController.getCarIconFromLayout(id);
-            car.style.transform = `translateX(0px)`;
+            const car: HTMLElement | null = this.getCarIconFromLayout(id);
+            if ('style' in car) {
+                car.style.transform = `translateX(0px)`;
+            }
         } catch (error: unknown) {
             console.error('Error occurred:', error instanceof Error ? error.message : String(error));
         }
-    }
+    };
 
     private showWinnersMessage(data: RaceWinnerMessage): void {
         const winnersCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === data.carID);
         const winnersName = winnersCar.name || Description.WINNER;
 
-        this.dialog.setDialogNameField(winnersName);
-        this.dialog.setDialogTimeField(String(data.time));
-        this.dialog.showDialog();
-        this.dialog.closeDialogByTimeout(CONSTANTS.dialogDelay);
-    }
-
-    private animateCarRacing(carID: number, car: HTMLElement, duration: number, trackDistance: number): AnimationFrame {
-        let start: number | null = null;
-        const animationDataCollection: AnimationFrame = { carID, animationID: null, distance: 0 };
-
-        const animate = (timestamp: number) => {
-            if (!start) {
-                start = timestamp;
-            }
-
-            const elapsed = timestamp - start;
-            const progress = Math.min(elapsed / duration, 1); // Ensure progress does not exceed 1
-            const left = trackDistance * progress; // The position based on progress
-
-            car.style.transform = `translateX(${left}px)`;
-            animationDataCollection.distance = Math.round(left);
-
-            if (progress < 1) {
-                animationDataCollection.animationID = window.requestAnimationFrame(animate);
-            }
-        };
-
-        animationDataCollection.animationID = window.requestAnimationFrame(animate);
-        return animationDataCollection;
+        if (this.dialog instanceof CreatorDialog) {
+            this.dialog.setDialogNameField(winnersName);
+            this.dialog.setDialogTimeField(String(data.time));
+            this.dialog.showDialog();
+            this.dialog.closeDialogByTimeout(CONSTANTS.dialogDelay);
+        }
     }
 }

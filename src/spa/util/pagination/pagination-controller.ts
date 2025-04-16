@@ -1,14 +1,7 @@
-import SessionStorageState from '../../state/session-storage-state';
+import type SessionStorageState from '../../state/session-storage-state';
 import CreatorElement from '../creator-element';
-import {
-    Callback,
-    Description,
-    ElementParameters,
-    Operator,
-    PageStateKeys,
-    PaginationParameters,
-} from '../../../types';
-import { CONSTANTS } from '../../state/initial-state';
+import type { Callback, ElementParameters, Operator, PageStateKeys, PaginationParameters } from '../../../types';
+import { Description } from '../../../types';
 
 export class PaginationController {
     private readonly state: SessionStorageState;
@@ -47,7 +40,7 @@ export class PaginationController {
     public createControls(): void {
         const paginationControlsContainerCreator = new CreatorElement(this.paginationParameters.container);
 
-        const prevButtonParametersWithCB: ElementParameters = {
+        const previousButtonParametersWithCB: ElementParameters = {
             ...this.paginationParameters.prevBtn,
             callback: () => this.prevPage(),
         };
@@ -57,7 +50,7 @@ export class PaginationController {
             callback: () => this.nextPage(),
         };
 
-        this.prevButton = new CreatorElement(prevButtonParametersWithCB);
+        this.prevButton = new CreatorElement(previousButtonParametersWithCB);
         this.nextButton = new CreatorElement(nextButtonParametersWithCB);
         this.toggleDisabledForPaginationButtons();
 
@@ -66,6 +59,24 @@ export class PaginationController {
         paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
 
         this.paginationContainer.addInnerElement(paginationControlsContainerCreator);
+    }
+
+    public toggleDisabledForPaginationButtons(): void {
+        const currentPage: number = this.state.getState()[this.pageStateKeys.currentPage];
+        const totalCars: number = this.state.getState()[this.pageStateKeys.itemsTotal];
+
+        if (currentPage === 1) {
+            if (this.prevButton) {
+                this.prevButton.setDisabled(true);
+            }
+        } else {
+            if (this.prevButton) {
+                this.prevButton.setDisabled(false);
+            }
+        }
+        if (currentPage >= totalCars / this.itemsOnPage) {
+            this.nextButton.setDisabled(true);
+        } else this.nextButton.setDisabled(false);
     }
 
     private async prevPage(): Promise<void> {
@@ -90,29 +101,11 @@ export class PaginationController {
         this.toggleDisabledForPaginationButtons();
     }
 
-    public toggleDisabledForPaginationButtons(): void {
-        const currentPage: number = this.state.getState()[this.pageStateKeys.currentPage];
-        const totalCars: number = this.state.getState()[this.pageStateKeys.itemsTotal];
-
-        if (currentPage === 1) {
-            if (this.prevButton) {
-                this.prevButton.setDisabled(true);
-            }
-        } else {
-            if (this.prevButton) {
-                this.prevButton.setDisabled(false);
-            }
-        }
-        if (currentPage >= totalCars / CONSTANTS.carsOnPage) {
-            this.nextButton.setDisabled(true);
-        } else this.nextButton.setDisabled(false);
-    }
-
     private countPageValue(operator: Operator, page: number): void {
-        if (typeof page === 'number' && isFinite(page)) {
+        if (typeof page === 'number' && Number.isFinite(page)) {
             const itemsQuantity = this.state.getState()[this.pageStateKeys.itemsTotal];
 
-            if (operator === Description.INCREMENT && page < itemsQuantity / CONSTANTS.carsOnPage) {
+            if (operator === Description.INCREMENT && page < itemsQuantity / this.itemsOnPage) {
                 this.state.updatePropertyInState(this.pageStateKeys.currentPage, ++page);
             } else if (operator === Description.DECREMENT && page > 1) {
                 this.state.updatePropertyInState(this.pageStateKeys.currentPage, --page);

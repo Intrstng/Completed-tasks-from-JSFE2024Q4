@@ -1,13 +1,9 @@
-import { AppStateKeys, ElementParameters, PageStateKeys, PaginationParameters } from '../../../../types';
+import type { ElementParameters, PageStateKeys, PaginationParameters } from '../../../../types';
+import { AppStateKeys } from '../../../../types';
 import { CSS_PAGINATION_WIN } from './winners-pagination-classes';
 import {
-    nextButtonGarageParameters,
-    prevButtonGarageParameters,
-} from '../../button/button-parameters/garage-view-buttons/garage-view-button-parameters';
-import { paginationGarageControlsContainerParameters } from '../garage-view-pagination/garage-view-pagination-parameters';
-import {
     nextButtonWinnersParameters,
-    prevButtonWinnersParameters,
+    previousButtonWinnersParameters,
 } from '../../button/button-parameters/winners-view-parameters/winners-view-button-parameters';
 
 export const paginationWinControlsContainerParameters: ElementParameters = {
@@ -17,7 +13,7 @@ export const paginationWinControlsContainerParameters: ElementParameters = {
 
 export const paginationWinnersParameters: PaginationParameters = {
     container: paginationWinControlsContainerParameters,
-    prevBtn: prevButtonWinnersParameters,
+    prevBtn: previousButtonWinnersParameters,
     nextBtn: nextButtonWinnersParameters,
 };
 

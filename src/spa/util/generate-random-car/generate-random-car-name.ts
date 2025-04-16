@@ -1,4 +1,4 @@
-import { Constants } from '../../../types';
+import type { Constants } from '../../../types';
 
 export function getRandomCarName(data: Constants): string {
     const { brands, models } = data;

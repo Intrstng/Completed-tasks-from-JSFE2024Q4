@@ -1,4 +1,4 @@
-import { Css_Classes } from '../../../../types';
+import type { Css_Classes } from '../../../../types';
 
 export const CSS_WINNERS: Css_Classes = {
     WINNERS: 'winners',

@@ -1,4 +1,4 @@
-type LineAttrs = {
+type LineAttributes = {
     x1: string;
     y1: string;
     x2: string;
@@ -6,30 +6,30 @@ type LineAttrs = {
     stroke: string;
 };
 
-type PathAttrs = {
+type PathAttributes = {
     d: string;
     stroke: string;
 };
 
-type CircleAttrs = {
+type CircleAttributes = {
     cx: string;
     cy: string;
     r: string;
     stroke: string;
 };
 
-type PolylineAttrs = {
+type PolylineAttributes = {
     points: string;
     stroke: string;
 };
 
-type ShapeAttrs = LineAttrs | PathAttrs | CircleAttrs | PolylineAttrs;
+type ShapeAttributes = LineAttributes | PathAttributes | CircleAttributes | PolylineAttributes;
 
 type ShapeElementType = 'line' | 'path' | 'circle' | 'polyline';
 
 export type ShapeElement = {
     type: ShapeElementType;
-    attrs: ShapeAttrs;
+    attrs: ShapeAttributes;
 };
 
 export type SvgElements = SVGLineElement | SVGPathElement | SVGCircleElement | SVGPolylineElement;

@@ -1,4 +1,4 @@
-import { Css_Classes } from '../../../types';
+import type { Css_Classes } from '../../../types';
 
 export const CSS_DIALOG: Css_Classes = {
     DIALOG: 'dialog',

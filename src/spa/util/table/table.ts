@@ -1,9 +1,7 @@
-import {
-    AppStateKeys,
+import type {
     Callback,
     Car,
     CreateTableRecordsCB,
-    Description,
     ElementParameters,
     OrderButtonParametersWithCB,
     SortOrderType,
@@ -11,6 +9,7 @@ import {
     ToggleButtonActiveClassCB,
     Winner,
 } from '../../../types';
+import { AppStateKeys, Description } from '../../../types';
 import CreatorElement from '../creator-element';
 import {
     scoreTableContainerParameters,
@@ -24,10 +23,10 @@ import {
     tableRowParameters,
     theadButtonsContainer,
 } from './table-view-parameters';
-import { createSVG } from '../createSvg/createSvg';
-import { svgElements } from '../createSvg/data';
+import { createSvg } from '../create-svg/create-svg';
+import { svgElements } from '../create-svg/data';
 import { createTableRecords } from './create-table-records';
-import SessionStorageState from '../../state/session-storage-state';
+import type SessionStorageState from '../../state/session-storage-state';
 import { toggleButtonActiveClass } from '../button/button-disable-toggle';
 import {
     ascTimeButtonParameters,
@@ -100,26 +99,26 @@ export default class Table {
                 const { ascButtonParametersWithCB, descButtonParametersWithCB } =
                     this.addOrderBtnCallbacksToParameters(columnName);
                 const theadCellContainerCreator = new CreatorElement(theadButtonsContainer);
-                let ascBtnCreator: CreatorElement | null;
-                let descBtnCreator: CreatorElement | null;
+                let ascButtonCreator: CreatorElement | null;
+                let descButtonCreator: CreatorElement | null;
 
                 if (columnName === Description.WINS) {
                     this.ascWinButton = new CreatorElement(ascButtonParametersWithCB);
                     this.descWinButton = new CreatorElement(descButtonParametersWithCB);
-                    ascBtnCreator = this.ascWinButton;
-                    descBtnCreator = this.descWinButton;
+                    ascButtonCreator = this.ascWinButton;
+                    descButtonCreator = this.descWinButton;
                 } else if (columnName === Description.TIME) {
                     this.ascTimeButton = new CreatorElement(ascButtonParametersWithCB);
                     this.descTimeButton = new CreatorElement(descButtonParametersWithCB);
-                    ascBtnCreator = this.ascTimeButton;
-                    descBtnCreator = this.descTimeButton;
+                    ascButtonCreator = this.ascTimeButton;
+                    descButtonCreator = this.descTimeButton;
                 }
                 const textContentCreator = new CreatorElement(spanParameters);
                 textContentCreator.setTextContent(columnName);
 
-                theadCellContainerCreator.addInnerElement(ascBtnCreator.getElement());
+                theadCellContainerCreator.addInnerElement(ascButtonCreator.getElement());
                 theadCellContainerCreator.addInnerElement(textContentCreator.getElement());
-                theadCellContainerCreator.addInnerElement(descBtnCreator.getElement());
+                theadCellContainerCreator.addInnerElement(descButtonCreator.getElement());
 
                 headCellCreator.addInnerElement(theadCellContainerCreator.getElement());
             } else {
@@ -158,7 +157,7 @@ export default class Table {
                 numberCellCreator.setTextContent(String(++index));
 
                 const carCellCreator = new CreatorElement(tableRowCellParameters);
-                const carTableLogo = createSVG(svgElements, record.color, Description.TABLE);
+                const carTableLogo = createSvg(svgElements, record.color, Description.TABLE);
                 carCellCreator.addInnerElement(carTableLogo);
 
                 const nameCellCreator = new CreatorElement(tableRowCellParameters);
@@ -190,22 +189,22 @@ export default class Table {
         if (columnName === Description.WINS) {
             ascButtonParametersWithCB = {
                 ...ascWinsButtonParameters,
-                callback: () => this.sortTableByWins(Description.ASC),
+                callback: (): Promise<void> => this.sortTableByWins(Description.ASC),
             };
             descButtonParametersWithCB = {
                 ...descWinsButtonParameters,
-                callback: () => this.sortTableByWins(Description.DESC),
+                callback: (): Promise<void> => this.sortTableByWins(Description.DESC),
             };
         }
 
         if (columnName === Description.TIME) {
             ascButtonParametersWithCB = {
                 ...ascTimeButtonParameters,
-                callback: () => this.sortTableByTime(Description.ASC),
+                callback: (): Promise<void> => this.sortTableByTime(Description.ASC),
             };
             descButtonParametersWithCB = {
                 ...descTimeButtonParameters,
-                callback: () => this.sortTableByTime(Description.DESC),
+                callback: (): Promise<void> => this.sortTableByTime(Description.DESC),
             };
         }
 

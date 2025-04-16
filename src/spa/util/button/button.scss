@@ -18,7 +18,7 @@
     transition: 0.25s ease-in-out all;
 
     &:hover {
-        background-color: rgba(15, 217, 5, 0.8);
+        background-color: rgb(15 217 5 / 80%);
     }
 
     &:active {
@@ -32,11 +32,12 @@
 
 .asc-btn,
 .desc-btn {
-    background-color: rgb(49, 111, 123);
-    border: 1px rgba(201, 201, 201, 0.5) solid;
+    border: 1px rgb(201 201 201 / 50%) solid;
+    background-color: rgb(49 111 123);
+
     &:hover {
-        background-color: rgba(49, 111, 123, 0.8);
         border: 1px #f6f8d5 solid;
+        background-color: rgb(49 111 123 / 80%);
     }
 
     &:active {
@@ -44,7 +45,7 @@
     }
 
     &:disabled {
-        background-color: rgb(164, 185, 125);
+        background-color: rgb(164 185 125);
     }
 }
 
@@ -55,7 +56,7 @@
 
 .update-btn {
     width: 100px;
-    color: #333333;
+    color: #333;
     background-color: #f6f8d5;
 }
 
@@ -81,9 +82,10 @@
 
 .back-btn {
     background-color: #ff9a9a;
+
     &:disabled {
-        background-color: rgb(212, 225, 24);
         opacity: 0.45;
+        background-color: rgb(212 225 24);
     }
 }
 

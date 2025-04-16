@@ -1,6 +1,7 @@
 import './dialog.scss';
 
-import { Description, DialogParameters, ElementParameters } from '../../../types';
+import type { DialogParameters, ElementParameters } from '../../../types';
+import { Description } from '../../../types';
 import CreatorElement from '../creator-element';
 import { CSS_DIALOG } from './dialog-classes';
 
@@ -46,7 +47,7 @@ export default class CreatorDialog {
         }
     }
 
-    public getElement(): HTMLElement | HTMLCanvasElement | null {
+    public getElement(): HTMLElement | null {
         return this.dialog;
     }
 
@@ -83,11 +84,11 @@ export default class CreatorDialog {
 
             innerElements.forEach(innerElement => {
                 const elementToAppend = innerElement.getElement();
-                if (innerElement.getElementId() === Description.DIALOG_NAME) {
-                    this.dialogName = elementToAppend;
-                }
+                const innerElementID: string = innerElement.getElementId();
 
-                if (innerElement.getElementId() === Description.DIALOG_TIME) {
+                if (innerElementID === String(Description.DIALOG_NAME)) {
+                    this.dialogName = elementToAppend;
+                } else if (innerElementID === String(Description.DIALOG_TIME)) {
                     this.dialogTime = elementToAppend;
                 }
 

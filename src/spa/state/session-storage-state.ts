@@ -1,5 +1,4 @@
-import type { AppState } from '../../types';
-import { AppStateKeys } from '../../types';
+import type { AppState, AppStateKeys } from '../../types';
 import { INITIAL_STATE } from './initial-state';
 
 export default class SessionStorageState {
@@ -44,14 +43,9 @@ export default class SessionStorageState {
     }
 
     private loadState(): AppState {
-        const storageItem: string | null = localStorage.getItem(this.accessKey);
+        const storageItem: string | null = sessionStorage.getItem(this.accessKey);
         if (storageItem) {
             try {
-                // const parsedData: unknown = JSON.parse(storageItem);
-                //
-                // assertIsDecisionJsonData(parsedData);
-                // return parsedData;
-                console.log(JSON.parse(storageItem));
                 return JSON.parse(storageItem);
             } catch (error) {
                 console.error('Failed to parse localStorage item:', error);

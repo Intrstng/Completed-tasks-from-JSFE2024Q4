@@ -4,15 +4,15 @@
     top: 1rem;
     right: 2.5rem;
 
-    //width: 215px;
     padding: 0.7rem 1.5rem;
     border: none;
     border-radius: 0.5rem;
+
     font-family: Corbel, sans-serif;
-    letter-spacing: 1px;
     font-weight: bold;
     color: rgb(0 0 0 / 55%);
     text-align: center;
+    letter-spacing: 1px;
 
     background-color: #f9c2c2;
 }
@@ -32,7 +32,7 @@
     color: rgb(0 0 0 / 55%);
     letter-spacing: 1px;
 
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgb(255 255 255 / 60%);
     outline: none;
 
     &::placeholder {

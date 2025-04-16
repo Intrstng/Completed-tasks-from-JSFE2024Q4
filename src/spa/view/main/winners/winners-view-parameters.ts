@@ -1,4 +1,5 @@
-import { Description, ElementParameters } from '../../../../types';
+import type { ElementParameters } from '../../../../types';
+import { Description } from '../../../../types';
 import { CSS_WINNERS } from './winners-classes';
 
 export const winnersParameters: ElementParameters = {

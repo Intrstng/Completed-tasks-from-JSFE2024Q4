@@ -1,13 +1,7 @@
-import { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
-import GarageView from '../spa/view/main/garage/garage-view';
-import WinnersView from '../spa/view/main/winners/winners-view';
-import CreatorElement from '../spa/util/creator-element';
-import { paginationGarageControlsContainerParameters } from '../spa/util/pagination/garage-view-pagination/garage-view-pagination-parameters';
-import {
-    nextButtonGarageParameters,
-    prevButtonGarageParameters,
-} from '../spa/util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
-import { CONSTANTS } from '../spa/state/initial-state';
+import type { AppStateKeys, Description, InputTypes, Location, LocationEvent } from './enums';
+import type GarageView from '../spa/view/main/garage/garage-view';
+import type WinnersView from '../spa/view/main/winners/winners-view';
+import type CreatorElement from '../spa/util/creator-element';
 
 export type Route = {
     path: string;
@@ -29,7 +23,7 @@ export type PopStateEventState = {
     url?: string;
 };
 
-export type EventCallback = ((event: Event) => void) | null;
+export type EventCallback = ((event: Event) => void | Promise<void>) | null;
 
 export type ElementParameters = {
     tag?: string;
@@ -67,13 +61,22 @@ export type Callback = () => void;
 
 export type CallbackID = (id: number) => void;
 
+export type CallbackQuery = (queryParameters: QueryParameters[]) => string;
+
 export type ToggleActiveButtonCallback = (button: CreatorElement) => void;
 
 export type CreateTableRecordsCB = (cars: Array<Car>, winners: Array<Winner>) => Array<TableRecord>;
 
-export type AddOrderBtnCallbacksToParametersCB = (columnName: Description) => OrderButtonParametersWithCB;
+export type AddOrderButtonCallbacksToParametersCB = (columnName: Description) => OrderButtonParametersWithCB;
 
 export type ToggleButtonActiveClassCB = (button: CreatorElement) => void;
+
+export type AnimateCarRacingCB = (
+    carID: number,
+    car: HTMLElement,
+    duration: number,
+    trackDistance: number
+) => AnimationFrame;
 
 export type Car = {
     id: number;
@@ -128,6 +131,10 @@ export type AnimationFrame = {
 export type EngineData = {
     velocity: number;
     distance: number;
+};
+
+export type DriveData = {
+    success: boolean;
 };
 
 export type AppState = {

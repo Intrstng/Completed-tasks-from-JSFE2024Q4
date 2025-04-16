@@ -1,7 +1,7 @@
 {
     "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order"],
     "rules": {
-        "unit-allowed-list": ["em", "rem", "px", "vw", "vh", "%", "s"]
+        "unit-allowed-list": ["em", "rem", "px", "vw", "vh", "%", "s", "fr"]
     },
     "defaultSeverity": "warning"
 }

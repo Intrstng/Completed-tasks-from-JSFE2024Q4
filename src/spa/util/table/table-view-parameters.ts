@@ -1,4 +1,5 @@
-import { ButtonParameters, Description, ElementParameters } from '../../../types';
+import type { ButtonParameters, ElementParameters } from '../../../types';
+import { Description } from '../../../types';
 import { CSS_TABLE } from './table-classes';
 
 export const scoreTableContainerParameters: ElementParameters = {

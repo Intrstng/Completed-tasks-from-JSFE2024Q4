@@ -1,5 +1,5 @@
 ::backdrop {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgb(0 0 0 / 20%);
     backdrop-filter: blur(0.25rem);
 }
 
@@ -9,40 +9,47 @@ body:has(dialog[open]) {
 }
 
 .dialog {
-    padding: 30px 28px;
-    border: none;
-    min-width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    min-width: 300px;
+    padding: 30px 28px;
+    border: none;
     border-radius: 1rem;
-    background-color: rgba(255, 255, 255, 0.8);
+
+    background-color: rgb(255 255 255 / 80%);
     box-shadow:
-        rgba(0, 0, 0, 0.25) 0px 54px 55px,
-        rgba(0, 0, 0, 0.12) 0px -12px 30px,
-        rgba(0, 0, 0, 0.12) 0px 4px 6px,
-        rgba(0, 0, 0, 0.17) 0px 12px 13px,
-        rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        rgb(0 0 0 / 25%) 0 54px 55px,
+        rgb(0 0 0 / 12%) 0 -12px 30px,
+        rgb(0 0 0 / 12%) 0 4px 6px,
+        rgb(0 0 0 / 17%) 0 12px 13px,
+        rgb(0 0 0 / 9%) 0 -3px 5px;
+
     &__name-title,
     &__time-title {
         margin: 0 auto;
+
         font-family: Corbel, sans-serif;
-        letter-spacing: 1px;
-        font-weight: bold;
         font-size: 24px;
-        text-transform: capitalize;
+        font-weight: bold;
         color: #316f7b;
+        text-transform: capitalize;
+        letter-spacing: 1px;
     }
+
     &__name,
     &__time {
         margin: 14px auto;
+
         font-family: Corbel, sans-serif;
-        letter-spacing: 1px;
-        font-weight: bold;
         font-size: 24px;
+        font-weight: bold;
         color: #f2613f;
+        letter-spacing: 1px;
     }
+
     &__time {
         margin-bottom: 0;
     }

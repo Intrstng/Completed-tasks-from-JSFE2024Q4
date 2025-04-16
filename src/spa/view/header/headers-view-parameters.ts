@@ -1,4 +1,5 @@
-import { Description, ElementParameters } from '../../../types';
+import type { ElementParameters } from '../../../types';
+import { Description } from '../../../types';
 import { CSS_HEADER } from './header-classes';
 
 export const titleParameters: ElementParameters = {

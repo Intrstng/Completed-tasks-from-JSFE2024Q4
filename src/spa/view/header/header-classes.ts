@@ -1,4 +1,4 @@
-import { Css_Classes } from '../../../types';
+import type { Css_Classes } from '../../../types';
 
 export const CSS_HEADER: Css_Classes = {
     HEADER: 'header',
@@ -6,5 +6,5 @@ export const CSS_HEADER: Css_Classes = {
     TITLE: 'title',
     NAV: 'nav',
     ITEM: 'nav-item',
-    ITEM_SELECTED: 'nav-item__selected',
+    ITEM_SELECTED: 'nav-item-selected',
 };

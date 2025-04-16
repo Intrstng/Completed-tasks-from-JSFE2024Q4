@@ -1,18 +1,8 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { AppState, Callback, CarPayload, ElementParameters, EngineData, ResponseObject } from '../../../../types';
-import {
-    AnimationFrame,
-    AppStateKeys,
-    ButtonParameters,
-    Car,
-    Description,
-    InputFieldsKeys,
-    InputTypes,
-    InputUse,
-    RaceWinnerMessage,
-} from '../../../../types';
+import type { ButtonParameters, Callback, Car, CarPayload, ElementParameters } from '../../../../types';
+import { AppStateKeys, Description, InputTypes, InputUse } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
     carBlockParameters,
@@ -30,27 +20,16 @@ import {
     raceBoardParameters,
     trackParameters,
 } from './garage-view-parameters';
-import LocalStorageState from '../../../state/session-storage-state';
+import type LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import LabelCreator from '../../../util/label/label-creator';
 import { getCallbackWithID } from '../../../util/assertion-functions/assertion-functions';
-import { changeSvgStrokeColor, createSVG } from '../../../util/createSvg/createSvg';
-import { svgElements } from '../../../util/createSvg/data';
-import ApiController from '../../../api/api-controller';
+import { createSvg } from '../../../util/create-svg/create-svg';
+import { svgElements } from '../../../util/create-svg/data';
+import type ApiController from '../../../api/api-controller';
 import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
 import { CONSTANTS } from '../../../state/initial-state';
-import CreatorDialog from '../../../util/dialog/dialog-creator';
-import {
-    allGarageButtonsToggleDisable,
-    carButtonToggleDisable,
-    raceButtonToggleDisable,
-    toggleDisabledAllCarButtons,
-    toggleDisabledDragRaceControlButtons,
-    toggleDisabledManageCarButtons,
-    togglePaginationButtons,
-} from '../../../util/button/button-disable-toggle';
 import { COLORS } from '../../../../constants/constants';
-import { CSS_BUTTON } from '../../../util/button/button-classes';
 import {
     carControlsButtonsParameters,
     createButtonParameters,
@@ -58,10 +37,8 @@ import {
     mainControlsButtonsParameters,
     updateButtonParameters,
 } from '../../../util/button/button-parameters/garage-view-buttons/garage-view-button-parameters';
-import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
 import { inputsParameters } from '../../../util/input-field/input-view-parameters';
 import { labelParameters } from '../../../util/label/label-view-parameters';
-import { CSS_GARAGE } from './garage-classes';
 import {
     pageGarageStateKeys,
     paginationGarageParameters,
@@ -69,9 +46,12 @@ import {
 import { PaginationController } from '../../../util/pagination/pagination-controller';
 import { CarController } from '../../../util/car/car-controller';
 import { RaceController } from '../../../util/race/race-controller';
+import CreatorDialog from '../../../util/dialog/dialog-creator';
+import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
 
 export default class GarageView extends View {
     public router: Router;
+    public api: ApiController;
     private readonly state: LocalStorageState;
     private garageQuantity: CreatorElement | null;
     private readonly garagePage: CreatorElement | null;
@@ -85,10 +65,10 @@ export default class GarageView extends View {
     private carUpdateLogo: SVGElement | null;
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
-    private paginationController: PaginationController | null;
+    private readonly paginationController: PaginationController | null;
     private carController: CarController | null;
     private raceController: RaceController | null;
-    public api: ApiController;
+    private readonly dialog: CreatorDialog | null;
 
     constructor(state: LocalStorageState, router: Router, api: ApiController) {
         super(garageParameters);
@@ -108,6 +88,7 @@ export default class GarageView extends View {
         this.state = state;
         this.api = api;
         this.garagePage = new CreatorElement(garagePageCurrentParameters);
+        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
 
         this.paginationController = new PaginationController(
             state,
@@ -121,6 +102,15 @@ export default class GarageView extends View {
         );
 
         this.configureView();
+    }
+
+    public addDialog(): void {
+        if (this.dialog instanceof CreatorDialog) {
+            const dialogElement: HTMLElement | null = this.dialog.getElement();
+            if (dialogElement) {
+                this.viewElementCreator.addInnerElement(dialogElement);
+            }
+        }
     }
 
     private async configureView(): Promise<void> {
@@ -139,16 +129,19 @@ export default class GarageView extends View {
             this.updateRaceBoardLayout.bind(this)
         );
 
-        this.paginationController.createControls();
+        if (this.paginationController instanceof PaginationController) {
+            this.paginationController.createControls();
+        }
         this.addSummary();
         this.createRaceBoard(this.state.getState().cars, true);
-        this.raceController.addDialog();
+
+        this.addDialog();
     }
 
     private async getCarsForCurrentPage(): Promise<void> {
         const currentGaragePage = this.state.getState()[AppStateKeys.GARAGE_PAGE];
 
-        if (typeof currentGaragePage === 'number' && isFinite(currentGaragePage)) {
+        if (typeof currentGaragePage === 'number' && Number.isFinite(currentGaragePage)) {
             await this.api.getCars(currentGaragePage);
         }
     }
@@ -224,7 +217,7 @@ export default class GarageView extends View {
     };
 
     private updateRaceBoardLayout(): void {
-        this.deleteAllItemsInContainer(this.raceBoard);
+        View.deleteAllItemsInContainer(this.raceBoard);
         this.createRaceBoard(this.state.getState().cars);
     }
 
@@ -267,7 +260,6 @@ export default class GarageView extends View {
                     id: `${inputParameters.id}${prefix}`,
                     callback,
                 };
-
                 const carInputNameCreator = new InputFieldCreator(inputParameterWithCB);
 
                 if (prefix === InputUse.CREATE) {
@@ -275,7 +267,6 @@ export default class GarageView extends View {
                 } else if (prefix === InputUse.UPDATE) {
                     this.inputUpdateNameField = carInputNameCreator;
                 }
-
                 container.addInnerElement(carInputNameCreator.getElement());
             }
 
@@ -296,7 +287,6 @@ export default class GarageView extends View {
                 } else if (prefix === InputUse.UPDATE) {
                     this.inputUpdateColorField = carInputColorCreator;
                 }
-
                 const labelCreator = new LabelCreator(newLabelParameters);
                 labelCreator.setTextContent(Description.COLOR);
                 container.addInnerElement(labelCreator.getElement());
@@ -317,13 +307,13 @@ export default class GarageView extends View {
 
         const carCreationBlockCreator = new CreatorElement(carCreationBlockParameters);
         this.addInputsCarBlock(carCreationBlockCreator, InputUse.CREATE);
-        this.carCreateLogo = createSVG(svgElements, COLORS.black, InputUse.CREATE);
+        this.carCreateLogo = createSvg(svgElements, COLORS.black, InputUse.CREATE);
         carCreationBlockCreator.addInnerElement(this.carCreateLogo);
         this.addCarBlockButton(carCreationBlockCreator, createButtonParameters);
 
         const carUpdateBlockCreator = new CreatorElement(carUpdateBlockParameters);
         this.addInputsCarBlock(carUpdateBlockCreator, InputUse.UPDATE);
-        this.carUpdateLogo = createSVG(svgElements, COLORS.black, InputUse.UPDATE);
+        this.carUpdateLogo = createSvg(svgElements, COLORS.black, InputUse.UPDATE);
         carUpdateBlockCreator.addInnerElement(this.carUpdateLogo);
         this.addCarBlockButton(carUpdateBlockCreator, updateButtonParameters);
 
@@ -408,7 +398,7 @@ export default class GarageView extends View {
     private createCarTrack(carData: Car, container: CreatorElement): void {
         const carTrackCreator = new CreatorElement(trackParameters);
 
-        const carIconCreator = createSVG(svgElements, carData.color, String(carData.id));
+        const carIconCreator = createSvg(svgElements, carData.color, String(carData.id));
         this.finish = new CreatorElement(finishParameters);
 
         this.raceController = new RaceController(
@@ -417,7 +407,8 @@ export default class GarageView extends View {
             this.carController,
             this.paginationController,
             this.viewElementCreator,
-            this.finish
+            this.finish,
+            this.dialog
         );
 
         carTrackCreator.addInnerElement(carIconCreator);
