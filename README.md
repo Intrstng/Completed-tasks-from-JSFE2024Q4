@@ -2,7 +2,7 @@
 
 1. Task: [link](https://github.com/rolling-scopes-school/tasks/tree/master/stage2/tasks/async-race)
 
-2. Functional requirements: Evaluation Criteria for **"Async Race"**: [link](https://github.com/rolling-scopes-school/tasks/blob/master/stage2/tasks/async-race/functional-requirements.md)
+2. Functional requirements: [Evaluation Criteria for **"Async Race"**](https://github.com/rolling-scopes-school/tasks/blob/master/stage2/tasks/async-race/functional-requirements.md)
 
 3. Screenshots:
 
