@@ -8,6 +8,7 @@ import type {
     TableRecord,
     ToggleButtonActiveClassCB,
     Winner,
+    TableNameHeadCellCB,
 } from '../../../types';
 import { AppStateKeys, Description } from '../../../types';
 import CreatorElement from '../creator-element';
@@ -37,6 +38,7 @@ import {
 import { CSS_TABLE } from './table-classes';
 import { toggleButtonActiveClassAssertion } from '../assertion-functions/assertion-functions';
 import { CONSTANTS } from '../../state/initial-state';
+import { createNameHeadCell } from './create-name-head-cell';
 
 export default class Table {
     private readonly state: SessionStorageState;
@@ -52,6 +54,7 @@ export default class Table {
     private readonly toggleButtonActiveClass: ToggleButtonActiveClassCB | null;
     private readonly getWinnersForCurrentPage: Callback | null;
     private readonly updateTableLayout: Callback | null;
+    private readonly createNameHeadCell: TableNameHeadCellCB = createNameHeadCell;
 
     constructor(
         state: SessionStorageState,
@@ -141,42 +144,7 @@ export default class Table {
         const theadRowCreator = new CreatorElement(tableRowParameters);
 
         tableHeadColumnsNames.forEach(columnName => {
-            const headCellCreator = new CreatorElement(tableHeadCellParameters);
-            if (columnName === Description.NAME) {
-                headCellCreator.setCssClasses([CSS_TABLE.TABLE_HEAD_NAME]);
-                headCellCreator.setTextContent(columnName);
-            } else if (columnName === Description.WINS || columnName === Description.TIME) {
-                const { ascButtonParametersWithCB, descButtonParametersWithCB } =
-                    this.addOrderBtnCallbacksToParameters(columnName);
-                const theadCellContainerCreator = new CreatorElement(theadButtonsContainer);
-                let ascButtonCreator: CreatorElement | null = null;
-                let descButtonCreator: CreatorElement | null = null;
-
-                if (columnName === Description.WINS && ascButtonParametersWithCB && descButtonParametersWithCB) {
-                    this.ascWinButton = new CreatorElement(ascButtonParametersWithCB);
-                    this.descWinButton = new CreatorElement(descButtonParametersWithCB);
-                    ascButtonCreator = this.ascWinButton;
-                    descButtonCreator = this.descWinButton;
-                } else if (columnName === Description.TIME && ascButtonParametersWithCB && descButtonParametersWithCB) {
-                    this.ascTimeButton = new CreatorElement(ascButtonParametersWithCB);
-                    this.descTimeButton = new CreatorElement(descButtonParametersWithCB);
-                    ascButtonCreator = this.ascTimeButton;
-                    descButtonCreator = this.descTimeButton;
-                }
-                const textContentCreator = new CreatorElement(spanParameters);
-                textContentCreator.setTextContent(columnName);
-
-                if (ascButtonCreator instanceof CreatorElement) {
-                    theadCellContainerCreator.addInnerElement(ascButtonCreator.getElement());
-                }
-                theadCellContainerCreator.addInnerElement(textContentCreator.getElement());
-                if (descButtonCreator instanceof CreatorElement) {
-                    theadCellContainerCreator.addInnerElement(descButtonCreator.getElement());
-                }
-                headCellCreator.addInnerElement(theadCellContainerCreator.getElement());
-            } else {
-                headCellCreator.setTextContent(columnName);
-            }
+            const headCellCreator = this.createHeadCell(columnName);
             theadRowCreator.addInnerElement(headCellCreator.getElement());
         });
 
@@ -185,6 +153,67 @@ export default class Table {
             this.table.addInnerElement(theadCreator.getElement());
         }
         this.toggleActiveClassSortButton();
+    }
+
+    private createHeadCell(columnName: Description): CreatorElement {
+        const headCellCreator = new CreatorElement(tableHeadCellParameters);
+
+        if (columnName === Description.NAME) {
+            this.createNameHeadCell(headCellCreator, columnName);
+        } else if (columnName === Description.WINS || columnName === Description.TIME) {
+            this.createSortableHeadCell(headCellCreator, columnName);
+        } else {
+            headCellCreator.setTextContent(columnName);
+        }
+
+        return headCellCreator;
+    }
+
+    private createSortableHeadCell(headCellCreator: CreatorElement, columnName: Description): void {
+        const { ascButtonParametersWithCB, descButtonParametersWithCB } =
+            this.addOrderBtnCallbacksToParameters(columnName);
+        const theadCellContainerCreator = new CreatorElement(theadButtonsContainer);
+
+        const { ascButton, descButton } = this.createSortButtons(
+            columnName,
+            ascButtonParametersWithCB,
+            descButtonParametersWithCB
+        );
+        const textContentCreator = new CreatorElement(spanParameters);
+        textContentCreator.setTextContent(columnName);
+
+        if (ascButton) {
+            theadCellContainerCreator.addInnerElement(ascButton.getElement());
+        }
+        theadCellContainerCreator.addInnerElement(textContentCreator.getElement());
+        if (descButton) {
+            theadCellContainerCreator.addInnerElement(descButton.getElement());
+        }
+
+        headCellCreator.addInnerElement(theadCellContainerCreator.getElement());
+    }
+
+    private createSortButtons(
+        columnName: Description,
+        ascButtonParameters: ElementParameters | null,
+        descButtonParameters: ElementParameters | null
+    ): { ascButton: CreatorElement | null; descButton: CreatorElement | null } {
+        let ascButton: CreatorElement | null = null;
+        let descButton: CreatorElement | null = null;
+
+        if (columnName === Description.WINS && ascButtonParameters && descButtonParameters) {
+            this.ascWinButton = new CreatorElement(ascButtonParameters);
+            this.descWinButton = new CreatorElement(descButtonParameters);
+            ascButton = this.ascWinButton;
+            descButton = this.descWinButton;
+        } else if (columnName === Description.TIME && ascButtonParameters && descButtonParameters) {
+            this.ascTimeButton = new CreatorElement(ascButtonParameters);
+            this.descTimeButton = new CreatorElement(descButtonParameters);
+            ascButton = this.ascTimeButton;
+            descButton = this.descTimeButton;
+        }
+
+        return { ascButton, descButton };
     }
 
     private async generateTableBody(): Promise<void> {

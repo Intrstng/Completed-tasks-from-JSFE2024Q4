@@ -14,12 +14,12 @@ import {
     allGarageButtonsToggleDisable,
     carButtonToggleDisable,
     raceButtonToggleDisable,
+    toggleDisableButtonsOnStartDragRace,
+    toggleDisableButtonsOnStartRace,
     toggleDisabledAllCarButtons,
     toggleDisabledDragRaceControlButtons,
-    toggleDisabledManageCarButtons,
-    togglePaginationButtons,
 } from '../button/button-disable-toggle';
-import { changeSvgStrokeColor } from '../create-svg/create-svg';
+import { changeSvgStrokeColor, getCarIconFromLayout } from '../create-svg/create-svg';
 import { COLORS } from '../../../constants/constants';
 import { CSS_BUTTON } from '../button/button-classes';
 import { CONSTANTS } from '../../state/initial-state';
@@ -27,7 +27,6 @@ import CreatorElement from '../creator-element';
 import type { CarController } from '../car/car-controller';
 import { PaginationController } from '../pagination/pagination-controller';
 import CreatorDialog from '../dialog/dialog-creator';
-import { getCarIconFromLayout } from '../create-svg/create-svg';
 import { animateCarRacing } from './animate-car-racing';
 
 export class RaceController {
@@ -83,34 +82,24 @@ export class RaceController {
     }
 
     public startRaceCar = async (id: number, isDragRace?: boolean): Promise<ResponseObject | undefined> => {
-        toggleDisabledAllCarButtons(id, true);
-        toggleDisabledDragRaceControlButtons(true);
-        raceButtonToggleDisable(true);
+        toggleDisableButtonsOnStartRace(id);
         const carIcon: HTMLElement | null = this.getCarIconFromLayout(id);
         let trackDistance: number;
-
         if (carIcon) {
             trackDistance = this.getTrackDistance(carIcon);
-
             const carEngineData: EngineData | undefined = await this.api.startEngine(id);
             if (!carEngineData) return;
-
             const { velocity, distance }: EngineData = carEngineData;
             const raceTime: number = Math.round(distance / velocity);
-
             const currentAnimation: AnimationFrame = this.animateCarRacing(id, carIcon, raceTime, trackDistance);
-
             const response = await this.api.driveCar(id);
-
             if (!response) return;
-
             const currentAnimationState = this.state.getState();
             const newAnimationState = {
                 ...currentAnimationState,
                 animation: [...currentAnimationState.animation, currentAnimation],
             };
             this.state.setState(newAnimationState);
-
             if (!response.success) {
                 const currentAnimationID: number | null = currentAnimation.animationID;
                 if (currentAnimationID) {
@@ -133,47 +122,14 @@ export class RaceController {
     };
 
     public startDragRace(): void {
-        toggleDisabledManageCarButtons(true);
-        raceButtonToggleDisable(true);
-        togglePaginationButtons(true);
-
+        toggleDisableButtonsOnStartDragRace();
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
         const promises: Promise<ResponseObject | undefined>[] = allCars.map(car => this.startRaceCar(car.id, true));
 
         if (promises.length > 0) {
             Promise.any(promises)
                 .then(async (response: ResponseObject | undefined) => {
-                    if (response && response.carID !== undefined) {
-                        const carID: number = response.carID;
-                        const time: number = response.time;
-                        const winnerResponse = await this.api.checkWinner(carID);
-
-                        if (typeof winnerResponse === 'boolean' && !winnerResponse) {
-                            const newApiWinner = { id: carID, wins: 1, time };
-                            await this.api.createWinner(newApiWinner);
-                        } else if (winnerResponse !== true && typeof winnerResponse !== 'boolean') {
-                            let bestTime: number;
-                            if (winnerResponse) {
-                                bestTime = Math.min(time, winnerResponse.time);
-                                await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
-                            }
-                        }
-                    } else {
-                        console.warn('Response does not contain carID:', response);
-                    }
-
-                    if (response) {
-                        const currentWinnerData: RaceWinnerMessage = {
-                            carID: response.carID,
-                            time: String(response.time / CONSTANTS.milliseconds),
-                        };
-                        this.showWinnersMessage(currentWinnerData);
-                        allGarageButtonsToggleDisable(false);
-                        if (this.paginationController instanceof PaginationController) {
-                            this.paginationController.toggleDisabledForPaginationButtons();
-                        }
-                        raceButtonToggleDisable(true);
-                    }
+                    await this.handleDragRaceResponse(response);
                 })
                 .catch(error => {
                     if (error instanceof AggregateError) {
@@ -223,6 +179,42 @@ export class RaceController {
             }
         } catch (error: unknown) {
             console.error('Error occurred:', error instanceof Error ? error.message : JSON.stringify(error));
+        }
+    };
+
+    private handleDragRaceResponse = async (response: ResponseObject | undefined) => {
+        if (response && response.carID !== undefined) {
+            const carID: number = response.carID;
+            const time: number = response.time;
+            const winnerResponse = await this.api.checkWinner(carID);
+
+            if (typeof winnerResponse === 'boolean' && !winnerResponse) {
+                const newApiWinner = { id: carID, wins: 1, time };
+                await this.api.createWinner(newApiWinner);
+            } else if (winnerResponse !== true && typeof winnerResponse !== 'boolean') {
+                let bestTime: number;
+                if (winnerResponse) {
+                    bestTime = Math.min(time, winnerResponse.time);
+                    await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
+                }
+            }
+        } else {
+            console.warn('Response does not contain carID:', response);
+        }
+
+        if (response) {
+            const currentWinnerData: RaceWinnerMessage = {
+                carID: response.carID,
+                time: String(response.time / CONSTANTS.milliseconds),
+            };
+            this.showWinnersMessage(currentWinnerData);
+            allGarageButtonsToggleDisable(false);
+
+            if (this.paginationController instanceof PaginationController) {
+                this.paginationController.toggleDisabledForPaginationButtons();
+            }
+
+            raceButtonToggleDisable(true);
         }
     };
 

@@ -78,7 +78,7 @@ export default tseslint.config(
             }
           }
         ],
-        "max-lines-per-function": ["error", 60]
+        "max-lines-per-function": ["error", 40]
       },
     },
     {

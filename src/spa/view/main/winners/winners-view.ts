@@ -2,7 +2,7 @@ import './winners.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
-import type { ToggleActiveButtonCallback } from '../../../../types';
+import type { ToggleActiveButtonCB } from '../../../../types';
 import { AppStateKeys, Description } from '../../../../types';
 import {
     winnersCurrentParameters,
@@ -35,7 +35,7 @@ export default class WinnersView extends View {
     private descWinButton: CreatorElement | null;
     private ascTimeButton: CreatorElement | null;
     private descTimeButton: CreatorElement | null;
-    private readonly toggleButtonActiveClass: ToggleActiveButtonCallback;
+    private readonly toggleButtonActiveClass: ToggleActiveButtonCB;
     private readonly paginationController: PaginationController | null;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {

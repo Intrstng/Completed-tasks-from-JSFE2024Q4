@@ -1,6 +1,6 @@
 import './input-field.scss';
 
-import type { ElementParameters, EventCallback } from '../../../types';
+import type { ElementParameters, EventCB } from '../../../types';
 import { InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
@@ -50,7 +50,7 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
-    public setCallback(callback: EventCallback = null): void {
+    public setCallback(callback: EventCB = null): void {
         if (this.element) {
             this.element.addEventListener('keyup', (event: Event) => {
                 if (callback) {

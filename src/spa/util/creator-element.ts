@@ -1,4 +1,4 @@
-import type { EventCallback, ElementParameters } from '../../types';
+import type { EventCB, ElementParameters } from '../../types';
 
 export default class CreatorElement {
     public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
@@ -131,7 +131,7 @@ export default class CreatorElement {
         }
     }
 
-    public setCallback(callback: EventCallback = null): void {
+    public setCallback(callback: EventCB = null): void {
         if (this.element && typeof callback === 'function') {
             this.element.addEventListener('click', (event: Event) => callback(event));
         } else if (!this.element) {

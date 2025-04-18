@@ -1,6 +1,6 @@
 import './button.scss';
 
-import type { ElementParameters, EventCallback } from '../../../types';
+import type { ElementParameters, EventCB } from '../../../types';
 import CreatorElement from '../creator-element';
 import { InputTypes } from '../../../types';
 
@@ -31,7 +31,7 @@ export default class ButtonCreator extends CreatorElement {
         }
     }
 
-    public setCallback(callback: EventCallback = null): void {
+    public setCallback(callback: EventCB = null): void {
         if (this.element) {
             this.element.addEventListener('click', (event: Event) => {
                 if (callback) {

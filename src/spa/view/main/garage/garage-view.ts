@@ -1,7 +1,7 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { ButtonParameters, Callback, CallbackEvent, Car, CarPayload, ElementParameters } from '../../../../types';
+import type { ButtonParameters, Callback, Car, CarPayload, ElementParameters, EventCB } from '../../../../types';
 import { AppStateKeys, Description, InputTypes, InputUse } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
@@ -187,10 +187,8 @@ export default class GarageView extends View {
         return mainButtonsContainerCreator;
     }
 
-    private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
-        const { textContent }: ButtonParameters = buttonParameters;
-
-        switch (textContent) {
+    private createButtonCallback = (parameters: ButtonParameters): Callback => {
+        switch (parameters.textContent) {
             case BUTTON_CONSTANTS.buttonRace: {
                 return () => this.raceController?.startDragRace();
             }
@@ -209,24 +207,19 @@ export default class GarageView extends View {
             case BUTTON_CONSTANTS.buttonStart: {
                 return () =>
                     getCallbackWithID(
-                        buttonParameters,
+                        parameters,
                         this.raceController?.startRaceCar.bind(this.raceController) ?? (() => {})
                     );
             }
             case BUTTON_CONSTANTS.buttonBack: {
                 return () =>
-                    getCallbackWithID(
-                        buttonParameters,
-                        this.raceController?.backFromRaceForCar.bind(this) ?? (() => {})
-                    );
+                    getCallbackWithID(parameters, this.raceController?.backFromRaceForCar.bind(this) ?? (() => {}));
             }
             case BUTTON_CONSTANTS.buttonSelect: {
-                return () =>
-                    getCallbackWithID(buttonParameters, this.carController?.selectCar.bind(this) ?? (() => {}));
+                return () => getCallbackWithID(parameters, this.carController?.selectCar.bind(this) ?? (() => {}));
             }
             case BUTTON_CONSTANTS.buttonRemove: {
-                return () =>
-                    getCallbackWithID(buttonParameters, this.carController?.removeCar.bind(this) ?? (() => {}));
+                return () => getCallbackWithID(parameters, this.carController?.removeCar.bind(this) ?? (() => {}));
             }
             default: {
                 return () => {};
@@ -271,61 +264,64 @@ export default class GarageView extends View {
 
     private addInputsCarBlock(container: CreatorElement, prefix: InputUse): void {
         inputsParameters.forEach(inputParameters => {
-            const callback = (event: Event): void => this.keyupHandler(event, prefix, inputParameters);
             if (inputParameters.type === InputTypes.TEXT) {
-                const inputParameterWithCB = {
-                    ...inputParameters,
-                    id: `${inputParameters.id}${prefix}`,
-                    callback,
-                };
-                const carInputNameCreator = new InputFieldCreator(inputParameterWithCB);
-
-                if (prefix === InputUse.CREATE) {
-                    this.inputCreateNameField = carInputNameCreator;
-                } else if (prefix === InputUse.UPDATE) {
-                    this.inputUpdateNameField = carInputNameCreator;
-                }
-                container.addInnerElement(carInputNameCreator.getElement());
-            }
-
-            if (inputParameters.type === InputTypes.COLOR) {
-                const inputParameterWithID = {
-                    ...inputParameters,
-                    id: `${inputParameters.id}${prefix}`,
-                };
-                const newLabelParameters = {
-                    ...inputParameters,
-                    ...labelParameters,
-                    textContent: prefix,
-                };
-                const carInputColorCreator = new InputFieldCreator(inputParameterWithID);
-
-                if (prefix === InputUse.CREATE) {
-                    this.inputCreateColorField = carInputColorCreator;
-                } else if (prefix === InputUse.UPDATE) {
-                    this.inputUpdateColorField = carInputColorCreator;
-                }
-                const labelCreator = new LabelCreator(newLabelParameters);
-                labelCreator.setTextContent(Description.COLOR);
-                container.addInnerElement(labelCreator.getElement());
-
-                let eventHandler: CallbackEvent = () => {};
-                if (this.carController instanceof CarController) {
-                    eventHandler =
-                        prefix === InputUse.CREATE
-                            ? (event: Event) => this.carController?.createCarColor(event, prefix)
-                            : (event: Event) => this.carController?.updateCarColor(event, prefix);
-                }
-
-                const carInputColorElement: HTMLElement | HTMLCanvasElement | null = carInputColorCreator.getElement();
-
-                if (carInputColorElement) {
-                    carInputColorElement.addEventListener('input', eventHandler);
-                }
-
-                container.addInnerElement(carInputColorCreator.getElement());
+                this.handleTextInput(container, prefix, inputParameters);
+            } else if (inputParameters.type === InputTypes.COLOR) {
+                this.handleColorInput(container, prefix, inputParameters);
             }
         });
+    }
+
+    private handleTextInput(container: CreatorElement, prefix: InputUse, inputParameters: ElementParameters): void {
+        const callback = (event: Event): void => this.keyupHandler(event, prefix, inputParameters);
+        const inputParameterWithCB = {
+            ...inputParameters,
+            id: `${inputParameters.id}${prefix}`,
+            callback,
+        };
+        const carInputNameCreator = new InputFieldCreator(inputParameterWithCB);
+
+        if (prefix === InputUse.CREATE) {
+            this.inputCreateNameField = carInputNameCreator;
+        } else if (prefix === InputUse.UPDATE) {
+            this.inputUpdateNameField = carInputNameCreator;
+        }
+        container.addInnerElement(carInputNameCreator.getElement());
+    }
+
+    private handleColorInput(container: CreatorElement, prefix: InputUse, inputParameters: ElementParameters): void {
+        const inputParameterWithID = {
+            ...inputParameters,
+            id: `${inputParameters.id}${prefix}`,
+        };
+        const newLabelParameters = {
+            ...inputParameters,
+            ...labelParameters,
+            textContent: prefix,
+        };
+        const carInputColorCreator = new InputFieldCreator(inputParameterWithID);
+
+        if (prefix === InputUse.CREATE) {
+            this.inputCreateColorField = carInputColorCreator;
+        } else if (prefix === InputUse.UPDATE) {
+            this.inputUpdateColorField = carInputColorCreator;
+        }
+        const labelCreator = new LabelCreator(newLabelParameters);
+        labelCreator.setTextContent(Description.COLOR);
+        container.addInnerElement(labelCreator.getElement());
+
+        const eventHandler: EventCB =
+            prefix === InputUse.CREATE
+                ? (event: Event) => this.carController?.createCarColor(event, prefix)
+                : (event: Event) => this.carController?.updateCarColor(event, prefix);
+
+        const carInputColorElement: HTMLElement | HTMLCanvasElement | null = carInputColorCreator.getElement();
+
+        if (carInputColorElement) {
+            carInputColorElement.addEventListener('input', eventHandler);
+        }
+
+        container.addInnerElement(carInputColorCreator.getElement());
     }
 
     private addCarCreationControls(): void {

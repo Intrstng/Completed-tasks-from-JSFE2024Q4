@@ -23,14 +23,12 @@ export type PopStateEventState = {
     url?: string;
 };
 
-export type EventCallback = ((event: Event) => void | Promise<void>) | null;
-
 export type ElementParameters = {
     tag?: string;
     id?: string;
     classNames?: Array<string>;
     textContent?: string;
-    callback?: EventCallback | null;
+    callback?: EventCB | null;
     type?: InputTypes | InputTypes.COLOR;
     placeholder?: string;
     title?: string;
@@ -61,15 +59,15 @@ export type Callback = () => void;
 
 export type CallbackID = (id: number) => void;
 
-export type CallbackEvent = (event: Event) => void;
+export type EventCB = ((event: Event) => void | Promise<void>) | null;
 
-export type CallbackQuery = (queryParameters: QueryParameters[]) => string;
+export type QueryCB = (queryParameters: QueryParameters[]) => string;
 
-export type ToggleActiveButtonCallback = (button: CreatorElement) => void;
+export type TableNameHeadCellCB = (headCellCreator: CreatorElement, columnName: Description) => void;
+
+export type ToggleActiveButtonCB = (button: CreatorElement) => void;
 
 export type CreateTableRecordsCB = (cars: Array<Car>, winners: Array<Winner>) => Array<TableRecord>;
-
-export type AddOrderButtonCallbacksToParametersCB = (columnName: Description) => OrderButtonParametersWithCB;
 
 export type ToggleButtonActiveClassCB = (button: CreatorElement) => void;
 

@@ -1,6 +1,6 @@
 import type {
     AppState,
-    CallbackQuery,
+    QueryCB,
     Car,
     Constants,
     DriveData,
@@ -34,7 +34,7 @@ export default class ApiController {
     private readonly path: Paths;
     private readonly state: LocalStorageState;
     private readonly constants: Constants;
-    private readonly getQueryString: CallbackQuery | null;
+    private readonly getQueryString: QueryCB | null;
 
     constructor(paths: Paths, state: LocalStorageState, constants: Constants) {
         this.baseUrl = constants.baseURL;
@@ -258,39 +258,29 @@ export default class ApiController {
                 { key: QueryParameterKeys.ORDER, value: sortOrderType },
                 { key: QueryParameterKeys.LIMIT, value: this.constants.winnersOnPage },
             ];
-
             const queryParameters = this.getQueryString ? this.getQueryString(parameters) : '';
-
             const response = await fetch(`${this.baseUrl}${this.path.winners}${queryParameters}`);
-
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
                 return undefined;
             }
-
             const winnersResponse: unknown = await response.json();
             let winners: Array<Winner> = [];
-
             if (isWinnerArray(winnersResponse)) {
                 winners = winnersResponse;
             }
-
             const winnersQuantity = Number(response.headers.get(HttpHeaderKeys.X_TOTAL_COUNT));
-
             const winnersData: Awaited<Car | undefined>[] = await Promise.all(
                 winners.map(winner => this.getCar(winner.id))
             );
             const validWinnersData: Car[] = winnersData.filter((car): car is Car => car !== undefined);
-
             const currentState: AppState = this.state.getState();
-
             const newState: AppState = {
                 ...currentState,
                 winners,
                 winnersData: validWinnersData,
                 winnersQuantity,
             };
-
             this.state.setState(newState);
         } catch (error: unknown) {
             console.error(

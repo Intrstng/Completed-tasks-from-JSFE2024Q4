@@ -20,6 +20,27 @@ export function toggleDisabledDragRaceControlButtons(isDisabled: boolean): void 
     });
 }
 
+export function raceButtonToggleDisable(isDisabled: boolean): void {
+    const buttons = document.querySelectorAll(`.${CSS_BUTTON.BUTTON_RACE}`);
+    buttons.forEach(button => {
+        if (button instanceof HTMLButtonElement) {
+            button.disabled = isDisabled;
+        }
+    });
+}
+
+export function toggleDisableButtonsOnStartRace(id: number): void {
+    toggleDisabledAllCarButtons(id, true);
+    toggleDisabledDragRaceControlButtons(true);
+    raceButtonToggleDisable(true);
+}
+
+export function toggleDisableButtonsOnStartDragRace(): void {
+    toggleDisabledManageCarButtons(true);
+    raceButtonToggleDisable(true);
+    togglePaginationButtons(true);
+}
+
 export function toggleDisabledManageCarButtons(isDisabled: boolean): void {
     const createCarButton = document.querySelector(`.${CSS_BUTTON.BUTTON_CREATE}`);
     const updateCarButton = document.querySelector(`.${CSS_BUTTON.BUTTON_UPDATE}`);
@@ -35,15 +56,6 @@ export function toggleDisabledManageCarButtons(isDisabled: boolean): void {
 
     buttons.forEach(button => {
         button.disabled = isDisabled;
-    });
-}
-
-export function raceButtonToggleDisable(isDisabled: boolean): void {
-    const buttons = document.querySelectorAll(`.${CSS_BUTTON.BUTTON_RACE}`);
-    buttons.forEach(button => {
-        if (button instanceof HTMLButtonElement) {
-            button.disabled = isDisabled;
-        }
     });
 }
 
