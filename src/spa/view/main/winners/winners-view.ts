@@ -20,6 +20,7 @@ import {
     paginationWinnersParameters,
 } from '../../../util/pagination/winners-view-pagination/winners-view-pagination-parameters';
 import { PaginationController } from '../../../util/pagination/pagination-controller';
+import { PagesNames } from '../../header/header-constants';
 
 export default class WinnersView extends View {
     public router: Router;
@@ -88,7 +89,7 @@ export default class WinnersView extends View {
     private async getWinnersForCurrentPage(): Promise<void> {
         const currentSortType = this.winnersState.getState()[AppStateKeys.SORT_TYPE];
         const currentWinnersPage = this.winnersState.getState()[AppStateKeys.WINNERS_PAGE];
-        let currentSortOrderTime: string;
+        let currentSortOrderTime: string | undefined;
 
         if (currentSortType === Description.SORT_WINS) {
             currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_WINS];
@@ -96,7 +97,7 @@ export default class WinnersView extends View {
             currentSortOrderTime = this.winnersState.getState()[AppStateKeys.ORDER_TIME];
         }
 
-        if (Number.isFinite(currentWinnersPage)) {
+        if (Number.isFinite(currentWinnersPage) && currentSortOrderTime) {
             await this.api.getAllWinners(currentSortType, currentSortOrderTime, currentWinnersPage);
         }
     }
@@ -109,7 +110,7 @@ export default class WinnersView extends View {
         const summaryCreator = new CreatorElement(winnersSummaryParameters);
 
         this.winnersQuantity = new CreatorElement(winnersCurrentParameters);
-        this.winnersQuantity.setTextContent(`${Description.WINNERS}${winnersQuantityText}`);
+        this.winnersQuantity.setTextContent(`${PagesNames.WINNERS}${winnersQuantityText}`);
 
         if (this.winnersPage instanceof CreatorElement) {
             this.winnersPage.setTextContent(`${Description.PAGE} ${currentWinnersPage}`);

@@ -5,13 +5,13 @@ import type {
     Car,
     DriveData,
     EngineData,
-    PopStateEventState,
-    Winner,
     Pages,
+    PopStateEventState,
     ToggleButtonActiveClassCB,
+    Winner,
 } from '../../../types';
-import { Description } from '../../../types';
 import CreatorElement from '../creator-element';
+import { LinkNames } from '../../view/header/header-constants';
 
 export function isValidState(state: unknown): state is PopStateEventState {
     return typeof state === 'object' && state !== null && 'url' in state;
@@ -75,7 +75,7 @@ export function isWinnerArray(data: unknown): data is Winner[] {
 }
 
 export function isValidPage(value: unknown): value is Pages {
-    return value === Description.TO_GARAGE || value === Description.TO_WINNERS;
+    return value === LinkNames.GARAGE || value === LinkNames.WINNERS;
 }
 
 export function toggleButtonActiveClassAssertion(

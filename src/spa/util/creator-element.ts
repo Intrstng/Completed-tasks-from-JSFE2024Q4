@@ -59,6 +59,7 @@ export default class CreatorElement {
         if (this.element) {
             return this.element.textContent || '';
         }
+        return null;
     }
 
     public createElement(parameters: ElementParameters): void {

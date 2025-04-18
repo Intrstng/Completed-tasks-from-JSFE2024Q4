@@ -48,6 +48,8 @@ import { CarController } from '../../../util/car/car-controller';
 import { RaceController } from '../../../util/race/race-controller';
 import CreatorDialog from '../../../util/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
+import { BUTTON_CONSTANTS } from '../../../util/button/button-parameters/button-constants';
+import { PagesNames } from '../../header/header-constants';
 
 export default class GarageView extends View {
     public router: Router;
@@ -154,7 +156,7 @@ export default class GarageView extends View {
         const summaryCreator = new CreatorElement(garageSummaryParameters);
 
         this.garageQuantity = new CreatorElement(garageCurrentParameters);
-        this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
+        this.garageQuantity.setTextContent(`${PagesNames.GARAGE}${garageQuantityText}`);
 
         if (this.garagePage instanceof CreatorElement) {
             this.garagePage.setTextContent(`${Description.PAGE} ${currentGaragePage}`);
@@ -184,32 +186,34 @@ export default class GarageView extends View {
     }
 
     private createButtonCallback = (buttonParameters: ButtonParameters): Callback => {
-        switch (buttonParameters.textContent) {
-            case Description.RACE: {
+        const { textContent }: ButtonParameters = buttonParameters;
+
+        switch (textContent) {
+            case BUTTON_CONSTANTS.buttonRace: {
                 return () => this.raceController?.startDragRace();
             }
-            case Description.RESET: {
+            case BUTTON_CONSTANTS.buttonReset: {
                 return () => this.raceController?.resetDragRace();
             }
-            case Description.GENERATE: {
+            case BUTTON_CONSTANTS.buttonGenerate: {
                 return () => this.generateCars();
             }
-            case Description.CREATE: {
+            case BUTTON_CONSTANTS.buttonCreate: {
                 return () => this.carController?.createCar();
             }
-            case Description.UPDATE: {
+            case BUTTON_CONSTANTS.buttonUpdate: {
                 return () => this.carController?.updateCar();
             }
-            case Description.START: {
+            case BUTTON_CONSTANTS.buttonStart: {
                 return () => getCallbackWithID(buttonParameters, this.raceController?.startRaceCar.bind(this));
             }
-            case Description.BACK: {
+            case BUTTON_CONSTANTS.buttonBack: {
                 return () => getCallbackWithID(buttonParameters, this.raceController?.backFromRaceForCar.bind(this));
             }
-            case Description.SELECT: {
+            case BUTTON_CONSTANTS.buttonSelect: {
                 return () => getCallbackWithID(buttonParameters, this.carController?.selectCar.bind(this));
             }
-            case Description.REMOVE: {
+            case BUTTON_CONSTANTS.buttonRemove: {
                 return () => getCallbackWithID(buttonParameters, this.carController?.removeCar.bind(this));
             }
             default: {
@@ -226,7 +230,7 @@ export default class GarageView extends View {
     private updateGarageQuantityLayout(): void {
         const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
         const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
-        this.garageQuantity.setTextContent(`${Description.GARAGE}${garageQuantityText}`);
+        this.garageQuantity.setTextContent(`${PagesNames.GARAGE}${garageQuantityText}`);
     }
 
     private async generateCars(): Promise<void> {
@@ -347,13 +351,18 @@ export default class GarageView extends View {
                 this.createCarBlock(car, this.raceBoard);
             });
         } catch (error: unknown) {
-            console.error('Race board creation failed:', error instanceof Error ? error.message : String(error));
+            console.error(
+                'Race board creation failed:',
+                error instanceof Error ? error.message : JSON.stringify(error)
+            );
         }
 
-        this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+        if (this.raceBoard instanceof CreatorElement) {
+            this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
+        }
     }
 
-    private createCarBlock(carData: Car, container: CreatorElement): void {
+    private createCarBlock(carData: Car, container: CreatorElement | null): void {
         const carBlockCreator = new CreatorElement(carBlockParameters);
         carBlockCreator.setDataAttribute('id', String(carData.id));
 
@@ -370,7 +379,9 @@ export default class GarageView extends View {
         this.createCarControls(carData, carRaceCreator);
         this.createCarTrack(carData, carRaceCreator);
 
-        container.addInnerElement(carBlockCreator.getElement());
+        if (container) {
+            container.addInnerElement(carBlockCreator.getElement());
+        }
     }
 
     private createCarControls(carData: Car, container: CreatorElement): void {
@@ -419,14 +430,20 @@ export default class GarageView extends View {
     }
 
     private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {
-        if (parameters.placeholder === Description.BRAND && prefix === InputUse.CREATE) {
-            this.carController.createCarName(event);
-        } else if (parameters.placeholder === Description.BRAND && prefix === InputUse.UPDATE) {
-            this.carController.updateCarName(event);
-        } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.CREATE) {
-            this.carController.createCarColor(event, parameters.id);
-        } else if (parameters.type === InputTypes.COLOR && prefix === InputUse.UPDATE) {
-            this.carController.updateCarColor(event, parameters.id);
+        if (parameters.placeholder === CONSTANTS.brandType) {
+            if (prefix === InputUse.CREATE) {
+                this.carController.createCarName(event);
+            }
+            if (prefix === InputUse.UPDATE) {
+                this.carController.updateCarName(event);
+            }
+        } else if (parameters.type === InputTypes.COLOR) {
+            if (prefix === InputUse.CREATE) {
+                this.carController.createCarColor(event, parameters.id);
+            }
+            if (prefix === InputUse.CREATE) {
+                this.carController.updateCarColor(event, parameters.id);
+            }
         }
     }
 }

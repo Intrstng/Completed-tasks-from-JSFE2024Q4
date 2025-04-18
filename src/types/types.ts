@@ -31,7 +31,7 @@ export type ElementParameters = {
     classNames?: Array<string>;
     textContent?: string;
     callback?: EventCallback | null;
-    type?: InputTypes;
+    type?: InputTypes | InputTypes.COLOR;
     placeholder?: string;
     title?: string;
     min?: string;
@@ -145,7 +145,7 @@ export type AppState = {
     [AppStateKeys.SELECTED_CAR]: Car;
     [AppStateKeys.CARS_QUANTITY]: number;
     [AppStateKeys.WINNERS_QUANTITY]: number;
-    [AppStateKeys.MAIN_PAGE]: Description;
+    [AppStateKeys.MAIN_PAGE]: string;
     [AppStateKeys.GARAGE_PAGE]: number;
     [AppStateKeys.WINNERS_PAGE]: number;
     [AppStateKeys.ORDER_WINS]: Description.ASC | Description.DESC;
@@ -175,6 +175,7 @@ export type Constants = {
     dialogDelay: number;
     resetRaceDelay: number;
     milliseconds: number;
+    brandType: string;
 };
 
 export type QueryParameters = {

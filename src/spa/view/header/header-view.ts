@@ -4,15 +4,10 @@ import LinkView from './link/link-view';
 import CreatorElement from '../../util/creator-element';
 import type { Pages } from '../../../types';
 import type Router from '../../router/router';
-import {
-    headerParameters,
-    LinkNames,
-    navigationParameters,
-    PagesNames,
-    titleParameters,
-} from './headers-view-parameters';
+import { headerParameters, navigationParameters, titleParameters } from './headers-view-parameters';
 import type { LinkElements, PageParameters } from './types';
 import { isValidPage } from '../../util/assertion-functions/assertion-functions';
+import { LinkNames, PagesNames } from './header-constants';
 
 export default class HeaderView extends View {
     public headerLinkElements: LinkElements;

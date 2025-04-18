@@ -218,7 +218,7 @@ export class RaceController {
                 car.style.transform = `translateX(0px)`;
             }
         } catch (error: unknown) {
-            console.error('Error occurred:', error instanceof Error ? error.message : String(error));
+            console.error('Error occurred:', error instanceof Error ? error.message : JSON.stringify(error));
         }
     };
 

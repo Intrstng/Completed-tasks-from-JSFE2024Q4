@@ -25,13 +25,3 @@ export const linkParameters: ElementParameters = {
     tag: 'a',
     classNames: [CSS_HEADER.ITEM],
 };
-
-export const LinkNames = {
-    GARAGE: Description.TO_GARAGE,
-    WINNERS: Description.TO_WINNERS,
-};
-
-export const PagesNames = {
-    GARAGE: Description.GARAGE,
-    WINNERS: Description.WINNERS,
-};

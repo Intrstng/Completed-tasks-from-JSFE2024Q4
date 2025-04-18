@@ -1,6 +1,7 @@
 import type { ButtonParameters, ButtonsCollection, ElementParameters } from '../../../../../types';
 import { Description } from '../../../../../types';
 import { CSS_BUTTON } from '../../button-classes';
+import { BUTTON_CONSTANTS } from '../button-constants';
 
 export const mainButtonsContainerParameters: ElementParameters = {
     tag: 'div',
@@ -11,17 +12,17 @@ export const mainControlsButtonsParameters: ButtonsCollection = [
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_CONTROLS, CSS_BUTTON.BUTTON_RACE],
-        textContent: Description.RACE,
+        textContent: BUTTON_CONSTANTS.buttonRace,
     },
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_CONTROLS, CSS_BUTTON.BUTTON_RESET],
-        textContent: Description.RESET,
+        textContent: BUTTON_CONSTANTS.buttonReset,
     },
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_CONTROLS, CSS_BUTTON.BUTTON_GENERATE],
-        textContent: Description.GENERATE,
+        textContent: BUTTON_CONSTANTS.buttonGenerate,
     },
 ];
 
@@ -29,35 +30,35 @@ export const carControlsButtonsParameters: ButtonsCollection = [
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_START],
-        textContent: Description.START,
+        textContent: BUTTON_CONSTANTS.buttonStart,
     },
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_BACK],
-        textContent: Description.BACK,
+        textContent: BUTTON_CONSTANTS.buttonBack,
     },
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_SELECT],
-        textContent: Description.SELECT,
+        textContent: BUTTON_CONSTANTS.buttonSelect,
     },
     {
         tag: 'button',
         classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_REMOVE],
-        textContent: Description.REMOVE,
+        textContent: BUTTON_CONSTANTS.buttonRemove,
     },
 ];
 
 export const createButtonParameters: ButtonParameters = {
     tag: 'button',
     classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_CREATE],
-    textContent: Description.CREATE,
+    textContent: BUTTON_CONSTANTS.buttonCreate,
 };
 
 export const updateButtonParameters: ButtonParameters = {
     tag: 'button',
     classNames: [CSS_BUTTON.BUTTON, CSS_BUTTON.BUTTON_UPDATE],
-    textContent: Description.UPDATE,
+    textContent: BUTTON_CONSTANTS.buttonUpdate,
 };
 
 export const previousButtonGarageParameters: ButtonParameters = {

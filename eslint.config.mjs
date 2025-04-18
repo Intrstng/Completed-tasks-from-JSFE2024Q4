@@ -65,6 +65,7 @@ export default tseslint.config(
         "unicorn/no-null": "off",
         "unicorn/number-literal-case": "off",
         "unicorn/numeric-separators-style": "off",
+        "unicorn/prefer-array-flat-map": "off",
         "unicorn/prevent-abbreviations": [
           "error",
           {

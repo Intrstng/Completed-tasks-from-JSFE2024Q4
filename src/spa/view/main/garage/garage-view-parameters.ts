@@ -1,6 +1,7 @@
 import type { ElementParameters } from '../../../../types';
 import { Description } from '../../../../types';
 import { CSS_GARAGE } from './garage-classes';
+import { PagesNames } from '../../header/header-constants';
 
 export const garageParameters: ElementParameters = {
     tag: 'section',
@@ -14,7 +15,7 @@ export const garageSummaryParameters: ElementParameters = {
 
 export const garageCurrentParameters: ElementParameters = {
     tag: 'h2',
-    textContent: Description.GARAGE,
+    textContent: PagesNames.GARAGE,
     classNames: [CSS_GARAGE.GARAGE_CURRENT],
 };
 

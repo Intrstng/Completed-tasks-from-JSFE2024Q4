@@ -6,4 +6,4 @@ export type PageParameters = {
     callback: () => void;
 };
 
-export type LinkElements = Map<Pages, LinkView>;
+export type LinkElements = Map<string, LinkView>;

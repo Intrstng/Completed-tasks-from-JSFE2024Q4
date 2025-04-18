@@ -211,7 +211,7 @@ export default class Table {
 
             Table.buildTableBodyRows(scoreRecords, tbodyCreator, currentPage);
         } catch (error: unknown) {
-            console.error('Table row creation failed:', error instanceof Error ? error.message : String(error));
+            console.error('Table row creation failed:', error instanceof Error ? error.message : JSON.stringify(error));
         }
         if (this.table instanceof CreatorElement) {
             this.table.addInnerElement(tbodyCreator.getElement());

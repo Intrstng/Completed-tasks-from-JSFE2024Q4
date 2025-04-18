@@ -33,7 +33,7 @@ export default class View {
             tag,
             classNames,
             textContent: '',
-            callback: null,
+            callback: () => {},
         };
         this.viewElementCreator = new CreatorElement(elementParameters);
         return this.viewElementCreator;

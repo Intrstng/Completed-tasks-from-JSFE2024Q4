@@ -1,5 +1,6 @@
 import type { AppState, Car, Constants, Paths } from '../../types';
 import { Description } from '../../types';
+import { PagesNames } from '../view/header/header-constants';
 
 export const PATHS: Paths = {
     garage: '/garage',
@@ -103,6 +104,7 @@ export const CONSTANTS: Constants = {
     dialogDelay: 4000,
     resetRaceDelay: 7000,
     milliseconds: 1000,
+    brandType: 'Enter car brand',
 };
 
 export const mockData: Array<Car> = [
@@ -140,7 +142,7 @@ export const INITIAL_STATE: AppState = {
     },
     carsQuantity: 0,
     winnersQuantity: 0,
-    mainPage: Description.GARAGE,
+    mainPage: PagesNames.GARAGE,
     garagePage: 1,
     winnersPage: 1,
     orderWins: Description.ASC,

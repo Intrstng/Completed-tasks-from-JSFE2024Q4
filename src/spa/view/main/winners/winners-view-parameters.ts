@@ -1,6 +1,7 @@
 import type { ElementParameters } from '../../../../types';
 import { Description } from '../../../../types';
 import { CSS_WINNERS } from './winners-classes';
+import { PagesNames } from '../../header/header-constants';
 
 export const winnersParameters: ElementParameters = {
     tag: 'section',
@@ -14,7 +15,7 @@ export const winnersSummaryParameters: ElementParameters = {
 
 export const winnersCurrentParameters: ElementParameters = {
     tag: 'h2',
-    textContent: Description.WINNERS,
+    textContent: PagesNames.WINNERS,
     classNames: [CSS_WINNERS.WINNERS_CURRENT],
 };
 

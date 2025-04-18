@@ -38,7 +38,10 @@ export class PaginationController {
     }
 
     public createControls(): void {
-        const paginationControlsContainerCreator = new CreatorElement(this.paginationParameters?.container);
+        let paginationControlsContainerCreator: CreatorElement | null = null;
+        if (this.paginationParameters) {
+            paginationControlsContainerCreator = new CreatorElement(this.paginationParameters.container);
+        }
 
         const previousButtonParametersWithCB: ElementParameters = {
             ...this.paginationParameters?.prevBtn,
@@ -54,9 +57,10 @@ export class PaginationController {
         this.nextButton = new CreatorElement(nextButtonParametersWithCB);
         this.toggleDisabledForPaginationButtons();
 
-        paginationControlsContainerCreator.addInnerElement(this.prevButton.getElement());
-
-        paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
+        if (paginationControlsContainerCreator) {
+            paginationControlsContainerCreator.addInnerElement(this.prevButton.getElement());
+            paginationControlsContainerCreator.addInnerElement(this.nextButton.getElement());
+        }
 
         if (this.paginationContainer instanceof CreatorElement) {
             this.paginationContainer.addInnerElement(paginationControlsContainerCreator);
@@ -64,8 +68,8 @@ export class PaginationController {
     }
 
     public toggleDisabledForPaginationButtons(): void {
-        let currentPage: number;
-        let totalCars: number;
+        let currentPage: number = 0;
+        let totalCars: number = 0;
 
         if (this.pageStateKeys) {
             currentPage = this.state.getState()[this.pageStateKeys?.currentPage];

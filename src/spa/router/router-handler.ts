@@ -11,7 +11,7 @@ export default class RouterHandler {
     constructor(callback: RouterCB, location: Location = Location.PATHNAME) {
         this.locationEvent = location === Location.PATHNAME ? LocationEvent.POPSTATE : LocationEvent.HASHCHANGE;
         this.callback = callback;
-        this.handler = this.onEvent.bind(this);
+        this.handler = (event: Event) => this.onEvent(event);
 
         this.params = {
             nameEvent: this.locationEvent,
