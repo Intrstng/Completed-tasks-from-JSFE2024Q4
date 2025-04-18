@@ -1,7 +1,7 @@
 import './garage.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
-import type { ButtonParameters, Callback, Car, CarPayload, ElementParameters } from '../../../../types';
+import type { ButtonParameters, Callback, CallbackEvent, Car, CarPayload, ElementParameters } from '../../../../types';
 import { AppStateKeys, Description, InputTypes, InputUse } from '../../../../types';
 import CreatorElement from '../../../util/creator-element';
 import {
@@ -86,6 +86,8 @@ export default class GarageView extends View {
         this.carUpdateLogo = null;
         this.prevButton = null;
         this.nextButton = null;
+        this.carController = null;
+        this.raceController = null;
         this.router = router;
         this.state = state;
         this.api = api;
@@ -205,16 +207,26 @@ export default class GarageView extends View {
                 return () => this.carController?.updateCar();
             }
             case BUTTON_CONSTANTS.buttonStart: {
-                return () => getCallbackWithID(buttonParameters, this.raceController?.startRaceCar.bind(this));
+                return () =>
+                    getCallbackWithID(
+                        buttonParameters,
+                        this.raceController?.startRaceCar.bind(this.raceController) ?? (() => {})
+                    );
             }
             case BUTTON_CONSTANTS.buttonBack: {
-                return () => getCallbackWithID(buttonParameters, this.raceController?.backFromRaceForCar.bind(this));
+                return () =>
+                    getCallbackWithID(
+                        buttonParameters,
+                        this.raceController?.backFromRaceForCar.bind(this) ?? (() => {})
+                    );
             }
             case BUTTON_CONSTANTS.buttonSelect: {
-                return () => getCallbackWithID(buttonParameters, this.carController?.selectCar.bind(this));
+                return () =>
+                    getCallbackWithID(buttonParameters, this.carController?.selectCar.bind(this) ?? (() => {}));
             }
             case BUTTON_CONSTANTS.buttonRemove: {
-                return () => getCallbackWithID(buttonParameters, this.carController?.removeCar.bind(this));
+                return () =>
+                    getCallbackWithID(buttonParameters, this.carController?.removeCar.bind(this) ?? (() => {}));
             }
             default: {
                 return () => {};
@@ -230,7 +242,7 @@ export default class GarageView extends View {
     private updateGarageQuantityLayout(): void {
         const carsQuantity: number = this.state.getState()[AppStateKeys.CARS_QUANTITY];
         const garageQuantityText: string = carsQuantity === 0 ? '' : ` (${carsQuantity})`;
-        this.garageQuantity.setTextContent(`${PagesNames.GARAGE}${garageQuantityText}`);
+        this.garageQuantity?.setTextContent(`${PagesNames.GARAGE}${garageQuantityText}`);
     }
 
     private async generateCars(): Promise<void> {
@@ -242,7 +254,7 @@ export default class GarageView extends View {
         );
         await this.getCarsForCurrentPage();
         this.updateGarageQuantityLayout();
-        this.paginationController.toggleDisabledForPaginationButtons();
+        this.paginationController?.toggleDisabledForPaginationButtons();
 
         this.updateRaceBoardLayout();
     }
@@ -297,12 +309,20 @@ export default class GarageView extends View {
                 labelCreator.setTextContent(Description.COLOR);
                 container.addInnerElement(labelCreator.getElement());
 
-                const eventHandler =
-                    prefix === InputUse.CREATE
-                        ? (event: Event) => this.carController.createCarColor(event, prefix)
-                        : (event: Event) => this.carController.updateCarColor(event, prefix);
+                let eventHandler: CallbackEvent = () => {};
+                if (this.carController instanceof CarController) {
+                    eventHandler =
+                        prefix === InputUse.CREATE
+                            ? (event: Event) => this.carController?.createCarColor(event, prefix)
+                            : (event: Event) => this.carController?.updateCarColor(event, prefix);
+                }
 
-                carInputColorCreator.getElement().addEventListener('input', eventHandler);
+                const carInputColorElement: HTMLElement | HTMLCanvasElement | null = carInputColorCreator.getElement();
+
+                if (carInputColorElement) {
+                    carInputColorElement.addEventListener('input', eventHandler);
+                }
+
                 container.addInnerElement(carInputColorCreator.getElement());
             }
         });
@@ -336,7 +356,7 @@ export default class GarageView extends View {
                 this.viewElementCreator.addInnerElement(this.raceBoard.getElement());
             }
 
-            if (carsData.length === 0) {
+            if (carsData.length === 0 && this.garagePage) {
                 let currentPage: number = this.state.getState()[AppStateKeys.GARAGE_PAGE];
                 --currentPage;
                 currentPage = currentPage === 0 ? 1 : currentPage;
@@ -397,7 +417,7 @@ export default class GarageView extends View {
 
             const buttonParametersWithCB = {
                 ...buttonParameters,
-                id: `${buttonParameters.classNames[1]}-${carData.id}`,
+                id: `${buttonParameters.classNames?.[1]}-${carData.id}`,
                 callback,
             };
 
@@ -414,15 +434,17 @@ export default class GarageView extends View {
         const carIconCreator = createSvg(svgElements, carData.color, String(carData.id));
         this.finish = new CreatorElement(finishParameters);
 
-        this.raceController = new RaceController(
-            this.state,
-            this.api,
-            this.carController,
-            this.paginationController,
-            this.viewElementCreator,
-            this.finish,
-            this.dialog
-        );
+        if (this.carController && this.paginationController && this.dialog) {
+            this.raceController = new RaceController(
+                this.state,
+                this.api,
+                this.carController,
+                this.paginationController,
+                this.viewElementCreator,
+                this.finish,
+                this.dialog
+            );
+        }
 
         carTrackCreator.addInnerElement(carIconCreator);
         carTrackCreator.addInnerElement(this.finish.getElement());
@@ -430,18 +452,18 @@ export default class GarageView extends View {
     }
 
     private keyupHandler(event: Event, prefix: InputUse, parameters: ElementParameters): void {
-        if (parameters.placeholder === CONSTANTS.brandType) {
+        if (this.carController && parameters.placeholder === CONSTANTS.brandType) {
             if (prefix === InputUse.CREATE) {
                 this.carController.createCarName(event);
             }
             if (prefix === InputUse.UPDATE) {
                 this.carController.updateCarName(event);
             }
-        } else if (parameters.type === InputTypes.COLOR) {
-            if (prefix === InputUse.CREATE) {
+        } else if (this.carController && parameters.type === InputTypes.COLOR) {
+            if (prefix === InputUse.CREATE && parameters.id) {
                 this.carController.createCarColor(event, parameters.id);
             }
-            if (prefix === InputUse.CREATE) {
+            if (prefix === InputUse.CREATE && parameters.id) {
                 this.carController.updateCarColor(event, parameters.id);
             }
         }

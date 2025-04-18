@@ -61,6 +61,11 @@ export default class Table {
         updateTableLayoutCB: Callback
     ) {
         this.tableContainer = null;
+        this.table = null;
+        this.ascWinButton = null;
+        this.descWinButton = null;
+        this.ascTimeButton = null;
+        this.descTimeButton = null;
         this.createTableRecords = createTableRecords;
         this.toggleButtonActiveClass = toggleButtonActiveClass;
         this.state = state;
@@ -144,15 +149,15 @@ export default class Table {
                 const { ascButtonParametersWithCB, descButtonParametersWithCB } =
                     this.addOrderBtnCallbacksToParameters(columnName);
                 const theadCellContainerCreator = new CreatorElement(theadButtonsContainer);
-                let ascButtonCreator: CreatorElement | null;
-                let descButtonCreator: CreatorElement | null;
+                let ascButtonCreator: CreatorElement | null = null;
+                let descButtonCreator: CreatorElement | null = null;
 
-                if (columnName === Description.WINS) {
+                if (columnName === Description.WINS && ascButtonParametersWithCB && descButtonParametersWithCB) {
                     this.ascWinButton = new CreatorElement(ascButtonParametersWithCB);
                     this.descWinButton = new CreatorElement(descButtonParametersWithCB);
                     ascButtonCreator = this.ascWinButton;
                     descButtonCreator = this.descWinButton;
-                } else if (columnName === Description.TIME) {
+                } else if (columnName === Description.TIME && ascButtonParametersWithCB && descButtonParametersWithCB) {
                     this.ascTimeButton = new CreatorElement(ascButtonParametersWithCB);
                     this.descTimeButton = new CreatorElement(descButtonParametersWithCB);
                     ascButtonCreator = this.ascTimeButton;
@@ -187,7 +192,7 @@ export default class Table {
         const winnersDataCollection: Array<Car> = this.state.getState()[AppStateKeys.WINNERS_DATA];
         const winnersCollection: Array<Winner> = this.state.getState()[AppStateKeys.WINNERS];
 
-        let scoreRecords: Array<TableRecord>;
+        let scoreRecords: Array<TableRecord> = [];
         if (this.createTableRecords) {
             scoreRecords = this.createTableRecords(winnersDataCollection, winnersCollection);
         }
@@ -255,9 +260,10 @@ export default class Table {
         if (this.getWinnersForCurrentPage) {
             await this.getWinnersForCurrentPage();
         }
-
-        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascWinButton);
-        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descWinButton);
+        if (this.toggleButtonActiveClass) {
+            toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascWinButton);
+            toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descWinButton);
+        }
 
         if (this.updateTableLayout) {
             this.updateTableLayout();
@@ -274,8 +280,10 @@ export default class Table {
             await this.getWinnersForCurrentPage();
         }
 
-        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascTimeButton);
-        toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descTimeButton);
+        if (this.toggleButtonActiveClass) {
+            toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascTimeButton);
+            toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descTimeButton);
+        }
 
         if (this.updateTableLayout) {
             this.updateTableLayout();
@@ -287,13 +295,13 @@ export default class Table {
         const currentOrderWins = this.state.getState()[AppStateKeys.ORDER_WINS];
         const currentOrderTime = this.state.getState()[AppStateKeys.ORDER_TIME];
 
-        if (currentSortType === Description.SORT_WINS) {
+        if (this.toggleButtonActiveClass && currentSortType === Description.SORT_WINS) {
             if (currentOrderWins === Description.ASC) {
                 toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascWinButton);
             } else if (currentOrderWins === Description.DESC) {
                 toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.descWinButton);
             }
-        } else if (currentSortType === Description.SORT_TIME) {
+        } else if (this.toggleButtonActiveClass && currentSortType === Description.SORT_TIME) {
             if (currentOrderTime === Description.ASC) {
                 toggleButtonActiveClassAssertion(this.toggleButtonActiveClass, this.ascTimeButton);
             } else if (currentOrderTime === Description.DESC) {

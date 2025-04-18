@@ -85,7 +85,11 @@ export class PaginationController {
                 this.prevButton.setDisabled(false);
             }
         }
-        if (currentPage >= totalCars / this.itemsOnPage && this.nextButton instanceof CreatorElement) {
+        if (
+            this.itemsOnPage &&
+            currentPage >= totalCars / this.itemsOnPage &&
+            this.nextButton instanceof CreatorElement
+        ) {
             this.nextButton.setDisabled(true);
         } else if (this.nextButton instanceof CreatorElement) {
             this.nextButton.setDisabled(false);
@@ -93,7 +97,7 @@ export class PaginationController {
     }
 
     private async prevPage(): Promise<void> {
-        let currentPage: number;
+        let currentPage: number = 0;
 
         if (this.pageStateKeys) {
             currentPage = this.state.getState()[this.pageStateKeys.currentPage];
@@ -115,7 +119,7 @@ export class PaginationController {
     }
 
     private async nextPage(): Promise<void> {
-        let currentPage: number;
+        let currentPage: number = 0;
 
         if (this.pageStateKeys) {
             currentPage = this.state.getState()[this.pageStateKeys.currentPage];
@@ -138,12 +142,12 @@ export class PaginationController {
 
     private countPageValue(operator: Operator, page: number): void {
         if (Number.isFinite(page)) {
-            let itemsQuantity: number;
+            let itemsQuantity: number = 0;
             if (this.pageStateKeys) {
                 itemsQuantity = this.state.getState()[this.pageStateKeys.itemsTotal];
             }
 
-            if (operator === Description.INCREMENT && page < itemsQuantity / this.itemsOnPage) {
+            if (this.itemsOnPage && operator === Description.INCREMENT && page < itemsQuantity / this.itemsOnPage) {
                 if (this.pageStateKeys) {
                     this.state.updatePropertyInState(this.pageStateKeys.currentPage, ++page);
                 }

@@ -15,7 +15,7 @@ export default class LinkView extends View {
 
     public setNotSelectedStatus(): void {
         const element = this.viewElementCreator.getElement();
-        if ('classList' in element) {
+        if (element && 'classList' in element) {
             element.classList.remove(CSS_HEADER.ITEM_SELECTED);
         }
     }
@@ -24,7 +24,7 @@ export default class LinkView extends View {
         this.linkElements.forEach(linkElement => linkElement.setNotSelectedStatus());
 
         const element = this.viewElementCreator.getElement();
-        if ('classList' in element) {
+        if (element && 'classList' in element) {
             element.classList.add(CSS_HEADER.ITEM_SELECTED);
         }
     }
@@ -34,7 +34,7 @@ export default class LinkView extends View {
         this.viewElementCreator.setCallback(pageParameter.callback);
 
         const element = this.viewElementCreator.getElement();
-        if ('addEventListener' in element) {
+        if (element && 'addEventListener' in element) {
             element.addEventListener('click', this.setSelectedStatus.bind(this));
         }
     }

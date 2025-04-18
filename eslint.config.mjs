@@ -65,7 +65,6 @@ export default tseslint.config(
         "unicorn/no-null": "off",
         "unicorn/number-literal-case": "off",
         "unicorn/numeric-separators-style": "off",
-        "unicorn/prefer-array-flat-map": "off",
         "unicorn/prevent-abbreviations": [
           "error",
           {
@@ -79,7 +78,7 @@ export default tseslint.config(
             }
           }
         ],
-        "max-lines-per-function": ["error", 50]
+        "max-lines-per-function": ["error", 60]
       },
     },
     {

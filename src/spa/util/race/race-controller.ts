@@ -39,7 +39,7 @@ export class RaceController {
     private dialogContainer: CreatorElement | null;
     private readonly dialog: CreatorDialog | null;
     private readonly getCarIconFromLayout: (id: number) => HTMLElement | null;
-    private animateCarRacing: AnimateCarRacingCB | null;
+    private animateCarRacing: AnimateCarRacingCB = animateCarRacing;
 
     constructor(
         state: SessionStorageState,
@@ -58,7 +58,6 @@ export class RaceController {
         this.finishCreator = finish;
         this.dialog = dialog;
         this.getCarIconFromLayout = getCarIconFromLayout;
-        this.animateCarRacing = animateCarRacing;
     }
 
     public getTrackDistance(car: HTMLElement): number {
@@ -74,7 +73,7 @@ export class RaceController {
         }
 
         const carCenterPoint = carRect.left + carRect.width / 2;
-        let finishCenterPoint: number;
+        let finishCenterPoint: number = 0;
 
         if (finishRect) {
             finishCenterPoint = finishRect.left + finishRect.width / 2;
@@ -92,45 +91,45 @@ export class RaceController {
 
         if (carIcon) {
             trackDistance = this.getTrackDistance(carIcon);
-        }
 
-        const carEngineData: EngineData | undefined = await this.api.startEngine(id);
-        if (!carEngineData) return;
+            const carEngineData: EngineData | undefined = await this.api.startEngine(id);
+            if (!carEngineData) return;
 
-        const { velocity, distance }: EngineData = carEngineData;
-        const raceTime: number = Math.round(distance / velocity);
+            const { velocity, distance }: EngineData = carEngineData;
+            const raceTime: number = Math.round(distance / velocity);
 
-        const currentAnimation: AnimationFrame = this.animateCarRacing(id, carIcon, raceTime, trackDistance);
+            const currentAnimation: AnimationFrame = this.animateCarRacing(id, carIcon, raceTime, trackDistance);
 
-        const response = await this.api.driveCar(id);
+            const response = await this.api.driveCar(id);
 
-        if (!response) return;
+            if (!response) return;
 
-        const currentAnimationState = this.state.getState();
-        const newAnimationState = {
-            ...currentAnimationState,
-            animation: [...currentAnimationState.animation, currentAnimation],
-        };
-        this.state.setState(newAnimationState);
+            const currentAnimationState = this.state.getState();
+            const newAnimationState = {
+                ...currentAnimationState,
+                animation: [...currentAnimationState.animation, currentAnimation],
+            };
+            this.state.setState(newAnimationState);
 
-        if (!response.success) {
-            const currentAnimationID: number | null = currentAnimation.animationID;
-            if (currentAnimationID) {
-                changeSvgStrokeColor(String(id), COLORS.red);
-                globalThis.cancelAnimationFrame(currentAnimationID);
-                if (isDragRace) {
-                    throw new Error('Car`s engine is broken...');
+            if (!response.success) {
+                const currentAnimationID: number | null = currentAnimation.animationID;
+                if (currentAnimationID) {
+                    changeSvgStrokeColor(String(id), COLORS.red);
+                    globalThis.cancelAnimationFrame(currentAnimationID);
+                    if (isDragRace) {
+                        throw new Error('Car`s engine is broken...');
+                    }
                 }
             }
+            const carBackButtonID: string = `${CSS_BUTTON.BUTTON_BACK}-${id}`;
+            carButtonToggleDisable(carBackButtonID, false);
+            toggleDisabledDragRaceControlButtons(false);
+            return {
+                ...response,
+                carID: id,
+                time: raceTime,
+            };
         }
-        const carBackButtonID: string = `${CSS_BUTTON.BUTTON_BACK}-${id}`;
-        carButtonToggleDisable(carBackButtonID, false);
-        toggleDisabledDragRaceControlButtons(false);
-        return {
-            ...response,
-            carID: id,
-            time: raceTime,
-        };
     };
 
     public startDragRace(): void {
@@ -139,46 +138,51 @@ export class RaceController {
         togglePaginationButtons(true);
 
         const allCars: Array<Car> = this.state.getState()[AppStateKeys.CARS];
-        const promises: Promise<ResponseObject>[] = allCars.map(car => this.startRaceCar(car.id, true));
+        const promises: Promise<ResponseObject | undefined>[] = allCars.map(car => this.startRaceCar(car.id, true));
 
-        Promise.any(promises)
-            .then(async (response: ResponseObject) => {
-                if (response && response.carID !== undefined) {
-                    const carID: number = response.carID;
-                    const time: number = response.time;
-                    const winnerResponse = await this.api.checkWinner(carID);
+        if (promises.length > 0) {
+            Promise.any(promises)
+                .then(async (response: ResponseObject | undefined) => {
+                    if (response && response.carID !== undefined) {
+                        const carID: number = response.carID;
+                        const time: number = response.time;
+                        const winnerResponse = await this.api.checkWinner(carID);
 
-                    if (typeof winnerResponse === 'boolean' && !winnerResponse) {
-                        const newApiWinner = { id: carID, wins: 1, time };
-                        await this.api.createWinner(newApiWinner);
-                    } else if (winnerResponse !== true && typeof winnerResponse !== 'boolean') {
-                        let bestTime: number;
-                        if (winnerResponse) {
-                            bestTime = Math.min(time, winnerResponse.time);
-                            await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
+                        if (typeof winnerResponse === 'boolean' && !winnerResponse) {
+                            const newApiWinner = { id: carID, wins: 1, time };
+                            await this.api.createWinner(newApiWinner);
+                        } else if (winnerResponse !== true && typeof winnerResponse !== 'boolean') {
+                            let bestTime: number;
+                            if (winnerResponse) {
+                                bestTime = Math.min(time, winnerResponse.time);
+                                await this.api.updateWinner({ time: bestTime, wins: winnerResponse.wins + 1 }, carID);
+                            }
                         }
+                    } else {
+                        console.warn('Response does not contain carID:', response);
                     }
-                } else {
-                    console.warn('Response does not contain carID:', response);
-                }
-                const currentWinnerData: RaceWinnerMessage = {
-                    carID: response.carID,
-                    time: String(response.time / CONSTANTS.milliseconds),
-                };
-                this.showWinnersMessage(currentWinnerData);
-                allGarageButtonsToggleDisable(false);
-                if (this.paginationController instanceof PaginationController) {
-                    this.paginationController.toggleDisabledForPaginationButtons();
-                }
-                raceButtonToggleDisable(true);
-            })
-            .catch(error => {
-                if (error instanceof AggregateError) {
-                    console.error('All promises were rejected:', error.errors);
-                } else {
-                    console.error('An unexpected error occurred:', error);
-                }
-            });
+
+                    if (response) {
+                        const currentWinnerData: RaceWinnerMessage = {
+                            carID: response.carID,
+                            time: String(response.time / CONSTANTS.milliseconds),
+                        };
+                        this.showWinnersMessage(currentWinnerData);
+                        allGarageButtonsToggleDisable(false);
+                        if (this.paginationController instanceof PaginationController) {
+                            this.paginationController.toggleDisabledForPaginationButtons();
+                        }
+                        raceButtonToggleDisable(true);
+                    }
+                })
+                .catch(error => {
+                    if (error instanceof AggregateError) {
+                        console.error('All promises were rejected:', error.errors);
+                    } else {
+                        console.error('An unexpected error occurred:', error);
+                    }
+                });
+        }
     }
 
     public async resetDragRace(): Promise<void> {
@@ -192,7 +196,7 @@ export class RaceController {
             toggleDisabledAllCarButtons(id, false);
             toggleDisabledDragRaceControlButtons(false);
             raceButtonToggleDisable(false);
-            const currentCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
+            const currentCar: Car | undefined = this.state.getState()[AppStateKeys.CARS].find(car => car.id === id);
             const currentState: AppState = this.state.getState();
             let carAnimationCollection: Array<AnimationFrame> = currentState[AppStateKeys.ANIMATION];
             const currentAnimationID = carAnimationCollection.find(animation => animation.carID === id);
@@ -214,7 +218,7 @@ export class RaceController {
                 changeSvgStrokeColor(String(id), currentCarColor);
             }
             const car: HTMLElement | null = this.getCarIconFromLayout(id);
-            if ('style' in car) {
+            if (car && 'style' in car) {
                 car.style.transform = `translateX(0px)`;
             }
         } catch (error: unknown) {
@@ -223,8 +227,9 @@ export class RaceController {
     };
 
     private showWinnersMessage(data: RaceWinnerMessage): void {
-        const winnersCar: Car = this.state.getState()[AppStateKeys.CARS].find(car => car.id === data.carID);
-        const winnersName = winnersCar.name || Description.WINNER;
+        const winnersCar: Car | undefined = this.state.getState()[AppStateKeys.CARS].find(car => car.id === data.carID);
+
+        const winnersName = winnersCar ? winnersCar.name : Description.WINNER;
 
         if (this.dialog instanceof CreatorDialog) {
             this.dialog.setDialogNameField(winnersName);

@@ -11,7 +11,7 @@ export default class View {
     }
 
     public static deleteAllItemsInContainer(container: CreatorElement | null): void {
-        let containerElement: HTMLElement | HTMLCanvasElement | null;
+        let containerElement: HTMLElement | HTMLCanvasElement | null = null;
 
         if (container) {
             containerElement = container.getElement();

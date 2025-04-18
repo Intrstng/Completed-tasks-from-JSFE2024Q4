@@ -61,6 +61,8 @@ export type Callback = () => void;
 
 export type CallbackID = (id: number) => void;
 
+export type CallbackEvent = (event: Event) => void;
+
 export type CallbackQuery = (queryParameters: QueryParameters[]) => string;
 
 export type ToggleActiveButtonCallback = (button: CreatorElement) => void;
