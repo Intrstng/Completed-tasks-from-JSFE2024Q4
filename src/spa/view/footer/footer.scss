@@ -1,0 +1,25 @@
+.chat {
+  &__footer {
+    padding: 1rem 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__copyright {
+    letter-spacing: 1px;
+  }
+}
+
+.social-link {
+  transition: 0.2s ease transform;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.svg-icon-rs {
+  height: 100px;
+  width: 100px;
+}

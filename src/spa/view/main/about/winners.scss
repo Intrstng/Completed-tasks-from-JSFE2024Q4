@@ -1,0 +1,96 @@
+.winners {
+    &__container {
+        margin: 20px 0 30px;
+    }
+
+    &__summary {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+    }
+
+    &__current {
+        margin: 0 auto;
+        color: rgb(246 248 213 / 75%);
+        text-transform: capitalize;
+    }
+
+    &__pagination {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 12.5%;
+        margin: 20px auto 15px;
+    }
+}
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+
+    &__row-cell {
+        padding: 6px;
+        text-align: center;
+    }
+
+    &__head-cell {
+        padding: 16px 6px;
+        text-align: center;
+
+        span {
+            margin: 0 8px;
+        }
+    }
+
+    &__head-name,
+    &__row-name {
+        width: 200px;
+    }
+
+    &__head-container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 100px;
+    }
+}
+
+thead {
+    background-color: #e04f4f;
+}
+
+th,
+td {
+    padding: 18px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    color: #333;
+}
+
+.race-board {
+    margin: 15px 0 40px;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #dbdbdb;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f5eedc;
+}
+
+.svg-icon-table {
+    width: 40px;
+    height: 40px;
+}

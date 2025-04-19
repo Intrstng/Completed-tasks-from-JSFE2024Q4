@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    font-family: Corbel, sans-serif;
+
+    background-color: #BEE4D0;
+
+    @media screen and (width <= 640px) {
+        font-size: 0.8rem;
+    }
+}
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 0 5px;
+}
+
+.main {
+    flex-grow: 1;
+    width: 100%;
+    margin-top: 30px;
+}
