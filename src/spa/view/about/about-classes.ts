@@ -8,5 +8,6 @@ export const CSS_ABOUT: Css_Classes = {
     ITEM: 'about__item',
     ITEM_TEXT: 'about__text',
     DESCRIPTION: 'about__description',
+    SOCIAL: 'about__social',
     NAVIGATION_BUTTON: 'button-back',
 };

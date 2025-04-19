@@ -17,9 +17,9 @@ export default class FooterView extends View {
     private configureView(): void {
         this.generateCopyrightTitle();
 
-        this.generateLogoLink(gitLinkParameters, gitSvgElements, footerLinks.GIT.link, footerLinks.GIT.color, footerLinks.GIT.viewBox, footerLinks.GIT.svgID);
+        this.generateLogoLink(gitLinkParameters, gitSvgElements, this.viewElementCreator, footerLinks.GIT.link, footerLinks.GIT.color, footerLinks.GIT.viewBox, footerLinks.GIT.svgID);
 
-        this.generateLogoLink(rsLinkParameters, rsSvgElements, footerLinks.RS.link, footerLinks.RS.color, footerLinks.RS.viewBox, footerLinks.RS.svgID);
+        this.generateLogoLink(rsLinkParameters, rsSvgElements, this.viewElementCreator, footerLinks.RS.link, footerLinks.RS.color, footerLinks.RS.viewBox, footerLinks.RS.svgID);
     }
 
     private generateCopyrightTitle(): void {

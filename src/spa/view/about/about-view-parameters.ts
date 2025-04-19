@@ -2,6 +2,7 @@ import type { ElementParameters } from '../../../types';
 import { CSS_ABOUT } from './about-classes';
 import { aboutContent } from './about-constants';
 import { CSS_BUTTON } from '../../util/button/button-classes';
+import { BUTTON_CONSTANTS } from '../../util/button/button-parameters/button-constants';
 
 export const aboutParameters: ElementParameters = {
     tag: 'section',
@@ -43,6 +44,12 @@ export const descriptionParameters: ElementParameters = {
 
 export const navigationButtonParameters: ElementParameters = {
     tag: 'button',
-    textContent: aboutContent.NAVIGATION_BUTTON,
+    textContent: BUTTON_CONSTANTS.buttonNavigation,
     classNames: [CSS_BUTTON.BUTTON, CSS_ABOUT.NAVIGATION_BUTTON],
+};
+
+export const personalLinkParameters: ElementParameters = {
+    tag: 'a',
+    textContent: aboutContent.NAME,
+    classNames: [CSS_ABOUT.SOCIAL],
 };

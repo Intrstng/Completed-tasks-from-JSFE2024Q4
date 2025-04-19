@@ -31,11 +31,11 @@ export function createSvg(elements: any, fillColor: string, viewBox: string, id?
     return svg;
 }
 
-export function generateLogoLink(parameters: ElementParameters, svgElements: SvgElement[], link: string, color: string, viewBox: string, id: string): void {
+export function generateLogoLink(parameters: ElementParameters, svgElements: SvgElement[], container: CreatorElement, link: string, color: string, viewBox: string, id: string): void {
     const creatorLink = new CreatorElement(parameters);
     creatorLink.getElement().setAttribute('href', link);
     creatorLink.getElement().setAttribute('target', '_blank');
     const svgLogo = createSvg(svgElements, color, viewBox, id);
     creatorLink.addInnerElement(svgLogo);
-    this.viewElementCreator.addInnerElement(creatorLink);
+    container.addInnerElement(creatorLink);
 }

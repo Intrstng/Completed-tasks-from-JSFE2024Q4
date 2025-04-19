@@ -3,6 +3,7 @@ import type GarageView from '../spa/view/main/chat/chat-view';
 import type AboutView from '../spa/view/about/about-view';
 import ChatView from '../spa/view/main/chat/chat-view';
 import LoginView from '../spa/view/login/login-view';
+import { loginContent } from '../spa/view/login/login-constants';
 
 export type Route = {
     path: string;
@@ -39,6 +40,8 @@ export type ElementParameters = {
     required?: boolean;
     rows?: string;
     cols?: string;
+    name?: string;
+    autocomplete?: string;
 };
 
 export type DialogParameters = ElementParameters & {

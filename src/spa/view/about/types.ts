@@ -3,5 +3,7 @@ export type AboutContent = {
   DESCRIPTION_TITLE: string;
   DESCRIPTION_LIST: string[];
   DESCRIPTION_ADD: string;
-  NAVIGATION_BUTTON: string;
+  LINK_COLOR: string;
+  NAME: string;
+  VIEWBOX: string;
 }

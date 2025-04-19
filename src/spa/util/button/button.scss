@@ -15,7 +15,7 @@
         rgb(50 50 93 / 25%) 0 13px 27px -5px,
         rgb(0 0 0 / 30%) 0 8px 16px -8px;
 
-    transition: 0.25s ease-in-out all;
+    transition: 0.25s ease all;
 
     &:hover {
         background-color: #3F7D58;
@@ -30,25 +30,21 @@
     }
 }
 
-//.generate-btn {
-//    background-color: #dda853;
-//}
-//
-//.start-btn {
-//    background-color: #4d55cc;
-//}
-//
-//.race-btn {
-//    background-color: #640d5f;
-//}
-//
-//.select-btn {
-//    background-color: #4f959d;
-//}
-//
-//.remove-btn {
-//    background-color: #f2613f;
-//}
+.button-submit {
+    background-color: #27548A;
+    max-width: 6.5rem;
+    &:hover {
+        background-color: #00879E;
+    }
+}
+
+.button-about {
+    background-color: #E38E49;
+    max-width: 6.5rem;
+    &:hover {
+        background-color: #EB5B00;
+    }
+}
 
 .button-back {
     background-color: #e8590c;

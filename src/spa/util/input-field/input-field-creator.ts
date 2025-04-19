@@ -38,6 +38,9 @@ export default class InputFieldCreator extends CreatorElement {
         if (parameters.type) {
             this.setInputType(parameters.type);
         }
+        if (parameters.autocomplete) {
+            this.setInputAutocomplete(parameters.autocomplete);
+        }
         if (parameters.placeholder) {
             this.setInputPlaceholder(parameters.placeholder);
             this.setInputName(parameters.placeholder);
@@ -66,6 +69,12 @@ export default class InputFieldCreator extends CreatorElement {
         }
     }
 
+    public getValue(): string {
+        if (this.element && 'value' in this.element) {
+            return this.element.value;
+        }
+    }
+
     public setValue(value: string | undefined): void {
         if (this.element && this.element instanceof HTMLInputElement && typeof value === 'string') {
             this.element.value = value;
@@ -79,6 +88,12 @@ export default class InputFieldCreator extends CreatorElement {
             this.element.setAttribute('type', type);
         }
     }
+
+    private setInputAutocomplete(value: string): void {
+        if (this.element && 'setAttribute' in this.element) {
+            this.element.setAttribute('autocomplete', value);
+        }
+}
 
     private setInputElementId(id: string = ''): void {
         if (this.element && 'setAttribute' in this.element) {

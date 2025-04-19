@@ -10,15 +10,20 @@ import {
   aboutSubtitleParameters,
   aboutTitleParameters,
   descriptionParameters,
-  navigationButtonParameters
+  navigationButtonParameters, personalLinkParameters
 } from './about-view-parameters';
 import CreatorElement from '../../util/creator-element';
 import { aboutContent } from './about-constants';
 import { Callback, ElementParameters } from '../../../types';
 import ButtonCreator from '../../util/button/button-creator';
+import { generateLogoLink } from '../../util/create-svg/create-svg';
+import { gitLinkParameters } from '../footer/footer-view-parameters';
+import { gitSvgElements } from '../../util/create-svg/data';
+import { footerLinks } from '../footer/footer-constants';
 
 export default class AboutView extends View {
   public router: Router;
+  private generateLogoLink = generateLogoLink;
   private readonly state: SessionStorageState;
 
 
@@ -33,6 +38,7 @@ export default class AboutView extends View {
     this.addSubtitle();
     this.addItemsList();
     this.addDescription();
+    this.addPersonalLink();
     this.addNavigationButton();
   }
 
@@ -58,15 +64,27 @@ export default class AboutView extends View {
       }
       const listItemTextCreator = new CreatorElement(aboutListItemTextParametersWithContent)
 
-      itemCreator.addInnerElement(listItemTextCreator.getElement());
-      listCreator.addInnerElement(itemCreator.getElement())
+      itemCreator.addInnerElement(listItemTextCreator);
+      listCreator.addInnerElement(itemCreator)
     })
-    this.viewElementCreator.addInnerElement(listCreator.getElement())
+    this.viewElementCreator.addInnerElement(listCreator)
   }
 
   private addDescription(): void {
     const descriptionCreator = new CreatorElement(descriptionParameters)
-    this.viewElementCreator.addInnerElement(descriptionCreator.getElement())
+    this.viewElementCreator.addInnerElement(descriptionCreator)
+  }
+
+  private addPersonalLink(): void {
+    this.generateLogoLink(gitLinkParameters, gitSvgElements, this.viewElementCreator, footerLinks.GIT.link, aboutContent.LINK_COLOR, aboutContent.VIEWBOX, footerLinks.GIT.svgID);
+    this.addLink();
+  }
+
+  private addLink(): void {
+    const creatorLink = new CreatorElement(personalLinkParameters);
+    creatorLink.getElement().setAttribute('href', footerLinks.GIT.link);
+    creatorLink.getElement().setAttribute('target', '_blank');
+    this.viewElementCreator.addInnerElement(creatorLink);
   }
 
   private addNavigationButton(): void {
@@ -76,7 +94,7 @@ export default class AboutView extends View {
       callback
     }
     const navigationButton = new ButtonCreator(navigationButtonParametersWithCB)
-    this.viewElementCreator.addInnerElement(navigationButton.getElement())
+    this.viewElementCreator.addInnerElement(navigationButton)
   }
 
   private navigateToPrevPage = (): void => {

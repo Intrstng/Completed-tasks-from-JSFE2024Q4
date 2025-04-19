@@ -22,7 +22,7 @@ export default class ButtonCreator extends CreatorElement {
             this.setCallback(parameters.callback);
         }
 
-        if (parameters.type === InputTypes.NUMBER) {
+        if (parameters.type) {
             this.setButtonType(parameters.type);
         }
 

@@ -39,4 +39,14 @@
     text-indent: 0.4rem;
     font-weight: normal;
   }
+  &__social {
+    margin-bottom: 0.8rem;
+    color: #3674B5;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+    &:hover {
+      color: #03A791;
+    }
+  }
 }

@@ -1,7 +1,15 @@
 import type { ElementParameters } from '../../../types';
-import { CSS_LABEL } from './label-classes';
+import { CSS_LOGIN } from '../../view/login/login-classes';
+import { loginContent } from '../../view/login/login-constants';
 
-export const labelParameters: ElementParameters = {
+export const nameLabelParameters: ElementParameters = {
     tag: 'label',
-    classNames: [CSS_LABEL.LABEL],
+    textContent: loginContent.NAME,
+    classNames: [CSS_LOGIN.NAME_LABEL],
+};
+
+export const passLabelParameters: ElementParameters = {
+    tag: 'label',
+    textContent: loginContent.PASS,
+    classNames: [CSS_LOGIN.PASS_LABEL],
 };

@@ -11,7 +11,7 @@ export const footerLinks: FooterLinks = {
     GIT: {
         link: 'https://github.com/Intrstng',
         color: COLORS.logo,
-        viewBox: '0 0 50 26',
+        viewBox: '0 0 32 32',
         svgID: 'git'
     }
 };
