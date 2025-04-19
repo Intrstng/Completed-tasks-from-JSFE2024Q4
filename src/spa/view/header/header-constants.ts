@@ -1,5 +1,4 @@
 export const LinkNames: { [key: string]: string } = {
-    CHAT: 'To chat',
     ABOUT: 'To about',
     LOGIN: 'To login'
 };

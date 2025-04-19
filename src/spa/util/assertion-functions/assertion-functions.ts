@@ -6,5 +6,5 @@ export function isValidState(state: unknown): state is PopStateEventState {
 }
 
 export function isValidPage(value: unknown): value is Pages {
-    return value === LinkNames.CHAT || value === LinkNames.LOGIN || value === LinkNames.ABOUT;
+    return value === LinkNames.LOGIN || value === LinkNames.ABOUT;
 }

@@ -41,8 +41,9 @@ export default class App {
         const footerElement: HTMLElement | null = this.footer.getHtmlElement();
         if (headerElement && mainElement && footerElement) {
             document.body.append(headerElement, mainElement, footerElement);
+            // document.body.append(mainElement);
         } else {
-            console.error('Main view element is null and cannot be appended to the body.');
+            console.error('Header / Main / Footer view element is null and cannot be appended to the body.');
         }
     }
 
@@ -51,27 +52,35 @@ export default class App {
             {
                 path: ``,
                 callback: async (): Promise<void> => {
-                    const { default: GarageView } = await import('./view/main/chat/garage-view');
+                    const { default: ChatView } = await import('./view/main/chat/chat-view');
                     // this.setContent(Pages.CHAT, new GarageView(state, this.router, this.api));
-                    this.setContent(Pages.CHAT, new GarageView(state, this.router));
+                    this.setContent(Pages.CHAT, new ChatView(state, this.router));
                 },
             },
             {
                 path: `${Pages.CHAT}`,
                 callback: async (): Promise<void> => {
-                    const { default: GarageView } = await import('./view/main/chat/garage-view');
+                    const { default: ChatView } = await import('./view/main/chat/chat-view');
                     // this.setContent(Pages.CHAT, new GarageView(state, this.router, this.api));
-                    this.setContent(Pages.CHAT, new GarageView(state, this.router));
+                    this.setContent(Pages.CHAT, new ChatView(state, this.router));
                 },
             },
-            // {
-            //     path: `${Pages.ABOUT}`,
-            //     callback: async (): Promise<void> => {
-            //         const { default: WinnersView } = await import('./view/main/about/winners-view');
-            //         // this.setContent(Pages.WINNERS, new WinnersView(state, this.router, this.api));
-            //         this.setContent(Pages.ABOUT, new WinnersView(state, this.router));
-            //     },
-            // },
+            {
+                path: `${Pages.ABOUT}`,
+                callback: async (): Promise<void> => {
+                    const { default: AboutView } = await import('./view/about/about-view');
+                    // this.setContent(Pages.WINNERS, new LoginView(state, this.router, this.api));
+                    this.setContent(Pages.ABOUT, new AboutView(state, this.router));
+                },
+            },
+            {
+                path: `${Pages.LOGIN}`,
+                callback: async (): Promise<void> => {
+                    const { default: LoginView } = await import('./view/login/login-view');
+                    // this.setContent(Pages.WINNERS, new LoginView(state, this.router, this.api));
+                    this.setContent(Pages.LOGIN, new LoginView(state, this.router));
+                },
+            },
         ];
     }
 

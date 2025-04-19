@@ -1,6 +1,6 @@
 import type { Css_Classes } from '../../../../types';
 
-export const CSS_GARAGE: Css_Classes = {
+export const CSS_CHAT: Css_Classes = {
     GARAGE: 'chat',
     GARAGE_CONTAINER: 'chat-container',
     GARAGE_SUMMARY: 'garage__summary',

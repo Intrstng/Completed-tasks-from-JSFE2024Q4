@@ -1,7 +1,7 @@
 .chat {
   &__footer {
     padding: 1rem 0;
-    width: 100%;
+    width: 45%;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -9,13 +9,15 @@
   }
   &__copyright {
     letter-spacing: 1px;
+    color: #FF8282;
   }
 }
 
 .social-link {
-  transition: 0.2s ease transform;
+  transition: 0.2s ease all;
   &:hover {
     transform: scale(1.1);
+    opacity: 0.65;
   }
 }
 

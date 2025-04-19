@@ -1,6 +1,8 @@
 import type { InputTypes, Location, LocationEvent } from './enums';
-import type GarageView from '../spa/view/main/chat/garage-view';
-import type WinnersView from '../spa/view/main/about/winners-view';
+import type GarageView from '../spa/view/main/chat/chat-view';
+import type AboutView from '../spa/view/about/about-view';
+import ChatView from '../spa/view/main/chat/chat-view';
+import LoginView from '../spa/view/login/login-view';
 
 export type Route = {
     path: string;
@@ -43,7 +45,7 @@ export type DialogParameters = ElementParameters & {
     open: boolean;
 };
 
-export type ViewCommon = GarageView | WinnersView;
+export type ViewCommon = ChatView | AboutView | LoginView;
 
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 

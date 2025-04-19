@@ -1,6 +1,5 @@
 import { ElementParameters } from '../../../types';
 import CreatorElement from '../creator-element';
-import { gitSvgElements } from './data';
 
 export function createSvg(elements: any, fillColor: string, viewBox: string, id?: string): SVGElement {
     const svgNS = 'http://www.w3.org/2000/svg';
@@ -32,7 +31,7 @@ export function createSvg(elements: any, fillColor: string, viewBox: string, id?
     return svg;
 }
 
-export function generateLogoLink(parameters: ElementParameters, svgElements: any, link: string, color: string, viewBox: string, id: string): void {
+export function generateLogoLink(parameters: ElementParameters, svgElements: SvgElement[], link: string, color: string, viewBox: string, id: string): void {
     const creatorLink = new CreatorElement(parameters);
     creatorLink.getElement().setAttribute('href', link);
     creatorLink.getElement().setAttribute('target', '_blank');

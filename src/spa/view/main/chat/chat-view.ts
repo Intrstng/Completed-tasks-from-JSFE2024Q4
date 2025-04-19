@@ -1,15 +1,14 @@
-import './garage.scss';
+import './chat.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
-import { garageCurrentParameters, garageParameters, } from './garage-view-parameters';
+import { garageCurrentParameters, garageParameters, } from './chat-view-parameters';
 import type LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
-import type ApiController from '../../../api/api-controller';
 import CreatorDialog from '../../../util/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
 
-export default class GarageView extends View {
+export default class ChatView extends View {
     public router: Router;
     private readonly state: LocalStorageState;
     private garageQuantity: CreatorElement | null;
@@ -63,7 +62,7 @@ export default class GarageView extends View {
         const title  = new CreatorElement(garageCurrentParameters)
         this.viewElementCreator.addInnerElement(title)
 
-        this.addDialog();
+        //this.addDialog();
     }
 
 

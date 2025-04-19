@@ -1,4 +1,4 @@
-export const gitSvgElements = [
+export const gitSvgElements: SvgElement[] = [
     {
         type: 'path',
         attrs: {
@@ -9,7 +9,7 @@ export const gitSvgElements = [
     },
 ];
 
-export const rsSvgElements = [
+export const rsSvgElements: SvgElement[] = [
     {
         type: 'path',
         attrs: {
