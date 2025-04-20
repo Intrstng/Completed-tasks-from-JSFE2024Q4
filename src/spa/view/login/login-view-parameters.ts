@@ -42,7 +42,7 @@ export const nameInputParameters: ElementParameters = {
 
 export const nameErrorParameters: ElementParameters = {
     tag: 'span',
-    textContent: loginContent.ERROR,
+    textContent: loginContent.ERROR_NAME,
     classNames: [CSS_LOGIN.NAME_ERROR, CSS_LOGIN.HIDDEN],
 };
 
@@ -67,7 +67,7 @@ export const passInputParameters: ElementParameters = {
 
 export const passErrorParameters: ElementParameters = {
     tag: 'span',
-    textContent: loginContent.ERROR,
+    textContent: loginContent.ERROR_PASS,
     classNames: [CSS_LOGIN.PASS_ERROR, CSS_LOGIN.HIDDEN],
 };
 

@@ -22,7 +22,7 @@
     position: relative;
   }
   &__name-wrapper {
-    margin-bottom: 1.25rem;
+    margin-bottom: 2rem;
     width: 100%;
     display: flex;
     flex-wrap: nowrap;
@@ -57,13 +57,14 @@
     left: 0.3rem;
     display: block;
     color: #FF0000FF;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   &__pass {
     position: relative;
   }
   &__pass-wrapper {
+    margin-bottom: 0.75rem;
     width: 100%;
     display: flex;
     flex-wrap: nowrap;

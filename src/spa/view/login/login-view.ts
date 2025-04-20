@@ -19,18 +19,25 @@ import CreatorElement from '../../util/creator-element';
 import LabelCreator from '../../util/label/label-creator';
 import { nameLabelParameters, passLabelParameters } from '../../util/label/label-view-parameters';
 import InputFieldCreator from '../../util/input-field/input-field-creator';
-import { Callback, ElementParameters, EventCB } from '../../../types';
+import { Callback, ElementParameters, EventCB, IS_DISABLED } from '../../../types';
 import ButtonCreator from '../../util/button/button-creator';
 import { PagesNames } from '../header/header-constants';
 import { loginContent } from './login-constants';
 import { InputFieldsValues } from './types';
+import { validateNameValue } from '../../util/validation/password-strength/name-validation';
+import { validatePassStrengthValue } from '../../util/validation/password-strength/password-strength-validation';
+import { CSS_LOGIN } from './login-classes';
 
 export default class LoginView extends View {
   public router: Router;
   private inputFieldName: InputFieldCreator | null;
   private inputFieldPass: InputFieldCreator | null;
+  private submitButton: ButtonCreator | null;
+  private nameError: CreatorElement | null;
+  private passError: CreatorElement | null;
   private readonly state: SessionStorageState;
-
+  private isValidName: boolean = false;
+  private isValidPass: boolean = false;
 
   constructor(state: SessionStorageState, router: Router) {
     super(loginParameters);
@@ -38,6 +45,9 @@ export default class LoginView extends View {
     this.router = router;
     this.inputFieldName = null;
     this.inputFieldPass = null;
+    this.nameError = null;
+    this.passError = null;
+    this.submitButton = null;
     this.configureView();
   }
 
@@ -95,15 +105,30 @@ export default class LoginView extends View {
     inputWrapperCreator.addInnerElement(labelCreator)
 
     if (inputParameters.id === loginContent.INPUT_NAME_ID) {
-      this.inputFieldName = new InputFieldCreator(inputParameters)
+      const callback: EventCB = this.validateNameField;
+      const inputParametersWithCB: ElementParameters = {
+        ...inputParameters,
+        callback
+      }
+      this.inputFieldName = new InputFieldCreator(inputParametersWithCB)
       inputWrapperCreator.addInnerElement(this.inputFieldName)
     } else if (inputParameters.id === loginContent.INPUT_PASS_ID) {
-      this.inputFieldPass = new InputFieldCreator(inputParameters)
+      const callback: EventCB = this.validatePassField;
+      const inputParametersWithCB: ElementParameters = {
+        ...inputParameters,
+        callback
+      }
+      this.inputFieldPass = new InputFieldCreator(inputParametersWithCB)
       inputWrapperCreator.addInnerElement(this.inputFieldPass)
     }
 
-    const nameErrorCreator = new CreatorElement(errorParameters)
-    containerCreator.addInnerElement(nameErrorCreator)
+    if (errorParameters.textContent === loginContent.ERROR_NAME) {
+      this.nameError = new CreatorElement(errorParameters)
+      containerCreator.addInnerElement(this.nameError)
+    } else if (errorParameters.textContent === loginContent.ERROR_PASS) {
+      this.passError = new CreatorElement(errorParameters)
+      containerCreator.addInnerElement(this.passError)
+    }
   }
 
   private getInputFieldsValues(): InputFieldsValues {
@@ -137,9 +162,9 @@ export default class LoginView extends View {
       callback: callbackSubmit
     }
 
-    const submitButtonCreator = new ButtonCreator(buttonSubmitParametersWithCB)
-    submitButtonCreator.getElement().setAttribute('disabled', 'true');
-    controlsContainerCreator.addInnerElement(submitButtonCreator);
+    this.submitButton = new ButtonCreator(buttonSubmitParametersWithCB)
+    this.toggleDisabledSubmitButton(IS_DISABLED.TRUE);
+    controlsContainerCreator.addInnerElement(this.submitButton);
 
     const buttonAboutParametersWithCB: ElementParameters = {
       ...buttonAboutParameters,
@@ -148,6 +173,58 @@ export default class LoginView extends View {
 
     const aboutButtonCreator = new ButtonCreator(buttonAboutParametersWithCB)
     controlsContainerCreator.addInnerElement(aboutButtonCreator);
+  }
+
+  private toggleDisabledSubmitButton(isDisabled: string): void {
+    if (isDisabled === IS_DISABLED.TRUE) {
+      this.submitButton.getElement().setAttribute('disabled', isDisabled);
+    } else if (isDisabled === IS_DISABLED.FALSE) {
+      this.submitButton.getElement().removeAttribute('disabled')
+    }
+  }
+
+  public validateNameField = (event: Event): void => {
+    const target = event.target;
+
+    if (target && target instanceof HTMLInputElement) {
+      this.isValidName = validateNameValue(target.value);
+      this.toggleShowErrorMessage(this.nameError, !this.isValidName)
+
+      if (this.isValidName && this.isValidPass) {
+        this.toggleDisabledSubmitButton(IS_DISABLED.FALSE);
+        this.toggleShowErrorMessage(this.nameError, false)
+      }
+      if (!this.isValidName || !this.isValidPass) {
+        this.toggleDisabledSubmitButton(IS_DISABLED.TRUE);
+      }
+    }
+  }
+
+  public validatePassField = (event: Event): void => {
+    const target = event.target;
+
+    if (target && target instanceof HTMLInputElement) {
+      this.isValidPass = validatePassStrengthValue(target.value);
+
+      if (this.isValidName && this.isValidPass) {
+        this.toggleDisabledSubmitButton(IS_DISABLED.FALSE);
+        this.toggleShowErrorMessage(this.passError, false)
+      }
+
+      this.toggleShowErrorMessage(this.passError, !this.isValidPass)
+
+      if (!this.isValidName || !this.isValidPass) {
+        this.toggleDisabledSubmitButton(IS_DISABLED.TRUE);
+      }
+    }
+  }
+
+  private toggleShowErrorMessage(errorElement: CreatorElement, isShown: boolean): void {
+    if (isShown) {
+      errorElement.getElement().classList.remove(CSS_LOGIN.HIDDEN);
+    } else {
+      errorElement.getElement().classList.add(CSS_LOGIN.HIDDEN);
+    }
   }
 }
 

@@ -4,7 +4,8 @@ export type LoginContent = {
   PASS: string,
   INPUT_NAME_ID: string,
   INPUT_PASS_ID: string,
-  ERROR: string,
+  ERROR_NAME: string,
+  ERROR_PASS: string,
   AUTOCOMPLETE_VALUE: string,
 };
 

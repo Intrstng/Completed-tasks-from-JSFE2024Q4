@@ -59,6 +59,11 @@ export enum QueryParameterKeys {
     ORDER = '_order',
 }
 
+export enum IS_DISABLED {
+    TRUE = 'true',
+    FALSE = 'false'
+}
+
 export enum ContentTypes {
     JSON = 'application/json',
     PLAIN = 'text/plain',
