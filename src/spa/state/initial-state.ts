@@ -1,4 +1,5 @@
 import type { AppState, Constants, Paths } from '../../types';
+import { AppStateKeys } from '../../types';
 
 export const PATHS: Paths = {
     login: '/login',
@@ -11,5 +12,6 @@ export const CONSTANTS: Constants = {
 };
 
 export const INITIAL_STATE: AppState = {
-    isLogged: false
+    [AppStateKeys.IS_LOGGED]: false,
+    [AppStateKeys.CURRENT_USER_NAME]: 'user'
 };

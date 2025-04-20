@@ -4,22 +4,25 @@ import SessionStorageState from '../../state/session-storage-state';
 import Router from '../../router/router';
 import {
   buttonAboutParameters,
-  buttonSubmitParameters, controlsContainerParameters,
+  buttonSubmitParameters,
+  controlsContainerParameters,
   fieldsetParameters,
   legendParameters,
   loginParameters,
   nameContainerParameters,
   nameErrorParameters,
-  nameInputParameters, nameInputWrapperParameters,
+  nameInputParameters,
+  nameInputWrapperParameters,
   passContainerParameters,
   passErrorParameters,
-  passInputParameters, passInputWrapperParameters
+  passInputParameters,
+  passInputWrapperParameters
 } from './login-view-parameters';
 import CreatorElement from '../../util/creator-element';
 import LabelCreator from '../../util/label/label-creator';
 import { nameLabelParameters, passLabelParameters } from '../../util/label/label-view-parameters';
 import InputFieldCreator from '../../util/input-field/input-field-creator';
-import { Callback, ElementParameters, EventCB, IS_DISABLED } from '../../../types';
+import { AppStateKeys, ElementParameters, EventCB, IS_DISABLED, Pages } from '../../../types';
 import ButtonCreator from '../../util/button/button-creator';
 import { PagesNames } from '../header/header-constants';
 import { loginContent } from './login-constants';
@@ -30,18 +33,18 @@ import { CSS_LOGIN } from './login-classes';
 
 export default class LoginView extends View {
   public router: Router;
+  private readonly state: SessionStorageState;
   private inputFieldName: InputFieldCreator | null;
   private inputFieldPass: InputFieldCreator | null;
   private submitButton: ButtonCreator | null;
   private nameError: CreatorElement | null;
   private passError: CreatorElement | null;
-  private readonly state: SessionStorageState;
   private isValidName: boolean = false;
   private isValidPass: boolean = false;
 
   constructor(state: SessionStorageState, router: Router) {
     super(loginParameters);
-
+    this.state = state;
     this.router = router;
     this.inputFieldName = null;
     this.inputFieldPass = null;
@@ -142,17 +145,19 @@ export default class LoginView extends View {
 
   private submitForm = (event: Event): void => {
     event.preventDefault();
-    console.log('Submit')
-    console.log(this.getInputFieldsValues());
+
+    const { inputNameValue } = this.getInputFieldsValues();
+    this.loginCurrentUser(inputNameValue);
   }
 
-  private handleAboutClick = (): void => {
+  private handleAboutClick = (event: Event): void => {
+    event.preventDefault();
     this.router.navigate(PagesNames.ABOUT);
   }
 
   private addFormControls(): void {
     const callbackSubmit: EventCB = this.submitForm;
-    const callbackAbout: Callback = this.handleAboutClick;
+    const callbackAbout: EventCB = this.handleAboutClick;
 
     const controlsContainerCreator = new CreatorElement(controlsContainerParameters)
     this.viewElementCreator.addInnerElement(controlsContainerCreator);
@@ -225,6 +230,12 @@ export default class LoginView extends View {
     } else {
       errorElement.getElement().classList.add(CSS_LOGIN.HIDDEN);
     }
+  }
+
+  private loginCurrentUser(name: string): void {
+    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, name);
+    this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, true);
+    this.router.navigate(Pages.CHAT);
   }
 }
 

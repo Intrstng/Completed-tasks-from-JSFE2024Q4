@@ -100,5 +100,6 @@ export enum Description {
 }
 
 export enum AppStateKeys {
-    IS_LOGGED = 'isLogged'
+    IS_LOGGED = 'isLogged',
+    CURRENT_USER_NAME = 'currentUserName'
 }

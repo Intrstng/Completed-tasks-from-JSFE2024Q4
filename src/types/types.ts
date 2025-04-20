@@ -4,6 +4,7 @@ import type AboutView from '../spa/view/about/about-view';
 import ChatView from '../spa/view/main/chat/chat-view';
 import LoginView from '../spa/view/login/login-view';
 import { loginContent } from '../spa/view/login/login-constants';
+import { AppStateKeys } from './enums';
 
 export type Route = {
     path: string;
@@ -61,7 +62,8 @@ export type EventCB = ((event: Event) => void | Promise<void>) | null;
 export type QueryCB = (queryParameters: QueryParameters[]) => string;
 
 export type AppState = {
-    isLogged: boolean;
+    [AppStateKeys.IS_LOGGED]: boolean;
+    [AppStateKeys.CURRENT_USER_NAME]: string;
 };
 
 export type Paths = {

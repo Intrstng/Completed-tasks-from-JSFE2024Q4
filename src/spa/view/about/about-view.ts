@@ -24,8 +24,6 @@ import { footerLinks } from '../footer/footer-constants';
 export default class AboutView extends View {
   public router: Router;
   private generateLogoLink = generateLogoLink;
-  private readonly state: SessionStorageState;
-
 
   constructor(state: SessionStorageState, router: Router) {
     super(aboutParameters);
