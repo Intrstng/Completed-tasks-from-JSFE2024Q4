@@ -235,7 +235,7 @@ export default class LoginView extends View {
   private loginCurrentUser(name: string): void {
     this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, name);
     this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, true);
-    this.router.navigate(Pages.CHAT);
+    this.router.navigate(PagesNames.CHAT);
   }
 }
 

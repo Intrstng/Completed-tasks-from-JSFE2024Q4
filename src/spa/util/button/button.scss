@@ -39,18 +39,23 @@
 }
 
 .button-about {
-    background-color: #E38E49;
+    background-color: #FF6500;
     max-width: 6.5rem;
     &:hover {
-        background-color: #EB5B00;
+        background-color: #FF407D;
     }
 }
 
 .button-back {
-    background-color: #e8590c;
+    background-color: #41B06E;
+    &:hover {
+        background-color: #2D9596;
+    }
+}
 
-    &:disabled {
-        opacity: 0.45;
-        background-color: rgb(212 225 24);
+.button-logout {
+    background-color: #006A67;
+    &:hover {
+        background-color: #B8001F;
     }
 }

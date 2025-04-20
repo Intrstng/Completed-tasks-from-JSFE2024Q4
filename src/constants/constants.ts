@@ -5,6 +5,6 @@ export const COLORS: { [key: string]: string } = {
     red: '#FF0000',
     blue: '#0000FF',
     yellow: '#FFD700',
-    logo: '#FF8282',
+    logo: '#191D88',
     link: '#3674B5'
 };

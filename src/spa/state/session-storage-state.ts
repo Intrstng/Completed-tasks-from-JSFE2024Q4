@@ -8,7 +8,7 @@ export default class SessionStorageState {
     constructor(key: string) {
         this.accessKey = key;
         this.values = this.loadState();
-       // window.addEventListener('beforeunload', () => this.saveState());
+        window.addEventListener('beforeunload', () => this.saveState());
     }
 
     public getField(key: AppStateKeys): AppState[AppStateKeys] {

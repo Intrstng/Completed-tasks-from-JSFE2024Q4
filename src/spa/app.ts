@@ -8,6 +8,7 @@ import LocalStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import FooterView from './view/footer/footer-view';
 import SessionStorageState from './state/session-storage-state';
+import { PagesNames } from './view/header/header-constants';
 // import ApiController from './api/api-controller';
 
 export default class App {
@@ -58,7 +59,7 @@ export default class App {
                     if (this.isLogged) {
                         await this.loadChatView(state);
                     } else {
-                        this.router.navigate(Pages.LOGIN)
+                        this.router.navigate(PagesNames.LOGIN)
                         //await this.loadLoginView(state);
                     }
                 },
@@ -70,7 +71,7 @@ export default class App {
                     if (this.isLogged) {
                         await this.loadChatView(state);
                     } else {
-                        this.router.navigate(Pages.LOGIN)
+                        this.router.navigate(PagesNames.LOGIN)
                         //await this.loadLoginView(state);
                     }
                 },
@@ -88,7 +89,7 @@ export default class App {
                     if (!this.isLogged) {
                         await this.loadLoginView(state);
                     } else {
-                        this.router.navigate(Pages.CHAT)
+                        this.router.navigate(PagesNames.CHAT)
                         //await this.loadChatView(state);
                     }
                 },
@@ -98,9 +99,6 @@ export default class App {
 
     public setContent(page: Pages, view: ViewCommon): void {
         if (this.main instanceof MainView) {
-            if (this.header instanceof HeaderView) {
-                this.header.setSelectedItem(page);
-            }
             this.main.setContent(view);
         } else {
             console.error('Cannot set content: Main view is not initialized');
@@ -130,7 +128,7 @@ export default class App {
 
     private createHeader(): void {
         if (!this.header) {
-            this.header = new HeaderView(this.router);
+            this.header = new HeaderView(this.state, this.router);
             const headerElement: HTMLElement | null = this.header.getHtmlElement();
             if (headerElement) {
                 document.body.prepend(headerElement);

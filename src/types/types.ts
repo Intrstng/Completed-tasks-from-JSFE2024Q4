@@ -68,12 +68,13 @@ export type AppState = {
 
 export type Paths = {
     login: '/login';
-    main: '/main';
+    chat: '/chat';
     about: '/about';
 };
 
 export type Constants = {
     baseURL: string;
+    userNameLength: number;
 };
 
 export type QueryParameters = {

@@ -1,61 +1,81 @@
 import './header.scss';
 import View from '../view';
-import LinkView from './link/link-view';
 import CreatorElement from '../../util/creator-element';
-import type { Pages } from '../../../types';
+import type { Callback, ElementParameters } from '../../../types';
+import { AppStateKeys } from '../../../types';
 import type Router from '../../router/router';
-import { headerParameters, navigationParameters, titleParameters } from './headers-view-parameters';
-import type { LinkElements, PageParameters } from './types';
-import { isValidPage } from '../../util/assertion-functions/assertion-functions';
-import { LinkNames, PagesNames } from './header-constants';
+import {
+    buttonNavLogoutParameters,
+    headerParameters,
+    navigationParameters,
+    titleParameters,
+    userContainerParameters,
+    userNameParameters,
+    userTitleParameters
+} from './headers-view-parameters';
+import { PagesNames } from './header-constants';
+import SessionStorageState from '../../state/session-storage-state';
+import ButtonCreator from '../../util/button/button-creator';
+import { buttonAboutParameters } from '../login/login-view-parameters';
+import { sliceNameLength } from '../../util/slice-name-string';
 
 export default class HeaderView extends View {
-    public headerLinkElements: LinkElements;
+    private router: Router | null;
+    private readonly state: SessionStorageState;
+    private readonly userName: string = '';
 
-    constructor(router: Router) {
+    constructor(state: SessionStorageState, router: Router) {
         super(headerParameters);
-
-        this.headerLinkElements = new Map();
-        this.configureView(router);
+        this.router = router;
+        this.state = state;
+        this.userName = sliceNameLength(this.state.getState()[AppStateKeys.CURRENT_USER_NAME])
+        this.configureView();
     }
 
-    public setSelectedItem(namePage: Pages): void {
-        const linkItem = this.headerLinkElements.get(namePage);
-        if (linkItem instanceof LinkView) {
-            linkItem.setSelectedStatus();
+    private configureView(): void {
+        this.addHeaderTitle();
+        this.addCurrentUserName();
+        this.addNavigationBlock();
+    }
+
+    private addHeaderTitle(): void {
+        const titleCreator = new CreatorElement(titleParameters);
+        this.viewElementCreator.addInnerElement(titleCreator);
+    }
+
+    private addCurrentUserName(): void {
+        const currentUserContainerCreator = new CreatorElement(userContainerParameters);
+        this.viewElementCreator.addInnerElement(currentUserContainerCreator);
+
+        const currentUserTitleCreator = new CreatorElement(userTitleParameters);
+        currentUserContainerCreator.addInnerElement(currentUserTitleCreator);
+
+        const userNameParametersWithContent: ElementParameters = {
+            ...userNameParameters,
+            textContent: this.userName
         }
+
+        const currentUserNameCreator = new CreatorElement(userNameParametersWithContent);
+        currentUserContainerCreator.addInnerElement(currentUserNameCreator);
     }
 
-    private configureView(router: Router): void {
-        const creatorTitle = new CreatorElement(titleParameters);
-        this.viewElementCreator.addInnerElement(creatorTitle);
+    private addNavigationBlock(): void {
+        const navCreator = new CreatorElement(navigationParameters);
+        this.viewElementCreator.addInnerElement(navCreator);
 
-        const creatorNav = new CreatorElement(navigationParameters);
-        this.viewElementCreator.addInnerElement(creatorNav);
+        const aboutButtonCallback: Callback = () => this.router.navigate(PagesNames.ABOUT);
+        const buttonAboutCreator = new ButtonCreator(buttonAboutParameters);
+        buttonAboutCreator.setCallback(aboutButtonCallback);
+        navCreator.addInnerElement(buttonAboutCreator);
 
-        Object.keys(LinkNames).forEach(key => {
-            const keyLinkNames: unknown = LinkNames[key];
+        const buttonLogoutCreator = new ButtonCreator(buttonNavLogoutParameters);
+        buttonLogoutCreator.setCallback(this.userLogOut);
+        navCreator.addInnerElement(buttonLogoutCreator);
+    }
 
-            if (!isValidPage(keyLinkNames)) {
-                console.log(keyLinkNames)
-                throw new Error(`Invalid key: ${key}`);
-            }
-
-            const pageParameter: PageParameters = {
-                name: keyLinkNames,
-                callback: (): void => router.navigate(PagesNames[key]),
-            };
-
-            const linkElementCreator = new LinkView(pageParameter, this.headerLinkElements);
-            const linkElement: HTMLElement | null = linkElementCreator.getHtmlElement();
-
-            if (linkElement) {
-                creatorNav.addInnerElement(linkElement);
-            }
-
-            this.headerLinkElements.set(PagesNames[key], linkElementCreator);
-        });
-
-        this.viewElementCreator.addInnerElement(creatorNav);
+    private userLogOut = (): void => {
+        this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, false);
+        this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
+        this.router.navigate(PagesNames.LOGIN)
     }
 }

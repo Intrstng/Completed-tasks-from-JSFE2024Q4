@@ -3,15 +3,16 @@ import { AppStateKeys } from '../../types';
 
 export const PATHS: Paths = {
     login: '/login',
-    main: '/main',
+    chat: '/chat',
     about: '/about',
 };
 
 export const CONSTANTS: Constants = {
     baseURL: 'http://127.0.0.1:4000',
+    userNameLength: 10
 };
 
 export const INITIAL_STATE: AppState = {
     [AppStateKeys.IS_LOGGED]: false,
-    [AppStateKeys.CURRENT_USER_NAME]: 'user'
+    [AppStateKeys.CURRENT_USER_NAME]: ''
 };

@@ -2,11 +2,11 @@ import './chat.scss';
 import View from '../../view';
 import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
-import { garageCurrentParameters, garageParameters, } from './chat-view-parameters';
 import type LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorDialog from '../../../util/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
+import { chatSectionParameters } from './parameters/chat-view-parameters';
 
 export default class ChatView extends View {
     public router: Router;
@@ -26,7 +26,7 @@ export default class ChatView extends View {
     private readonly dialog: CreatorDialog | null;
 
     constructor(state: LocalStorageState, router: Router) {
-        super(garageParameters);
+        super(chatSectionParameters);
         this.garageQuantity = null;
         this.garagePage = null;
         this.raceBoard = null;
@@ -59,8 +59,8 @@ export default class ChatView extends View {
     }
 
     private async configureView(): Promise<void> {
-        const title  = new CreatorElement(garageCurrentParameters)
-        this.viewElementCreator.addInnerElement(title)
+        // const title  = new CreatorElement(garageCurrentParameters)
+        // this.viewElementCreator.addInnerElement(title)
 
         //this.addDialog();
     }

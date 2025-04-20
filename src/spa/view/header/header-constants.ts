@@ -8,3 +8,4 @@ export const PagesNames: { [key: string]: string } = {
     ABOUT: 'about',
     LOGIN: 'login'
 };
+
