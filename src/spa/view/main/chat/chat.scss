@@ -160,13 +160,13 @@ width: 29.5%;
 .message {
     max-width: 18rem;
     margin: 0.3rem;
-    padding: 0.3rem 0.4rem;
+    padding: 0.3rem 0.3rem;
     width: 100%;
-    background-color: #C0D8C0;
+    background-color: #519259;
     border: none;
     border-radius: 0.5rem;
     &__header {
-        padding: 0 0.35rem;
+        padding: 0.15rem 0.35rem;
         margin-bottom: 0.25rem;
         display: flex;
         flex-wrap: nowrap;
@@ -188,7 +188,8 @@ width: 29.5%;
         color: #4F709C;
     }
     &__footer {
-        //text-align: right;
+        padding: 0 0.35rem;
+        font-size: 0.85rem;
     }
     &__status {
         color: #FEFBF6;
