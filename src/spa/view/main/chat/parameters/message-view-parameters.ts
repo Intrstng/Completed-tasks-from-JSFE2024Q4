@@ -3,7 +3,7 @@ import { CSS_MESSAGE } from '../chat-classes';
 import { chatContent } from '../chat-constants';
 
 export const messageContainerParameters: ElementParameters = {
-  tag: 'div',
+  tag: 'li',
   classNames: [CSS_MESSAGE.MESSAGE],
 };
 
@@ -24,7 +24,7 @@ export const messageTimeParameters: ElementParameters = {
 };
 
 export const messageBodyParameters: ElementParameters = {
-  tag: 'span',
+  tag: 'div',
   classNames: [CSS_MESSAGE.MESSAGE_BODY],
 };
 
@@ -33,12 +33,7 @@ export const messageFooterParameters: ElementParameters = {
   classNames: [CSS_MESSAGE.MESSAGE_FOOTER],
 };
 
-export const messageReadStatusParameters: ElementParameters = {
+export const messageStatusParameters: ElementParameters = {
   tag: 'span',
-  classNames: [CSS_MESSAGE.MESSAGE_READ],
-};
-
-export const messageSentStatusParameters: ElementParameters = {
-  tag: 'span',
-  classNames: [CSS_MESSAGE.MESSAGE_SENT],
+  classNames: [CSS_MESSAGE.MESSAGE_STATUS],
 };

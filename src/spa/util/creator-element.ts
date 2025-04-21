@@ -11,6 +11,20 @@ export default class CreatorElement {
         return classes.every(cls => element && element.classList.contains(cls));
     }
 
+    public static deleteAllItemsInContainer(container: CreatorElement | null): void {
+        let containerElement: HTMLElement | HTMLCanvasElement | null = null;
+
+        if (container) {
+            containerElement = container.getElement();
+        }
+
+        if (containerElement) {
+            while (containerElement.firstElementChild) {
+                containerElement.firstElementChild.remove();
+            }
+        }
+    }
+
     public addInnerElement(element: HTMLElement | CreatorElement | SVGElement | null): void {
         if (this.element) {
             const elementToAppend = element instanceof CreatorElement ? element.getElement() : element;

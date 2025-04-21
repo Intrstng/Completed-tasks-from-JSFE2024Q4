@@ -1,10 +1,8 @@
 import type { InputTypes, Location, LocationEvent } from './enums';
-import type GarageView from '../spa/view/main/chat/chat-view';
-import type AboutView from '../spa/view/about/about-view';
-import ChatView from '../spa/view/main/chat/chat-view';
-import LoginView from '../spa/view/login/login-view';
-import { loginContent } from '../spa/view/login/login-constants';
 import { AppStateKeys } from './enums';
+import ChatView from '../spa/view/main/chat/chat-view';
+import type AboutView from '../spa/view/about/about-view';
+import LoginView from '../spa/view/login/login-view';
 
 export type Route = {
     path: string;
@@ -64,6 +62,9 @@ export type QueryCB = (queryParameters: QueryParameters[]) => string;
 export type AppState = {
     [AppStateKeys.IS_LOGGED]: boolean;
     [AppStateKeys.CURRENT_USER_NAME]: string;
+    [AppStateKeys.CURRENT_CONTACT]: ContactItem;
+    [AppStateKeys.MESSAGE_HISTORY]: MessageItem[]
+    [AppStateKeys.CURRENT_MESSAGE]: string;
 };
 
 export type Paths = {
@@ -83,3 +84,18 @@ export type QueryParameters = {
 };
 
 export type Css_Classes = { [key: string]: string };
+
+export type ContactItem = { login: string; isLogined: boolean };
+
+export type MessageItem = {
+    id: string,
+    from: string,
+    to: string,
+    text: string,
+    datetime: number,
+    status: {
+        isDelivered: boolean,
+        isReaded: boolean,
+        isEdited: boolean,
+    }
+}

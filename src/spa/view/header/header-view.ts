@@ -76,6 +76,7 @@ export default class HeaderView extends View {
     private userLogOut = (): void => {
         this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, false);
         this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
+        this.state.resetState();
         this.router.navigate(PagesNames.LOGIN)
     }
 }

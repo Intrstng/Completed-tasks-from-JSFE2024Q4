@@ -31,16 +31,10 @@ export default class SessionStorageState {
         this.setState(updatedState);
     }
 
-    // public updateInputFieldStateProperty(key: string, value: string): void {
-    //     const updatedState: AppState = {
-    //         ...this.values,
-    //         inputData: {
-    //             ...this.values.inputData,
-    //             [key]: value,
-    //         },
-    //     };
-    //     this.setState(updatedState);
-    // }
+    public resetState(): void {
+        this.values = INITIAL_STATE;
+        this.saveState();
+    }
 
     private loadState(): AppState {
         const storageItem: string | null = sessionStorage.getItem(this.accessKey);

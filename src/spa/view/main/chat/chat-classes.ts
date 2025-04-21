@@ -2,12 +2,14 @@ import type { Css_Classes } from '../../../../types';
 
 export const CSS_CONTACTS: Css_Classes = {
     CHAT: 'chat',
-    CONTACTS_CONTAINER: 'chat__contacts',
-    SEARCH_FIELD: 'chat__search',
-    CONTACTS_LIST: 'chat__list',
-    CONTACTS_ITEM: 'chat__item',
-    CONTACT_STATUS: 'chat__dot',
-    CONTACT: 'chat__contact',
+    CONTACTS_CONTAINER: 'contacts',
+    SEARCH_FIELD: 'contacts__search',
+    CONTACTS_LIST: 'contacts__list',
+    CONTACTS_ITEM: 'contacts__item',
+    CONTACT_STATUS: 'contacts__dot',
+    CONTACT: 'contacts__contact',
+    ONLINE: 'active',
+    OFFLINE: 'offline',
 };
 
 export const CSS_DIALOG: Css_Classes = {
@@ -24,7 +26,7 @@ export const CSS_DIALOG: Css_Classes = {
 export const CSS_SEND: Css_Classes = {
     SEND_FORM: 'send',
     SEND_INPUT: 'send__input',
-    SEND_BUTTON: 'send-button',
+    SEND_BUTTON: 'button-send',
 }
 
 export const CSS_MESSAGE: Css_Classes = {
@@ -34,6 +36,8 @@ export const CSS_MESSAGE: Css_Classes = {
     MESSAGE_TIME: 'message__time',
     MESSAGE_BODY: 'message__body',
     MESSAGE_FOOTER: 'message__footer',
-    MESSAGE_READ: 'message__read',
-    MESSAGE_SENT: 'message__sent',
+    MESSAGE_STATUS: 'message__status',
+
+    MESSAGE_OUTCOME: 'message__outcome',
+    MESSAGE_INCOME: 'message__income',
 }

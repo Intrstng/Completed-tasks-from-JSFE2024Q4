@@ -14,5 +14,11 @@ export const CONSTANTS: Constants = {
 
 export const INITIAL_STATE: AppState = {
     [AppStateKeys.IS_LOGGED]: false,
-    [AppStateKeys.CURRENT_USER_NAME]: ''
+    [AppStateKeys.CURRENT_USER_NAME]: '',
+    [AppStateKeys.CURRENT_CONTACT]: {
+        login: '',
+        isLogined: false,
+    },
+    [AppStateKeys.MESSAGE_HISTORY]: [],
+    [AppStateKeys.CURRENT_MESSAGE]: '',
 };

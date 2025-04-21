@@ -11,6 +11,8 @@ export const sendFormParameters: ElementParameters = {
 
 export const sendInputAreaParameters: ElementParameters = {
   tag: 'textarea',
+  rows: '3',
+  cols: '30',
   placeholder: chatContent.MESSAGE,
   classNames: [CSS_SEND.SEND_INPUT],
 };

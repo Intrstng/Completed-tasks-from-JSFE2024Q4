@@ -1,5 +1,6 @@
 import { ElementParameters } from '../../../../../types';
 import { CSS_DIALOG } from '../chat-classes';
+import { chatContent } from '../chat-constants';
 
 export const messagesContainerParameters: ElementParameters = {
   tag: 'article',
@@ -33,5 +34,6 @@ export const dialogBoardParameters: ElementParameters = {
 
 export const dialogInfoParameters: ElementParameters = {
   tag: 'li',
-  classNames: [CSS_DIALOG.dialog__info],
+  textContent: chatContent.BLANK_MESSAGE,
+  classNames: [CSS_DIALOG.DIALOG_INFO],
 };
