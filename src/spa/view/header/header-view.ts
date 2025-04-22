@@ -18,16 +18,19 @@ import SessionStorageState from '../../state/session-storage-state';
 import ButtonCreator from '../../util/button/button-creator';
 import { buttonAboutParameters } from '../login/login-view-parameters';
 import { sliceNameLength } from '../../util/slice-name-string';
+import ApiController from '../../api/api-controller';
 
 export default class HeaderView extends View {
     private router: Router | null;
     private readonly state: SessionStorageState;
+    private api: ApiController;
     private readonly userName: string = '';
 
-    constructor(state: SessionStorageState, router: Router) {
+    constructor(state: SessionStorageState, router: Router, api: ApiController) {
         super(headerParameters);
         this.router = router;
         this.state = state;
+        this.api = api;
         this.userName = sliceNameLength(this.state.getState()[AppStateKeys.CURRENT_USER_NAME])
         this.configureView();
     }
@@ -74,9 +77,8 @@ export default class HeaderView extends View {
     }
 
     private userLogOut = (): void => {
-        this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, false);
-        this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
-        this.state.resetState();
-        this.router.navigate(PagesNames.LOGIN)
+      const { currentUserName, currentUserPass } = this.state.getState();
+
+      this.api.logoutUser(currentUserName, currentUserPass);
     }
 }

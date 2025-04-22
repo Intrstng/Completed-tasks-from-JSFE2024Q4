@@ -30,10 +30,12 @@ import { InputFieldsValues } from './types';
 import { validateNameValue } from '../../util/validation/password-strength/name-validation';
 import { validatePassStrengthValue } from '../../util/validation/password-strength/password-strength-validation';
 import { CSS_LOGIN } from './login-classes';
+import ApiController from '../../api/api-controller';
 
 export default class LoginView extends View {
   public router: Router;
   private readonly state: SessionStorageState;
+  private readonly api: ApiController;
   private inputFieldName: InputFieldCreator | null;
   private inputFieldPass: InputFieldCreator | null;
   private submitButton: ButtonCreator | null;
@@ -42,10 +44,11 @@ export default class LoginView extends View {
   private isValidName: boolean = false;
   private isValidPass: boolean = false;
 
-  constructor(state: SessionStorageState, router: Router) {
+  constructor(state: SessionStorageState, router: Router, api: ApiController) {
     super(loginParameters);
     this.state = state;
     this.router = router;
+    this.api = api;
     this.inputFieldName = null;
     this.inputFieldPass = null;
     this.nameError = null;
@@ -147,6 +150,7 @@ export default class LoginView extends View {
     event.preventDefault();
 
     const { inputNameValue, inputPassValue } = this.getInputFieldsValues();
+
     this.loginCurrentUser(inputNameValue, inputPassValue);
   }
 
@@ -233,11 +237,7 @@ export default class LoginView extends View {
   }
 
   private loginCurrentUser(login: string, password: string): void {
-    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, login);
-    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_PASS, password);
-    this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, true);
-
-    this.router.navigate(PagesNames.CHAT);
+    this.api.loginUser(login, password);
   }
 }
 

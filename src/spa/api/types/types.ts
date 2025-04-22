@@ -1,4 +1,11 @@
-import { SocketMessageType } from './enums';
+import { CONSTANTS_KEYS, SocketMessageType } from './enums';
+
+export type API_CONSTANTS_TYPES = {
+  [CONSTANTS_KEYS.WS_URL]: string;
+  [CONSTANTS_KEYS.USER_NAME_LENGTH]: number;
+  [CONSTANTS_KEYS.RECONNECT_INTERVAL]: number;
+  [CONSTANTS_KEYS.ERROR_MESSAGE_DELAY]: number;
+}
 
 type MessageStatus = {
   isDelivered: boolean;
@@ -77,4 +84,3 @@ export type SetMessageRead = BaseRequest<SocketMessageType.MSG_READ, {
     id: string;
   };
 }>;
-

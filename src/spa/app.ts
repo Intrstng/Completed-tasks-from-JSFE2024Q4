@@ -10,10 +10,10 @@ import FooterView from './view/footer/footer-view';
 import SessionStorageState from './state/session-storage-state';
 import { PagesNames } from './view/header/header-constants';
 import ApiController from './api/api-controller';
-import { CONSTANTS } from './state/initial-state';
 import CreatorDialog from './util/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from './util/dialog/dialog-view-parameters';
 import { CONNECTION_ERROR } from './util/dialog/dialog-constants';
+import { API_CONSTANTS } from './api/api-constants';
 
 export default class App {
     public api: ApiController;
@@ -32,9 +32,9 @@ export default class App {
         this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters)
         this.createDialog(this.dialog);
 
-        this.api = new ApiController(this.state, this.dialog, CONSTANTS);
         const routes = this.createRoutes(this.state);
         this.router = new Router(routes);
+        this.api = new ApiController(this.state, this.router, this.dialog, API_CONSTANTS);
         this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
         this.router.setHashHandler();
         this.createView();
@@ -137,12 +137,12 @@ export default class App {
         const { default: LoginView } = await import('./view/login/login-view');
         this.removeHeader();
         this.removeFooter();
-        this.setContent(Pages.LOGIN, new LoginView(state, this.router));
+        this.setContent(Pages.LOGIN, new LoginView(state, this.router, this.api));
     }
 
     private createHeader(): void {
         if (!this.header) {
-            this.header = new HeaderView(this.state, this.router);
+            this.header = new HeaderView(this.state, this.router, this.api);
             const headerElement: HTMLElement | null = this.header.getHtmlElement();
             if (headerElement) {
                 document.body.prepend(headerElement);

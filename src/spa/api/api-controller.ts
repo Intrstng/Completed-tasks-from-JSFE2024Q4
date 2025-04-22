@@ -1,6 +1,7 @@
-import { Constants } from '../../types';
+import { AppStateKeys } from '../../types';
 import SessionStorageState from '../state/session-storage-state';
 import {
+  API_CONSTANTS_TYPES, CONSTANTS_KEYS,
   DeleteMessage,
   GetAuthorization,
   GetMessage,
@@ -14,22 +15,26 @@ import {
 } from './types';
 import CreatorDialog from '../util/dialog/dialog-creator';
 import { CONNECTION_ERROR } from '../util/dialog/dialog-constants';
-import { RECONNECT_INTERVAL } from './api-constants';
+import { API_CONSTANTS } from './api-constants';
+import Router from '../router/router';
+import { PagesNames } from '../view/header/header-constants';
 
 export default class ApiController {
   public socket: globalThis.WebSocket;
   private readonly wsURL: string;
   private readonly state: SessionStorageState;
-  private readonly constants: Constants;
+  private router: Router;
+  private readonly constants: API_CONSTANTS_TYPES;
   private errorMessage: CreatorDialog | null = null;
 
-  private reconnectInterval: number = RECONNECT_INTERVAL;
+  private reconnectInterval: number = API_CONSTANTS.RECONNECT_INTERVAL;
   private isConnected: boolean = false;
 
-  constructor(state: SessionStorageState, errorMessage: CreatorDialog, constants: Constants) {
-    this.wsURL = constants.wsURL;
+  constructor(state: SessionStorageState, router: Router,errorMessage: CreatorDialog, constants: API_CONSTANTS_TYPES) {
+    this.wsURL = constants[CONSTANTS_KEYS.WS_URL];
     this.constants = constants;
     this.state = state;
+    this.router = router;
     this.errorMessage = errorMessage;
 
     this.connect();
@@ -79,14 +84,91 @@ export default class ApiController {
 
   private handleMessageSocket(event: MessageEvent): void {
     try {
+      console.log('sss', event.data)
       const message = JSON.parse(event.data);
       console.log('Received message:', message);
+
+
+
+      switch (message.type) {
+        case SocketMessageType.USER_LOGIN: {
+          const { login, isLogined } = message.payload.user;
+
+          this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, login);
+          this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, isLogined);
+
+          this.router.navigate(PagesNames.CHAT);
+
+          break;
+        }
+        case SocketMessageType.USER_LOGOUT: {
+          const { isLogined } = message.payload.user;
+
+          this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, isLogined);
+          this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
+          this.state.resetState();
+          this.router.navigate(PagesNames.LOGIN)
+
+          break;
+        }
+        case SocketMessageType.USER_ACTIVE:
+        case SocketMessageType.USER_INACTIVE: {
+
+          break;
+        }
+        case SocketMessageType.USER_EXTERNAL_LOGIN:
+        case SocketMessageType.USER_EXTERNAL_LOGOUT: {
+
+          break;
+        }
+        case SocketMessageType.MSG_FROM_USER:
+
+          break;
+        case SocketMessageType.MSG_SEND: {
+
+          break;
+        }
+        case SocketMessageType.MSG_DELIVER: {
+
+          break;
+        }
+        case SocketMessageType.MSG_READ: {
+
+          break;
+        }
+        case SocketMessageType.MSG_EDIT: {
+
+          break;
+        }
+        case SocketMessageType.MSG_DELETE: {
+
+          break;
+        }
+        case SocketMessageType.ERROR: {
+          this.errorMessage.showDialog(message.payload.error)
+          break;
+        }
+        default:
+          console.warn('Unhandled message type:', message);
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     } catch (error) {
       console.error('Error parsing message:', error);
     }
-    console.error('handleMessageSocket');
   }
 
   public loginUser(login: string, password: string): void {
@@ -102,12 +184,14 @@ export default class ApiController {
         },
       };
       this.socket.send(JSON.stringify(message));
+
+      // Check saving password on client side
+      this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_PASS, password);
     } else {
       console.error('Unable to login user, not connected.');
     }
   }
 
-  // Check params
   public logoutUser(login: string, password: string): void {
     if (this.isConnected && this.socket) {
       const message: LogoutRequest = {
@@ -116,7 +200,7 @@ export default class ApiController {
         payload: {
           user: {
             login,
-            password,
+            password
           },
         },
       };

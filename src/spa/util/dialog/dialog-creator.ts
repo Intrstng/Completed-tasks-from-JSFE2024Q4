@@ -4,6 +4,8 @@ import CreatorElement from '../creator-element';
 import { CSS_DIALOG, DIALOG_IDs } from './dialog-classes';
 import { loaderSpinnerParameters } from './dialog-view-parameters';
 import { CONNECTION_ERROR } from './dialog-constants';
+import { CONSTANTS_KEYS } from '../../api/types';
+import { API_CONSTANTS } from '../../api/api-constants';
 const spinnerLogo = require('../../../assets/spinner.gif');
 
 export default class CreatorDialog {
@@ -113,10 +115,12 @@ export default class CreatorDialog {
                 this.removeSpinner();
                 this.addSpinner();
                 this.setDialogTextField(message);
+            } else {
+                setTimeout(() => this.closeDialog(), API_CONSTANTS[CONSTANTS_KEYS.ERROR_MESSAGE_DELAY]);
             }
 
             this.dialog.showModal();
-
+            this.setDialogTextField(message);
             this.dialog.classList.remove(CSS_DIALOG.HIDDEN);
         } else {
             console.error('Cannot call showModal: element is not a dialog');

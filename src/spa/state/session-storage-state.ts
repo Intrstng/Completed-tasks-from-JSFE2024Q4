@@ -1,14 +1,28 @@
-import type { AppState, AppStateKeys } from '../../types';
+import type { AppState, AppStateKeys, Callback } from '../../types';
 import { INITIAL_STATE } from './initial-state';
+import { SubscriberCallback } from './types';
 
 export default class SessionStorageState {
     public values: AppState;
     private readonly accessKey: string;
+    public subscribers: SubscriberCallback[] = [];
 
     constructor(key: string) {
         this.accessKey = key;
         this.values = this.loadState();
+        this.subscribers = [];
         window.addEventListener('beforeunload', () => this.saveState());
+    }
+
+    subscribe(callback: SubscriberCallback): Callback {
+        this.subscribers.push(callback);
+        return () => {
+            this.subscribers = this.subscribers.filter(sub => sub !== callback);
+        };
+    }
+
+    public notifySubscribers(): void {
+        this.subscribers.forEach(callback => callback(this.values));
     }
 
     public getField(key: AppStateKeys): AppState[AppStateKeys] {

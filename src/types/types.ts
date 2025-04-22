@@ -74,12 +74,6 @@ export type Paths = {
     about: '/about';
 };
 
-export type Constants = {
-    baseURL: string;
-    wsURL: string;
-    userNameLength: number;
-};
-
 export type QueryParameters = {
     key: string;
     value: number | string;
