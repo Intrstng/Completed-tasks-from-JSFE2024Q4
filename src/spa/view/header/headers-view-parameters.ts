@@ -1,5 +1,5 @@
 import type { ElementParameters } from '../../../types';
-import { Description, InputTypes } from '../../../types';
+import { AppInfo } from '../../../types';
 import { CSS_HEADER } from './header-classes';
 import { CHAT_CONSTANTS } from '../main/chat/chat-view-constants';
 import { BUTTON_CONSTANTS } from '../../util/button/button-parameters/button-constants';
@@ -9,8 +9,8 @@ import { CSS_LOGIN } from '../login/login-classes';
 export const titleParameters: ElementParameters = {
     tag: 'h1',
     classNames: [CSS_HEADER.TITLE],
-    title: Description.APP_NAME,
-    textContent: Description.APP_NAME,
+    title: AppInfo.NAME,
+    textContent: AppInfo.NAME,
 };
 
 export const headerParameters: ElementParameters = {

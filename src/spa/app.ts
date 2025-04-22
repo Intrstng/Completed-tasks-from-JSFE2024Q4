@@ -9,28 +9,33 @@ import HeaderView from './view/header/header-view';
 import FooterView from './view/footer/footer-view';
 import SessionStorageState from './state/session-storage-state';
 import { PagesNames } from './view/header/header-constants';
-// import ApiController from './api/api-controller';
+import ApiController from './api/api-controller';
+import { CONSTANTS } from './state/initial-state';
+import CreatorDialog from './util/dialog/dialog-creator';
+import { dialogContentParameters, dialogParameters } from './util/dialog/dialog-view-parameters';
+import { CONNECTION_ERROR } from './util/dialog/dialog-constants';
 
 export default class App {
-    // public api: ApiController;
+    public api: ApiController;
     private readonly appName: string = AppInfo.NAME;
     private readonly keyToRecordInLS: string = AppInfo.KEY_LS;
     private readonly router: Router;
-    private header: HeaderView | null;
-    private main: MainView | null;
-    private footer: FooterView | null;
+    private header: HeaderView | null = null;
+    private main: MainView | null = null;
+    private footer: FooterView | null = null;
+    private dialog: CreatorDialog | null = null;
     private readonly state: SessionStorageState;
     private isLogged: boolean = true;
 
     constructor() {
-        this.header = null;
-        this.main = null;
         this.state = new SessionStorageState(this.keyToRecordInLS);
-        // this.api = new ApiController(PATHS, this.state, CONSTANTS);
+        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters)
+        this.createDialog(this.dialog);
+
+        this.api = new ApiController(this.state, this.dialog, CONSTANTS);
         const routes = this.createRoutes(this.state);
         this.router = new Router(routes);
         this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
-
         this.router.setHashHandler();
         this.createView();
     }
@@ -50,10 +55,19 @@ export default class App {
         this.createFooter();
     }
 
+    public createDialog(dialog: CreatorDialog): void {
+        const dialogElement: HTMLElement | null = dialog.getElement();
+        if (dialogElement) {
+            document.body.append(dialogElement);
+        } else {
+            console.error('Dialog element is null and cannot be appended to the body.');
+        }
+    }
+
     public createRoutes(state: LocalStorageState): Array<Route> {
         return [
             {
-                path: ``,
+                path: `${Pages.EMPTY}`,
                 callback: async (): Promise<void> => {
                     this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
                     if (this.isLogged) {

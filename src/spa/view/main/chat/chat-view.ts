@@ -286,7 +286,6 @@ this.state.setState(updatedState)
         }
 
         this.state.setState(updatedState);
-
         this.updateDialogHeaderContent();
     }
 

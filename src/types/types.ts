@@ -62,6 +62,7 @@ export type QueryCB = (queryParameters: QueryParameters[]) => string;
 export type AppState = {
     [AppStateKeys.IS_LOGGED]: boolean;
     [AppStateKeys.CURRENT_USER_NAME]: string;
+    [AppStateKeys.CURRENT_USER_PASS]: string;
     [AppStateKeys.CURRENT_CONTACT]: ContactItem;
     [AppStateKeys.MESSAGE_HISTORY]: MessageItem[]
     [AppStateKeys.CURRENT_MESSAGE]: string;
@@ -75,6 +76,7 @@ export type Paths = {
 
 export type Constants = {
     baseURL: string;
+    wsURL: string;
     userNameLength: number;
 };
 
@@ -85,7 +87,10 @@ export type QueryParameters = {
 
 export type Css_Classes = { [key: string]: string };
 
-export type ContactItem = { login: string; isLogined: boolean };
+export type ContactItem = {
+    login: string;
+    isLogined: boolean
+};
 
 export type MessageItem = {
     id: string,

@@ -1,0 +1,1 @@
+export const RECONNECT_INTERVAL: number = 3000;

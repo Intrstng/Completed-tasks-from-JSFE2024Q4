@@ -22,7 +22,7 @@ import CreatorElement from '../../util/creator-element';
 import LabelCreator from '../../util/label/label-creator';
 import { nameLabelParameters, passLabelParameters } from '../../util/label/label-view-parameters';
 import InputFieldCreator from '../../util/input-field/input-field-creator';
-import { AppStateKeys, ElementParameters, EventCB, IS_DISABLED, Pages } from '../../../types';
+import { AppStateKeys, ElementParameters, EventCB, IS_DISABLED } from '../../../types';
 import ButtonCreator from '../../util/button/button-creator';
 import { PagesNames } from '../header/header-constants';
 import { loginContent } from './login-constants';
@@ -146,8 +146,8 @@ export default class LoginView extends View {
   private submitForm = (event: Event): void => {
     event.preventDefault();
 
-    const { inputNameValue } = this.getInputFieldsValues();
-    this.loginCurrentUser(inputNameValue);
+    const { inputNameValue, inputPassValue } = this.getInputFieldsValues();
+    this.loginCurrentUser(inputNameValue, inputPassValue);
   }
 
   private handleAboutClick = (event: Event): void => {
@@ -232,9 +232,11 @@ export default class LoginView extends View {
     }
   }
 
-  private loginCurrentUser(name: string): void {
-    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, name);
+  private loginCurrentUser(login: string, password: string): void {
+    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, login);
+    this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_PASS, password);
     this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, true);
+
     this.router.navigate(PagesNames.CHAT);
   }
 }
