@@ -1,4 +1,5 @@
-import { ContactItem, MessageItem } from '../../../../types';
+import { ContactItem } from '../../../../types';
+import { Message, User } from '../../../api/types';
 
 export const chatContent: { [key: string]: string } = {
   SEARCH: 'Search...',
@@ -14,7 +15,7 @@ export const chatContent: { [key: string]: string } = {
   EDITED: 'message edited',
 };
 
-export const mockContacts: ContactItem[] = [
+export const mockContacts: User[] = [
   { login: "Alice", isLogined: true },
   { login: "Bob", isLogined: false },
   { login: "Charlie", isLogined: true },
@@ -56,7 +57,7 @@ export const mockContacts: ContactItem[] = [
   { login: "Taylor", isLogined: false },
 ];
 
-export const mockMessages: MessageItem[] = [
+export const mockMessages: Message[] = [
   {
     id: '2',
     from: 'Sender 2',

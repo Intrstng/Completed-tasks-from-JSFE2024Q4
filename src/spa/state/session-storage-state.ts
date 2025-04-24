@@ -1,6 +1,6 @@
-import type { AppState, AppStateKeys, Callback } from '../../types';
+import type { AppStateKeys, Callback } from '../../types';
 import { INITIAL_STATE } from './initial-state';
-import { SubscriberCallback } from './types';
+import { AppState, SubscriberCallback } from './types';
 
 export default class SessionStorageState {
     public values: AppState;

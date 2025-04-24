@@ -4,8 +4,6 @@ import type Router from '../../../router/router';
 import CreatorElement from '../../../util/creator-element';
 import type LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
-import CreatorDialog from '../../../util/dialog/dialog-creator';
-import { dialogContentParameters, dialogParameters } from '../../../util/dialog/dialog-view-parameters';
 import { chatSectionParameters } from './parameters/chat-view-parameters';
 import {
     dialogBoardParameters,
@@ -24,16 +22,17 @@ import {
     contactsSearchFieldParameters,
     contactStatusParameters
 } from './parameters/contacts-view-parameters';
-import { chatContent, mockContacts, mockMessages } from './chat-constants';
+import { chatContent, mockMessages } from './chat-constants';
 import { CSS_CONTACTS, CSS_MESSAGE } from './chat-classes';
-import { AppState, AppStateKeys, ContactItem, MessageItem } from '../../../../types';
+import { AppStateKeys } from '../../../../types';
 import { sliceNameLength } from '../../../util/slice-name-string';
 import {
     messageAuthorParameters,
     messageBodyParameters,
     messageContainerParameters,
     messageFooterParameters,
-    messageHeaderParameters, messageStatusParameters,
+    messageHeaderParameters,
+    messageStatusParameters,
     messageTimeParameters
 } from './parameters/message-view-parameters';
 import {
@@ -42,9 +41,13 @@ import {
     sendInputAreaParameters
 } from './parameters/send-form-view-parameters';
 import ButtonCreator from '../../../util/button/button-creator';
+import ApiController from '../../../api/api-controller';
+import { AppState } from '../../../state/types';
+import { Message, User } from '../../../api/types';
 
 export default class ChatView extends View {
     public router: Router;
+    public api: ApiController;
     private readonly state: LocalStorageState;
     private garageQuantity: CreatorElement | null;
     private readonly garagePage: CreatorElement | null;
@@ -54,6 +57,7 @@ export default class ChatView extends View {
     private inputCreateColorField: InputFieldCreator | null;
     private inputUpdateNameField: InputFieldCreator | null;
     private inputUpdateColorField: InputFieldCreator | null;
+    private contactsListCreator = new CreatorElement(contactsListParameters);
     private carCreateLogo: SVGElement | null;
     private carUpdateLogo: SVGElement | null;
     private prevButton: CreatorElement | null;
@@ -62,7 +66,7 @@ export default class ChatView extends View {
     private dialogHeader: CreatorElement | null;
     private dialogBoard: CreatorElement | null;
 
-    constructor(state: LocalStorageState, router: Router) {
+    constructor(state: LocalStorageState, router: Router, api: ApiController) {
         super(chatSectionParameters);
         this.garageQuantity = null;
         this.garagePage = null;
@@ -78,14 +82,14 @@ export default class ChatView extends View {
         this.nextButton = null;
         this.router = router;
         this.state = state;
+        this.api = api;
 
         // this.dialog = new CreatorElement(dialogParameters, dialogContentParameters);
         this.dialogHeader = new CreatorElement(messagesHeaderParameters);
         this.dialogBoard = new CreatorElement(dialogBoardParameters);
-
-
         this.configureView();
     }
+
 
     // public addDialog(): void {
     //     if (this.dialog instanceof CreatorDialog) {
@@ -109,13 +113,18 @@ export default class ChatView extends View {
         inputSearchCreator.setCallback(this.searchContactHandler)
         contactsSectionContainer.addInnerElement(inputSearchCreator);
 
-        const contactsListCreator = new CreatorElement(contactsListParameters);
-        contactsSectionContainer.addInnerElement(contactsListCreator);
+        contactsSectionContainer.addInnerElement(this.contactsListCreator);
+        const onlineUsersCollection: User[] = this.state.getState()[AppStateKeys.ONLINE_USERS]
+        const offlineUsersCollection: User[] = this.state.getState()[AppStateKeys.OFFLINE_USERS]
+        const allUsersCollection: User[] = [...onlineUsersCollection, ...offlineUsersCollection]
 
-        this.addContacts(contactsListCreator, mockContacts)
+        this.addContacts(this.contactsListCreator, allUsersCollection)
     }
 
-    private addContacts(listContainer: CreatorElement, contactsData: ContactItem[]): void {
+    private addContacts(listContainer: CreatorElement, contactsData: User[]): void {
+
+       CreatorElement.deleteAllItemsInContainer(listContainer) // Clean
+
         contactsData.forEach(contact => {
             const contactCreator = new CreatorElement(contactItemParameters)
             contactCreator.setCallback(() => this.selectContactToChat(contact))
@@ -183,7 +192,7 @@ export default class ChatView extends View {
         dialogContainer.addInnerElement(dialogContainerCreator);
         dialogContainerCreator.addInnerElement(this.dialogBoard);
 
-        const messagesHistoryCollection: MessageItem[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY]
+        const messagesHistoryCollection: Message[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY]
         if (messagesHistoryCollection.length === 0) {
             const blankMessageCreator = new CreatorElement(dialogInfoParameters);
             this.dialogBoard.addInnerElement(blankMessageCreator);
@@ -193,14 +202,14 @@ export default class ChatView extends View {
 
     private addContentToDialogBoard(): void {
 ///////////
-const currentState = this.state.getState()
-const updatedState = {
-    ...currentState,
-    [AppStateKeys.MESSAGE_HISTORY]: mockMessages
-}
-this.state.setState(updatedState)
+// const currentState = this.state.getState()
+// const updatedState = {
+//     ...currentState,
+//     [AppStateKeys.MESSAGE_HISTORY]: mockMessages
+// }
+// this.state.setState(updatedState)
 ///////////
-        const messagesHistoryCollection: MessageItem[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY]
+        const messagesHistoryCollection: Message[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY]
         if (messagesHistoryCollection.length > 0) {
             CreatorElement.deleteAllItemsInContainer(this.dialogBoard);
 
@@ -211,7 +220,7 @@ this.state.setState(updatedState)
         }
     }
 
-    private createMessage(message: MessageItem): CreatorElement {
+    private createMessage(message: Message): CreatorElement {
         const messageContainerCreator = new CreatorElement(messageContainerParameters);
 
         if (message.to) {
@@ -278,22 +287,39 @@ this.state.setState(updatedState)
         dialogContainer.addInnerElement(messageInputFormCreator);
     }
 
-    private selectContactToChat(contact: ContactItem): void {
+    private selectContactToChat(contact: User): void {
+        this.api.getMessages(contact.login);
+
+
         const currentState: AppState = this.state.getState()
         const updatedState: AppState = {
             ...currentState,
             [AppStateKeys.CURRENT_CONTACT]: contact,
         }
-
+console.log(this.state.getState())
         this.state.setState(updatedState);
+
+
+
         this.updateDialogHeaderContent();
     }
 
-    private searchContactHandler(event: Event): void {
+    private searchContactHandler = (event: Event): void => {
         const target = event.target;
 
         if (target && target instanceof HTMLInputElement) {
             console.log(target.value)
+            const onlineUsersCollection = this.state.getState()[AppStateKeys.ONLINE_USERS]
+            const offlineUsersCollection = this.state.getState()[AppStateKeys.OFFLINE_USERS]
+            const usersCollection = [...onlineUsersCollection, ...offlineUsersCollection]
+
+            const filteredUsersBySearchName: User[] = usersCollection.filter(user => user.login.toLowerCase().includes(target.value))
+
+
+            this.addContacts(this.contactsListCreator, filteredUsersBySearchName)
+
+
+
         }
     }
 

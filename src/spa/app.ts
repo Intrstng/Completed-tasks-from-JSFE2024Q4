@@ -29,6 +29,7 @@ export default class App {
 
     constructor() {
         this.state = new SessionStorageState(this.keyToRecordInLS);
+
         this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters)
         this.createDialog(this.dialog);
 
@@ -38,6 +39,8 @@ export default class App {
         this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
         this.router.setHashHandler();
         this.createView();
+
+        // alert('This task is not yet fully completed. May I ask you to check it on the last day of the cross-check')
     }
 
     public createView(): void {
@@ -122,7 +125,7 @@ export default class App {
     private async loadChatView(state: LocalStorageState): Promise<void> {
         const { default: ChatView } = await import('./view/main/chat/chat-view');
         this.createHeader();
-        this.setContent(Pages.CHAT, new ChatView(state, this.router));
+        this.setContent(Pages.CHAT, new ChatView(state, this.router, this.api));
         this.createFooter();
     }
 

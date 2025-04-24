@@ -8,7 +8,7 @@ body:has(dialog[open]) {
     background-color: #4d55cc;
 }
 
-.dialog {
+.modal {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,12 +38,14 @@ body:has(dialog[open]) {
     &__title {
         color: #316f7b;
         font-size: 1.5rem;
+        text-align: center;
     }
 
     &__text {
         margin: 0.5rem auto;
         font-size: 1.25rem;
         color: #f2613f;
+        text-align: center;
     }
     &__spinner-box {
 
@@ -54,6 +56,6 @@ body:has(dialog[open]) {
     }
 }
 
-.dialog-hidden {
+.modal-hidden {
     display: none;
 }

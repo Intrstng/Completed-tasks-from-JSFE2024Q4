@@ -7,7 +7,7 @@ import {
   GetMessage,
   GetUnAuthorization,
   LoginRequest,
-  LogoutRequest,
+  LogoutRequest, Responses,
   SendMessage,
   SetMessageEdit,
   SetMessageRead,
@@ -18,6 +18,7 @@ import { CONNECTION_ERROR } from '../util/dialog/dialog-constants';
 import { API_CONSTANTS } from './api-constants';
 import Router from '../router/router';
 import { PagesNames } from '../view/header/header-constants';
+import { AppState } from '../state/types';
 
 export default class ApiController {
   public socket: globalThis.WebSocket;
@@ -69,7 +70,7 @@ export default class ApiController {
   private reconnect() {
     if (this.isConnected) return;
 
-    console.log(`Attempting to reconnect in ${this.reconnectInterval / 1000} seconds...`);
+    console.log(`Attempting to reconnect in ${this.reconnectInterval / API_CONSTANTS[CONSTANTS_KEYS.SECOND]} seconds...`);
     setTimeout(() => {
       this.connect();
     }, this.reconnectInterval);
@@ -84,11 +85,8 @@ export default class ApiController {
 
   private handleMessageSocket(event: MessageEvent): void {
     try {
-      console.log('sss', event.data)
-      const message = JSON.parse(event.data);
+      const message: Responses = JSON.parse(event.data);
       console.log('Received message:', message);
-
-
 
       switch (message.type) {
         case SocketMessageType.USER_LOGIN: {
@@ -97,7 +95,12 @@ export default class ApiController {
           this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, login);
           this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, isLogined);
 
-          this.router.navigate(PagesNames.CHAT);
+          if (isLogined) {
+            this.getAuthorizedUsers();
+            this.getUnAuthorizedUsers();
+
+            this.router.navigate(PagesNames.CHAT);
+          }
 
           break;
         }
@@ -111,19 +114,46 @@ export default class ApiController {
 
           break;
         }
-        case SocketMessageType.USER_ACTIVE:
-        case SocketMessageType.USER_INACTIVE: {
+        case SocketMessageType.USER_ACTIVE: {
+          const currentUserName = this.state.getState()[AppStateKeys.CURRENT_USER_NAME];
+          const usersCollectionWithoutCurrentUser = message.payload.users.filter(user => user.login !== currentUserName)
+          const currentState: AppState = this.state.getState()
+          const updatedState: AppState = {
+            ...currentState,
+            [AppStateKeys.ONLINE_USERS]: usersCollectionWithoutCurrentUser,
+          }
 
+          this.state.setState(updatedState);
+          break;
+        }
+        case SocketMessageType.USER_INACTIVE: {
+          console.log(message.payload.users, 'message.payload.user')
+          console.log(this.state.getState(), 'state')
+          const currentState: AppState = this.state.getState()
+          const updatedState: AppState = {
+            ...currentState,
+            [AppStateKeys.OFFLINE_USERS]: message.payload.users,
+          }
+          this.state.setState(updatedState);
           break;
         }
         case SocketMessageType.USER_EXTERNAL_LOGIN:
         case SocketMessageType.USER_EXTERNAL_LOGOUT: {
 
+
           break;
         }
         case SocketMessageType.MSG_FROM_USER:
 
+          const currentState: AppState = this.state.getState()
+          const updatedState: AppState = {
+            ...currentState,
+            [AppStateKeys.MESSAGE_HISTORY]: message.payload.messages,
+          }
+          this.state.setState(updatedState);
           break;
+
+
         case SocketMessageType.MSG_SEND: {
 
           break;
@@ -237,10 +267,10 @@ export default class ApiController {
   }
 
   // Check id (login => from whom)
-  public getMessages(id: string, login: string): void {
+  public getMessages(login: string): void {
     if (this.isConnected && this.socket) {
       const message: GetMessage = {
-        id,
+        id: crypto.randomUUID(),
         type: SocketMessageType.MSG_FROM_USER,
         payload: {
           user: {

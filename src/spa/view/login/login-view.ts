@@ -31,6 +31,7 @@ import { validateNameValue } from '../../util/validation/password-strength/name-
 import { validatePassStrengthValue } from '../../util/validation/password-strength/password-strength-validation';
 import { CSS_LOGIN } from './login-classes';
 import ApiController from '../../api/api-controller';
+import { AppState } from '../../state/types';
 
 export default class LoginView extends View {
   public router: Router;

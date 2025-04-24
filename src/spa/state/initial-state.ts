@@ -1,5 +1,6 @@
-import type { AppState, Paths } from '../../types';
+import type { Paths } from '../../types';
 import { AppStateKeys } from '../../types';
+import { AppState } from './types';
 
 export const PATHS: Paths = {
     login: '/login',
@@ -17,4 +18,6 @@ export const INITIAL_STATE: AppState = {
     },
     [AppStateKeys.MESSAGE_HISTORY]: [],
     [AppStateKeys.CURRENT_MESSAGE]: '',
+    [AppStateKeys.ONLINE_USERS]: [],
+    [AppStateKeys.OFFLINE_USERS]: [],
 };

@@ -5,28 +5,28 @@ export type API_CONSTANTS_TYPES = {
   [CONSTANTS_KEYS.USER_NAME_LENGTH]: number;
   [CONSTANTS_KEYS.RECONNECT_INTERVAL]: number;
   [CONSTANTS_KEYS.ERROR_MESSAGE_DELAY]: number;
+  [CONSTANTS_KEYS.SECOND]: number;
 }
 
 type MessageStatus = {
-  isDelivered: boolean;
-  isReaded: boolean;
-  isEdited: boolean;
-  isDeleted: boolean;
+  isDelivered?: boolean;
+  isReaded?: boolean;
+  isEdited?: boolean;
+  isDeleted?: boolean;
 }
 
-type Message = {
+export type Message = {
   id?: string | null;
-  text?: string;
-  to?: string | null;
   from?: string | null;
+  to?: string | null;
+  text?: string;
   datetime?: number;
   status?: MessageStatus;
 }
 
-type User = {
+export type User = {
   login: string;
-  password?: string;
-  isLogined?: string
+  isLogined: boolean
 }
 
 export type BaseRequest<T extends SocketMessageType, P> = {
@@ -84,3 +84,70 @@ export type SetMessageRead = BaseRequest<SocketMessageType.MSG_READ, {
     id: string;
   };
 }>;
+
+
+
+
+export type BaseResponse<T extends SocketMessageType, P> = {
+  id: string | null;
+  type: T;
+  payload: P;
+};
+
+export type LoginResponse = BaseResponse<SocketMessageType.USER_LOGIN, {
+  user: User;
+}>;
+
+export type LogoutResponse = BaseResponse<SocketMessageType.USER_LOGOUT, {
+  user: User;
+}>;
+
+export type ExternalLoginResponse = BaseResponse<SocketMessageType.USER_EXTERNAL_LOGIN, {
+  user: User;
+}>;
+
+export type ExternalLogoutResponse = BaseResponse<SocketMessageType.USER_EXTERNAL_LOGOUT, {
+  user: User;
+}>;
+
+export type GetAllAuthenticatedUsersResponse = BaseResponse<SocketMessageType.USER_ACTIVE, {
+  users: User[];
+}>;
+
+export type GetAllUnAuthenticatedUsersResponse = BaseResponse<SocketMessageType.USER_INACTIVE, {
+  users: User[];
+}>;
+
+export type SendMessageToUserResponse = BaseResponse<SocketMessageType.MSG_SEND, {
+  message: Message;
+}>;
+
+    export type ReceivingMessageFromUserResponse = BaseResponse<SocketMessageType.MSG_SEND, {
+      message: Message;
+    }>;
+
+export type FetchingUserMessageHistoryResponse = BaseResponse<SocketMessageType.MSG_FROM_USER, {
+  messages: Message[];
+}>;
+
+export type MessageDeliveryStatusChangeResponse = BaseResponse<SocketMessageType.MSG_DELIVER, {
+  message: Message;
+}>;
+
+export type MessageReadStatusChangeResponse = BaseResponse<SocketMessageType.MSG_READ, {
+  message: Message;
+}>;
+
+export type MessageDeleteResponse = BaseResponse<SocketMessageType.MSG_DELETE, {
+  message: Message;
+}>;
+
+export type MessageEditResponse = BaseResponse<SocketMessageType.MSG_EDIT, {
+  message: Message;
+}>;
+
+export type ErrorResponse = BaseResponse<SocketMessageType.ERROR, {
+  error: string,
+}>;
+
+export type Responses = LoginResponse | LogoutResponse | ExternalLoginResponse | ExternalLogoutResponse | GetAllAuthenticatedUsersResponse | GetAllUnAuthenticatedUsersResponse | SendMessageToUserResponse | ReceivingMessageFromUserResponse | FetchingUserMessageHistoryResponse | MessageDeliveryStatusChangeResponse | MessageReadStatusChangeResponse | MessageDeleteResponse | MessageEditResponse | ErrorResponse

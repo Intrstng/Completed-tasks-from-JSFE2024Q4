@@ -51,7 +51,7 @@ export default class RouterHandler {
             url = hash ? hash.slice(1) : null;
         }
 
-        this.navigate(url);
+       this.navigate(url);
     }
 
     private setHistory(url: string): void {
@@ -63,3 +63,4 @@ export default class RouterHandler {
         }
     }
 }
+
