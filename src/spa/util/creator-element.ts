@@ -153,6 +153,16 @@ export default class CreatorElement {
         }
     }
 
+    public setInputCallback(callback: EventCB = null): void {
+        if (this.element) {
+            this.element.addEventListener('keyup', (event: Event) => {
+                if (callback) {
+                    callback(event);
+                }
+            });
+        }
+    }
+
     private setTextareaSize(parameters: ElementParameters): void {
         if (this.element && 'setAttribute' in this.element) {
             const rows = parameters.rows === undefined ? '4' : parameters.rows;

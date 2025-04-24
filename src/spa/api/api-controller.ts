@@ -102,6 +102,7 @@ export default class ApiController {
             this.router.navigate(PagesNames.CHAT);
           }
 
+
           break;
         }
         case SocketMessageType.USER_LOGOUT: {
@@ -111,6 +112,8 @@ export default class ApiController {
           this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
           this.state.resetState();
           this.router.navigate(PagesNames.LOGIN)
+
+
 
           break;
         }
@@ -139,6 +142,7 @@ export default class ApiController {
         }
         case SocketMessageType.USER_EXTERNAL_LOGIN:
         case SocketMessageType.USER_EXTERNAL_LOGOUT: {
+
 
 
           break;
@@ -266,22 +270,51 @@ export default class ApiController {
     }
   }
 
-  // Check id (login => from whom)
-  public getMessages(login: string): void {
-    if (this.isConnected && this.socket) {
-      const message: GetMessage = {
-        id: crypto.randomUUID(),
-        type: SocketMessageType.MSG_FROM_USER,
-        payload: {
-          user: {
-            login,
-          },
-        },
-      };
-      this.socket.send(JSON.stringify(message));
-    } else {
-      console.error('Unable to get messages, not connected.');
-    }
+  // // Check id (login => from whom)
+  // public async getMessages(login: string): Promise<void> {
+  //   if (this.isConnected && this.socket) {
+  //     const message: GetMessage = {
+  //       id: crypto.randomUUID(),
+  //       type: SocketMessageType.MSG_FROM_USER,
+  //       payload: {
+  //         user: {
+  //           login,
+  //         },
+  //       },
+  //     };
+  //     await this.socket.send(JSON.stringify(message));
+  //   } else {
+  //     console.error('Unable to get messages, not connected.');
+  //   }
+  // }
+
+  public async getMessages(login: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (this.isConnected && this.socket) {
+        const messageId = crypto.randomUUID();
+
+        const handler = (event: MessageEvent) => {
+          const response: Responses = JSON.parse(event.data);
+          if (response.type === SocketMessageType.MSG_FROM_USER &&
+              response.id === messageId) {
+            this.socket.removeEventListener('message', handler);
+            resolve();
+          }
+        };
+
+        this.socket.addEventListener('message', handler);
+
+        const message: GetMessage = {
+          id: messageId,
+          type: SocketMessageType.MSG_FROM_USER,
+          payload: { user: { login } },
+        };
+        this.socket.send(JSON.stringify(message));
+      } else {
+        console.error('Unable to get messages, not connected.');
+        resolve();
+      }
+    });
   }
 
   public sendMessage(recipient: string, msg: string): void {

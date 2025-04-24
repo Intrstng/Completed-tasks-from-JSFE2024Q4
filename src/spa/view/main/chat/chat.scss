@@ -242,6 +242,9 @@ width: 29.5%;
             border: 1.5px solid rgb(97, 97, 97);
             border-radius: 0.3rem;
         }
+        &:disabled {
+            opacity: 0.3;
+        };
     }
 }
 
