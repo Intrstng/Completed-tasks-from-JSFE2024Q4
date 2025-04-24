@@ -99,7 +99,7 @@ export default class ApiController {
     console.error('Socket connection terminated. Reconnection in progress');
   }
 
-  private handleMessageSocket(event: MessageEvent): void {
+  private async handleMessageSocket(event: MessageEvent): Promise<void> {
     try {
       const message: Responses = JSON.parse(event.data);
       console.log('Received message:', message);
@@ -112,8 +112,8 @@ export default class ApiController {
           this.state.updatePropertyInState(AppStateKeys.IS_LOGGED, isLogined);
 
           if (isLogined) {
-            this.getAuthorizedUsers();
-            this.getUnAuthorizedUsers();
+            await this.getAuthorizedUsers();
+            await this.getUnAuthorizedUsers();
 
             this.router.navigate(PagesNames.CHAT);
           }
@@ -161,7 +161,7 @@ export default class ApiController {
           const updatedCurrentOfflineUsers = currentOfflineUsers.filter(user => user.login !== message.payload.user.login)
           this.state.updatePropertyInState(AppStateKeys.OFFLINE_USERS, updatedCurrentOfflineUsers)
 
-          this.state.notifySubscribers();
+          this.state.notifySubscribers(SocketMessageType.USER_EXTERNAL_LOGIN);
           break;
         }
         case SocketMessageType.USER_EXTERNAL_LOGOUT: {
@@ -174,7 +174,7 @@ export default class ApiController {
           const updatedCurrentOfflineUsers = [...currentOfflineUsers, message.payload.user];
           this.state.updatePropertyInState(AppStateKeys.OFFLINE_USERS, updatedCurrentOfflineUsers)
 
-          this.state.notifySubscribers();
+          this.state.notifySubscribers(SocketMessageType.USER_EXTERNAL_LOGOUT);
           break;
         }
         case SocketMessageType.MSG_FROM_USER:
@@ -250,7 +250,6 @@ export default class ApiController {
       };
       this.socket.send(JSON.stringify(message));
 
-      // Check saving password on client side
       this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_PASS, password);
     } else {
       console.error('Unable to login user, not connected.');
@@ -275,30 +274,62 @@ export default class ApiController {
     }
   }
 
-  public getAuthorizedUsers(): void {
-    if (this.isConnected && this.socket) {
-      const message: GetAuthorization = {
-        id: crypto.randomUUID(),
-        type: SocketMessageType.USER_ACTIVE,
-        payload: null,
-      };
-      this.socket.send(JSON.stringify(message));
-    } else {
-      console.error('Unable to get authorized users, not connected.');
-    }
+  public async getAuthorizedUsers(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (this.isConnected && this.socket) {
+        const messageId = crypto.randomUUID();
+
+        const handler = (event: MessageEvent) => {
+          const response: Responses = JSON.parse(event.data);
+          if (response.type === SocketMessageType.USER_ACTIVE &&
+              response.id === messageId) {
+            this.socket.removeEventListener('message', handler);
+            resolve();
+          }
+        };
+
+        this.socket.addEventListener('message', handler);
+
+        const message: GetAuthorization = {
+          id: messageId,
+          type: SocketMessageType.USER_ACTIVE,
+          payload: null,
+        };
+        this.socket.send(JSON.stringify(message));
+      } else {
+        console.error('Unable to get authorized users, not connected.');
+        resolve();
+      }
+    });
   }
 
-  public getUnAuthorizedUsers(): void {
+  public async getUnAuthorizedUsers(): Promise<void> {
+    return new Promise<void>((resolve) => {
     if (this.isConnected && this.socket) {
+      const messageId = crypto.randomUUID();
+
+      const handler = (event: MessageEvent) => {
+        const response: Responses = JSON.parse(event.data);
+        if (response.type === SocketMessageType.USER_INACTIVE &&
+            response.id === messageId) {
+          this.socket.removeEventListener('message', handler);
+          resolve();
+        }
+      };
+
+      this.socket.addEventListener('message', handler);
+
       const message: GetUnAuthorization = {
-        id: crypto.randomUUID(),
+        id: messageId,
         type: SocketMessageType.USER_INACTIVE,
         payload: null,
       };
       this.socket.send(JSON.stringify(message));
     } else {
       console.error('Unable to get unauthorized users, not connected.');
+      resolve();
     }
+    });
   }
 
   public async getMessages(login: string): Promise<void> {

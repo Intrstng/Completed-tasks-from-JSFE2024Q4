@@ -43,7 +43,7 @@ import {
 import ButtonCreator from '../../../util/button/button-creator';
 import ApiController from '../../../api/api-controller';
 import { AppState } from '../../../state/types';
-import { Message, User } from '../../../api/types';
+import { Message, SocketMessageType, User } from '../../../api/types';
 import { formatTimestampToDate } from '../../../util/format-timestamp-to-date/format-timestamp-to-date';
 
 export default class ChatView extends View {
@@ -92,7 +92,8 @@ export default class ChatView extends View {
         this.dialogBoard = new CreatorElement(dialogBoardParameters);
         this.configureView();
 
-        this.state.subscribe(this.handleStateUpdates.bind(this));
+
+        this.addAllSubscribers();
     }
 
     private configureView(): void {
@@ -100,18 +101,17 @@ export default class ChatView extends View {
         this.addDialogArticle();
     }
 
-    private handleStateUpdates(newState: AppState): void {
-        console.log(newState)
-        console.log(this.state.getState())
+    private addAllSubscribers(): void {
+        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGIN, this.updateContactListOnNewUserAuthInOut.bind(this));
+        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGOUT, this.updateContactListOnNewUserAuthInOut.bind(this));
 
+
+
+    }
+
+    private updateContactListOnNewUserAuthInOut(newState: AppState): void {
         const allUsersCollection = [...newState[AppStateKeys.ONLINE_USERS], ...newState[AppStateKeys.OFFLINE_USERS]]
         this.addContacts(this.contactsListCreator, allUsersCollection)
-
-        if (newState[AppStateKeys.CURRENT_USER_NAME] !==
-            this.state.getState()[AppStateKeys.CURRENT_USER_NAME]) {
-            console.log('name in state updated')
-        }
-
     }
 
     private addContactsSection(): void {
