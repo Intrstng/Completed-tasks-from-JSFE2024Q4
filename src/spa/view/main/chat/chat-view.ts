@@ -105,8 +105,16 @@ export default class ChatView extends View {
         this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGIN, this.updateContactListOnNewUserAuthInOut.bind(this));
         this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGOUT, this.updateContactListOnNewUserAuthInOut.bind(this));
 
+        this.state.subscribe(SocketMessageType.MSG_SEND, this.updateDialogBoardOnNewMessageReceive.bind(this));
 
+    }
 
+    private updateDialogBoardOnNewMessageReceive(_: AppState, from: string): void {
+        const currentContactName = this.state.getState()[AppStateKeys.CURRENT_CONTACT].login
+
+        if (currentContactName === from) {
+            this.addContentToDialogBoard()
+        }
     }
 
     private updateContactListOnNewUserAuthInOut(newState: AppState): void {
@@ -371,6 +379,10 @@ export default class ChatView extends View {
             await this.api.getMessages(contact.login);
 
             this.addContentToDialogBoard()
+
+            this.state.updatePropertyInState(AppStateKeys.CURRENT_MESSAGE, '');
+            this.clearInputMessage()
+            this.toggleDisableSubmitButton(true)
         } catch (error) {
             console.error('Error selecting contact:', error);
         }

@@ -191,6 +191,8 @@ export default class ApiController {
           const currentMessageHistory: Message[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY];
           const updatedMessageHistory: Message[] = [...currentMessageHistory, message.payload.message]
           this.state.updatePropertyInState(AppStateKeys.MESSAGE_HISTORY, updatedMessageHistory)
+
+          this.state.notifySubscribers(SocketMessageType.MSG_SEND, message.payload.message.from);
           break;
         }
         case SocketMessageType.MSG_DELIVER: {

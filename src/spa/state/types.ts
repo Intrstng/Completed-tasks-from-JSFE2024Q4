@@ -1,7 +1,7 @@
 import { AppStateKeys } from '../../types';
 import { Message, User } from '../api/types';
 
-export type SubscriberCallback = (state: AppState) => void
+export type SubscriberCallback = (state: AppState, extraParameter?: string) => void
 
 export type AppState = {
   [AppStateKeys.IS_LOGGED]: boolean;

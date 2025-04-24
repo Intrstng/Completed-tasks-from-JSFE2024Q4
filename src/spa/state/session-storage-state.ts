@@ -24,14 +24,14 @@ export default class SessionStorageState {
         this.subscribers.delete(key);
     }
 
-    public notifySubscribers(key?: SocketMessageType): void {
+    public notifySubscribers(key?: SocketMessageType, extraParameter?: string): void {
         if (key) {
             const callback = this.subscribers.get(key);
             if (callback) {
-                callback(this.values);
+                callback(this.values, extraParameter);
             }
         } else {
-            this.subscribers.forEach(callback => callback(this.values));
+            this.subscribers.forEach(callback => callback(this.values, extraParameter));
         }
     }
 

@@ -161,7 +161,7 @@ width: 29.5%;
     margin: 0.3rem;
     padding: 0.3rem 0.3rem;
     width: 100%;
-    background-color: #519259;
+    //background-color: #519259;
     border: none;
     border-radius: 0.5rem;
     &__header {
@@ -195,9 +195,11 @@ width: 29.5%;
     }
     &__outcome {
         align-self: flex-end;
+        background-color: #acdeb3;
     }
     &__income {
         align-self: flex-start;
+        background-color: #519259;
     }
 }
 
