@@ -7,11 +7,11 @@ import {
   GetMessage,
   GetUnAuthorization,
   LoginRequest,
-  LogoutRequest, Responses,
+  LogoutRequest, Message, Responses,
   SendMessage,
   SetMessageEdit,
   SetMessageRead,
-  SocketMessageType,
+  SocketMessageType, User,
 } from './types';
 import CreatorDialog from '../util/dialog/dialog-creator';
 import { CONNECTION_ERROR } from '../util/dialog/dialog-constants';
@@ -39,6 +39,20 @@ export default class ApiController {
     this.errorMessage = errorMessage;
 
     this.connect();
+
+    window.addEventListener('beforeunload', () => {
+      this.socket?.close();
+    });
+  }
+
+  public restoreUserSession(): void {
+    const login = this.state.getState()[AppStateKeys.CURRENT_USER_NAME];
+    const password = this.state.getState()[AppStateKeys.CURRENT_USER_PASS];
+
+    if (login && password) {
+      this.loginUser(login, password);
+      console.log('User session restored with credentials');
+    }
   }
 
   public connect() {
@@ -58,6 +72,8 @@ export default class ApiController {
     this.isConnected = true;
     this.errorMessage.closeDialog();
     console.log('Socket open connection logic');
+
+    this.restoreUserSession();
   }
 
   private handleCloseSocket(): void {
@@ -102,7 +118,6 @@ export default class ApiController {
             this.router.navigate(PagesNames.CHAT);
           }
 
-
           break;
         }
         case SocketMessageType.USER_LOGOUT: {
@@ -112,8 +127,6 @@ export default class ApiController {
           this.state.updatePropertyInState(AppStateKeys.CURRENT_USER_NAME, '');
           this.state.resetState();
           this.router.navigate(PagesNames.LOGIN)
-
-
 
           break;
         }
@@ -130,8 +143,6 @@ export default class ApiController {
           break;
         }
         case SocketMessageType.USER_INACTIVE: {
-          console.log(message.payload.users, 'message.payload.user')
-          console.log(this.state.getState(), 'state')
           const currentState: AppState = this.state.getState()
           const updatedState: AppState = {
             ...currentState,
@@ -140,11 +151,30 @@ export default class ApiController {
           this.state.setState(updatedState);
           break;
         }
-        case SocketMessageType.USER_EXTERNAL_LOGIN:
+        case SocketMessageType.USER_EXTERNAL_LOGIN: {
+          const currentOnlineUsers = this.state.getState()[AppStateKeys.ONLINE_USERS]
+          const currentOfflineUsers = this.state.getState()[AppStateKeys.OFFLINE_USERS]
+
+          const updatedOnlineUsers = [...currentOnlineUsers, message.payload.user]
+          this.state.updatePropertyInState(AppStateKeys.ONLINE_USERS, updatedOnlineUsers)
+
+          const updatedCurrentOfflineUsers = currentOfflineUsers.filter(user => user.login !== message.payload.user.login)
+          this.state.updatePropertyInState(AppStateKeys.OFFLINE_USERS, updatedCurrentOfflineUsers)
+
+          this.state.notifySubscribers();
+          break;
+        }
         case SocketMessageType.USER_EXTERNAL_LOGOUT: {
+          const currentOnlineUsers = this.state.getState()[AppStateKeys.ONLINE_USERS]
+          const currentOfflineUsers = this.state.getState()[AppStateKeys.OFFLINE_USERS]
 
+          const updatedCurrentOnlineUsers = currentOnlineUsers.filter(user => user.login !== message.payload.user.login)
+          this.state.updatePropertyInState(AppStateKeys.ONLINE_USERS, updatedCurrentOnlineUsers)
 
+          const updatedCurrentOfflineUsers = [...currentOfflineUsers, message.payload.user];
+          this.state.updatePropertyInState(AppStateKeys.OFFLINE_USERS, updatedCurrentOfflineUsers)
 
+          this.state.notifySubscribers();
           break;
         }
         case SocketMessageType.MSG_FROM_USER:
@@ -157,9 +187,10 @@ export default class ApiController {
           this.state.setState(updatedState);
           break;
 
-
         case SocketMessageType.MSG_SEND: {
-
+          const currentMessageHistory: Message[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY];
+          const updatedMessageHistory: Message[] = [...currentMessageHistory, message.payload.message]
+          this.state.updatePropertyInState(AppStateKeys.MESSAGE_HISTORY, updatedMessageHistory)
           break;
         }
         case SocketMessageType.MSG_DELIVER: {
@@ -270,24 +301,6 @@ export default class ApiController {
     }
   }
 
-  // // Check id (login => from whom)
-  // public async getMessages(login: string): Promise<void> {
-  //   if (this.isConnected && this.socket) {
-  //     const message: GetMessage = {
-  //       id: crypto.randomUUID(),
-  //       type: SocketMessageType.MSG_FROM_USER,
-  //       payload: {
-  //         user: {
-  //           login,
-  //         },
-  //       },
-  //     };
-  //     await this.socket.send(JSON.stringify(message));
-  //   } else {
-  //     console.error('Unable to get messages, not connected.');
-  //   }
-  // }
-
   public async getMessages(login: string): Promise<void> {
     return new Promise<void>((resolve) => {
       if (this.isConnected && this.socket) {
@@ -317,22 +330,38 @@ export default class ApiController {
     });
   }
 
-  public sendMessage(recipient: string, msg: string): void {
-    if (this.isConnected && this.socket) {
-      const message: SendMessage = {
-        id: crypto.randomUUID(),
-        type: SocketMessageType.MSG_SEND,
-        payload: {
-          message: {
-            to: recipient,
-            text: msg,
+  public async sendMessage(recipient: string, msg: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      if (this.isConnected && this.socket) {
+        const messageId = crypto.randomUUID();
+
+        const handler = (event: MessageEvent) => {
+          const response: Responses = JSON.parse(event.data);
+          if (response.type === SocketMessageType.MSG_SEND &&
+              response.id === messageId) {
+            this.socket.removeEventListener('message', handler);
+            resolve();
+          }
+        };
+
+        this.socket.addEventListener('message', handler);
+
+        const message: SendMessage = {
+          id: messageId,
+          type: SocketMessageType.MSG_SEND,
+          payload: {
+            message: {
+              to: recipient,
+              text: msg,
+            },
           },
-        },
-      };
-      this.socket.send(JSON.stringify(message));
-    } else {
-      console.error('Unable to send message, not connected.');
-    }
+        };
+        this.socket.send(JSON.stringify(message));
+      } else {
+        console.error('Unable to get messages, not connected.');
+        resolve();
+      }
+    });
   }
 
   public deleteMessage(id: string): void {

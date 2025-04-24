@@ -76,9 +76,9 @@ export default class HeaderView extends View {
         navCreator.addInnerElement(buttonLogoutCreator);
     }
 
-    private userLogOut = (): void => {
+    private userLogOut = async (): Promise<void> => {
       const { currentUserName, currentUserPass } = this.state.getState();
 
-      this.api.logoutUser(currentUserName, currentUserPass);
+      await this.api.logoutUser(currentUserName, currentUserPass);
     }
 }

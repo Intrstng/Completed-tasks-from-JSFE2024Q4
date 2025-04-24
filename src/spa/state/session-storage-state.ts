@@ -1,6 +1,7 @@
 import type { AppStateKeys, Callback } from '../../types';
 import { INITIAL_STATE } from './initial-state';
 import { AppState, SubscriberCallback } from './types';
+import { Message, User } from '../api/types';
 
 export default class SessionStorageState {
     public values: AppState;
@@ -14,11 +15,11 @@ export default class SessionStorageState {
         window.addEventListener('beforeunload', () => this.saveState());
     }
 
-    subscribe(callback: SubscriberCallback): Callback {
+    subscribe(callback: SubscriberCallback): void {
         this.subscribers.push(callback);
-        return () => {
-            this.subscribers = this.subscribers.filter(sub => sub !== callback);
-        };
+        // return () => {
+        //     this.subscribers = this.subscribers.filter(sub => sub !== callback);
+        // };
     }
 
     public notifySubscribers(): void {
@@ -37,7 +38,7 @@ export default class SessionStorageState {
         this.values = state;
     }
 
-    public updatePropertyInState(key: string, value: string | number | boolean): void {
+    public updatePropertyInState(key: string, value: User[] | Message[] | string | number | boolean): void {
         const updatedState: AppState = {
             ...this.values,
             [key]: value,

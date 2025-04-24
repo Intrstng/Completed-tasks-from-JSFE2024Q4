@@ -91,21 +91,27 @@ export default class ChatView extends View {
         this.dialogHeader = new CreatorElement(messagesHeaderParameters);
         this.dialogBoard = new CreatorElement(dialogBoardParameters);
         this.configureView();
+
+        this.state.subscribe(this.handleStateUpdates.bind(this));
     }
-
-
-    // public addDialog(): void {
-    //     if (this.dialog instanceof CreatorDialog) {
-    //         const dialogElement: HTMLElement | null = this.dialog.getElement();
-    //         if (dialogElement) {
-    //             this.viewElementCreator.addInnerElement(dialogElement);
-    //         }
-    //     }
-    // }
 
     private configureView(): void {
         this.addContactsSection();
         this.addDialogArticle();
+    }
+
+    private handleStateUpdates(newState: AppState): void {
+        console.log(newState)
+        console.log(this.state.getState())
+
+        const allUsersCollection = [...newState[AppStateKeys.ONLINE_USERS], ...newState[AppStateKeys.OFFLINE_USERS]]
+        this.addContacts(this.contactsListCreator, allUsersCollection)
+
+        if (newState[AppStateKeys.CURRENT_USER_NAME] !==
+            this.state.getState()[AppStateKeys.CURRENT_USER_NAME]) {
+            console.log('name in state updated')
+        }
+
     }
 
     private addContactsSection(): void {
@@ -206,18 +212,8 @@ export default class ChatView extends View {
     }
 
     private addContentToDialogBoard(): void {
-
-
         // See below
-        CreatorElement.deleteAllItemsInContainer(this.dialogBoard);
-///////////
-// const currentState = this.state.getState()
-// const updatedState = {
-//     ...currentState,
-//     [AppStateKeys.MESSAGE_HISTORY]: mockMessages
-// }
-// this.state.setState(updatedState)
-///////////
+       CreatorElement.deleteAllItemsInContainer(this.dialogBoard);
 
         const messagesHistoryCollection: Message[] = this.state.getState()[AppStateKeys.MESSAGE_HISTORY]
         if (messagesHistoryCollection.length > 0) {
@@ -231,19 +227,20 @@ export default class ChatView extends View {
     }
 
     private createMessage(message: Message): CreatorElement {
-        console.log(message)
+        const currentUserName = this.state.getState()[AppStateKeys.CURRENT_USER_NAME]
+
         const messageContainerCreator = new CreatorElement(messageContainerParameters);
 
-        if (message.to) {
+        if (message.to &&  message.from === currentUserName) {
             messageContainerCreator.setCssClasses([CSS_MESSAGE.MESSAGE_OUTCOME]);
-        } else if (message.from) {
+        } else if (message.from && message.from !== currentUserName) {
             messageContainerCreator.setCssClasses([CSS_MESSAGE.MESSAGE_INCOME]);
         }
 
         const messageHeaderCreator = new CreatorElement(messageHeaderParameters);
 
         const messageAuthorCreator = new CreatorElement(messageAuthorParameters);
-        if (message.from) {
+        if (message.from && message.from !== currentUserName) {
             messageAuthorCreator.setTextContent(message.from);
         } else {
             messageAuthorCreator.setTextContent(chatContent.AUTHOR);
@@ -331,8 +328,6 @@ export default class ChatView extends View {
         const currentContact = this.state.getState()[AppStateKeys.CURRENT_CONTACT].login;
         const element = this.messageInputAreaCreator.getElement();
         if (element instanceof HTMLTextAreaElement) {
-            console.log(currentContact, 'currentContact')
-            console.log(currentContact.length > 0, 'currentContact.length > 0')
             if (currentContact.length > 0) {
                 element.removeAttribute('disabled');
             } else {
@@ -341,14 +336,15 @@ export default class ChatView extends View {
         }
     }
 
-    private sendMessage = (): void => {
+    private sendMessage = async (): Promise<void> => {
         const currentContact: string = this.state.getState()[AppStateKeys.CURRENT_CONTACT].login
         const currentMessage: string = this.state.getState()[AppStateKeys.CURRENT_MESSAGE]
 
-        this.api.sendMessage(currentContact, currentMessage)
+        await this.api.sendMessage(currentContact, currentMessage)
         this.clearInputMessage()
         this.toggleDisableSubmitButton(true)
-        // this.addContentToDialogBoard()
+        // Check
+        this.addContentToDialogBoard()
     }
 
     private clearInputMessage(): void {
@@ -372,9 +368,7 @@ export default class ChatView extends View {
             this.updateDialogHeaderContent();
             this.toggleDisableMessageInput()
 
-            console.log(this.state.getState(), 'this.state before')
             await this.api.getMessages(contact.login);
-            console.log(this.state.getState(), 'this.state after')
 
             this.addContentToDialogBoard()
         } catch (error) {
