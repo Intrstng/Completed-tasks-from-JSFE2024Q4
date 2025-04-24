@@ -59,4 +59,5 @@ export enum AppStateKeys {
     CURRENT_MESSAGE = 'currentMessage',
     ONLINE_USERS = 'onlineUsers',
     OFFLINE_USERS = 'offlineUsers',
+    MESSAGE_COUNTER = 'messageCounter',
 }

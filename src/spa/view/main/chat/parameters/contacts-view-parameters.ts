@@ -27,6 +27,11 @@ export const contactItemParameters: ElementParameters = {
   classNames: [CSS_CONTACTS.CONTACTS_ITEM],
 };
 
+export const contactCounterParameters: ElementParameters = {
+  tag: 'span',
+  classNames: [CSS_CONTACTS.CONTACTS_COUNTER],
+};
+
 export const contactStatusParameters: ElementParameters = {
   tag: 'div',
   classNames: [CSS_CONTACTS.CONTACT_STATUS],

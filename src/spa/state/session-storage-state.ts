@@ -1,6 +1,6 @@
 import type { AppStateKeys, Callback } from '../../types';
 import { INITIAL_STATE } from './initial-state';
-import { AppState, SubscriberCallback } from './types';
+import { AppState, MessageCounter, SubscriberCallback } from './types';
 import { Message, SocketMessageType, User } from '../api/types';
 
 export default class SessionStorageState {
@@ -48,7 +48,7 @@ export default class SessionStorageState {
         this.values = state;
     }
 
-    public updatePropertyInState(key: string, value: User[] | Message[] | string | number | boolean): void {
+    public updatePropertyInState(key: string, value: User[] | Message[] | MessageCounter | string | number | boolean): void {
         const updatedState: AppState = {
             ...this.values,
             [key]: value,

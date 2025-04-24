@@ -12,4 +12,7 @@ export type AppState = {
   [AppStateKeys.CURRENT_MESSAGE]: string;
   [AppStateKeys.ONLINE_USERS]: User[];
   [AppStateKeys.OFFLINE_USERS]: User[];
+  [AppStateKeys.MESSAGE_COUNTER]: MessageCounter;
 };
+
+export type MessageCounter = { [key: string]: number };

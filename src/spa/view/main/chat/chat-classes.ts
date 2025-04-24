@@ -6,10 +6,13 @@ export const CSS_CONTACTS: Css_Classes = {
     SEARCH_FIELD: 'contacts__search',
     CONTACTS_LIST: 'contacts__list',
     CONTACTS_ITEM: 'contacts__item',
+    CONTACTS_NAME: 'contacts__name',
+    CONTACTS_COUNTER: 'contacts__counter',
     CONTACT_STATUS: 'contacts__dot',
     CONTACT: 'contacts__contact',
     ONLINE: 'active',
     OFFLINE: 'offline',
+    COUNTER_HIDDEN: 'counter-hidden',
 };
 
 export const CSS_DIALOG: Css_Classes = {

@@ -85,9 +85,6 @@ export type SetMessageRead = BaseRequest<SocketMessageType.MSG_READ, {
   };
 }>;
 
-
-
-
 export type BaseResponse<T extends SocketMessageType, P> = {
   id: string | null;
   type: T;

@@ -15,6 +15,7 @@ import {
     personStatusParameters
 } from './parameters/messages-view-parameters';
 import {
+    contactCounterParameters,
     contactItemParameters,
     contactParameters,
     contactsContainerParameters,
@@ -42,22 +43,14 @@ import {
 } from './parameters/send-form-view-parameters';
 import ButtonCreator from '../../../util/button/button-creator';
 import ApiController from '../../../api/api-controller';
-import { AppState } from '../../../state/types';
+import { AppState, MessageCounter } from '../../../state/types';
 import { Message, SocketMessageType, User } from '../../../api/types';
 import { formatTimestampToDate } from '../../../util/format-timestamp-to-date/format-timestamp-to-date';
 
 export default class ChatView extends View {
-    public router: Router;
-    public api: ApiController;
+    private readonly router: Router;
+    private readonly api: ApiController;
     private readonly state: SessionStorageState;
-    private garageQuantity: CreatorElement | null;
-    private readonly garagePage: CreatorElement | null;
-    private raceBoard: CreatorElement | null;
-    private finish: CreatorElement | null;
-    private inputCreateNameField: InputFieldCreator | null;
-    private inputCreateColorField: InputFieldCreator | null;
-    private inputUpdateNameField: InputFieldCreator | null;
-    private inputUpdateColorField: InputFieldCreator | null;
     private contactsListCreator = new CreatorElement(contactsListParameters);
     private buttonSendMessageCreator = new ButtonCreator(buttonSubmitParameters);
     private messageInputAreaCreator = new CreatorElement(sendInputAreaParameters);
@@ -65,20 +58,11 @@ export default class ChatView extends View {
     private carUpdateLogo: SVGElement | null;
     private prevButton: CreatorElement | null;
     private nextButton: CreatorElement | null;
-    // private readonly dialog: CreatorDialog | null;
-    private dialogHeader: CreatorElement | null;
-    private dialogBoard: CreatorElement | null;
+    private readonly dialogHeader: CreatorElement | null;
+    private readonly dialogBoard: CreatorElement | null;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {
         super(chatSectionParameters);
-        this.garageQuantity = null;
-        this.garagePage = null;
-        this.raceBoard = null;
-        this.finish = null;
-        this.inputCreateNameField = null;
-        this.inputCreateColorField = null;
-        this.inputUpdateNameField = null;
-        this.inputUpdateColorField = null;
         this.carCreateLogo = null;
         this.carUpdateLogo = null;
         this.prevButton = null;
@@ -86,8 +70,6 @@ export default class ChatView extends View {
         this.router = router;
         this.state = state;
         this.api = api;
-
-        // this.dialog = new CreatorElement(dialogParameters, dialogContentParameters);
         this.dialogHeader = new CreatorElement(messagesHeaderParameters);
         this.dialogBoard = new CreatorElement(dialogBoardParameters);
         this.configureView();
@@ -102,23 +84,39 @@ export default class ChatView extends View {
     }
 
     private addAllSubscribers(): void {
-        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGIN, this.updateContactListOnNewUserAuthInOut.bind(this));
-        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGOUT, this.updateContactListOnNewUserAuthInOut.bind(this));
+        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGIN, this.updateContactList.bind(this));
+        this.state.subscribe(SocketMessageType.USER_EXTERNAL_LOGOUT, this.updateContactList.bind(this));
 
         this.state.subscribe(SocketMessageType.MSG_SEND, this.updateDialogBoardOnNewMessageReceive.bind(this));
-
     }
 
     private updateDialogBoardOnNewMessageReceive(_: AppState, from: string): void {
         const currentContactName = this.state.getState()[AppStateKeys.CURRENT_CONTACT].login
 
+        const currentState: AppState = this.state.getState();
+        this.updateContactList(currentState);
+        //////////////////
         if (currentContactName === from) {
             this.addContentToDialogBoard()
         }
     }
 
-    private updateContactListOnNewUserAuthInOut(newState: AppState): void {
-        const allUsersCollection = [...newState[AppStateKeys.ONLINE_USERS], ...newState[AppStateKeys.OFFLINE_USERS]]
+    private resetCounterMessagesFromContact(contactName: string): void {
+        const currentContactsCounters: MessageCounter = this.state.getState()[AppStateKeys.MESSAGE_COUNTER]
+
+        const updatedContactsCounters: MessageCounter = {
+            ...currentContactsCounters,
+            [contactName]: 0,
+        }
+
+        this.state.updatePropertyInState(AppStateKeys.MESSAGE_COUNTER, updatedContactsCounters)
+    }
+
+    private updateContactList(newState: AppState): void {
+        const currentOnlineContacts = newState[AppStateKeys.ONLINE_USERS]
+        const currentOfflineContacts = newState[AppStateKeys.OFFLINE_USERS]
+
+        const allUsersCollection = [...currentOnlineContacts, ...currentOfflineContacts]
         this.addContacts(this.contactsListCreator, allUsersCollection)
     }
 
@@ -154,9 +152,24 @@ export default class ChatView extends View {
 
             contactCreator.addInnerElement(statusIconCreator);
 
+            let counterMessagesFromContact: number | string = this.state.getState()[AppStateKeys.MESSAGE_COUNTER][contact.login];
+
+            counterMessagesFromContact = counterMessagesFromContact ? String(counterMessagesFromContact) : '';
+
+            const contactCounterCreator = new CreatorElement(contactCounterParameters);
+            contactCounterCreator.setDataAttribute('counter', contact.login.toLowerCase());
+            contactCounterCreator.setTextContent(counterMessagesFromContact)
+
+            if (counterMessagesFromContact) {
+                contactCounterCreator.removeCssClasses([CSS_CONTACTS.COUNTER_HIDDEN])
+            } else {
+                contactCounterCreator.setCssClasses([CSS_CONTACTS.COUNTER_HIDDEN])
+            }
+
             const contactItemCreator = new CreatorElement(contactParameters)
             contactItemCreator.setTextContent(contact.login)
             contactCreator.addInnerElement(contactItemCreator);
+            contactCreator.addInnerElement(contactCounterCreator);
         })
     }
 
@@ -382,7 +395,12 @@ export default class ChatView extends View {
 
             this.state.updatePropertyInState(AppStateKeys.CURRENT_MESSAGE, '');
             this.clearInputMessage()
-            this.toggleDisableSubmitButton(true)
+            this.toggleDisableSubmitButton(true);
+
+            // Reset counter
+            this.resetCounterMessagesFromContact(contact.login);
+            this.updateContactList(currentState);
+            //
         } catch (error) {
             console.error('Error selecting contact:', error);
         }

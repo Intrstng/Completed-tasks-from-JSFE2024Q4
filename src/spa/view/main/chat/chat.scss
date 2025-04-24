@@ -58,7 +58,7 @@ width: 29.5%;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
         gap: 0.5rem;
         cursor: pointer;
         transition: 0.25s ease all;
@@ -69,6 +69,9 @@ width: 29.5%;
         &:hover .contacts__contact {
             color: #FEFBF6;
         }
+        &:hover .contacts__counter {
+            //transform: translateX(-0.2rem);
+        }
     }
     &__dot {
         width: 0.4rem;
@@ -78,11 +81,26 @@ width: 29.5%;
         background-color: #EF5A6F;
     }
     &__contact {
-        margin: 0;
+        margin: 0 auto 0 0;
         text-align: left;
         font-weight: bold;
         font-size: 1.05rem;
         color: #758694;
+    }
+    &__counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        font-family: Arial, sans-serif;
+        border: 1.5px solid #519259;
+        border-radius: 50%;
+        text-align: center;
+        background-color: #FEFBF6;
+        font-weight: bold;
+        font-size: 0.8rem;
+        color: #519259;
     }
 }
 
@@ -247,6 +265,10 @@ width: 29.5%;
             opacity: 0.3;
         };
     }
+}
+
+.counter-hidden {
+    display: none;
 }
 
 .active {

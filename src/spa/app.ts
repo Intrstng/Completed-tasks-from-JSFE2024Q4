@@ -5,14 +5,13 @@ import { AppInfo, AppStateKeys, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
 import LocalStorageState from './state/session-storage-state';
+import SessionStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import FooterView from './view/footer/footer-view';
-import SessionStorageState from './state/session-storage-state';
 import { PagesNames } from './view/header/header-constants';
 import ApiController from './api/api-controller';
 import CreatorDialog from './util/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from './util/dialog/dialog-view-parameters';
-import { CONNECTION_ERROR } from './util/dialog/dialog-constants';
 import { API_CONSTANTS } from './api/api-constants';
 
 export default class App {
@@ -23,7 +22,7 @@ export default class App {
     private header: HeaderView | null = null;
     private main: MainView | null = null;
     private footer: FooterView | null = null;
-    private dialog: CreatorDialog | null = null;
+    private readonly dialog: CreatorDialog | null = null;
     private readonly state: SessionStorageState;
     private isLogged: boolean = true;
 
@@ -39,8 +38,6 @@ export default class App {
         this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
         this.router.setHashHandler();
         this.createView();
-
-        // alert('This task is not yet fully completed. May I ask you to check it on the last day of the cross-check')
     }
 
     public createView(): void {

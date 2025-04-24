@@ -5,7 +5,6 @@ import { CONNECTION_ERROR } from './dialog-constants';
 export const dialogParameters: DialogParameters = {
     tag: 'dialog',
     classNames: [CSS_DIALOG.DIALOG, CSS_DIALOG.HIDDEN],
-    // classNames: [CSS_DIALOG.DIALOG],
     open: false,
 };
 

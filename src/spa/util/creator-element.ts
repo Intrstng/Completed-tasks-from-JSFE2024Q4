@@ -121,6 +121,18 @@ export default class CreatorElement {
         }
     }
 
+    public removeCssClasses(cssClasses: Array<string> = []): void {
+        if (this.element === null) {
+            console.warn('Cannot remove CSS classes: element is null.');
+        } else {
+            cssClasses.forEach(cssClass => {
+                if (this.element && 'classList' in this.element) {
+                    this.element.classList.remove(cssClass);
+                }
+            });
+        }
+    }
+
     public setDataAttribute(datasetKey: string = 'key', datasetValue: string): void {
         if (this.element && 'dataset' in this.element) {
             this.element.dataset[datasetKey] = datasetValue;

@@ -18,6 +18,7 @@ export const INITIAL_STATE: AppState = {
     },
     [AppStateKeys.MESSAGE_HISTORY]: [],
     [AppStateKeys.CURRENT_MESSAGE]: '',
+    [AppStateKeys.MESSAGE_COUNTER]: {},
     [AppStateKeys.ONLINE_USERS]: [],
     [AppStateKeys.OFFLINE_USERS]: [],
 };

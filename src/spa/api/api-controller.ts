@@ -192,6 +192,8 @@ export default class ApiController {
           const updatedMessageHistory: Message[] = [...currentMessageHistory, message.payload.message]
           this.state.updatePropertyInState(AppStateKeys.MESSAGE_HISTORY, updatedMessageHistory)
 
+          this.setMessageCounterFromContact(message.payload.message.from);
+
           this.state.notifySubscribers(SocketMessageType.MSG_SEND, message.payload.message.from);
           break;
         }
@@ -447,5 +449,28 @@ export default class ApiController {
     } else {
       console.error('Unable to set message, not connected.');
     }
+  }
+
+  private setMessageCounterFromContact(from: string): void {
+    const currentUsersMessageCounters = this.state.getState()[AppStateKeys.MESSAGE_COUNTER]
+
+    let currentUserCounter: number = currentUsersMessageCounters[from];
+
+    if (!currentUserCounter) {
+      currentUserCounter = 1;
+    } else {
+      currentUserCounter += 1;
+    }
+
+    currentUsersMessageCounters[from] = currentUserCounter;
+
+
+    const currentState: AppState = this.state.getState()
+    const updatedState: AppState = {
+      ...currentState,
+      [AppStateKeys.MESSAGE_COUNTER]: currentUsersMessageCounters,
+    }
+
+    this.state.setState(updatedState);
   }
 }
