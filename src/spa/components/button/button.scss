@@ -1,0 +1,73 @@
+.button {
+    cursor: pointer;
+
+    padding: 0.4rem 0.6rem;
+    border: none;
+    border-radius: 0.25rem;
+
+    font-family: Corbel, sans-serif;
+    font-weight: bold;
+    color: rgb(255 255 255 / 90%);
+    letter-spacing: 1px;
+
+    background-color: rgb(169 163 3 / 90%);
+    box-shadow:
+        rgb(50 50 93 / 25%) 0 13px 27px -5px,
+        rgb(0 0 0 / 30%) 0 8px 16px -8px;
+
+    transition: 0.25s ease all;
+
+    &:hover {
+        background-color: #3f7d58;
+    }
+
+    &:active {
+        background-color: rgb(8 117 2 / 80%);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+    }
+}
+
+.button-submit {
+    max-width: 6.5rem;
+    background-color: #27548a;
+
+    &:hover {
+        background-color: #00879e;
+    }
+}
+
+.button-about {
+    max-width: 6.5rem;
+    background-color: #ff6500;
+
+    &:hover {
+        background-color: #ff407d;
+    }
+}
+
+.button-back {
+    background-color: #41b06e;
+
+    &:hover {
+        background-color: #2d9596;
+    }
+}
+
+.button-logout {
+    background-color: #006a67;
+
+    &:hover {
+        background-color: #b8001f;
+    }
+}
+
+.button-send {
+    background-color: #1572a1;
+
+    &:hover {
+        background-color: #3876bf;
+    }
+}

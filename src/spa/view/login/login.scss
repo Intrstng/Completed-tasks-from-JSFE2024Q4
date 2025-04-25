@@ -1,95 +1,117 @@
 .login {
-  padding: 1.75rem;
-  border-radius: 0.5rem;
-  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
-  background-color: #EEF1DA;
-  max-width: 400px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  &__fieldset {
-    padding: 1.5rem 1rem;
-    margin-bottom: 1rem;
-  }
-  &__legend {
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: rgba(107, 107, 107, 0.9);
-  }
-  &__name {
-    margin-bottom: 1rem;
-    position: relative;
-  }
-  &__name-wrapper {
-    margin-bottom: 2rem;
-    width: 100%;
     display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
-  }
-  &__name-label {
-    font-weight: bold;
-    color: rgba(107, 107, 107, 0.9);
-  }
-  &__name-input,
-  &__pass-input {
-    width: 65%;
-    outline: none;
-    overflow: hidden;
-    border: none;
-    border-radius: 0.2rem;
-    padding: 0.3rem 0.5rem;
-    color: rgba(107, 107, 107, 0.9);
-    font-weight: bold;
-    letter-spacing: 1px;
-    background-color: rgba(91, 153, 194, 0.3);
-    &::placeholder {
-      font-weight: normal;
-      color: rgba(107, 107, 107, 0.6);
+
+    width: 100%;
+    max-width: 400px;
+    padding: 1.75rem;
+    border-radius: 0.5rem;
+
+    background-color: #eef1da;
+    box-shadow:
+        rgb(255 255 255 / 10%) 0 1px 1px 0 inset,
+        rgb(50 50 93 / 25%) 0 50px 100px -20px,
+        rgb(0 0 0 / 30%) 0 30px 60px -30px;
+
+    &__fieldset {
+        margin-bottom: 1rem;
+        padding: 1.5rem 1rem;
     }
-  }
-  &__name-error,
-  &__pass-error {
-    position: absolute;
-    top: 1.65rem;
-    left: 0.3rem;
-    display: block;
-    color: #FF0000FF;
-    font-size: 0.7rem;
-  }
 
-  &__pass {
-    position: relative;
-  }
-  &__pass-wrapper {
-    margin-bottom: 0.75rem;
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-  &__pass-label {
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: rgba(107, 107, 107, 0.9);
-  }
+    &__legend {
+        font-weight: bold;
+        color: rgb(107 107 107 / 90%);
+        letter-spacing: 1px;
+    }
 
-  &__controls {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-  }
+    &__name {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    &__name-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    &__name-label {
+        font-weight: bold;
+        color: rgb(107 107 107 / 90%);
+    }
+
+    &__name-input,
+    &__pass-input {
+        overflow: hidden;
+
+        width: 65%;
+        padding: 0.3rem 0.5rem;
+        border: none;
+        border-radius: 0.2rem;
+
+        font-weight: bold;
+        color: rgb(107 107 107 / 90%);
+        letter-spacing: 1px;
+
+        background-color: rgb(91 153 194 / 30%);
+        outline: none;
+
+        &::placeholder {
+            font-weight: normal;
+            color: rgb(107 107 107 / 60%);
+        }
+    }
+
+    &__name-error,
+    &__pass-error {
+        position: absolute;
+        top: 1.65rem;
+        left: 0.3rem;
+
+        display: block;
+
+        font-size: 0.7rem;
+        color: #f00f;
+    }
+
+    &__pass {
+        position: relative;
+    }
+
+    &__pass-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+
+    &__pass-label {
+        font-weight: bold;
+        color: rgb(107 107 107 / 90%);
+        letter-spacing: 1px;
+    }
+
+    &__controls {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .error-input {
-  background-color: rgba(255, 130, 130, 0.6);
+    background-color: rgb(255 130 130 / 60%);
 }
 
 .error-hidden {
-  display: none;
+    display: none;
 }

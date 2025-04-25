@@ -24,13 +24,13 @@ export const CSS_DIALOG: Css_Classes = {
     DIALOG: 'dialog',
     DIALOG_BOARD: 'dialog__board',
     DIALOG_INFO: 'dialog__info',
-}
+};
 
 export const CSS_SEND: Css_Classes = {
     SEND_FORM: 'send',
     SEND_INPUT: 'send__input',
     SEND_BUTTON: 'button-send',
-}
+};
 
 export const CSS_MESSAGE: Css_Classes = {
     MESSAGE: 'message',
@@ -43,4 +43,4 @@ export const CSS_MESSAGE: Css_Classes = {
 
     MESSAGE_OUTCOME: 'message__outcome',
     MESSAGE_INCOME: 'message__income',
-}
+};

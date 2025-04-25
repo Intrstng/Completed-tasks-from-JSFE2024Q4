@@ -1,10 +1,10 @@
 import type { ElementParameters } from '../../../types';
 import { AppInfo } from '../../../types';
 import { CSS_HEADER } from './header-classes';
-import { CHAT_CONSTANTS } from '../main/chat/chat-view-constants';
-import { BUTTON_CONSTANTS } from '../../util/button/button-parameters/button-constants';
-import { CSS_BUTTON } from '../../util/button/button-classes';
+import { CHAT_CONSTANTS } from '../../../constants/chat-view-constants';
 import { CSS_LOGIN } from '../login/login-classes';
+import { BUTTON_CONSTANTS } from '../../../constants/button-constants';
+import { CSS_BUTTON } from '../../components/button/button-classes';
 
 export const titleParameters: ElementParameters = {
     tag: 'h1',

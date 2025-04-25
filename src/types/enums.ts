@@ -47,7 +47,7 @@ export enum InputTypes {
 
 export enum IS_DISABLED {
     TRUE = 'true',
-    FALSE = 'false'
+    FALSE = 'false',
 }
 
 export enum AppStateKeys {

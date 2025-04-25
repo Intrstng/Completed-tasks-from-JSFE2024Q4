@@ -1,18 +1,19 @@
 import '../style.scss';
 
-import type { Route, ViewCommon } from '../types';
+import type { ViewCommon } from '../types';
 import { AppInfo, AppStateKeys, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
-import LocalStorageState from './state/session-storage-state';
+import type LocalStorageState from './state/session-storage-state';
 import SessionStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import FooterView from './view/footer/footer-view';
-import { PagesNames } from './view/header/header-constants';
+import { PagesNames } from '../constants/header-constants';
 import ApiController from './api/api-controller';
-import CreatorDialog from './util/dialog/dialog-creator';
-import { dialogContentParameters, dialogParameters } from './util/dialog/dialog-view-parameters';
-import { API_CONSTANTS } from './api/api-constants';
+import CreatorDialog from './components/dialog/dialog-creator';
+import { dialogContentParameters, dialogParameters } from './components/dialog/dialog-view-parameters';
+import { API_CONSTANTS } from '../constants/api-constants';
+import type { AuthedPathRoute, Route } from './router/types';
 
 export default class App {
     public api: ApiController;
@@ -24,20 +25,22 @@ export default class App {
     private footer: FooterView | null = null;
     private readonly dialog: CreatorDialog | null = null;
     private readonly state: SessionStorageState;
-    private isLogged: boolean = true;
+    private isLogged = true;
 
     constructor() {
         this.state = new SessionStorageState(this.keyToRecordInLS);
 
-        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters)
-        this.createDialog(this.dialog);
+        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
+        this.dialog.addDialogToLayout();
 
-        const routes = this.createRoutes(this.state);
+        const routes = this.createRoutes();
         this.router = new Router(routes);
         this.api = new ApiController(this.state, this.router, this.dialog, API_CONSTANTS);
         this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
         this.router.setHashHandler();
         this.createView();
+
+        this.init();
     }
 
     public createView(): void {
@@ -55,60 +58,42 @@ export default class App {
         this.createFooter();
     }
 
-    public createDialog(dialog: CreatorDialog): void {
-        const dialogElement: HTMLElement | null = dialog.getElement();
-        if (dialogElement) {
-            document.body.append(dialogElement);
-        } else {
-            console.error('Dialog element is null and cannot be appended to the body.');
-        }
-    }
-
-    public createRoutes(state: LocalStorageState): Array<Route> {
+    public createRoutes(): Route[] {
         return [
-            {
-                path: `${Pages.EMPTY}`,
-                callback: async (): Promise<void> => {
-                    this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
-                    if (this.isLogged) {
-                        await this.loadChatView(state);
-                    } else {
-                        this.router.navigate(PagesNames.LOGIN)
-                        //await this.loadLoginView(state);
-                    }
-                },
-            },
-            {
-                path: `${Pages.CHAT}`,
-                callback: async (): Promise<void> => {
-                    this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
-                    if (this.isLogged) {
-                        await this.loadChatView(state);
-                    } else {
-                        this.router.navigate(PagesNames.LOGIN)
-                        //await this.loadLoginView(state);
-                    }
-                },
-            },
+            this.getRouteForAuthedPath(Pages.EMPTY),
+            this.getRouteForAuthedPath(Pages.CHAT),
             {
                 path: `${Pages.ABOUT}`,
                 callback: async (): Promise<void> => {
-                    await this.loadAboutView(state);
+                    await this.loadAboutView(this.state);
                 },
             },
             {
                 path: `${Pages.LOGIN}`,
                 callback: async (): Promise<void> => {
                     this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
-                    if (!this.isLogged) {
-                        await this.loadLoginView(state);
+                    if (this.isLogged) {
+                        this.router.navigate(PagesNames.CHAT);
                     } else {
-                        this.router.navigate(PagesNames.CHAT)
-                        //await this.loadChatView(state);
+                        await this.loadLoginView(this.state);
                     }
                 },
             },
         ];
+    }
+
+    public getRouteForAuthedPath(path: Pages): AuthedPathRoute {
+        return {
+            path: `${path}`,
+            callback: async (): Promise<void> => {
+                this.isLogged = this.state.getState()[AppStateKeys.IS_LOGGED];
+                if (this.isLogged) {
+                    await this.loadChatView(this.state);
+                } else {
+                    this.router.navigate(PagesNames.LOGIN);
+                }
+            },
+        };
     }
 
     public setContent(page: Pages, view: ViewCommon): void {
@@ -184,7 +169,7 @@ export default class App {
         }
     }
 
-    public init(): void {
+    private init(): void {
         console.log(`Application ${this.appName} initialized...`);
     }
 }

@@ -1,6 +1,6 @@
-import type { Paths } from '../../types';
 import { AppStateKeys } from '../../types';
-import { AppState } from './types';
+import type { AppState } from './types';
+import type { Paths } from '../router/types';
 
 export const PATHS: Paths = {
     login: '/login',

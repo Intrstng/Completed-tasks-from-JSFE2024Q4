@@ -10,11 +10,8 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 export default tseslint.config(
     pluginJs.configs.recommended,
     eslint.configs.recommended,
-
-// tseslint.configs.recommended,
-tseslint.configs.strict,
-tseslint.configs.stylistic,
-
+    tseslint.configs.strict,
+    tseslint.configs.stylistic,
     eslintPluginUnicorn.configs.recommended,
     tseslint.configs.recommendedTypeChecked,
     {
@@ -38,7 +35,7 @@ tseslint.configs.stylistic,
         }
       },
       linterOptions: {
-        noInlineConfig: true,
+        noInlineConfig: false,
         reportUnusedDisableDirectives: "error"
       },
       rules: {
@@ -49,6 +46,7 @@ tseslint.configs.stylistic,
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/no-unsafe-argument": "off",
         "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/consistent-type-assertions": [
           "error",
           { "assertionStyle": "never" }

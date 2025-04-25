@@ -1,0 +1,12 @@
+import type { API_CONSTANTS_TYPES } from '../spa/api/types';
+import { CONSTANTS_KEYS } from '../spa/api/types';
+
+const PORT = '4000';
+
+export const API_CONSTANTS: API_CONSTANTS_TYPES = {
+    [CONSTANTS_KEYS.WS_URL]: `ws://127.0.0.1:${PORT}`,
+    [CONSTANTS_KEYS.USER_NAME_LENGTH]: 10,
+    [CONSTANTS_KEYS.RECONNECT_INTERVAL]: 3000,
+    [CONSTANTS_KEYS.ERROR_MESSAGE_DELAY]: 2000,
+    [CONSTANTS_KEYS.SECOND]: 1000,
+};

@@ -1,5 +1,5 @@
 import type { ElementParameters } from '../../types';
-import CreatorElement from '../util/creator-element';
+import CreatorElement from '../components/creator-element';
 
 export default class View {
     protected viewElementCreator: CreatorElement;
@@ -15,11 +15,13 @@ export default class View {
     }
 
     public createView({ tag, classNames }: ElementParameters): CreatorElement {
-        const elementParameters = {
+        const elementParameters: ElementParameters = {
             tag,
             classNames,
             textContent: '',
-            callback: () => {},
+            callback: () => {
+                console.log('Callback executed');
+            },
         };
         this.viewElementCreator = new CreatorElement(elementParameters);
         return this.viewElementCreator;

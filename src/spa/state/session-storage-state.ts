@@ -1,13 +1,12 @@
-import type { AppStateKeys, Callback } from '../../types';
+import type { AppStateKeys } from '../../types';
 import { INITIAL_STATE } from './initial-state';
-import { AppState, MessageCounter, SubscriberCallback } from './types';
-import { Message, SocketMessageType, User } from '../api/types';
+import type { AppState, MessageCounter, SubscriberCallback } from './types';
+import type { Message, SocketMessageType, User } from '../api/types';
 
 export default class SessionStorageState {
     public values: AppState;
-    private readonly accessKey: string;
-    // public subscribers: SubscriberCallback[] = [];
     public subscribers: Map<SocketMessageType, SubscriberCallback>;
+    private readonly accessKey: string;
 
     constructor(key: string) {
         this.accessKey = key;
@@ -16,11 +15,11 @@ export default class SessionStorageState {
         window.addEventListener('beforeunload', () => this.saveState());
     }
 
-    subscribe(key: SocketMessageType, callback: SubscriberCallback): void {
+    public subscribe(key: SocketMessageType, callback: SubscriberCallback): void {
         this.subscribers.set(key, callback);
     }
 
-    unsubscribe(key: SocketMessageType): void {
+    public unsubscribe(key: SocketMessageType): void {
         this.subscribers.delete(key);
     }
 
@@ -35,7 +34,6 @@ export default class SessionStorageState {
         }
     }
 
-
     public getField(key: AppStateKeys): AppState[AppStateKeys] {
         return this.values[key];
     }
@@ -48,7 +46,10 @@ export default class SessionStorageState {
         this.values = state;
     }
 
-    public updatePropertyInState(key: string, value: User[] | Message[] | MessageCounter | string | number | boolean): void {
+    public updatePropertyInState(
+        key: string,
+        value: User[] | Message[] | MessageCounter | string | number | boolean
+    ): void {
         const updatedState: AppState = {
             ...this.values,
             [key]: value,

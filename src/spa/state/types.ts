@@ -1,18 +1,18 @@
-import { AppStateKeys } from '../../types';
-import { Message, User } from '../api/types';
+import type { AppStateKeys } from '../../types';
+import type { Message, User } from '../api/types';
 
-export type SubscriberCallback = (state: AppState, extraParameter?: string) => void
+export type SubscriberCallback = (state: AppState, extraParameter?: string) => void;
 
 export type AppState = {
-  [AppStateKeys.IS_LOGGED]: boolean;
-  [AppStateKeys.CURRENT_USER_NAME]: string;
-  [AppStateKeys.CURRENT_USER_PASS]: string;
-  [AppStateKeys.CURRENT_CONTACT]: User;
-  [AppStateKeys.MESSAGE_HISTORY]: Message[]
-  [AppStateKeys.CURRENT_MESSAGE]: string;
-  [AppStateKeys.ONLINE_USERS]: User[];
-  [AppStateKeys.OFFLINE_USERS]: User[];
-  [AppStateKeys.MESSAGE_COUNTER]: MessageCounter;
+    [AppStateKeys.IS_LOGGED]: boolean;
+    [AppStateKeys.CURRENT_USER_NAME]: string;
+    [AppStateKeys.CURRENT_USER_PASS]: string;
+    [AppStateKeys.CURRENT_CONTACT]: User;
+    [AppStateKeys.MESSAGE_HISTORY]: Message[];
+    [AppStateKeys.CURRENT_MESSAGE]: string;
+    [AppStateKeys.ONLINE_USERS]: User[];
+    [AppStateKeys.OFFLINE_USERS]: User[];
+    [AppStateKeys.MESSAGE_COUNTER]: MessageCounter;
 };
 
-export type MessageCounter = { [key: string]: number };
+export type MessageCounter = Record<string, number>;

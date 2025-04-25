@@ -1,7 +1,7 @@
 import './header.scss';
 import View from '../view';
-import CreatorElement from '../../util/creator-element';
-import type { Callback, ElementParameters } from '../../../types';
+import CreatorElement from '../../components/creator-element';
+import type { ElementParameters } from '../../../types';
 import { AppStateKeys } from '../../../types';
 import type Router from '../../router/router';
 import {
@@ -11,14 +11,14 @@ import {
     titleParameters,
     userContainerParameters,
     userNameParameters,
-    userTitleParameters
+    userTitleParameters,
 } from './headers-view-parameters';
-import { PagesNames } from './header-constants';
-import SessionStorageState from '../../state/session-storage-state';
-import ButtonCreator from '../../util/button/button-creator';
+import { PagesNames } from '../../../constants/header-constants';
+import type SessionStorageState from '../../state/session-storage-state';
 import { buttonAboutParameters } from '../login/login-view-parameters';
-import { sliceNameLength } from '../../util/slice-name-string';
-import ApiController from '../../api/api-controller';
+import { sliceNameLength } from '../../utils/slice-name-string';
+import type ApiController from '../../api/api-controller';
+import ButtonCreator from '../../components/button/button-creator';
 
 export default class HeaderView extends View {
     private router: Router | null;
@@ -31,7 +31,7 @@ export default class HeaderView extends View {
         this.router = router;
         this.state = state;
         this.api = api;
-        this.userName = sliceNameLength(this.state.getState()[AppStateKeys.CURRENT_USER_NAME])
+        this.userName = sliceNameLength(this.state.getState()[AppStateKeys.CURRENT_USER_NAME]);
         this.configureView();
     }
 
@@ -55,8 +55,8 @@ export default class HeaderView extends View {
 
         const userNameParametersWithContent: ElementParameters = {
             ...userNameParameters,
-            textContent: this.userName
-        }
+            textContent: this.userName,
+        };
 
         const currentUserNameCreator = new CreatorElement(userNameParametersWithContent);
         currentUserContainerCreator.addInnerElement(currentUserNameCreator);
@@ -66,9 +66,8 @@ export default class HeaderView extends View {
         const navCreator = new CreatorElement(navigationParameters);
         this.viewElementCreator.addInnerElement(navCreator);
 
-        const aboutButtonCallback: Callback = () => this.router.navigate(PagesNames.ABOUT);
         const buttonAboutCreator = new ButtonCreator(buttonAboutParameters);
-        buttonAboutCreator.setCallback(aboutButtonCallback);
+        buttonAboutCreator.setCallback(() => this.router?.navigate(PagesNames.ABOUT));
         navCreator.addInnerElement(buttonAboutCreator);
 
         const buttonLogoutCreator = new ButtonCreator(buttonNavLogoutParameters);
@@ -77,8 +76,8 @@ export default class HeaderView extends View {
     }
 
     private userLogOut = async (): Promise<void> => {
-      const { currentUserName, currentUserPass } = this.state.getState();
+        const { currentUserName, currentUserPass } = this.state.getState();
 
-      await this.api.logoutUser(currentUserName, currentUserPass);
-    }
+        await this.api.logoutUser(currentUserName, currentUserPass);
+    };
 }

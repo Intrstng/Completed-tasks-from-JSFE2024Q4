@@ -1,9 +1,9 @@
 import type { ElementParameters } from '../../../types';
 import { InputTypes } from '../../../types';
 import { CSS_LOGIN } from './login-classes';
-import { loginContent } from './login-constants';
-import { BUTTON_CONSTANTS } from '../../util/button/button-parameters/button-constants';
-import { CSS_BUTTON } from '../../util/button/button-classes';
+import { loginContent } from '../../../constants/login-constants';
+import { CSS_BUTTON } from '../../components/button/button-classes';
+import { BUTTON_CONSTANTS } from '../../../constants/button-constants';
 
 export const loginParameters: ElementParameters = {
     tag: 'form',
@@ -29,7 +29,7 @@ export const nameContainerParameters: ElementParameters = {
 export const nameInputWrapperParameters: ElementParameters = {
     tag: 'div',
     classNames: [CSS_LOGIN.NAME_INPUT_WRAPPER],
-}
+};
 
 export const nameInputParameters: ElementParameters = {
     tag: 'input',
@@ -54,7 +54,7 @@ export const passContainerParameters: ElementParameters = {
 export const passInputWrapperParameters: ElementParameters = {
     tag: 'div',
     classNames: [CSS_LOGIN.PASS_INPUT_WRAPPER],
-}
+};
 
 export const passInputParameters: ElementParameters = {
     tag: 'input',

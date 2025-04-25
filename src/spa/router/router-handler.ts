@@ -1,6 +1,6 @@
-import type { RouterCB, RouterParameters } from '../../types';
 import { Location, LocationEvent } from '../../types';
-import { isValidState } from '../util/assertion-functions/assertion-functions';
+import { isValidState } from '../utils/assertion-functions/assertion-functions';
+import type { RouterCB, RouterParameters } from './types';
 
 export default class RouterHandler {
     private params: RouterParameters;
@@ -51,7 +51,7 @@ export default class RouterHandler {
             url = hash ? hash.slice(1) : null;
         }
 
-       this.navigate(url);
+        this.navigate(url);
     }
 
     private setHistory(url: string): void {
@@ -63,4 +63,3 @@ export default class RouterHandler {
         }
     }
 }
-

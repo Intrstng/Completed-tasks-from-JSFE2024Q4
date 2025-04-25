@@ -24,5 +24,5 @@ export const CSS_LOGIN: Css_Classes = {
     BUTTON_LOGOUT: 'button-logout',
 
     HIDDEN: 'error-hidden',
-    INPUT_ERROR: 'error-input'
+    INPUT_ERROR: 'error-input',
 };

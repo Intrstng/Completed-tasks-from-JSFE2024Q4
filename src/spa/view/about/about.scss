@@ -1,52 +1,81 @@
 .about {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 28rem;
-  padding: 1.75rem 2rem;
-  border-radius: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
-  background-color: #EEF1DA;
-  &__title {
-    margin: 0;
-    color: #03A791;
-    letter-spacing: 1px;
-  }
-  &__subtitle {
-    margin: 0.75rem 0;
-    color: #626F47;
-    text-indent: 0.4rem;
-    font-weight: normal;
-  }
-  &__list {
-    margin: 0;
-    padding-left: 1.1rem;
-    list-style-type: none;
-    align-self: flex-start;
-  }
-  &__item {
-    margin-bottom: 0.25rem;
-  }
-  &__text {
-    margin: 0;
-    color: #A4B465;
-    font-weight: bold;
-  }
-  &__description {
-    margin: 0.3rem 0 1rem;
-    color: #626F47;
-    text-indent: 0.4rem;
-    font-weight: normal;
-  }
-  &__social {
-    margin-bottom: 0.8rem;
-    color: #3674B5;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-decoration: none;
-    &:hover {
-      color: #03A791;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    max-width: 28rem;
+    padding: 1.75rem 2rem;
+    border-radius: 1rem;
+
+    background-color: #eef1da;
+    box-shadow:
+        rgb(0 0 0 / 7%) 0 1px 2px,
+        rgb(0 0 0 / 7%) 0 2px 4px,
+        rgb(0 0 0 / 7%) 0 4px 8px,
+        rgb(0 0 0 / 7%) 0 8px 16px,
+        rgb(0 0 0 / 7%) 0 16px 32px,
+        rgb(0 0 0 / 7%) 0 32px 64px;
+
+    &__title {
+        margin: 0;
+        color: #03a791;
+        letter-spacing: 1px;
     }
-  }
+
+    &__subtitle {
+        margin: 0.75rem 0;
+        font-weight: normal;
+        color: #626f47;
+        text-indent: 0.4rem;
+    }
+
+    &__list {
+        align-self: flex-start;
+        margin: 0;
+        padding-left: 1.1rem;
+        list-style-type: none;
+    }
+
+    &__item {
+        margin-bottom: 0.25rem;
+    }
+
+    &__text {
+        margin: 0;
+        font-weight: bold;
+        color: #a4b465;
+    }
+
+    &__description {
+        margin: 0.3rem 0 1rem;
+        font-weight: normal;
+        color: #626f47;
+        text-indent: 0.4rem;
+    }
+
+    &__social-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: 0.25s ease all;
+        &:hover .about__social, {
+            color: #03a791;
+
+        }
+        &:hover {
+             transform: scale(1.03);
+             opacity: 0.65;
+        }
+    }
+
+    &__social {
+        margin-bottom: 0.8rem;
+
+        font-weight: bold;
+        color: #3674b5;
+        text-decoration: none;
+        letter-spacing: 1px;
+    }
 }

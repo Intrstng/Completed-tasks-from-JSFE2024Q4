@@ -1,12 +1,12 @@
 import RouterHandler from './router-handler';
-import type { RequestParameters, Route } from '../../types';
 import { Location, Pages } from '../../types';
+import type { RequestParameters, Route } from './types';
 
 export default class Router {
-    private routes: Array<Route>;
+    private routes: Route[];
     private handler: RouterHandler;
 
-    constructor(routes: Array<Route>) {
+    constructor(routes: Route[]) {
         this.routes = routes;
 
         this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);

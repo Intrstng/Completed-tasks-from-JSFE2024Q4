@@ -1,6 +1,6 @@
 import type { ElementParameters } from '../../../types';
 import { CSS_FOOTER } from './footer-classes';
-import { COPYRIGHT } from './footer-constants';
+import { COPYRIGHT } from '../../../constants/footer-constants';
 
 export const footerParameters: ElementParameters = {
     tag: 'footer',

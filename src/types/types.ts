@@ -1,32 +1,13 @@
-import type { InputTypes, Location, LocationEvent } from './enums';
-import ChatView from '../spa/view/main/chat/chat-view';
+import type { InputTypes } from './enums';
+import type ChatView from '../spa/view/main/chat/chat-view';
 import type AboutView from '../spa/view/about/about-view';
-import LoginView from '../spa/view/login/login-view';
-
-export type Route = {
-    path: string;
-    callback: () => Promise<void>;
-};
-
-export type RequestParameters = {
-    path: string;
-};
-
-export type RouterCB = (parameters: RequestParameters) => void;
-
-export type RouterParameters = {
-    nameEvent: LocationEvent;
-    locationField: Location;
-};
-
-export type PopStateEventState = {
-    url?: string;
-};
+import type LoginView from '../spa/view/login/login-view';
+import type CreatorElement from '../spa/components/creator-element';
 
 export type ElementParameters = {
     tag?: string;
     id?: string;
-    classNames?: Array<string>;
+    classNames?: string[];
     textContent?: string;
     callback?: EventCB | null;
     type?: InputTypes | InputTypes.COLOR;
@@ -50,28 +31,12 @@ export type ViewCommon = ChatView | AboutView | LoginView;
 
 export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
 
-export type ButtonsCollection = Array<ButtonParameters>;
-
 export type Callback = () => void;
+
+export type NavigateCB = (url: string) => void;
 
 export type EventCB = ((event: Event) => void | Promise<void>) | null;
 
-export type QueryCB = (queryParameters: QueryParameters[]) => string;
+export type ToggleShowErrorMessageCB = (errorElement: CreatorElement, isShown: boolean) => void;
 
-export type Paths = {
-    login: '/login';
-    chat: '/chat';
-    about: '/about';
-};
-
-export type QueryParameters = {
-    key: string;
-    value: number | string;
-};
-
-export type Css_Classes = { [key: string]: string };
-
-export type ContactItem = {
-    login: string;
-    isLogined: boolean
-};
+export type Css_Classes = Record<string, string>;
