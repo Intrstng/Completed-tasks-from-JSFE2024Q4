@@ -2,6 +2,7 @@ import type { AppStateKeys } from '../../types';
 import { INITIAL_STATE } from './initial-state';
 import type { AppState, MessageCounter, SubscriberCallback } from './types';
 import type { Message, SocketMessageType, User } from '../api/types';
+import { DOMEvents } from '../../types';
 
 export default class SessionStorageState {
     public values: AppState;
@@ -12,7 +13,7 @@ export default class SessionStorageState {
         this.accessKey = key;
         this.values = this.loadState();
         this.subscribers = new Map();
-        window.addEventListener('beforeunload', () => this.saveState());
+        globalThis.addEventListener(DOMEvents.BEFOREUNLOAD, () => this.saveState());
     }
 
     public subscribe(key: SocketMessageType, callback: SubscriberCallback): void {

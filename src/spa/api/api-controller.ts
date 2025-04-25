@@ -1,4 +1,4 @@
-import { AppStateKeys } from '../../types';
+import { AppStateKeys, DOMEvents } from '../../types';
 import type SessionStorageState from '../state/session-storage-state';
 import type {
     API_CONSTANTS_TYPES,
@@ -23,7 +23,7 @@ import type {
     LogoutResponse,
     ErrorResponse,
 } from './types';
-import { CONSTANTS_KEYS, SocketMessageType } from './types';
+import { CONSTANTS_KEYS, SocketMessageType, WSEvents } from './types';
 import { CONNECTION_ERROR } from '../../constants/dialog-constants';
 import { API_CONSTANTS } from '../../constants/api-constants';
 import type Router from '../router/router';
@@ -61,7 +61,7 @@ export default class ApiController {
 
         this.connect();
 
-        window.addEventListener('beforeunload', () => {
+        globalThis.addEventListener(DOMEvents.BEFOREUNLOAD, () => {
             if (this.socket) {
                 this.socket.close();
             }
@@ -80,10 +80,10 @@ export default class ApiController {
 
     public connect() {
         if (this.wsURL && this.socket) {
-            this.socket.addEventListener('open', () => this.handleOpenSocket());
-            this.socket.addEventListener('close', () => this.handleCloseSocket());
-            this.socket.addEventListener('error', () => this.handleErrorSocket());
-            this.socket.addEventListener('message', (event: MessageEvent) => this.handleMessageSocket(event));
+            this.socket.addEventListener(WSEvents.OPEN, () => this.handleOpenSocket());
+            this.socket.addEventListener(WSEvents.CLOSE, () => this.handleCloseSocket());
+            this.socket.addEventListener(WSEvents.ERROR, () => this.handleErrorSocket());
+            this.socket.addEventListener(WSEvents.MESSAGE, (event: MessageEvent) => this.handleMessageSocket(event));
         } else {
             console.error('WebSocket URL is not defined');
         }
@@ -137,13 +137,13 @@ export default class ApiController {
 
                     if (response.type === SocketMessageType.USER_ACTIVE && response.id === messageId) {
                         if (this.socket) {
-                            this.socket.removeEventListener('message', handler);
+                            this.socket.removeEventListener(WSEvents.MESSAGE, handler);
                         }
                         resolve();
                     }
                 };
 
-                this.socket.addEventListener('message', handler);
+                this.socket.addEventListener(WSEvents.MESSAGE, handler);
 
                 const message: GetAuthorization = {
                     id: messageId,
@@ -167,13 +167,13 @@ export default class ApiController {
                     const response: GetAllUnAuthenticatedUsersResponse = JSON.parse(event.data);
                     if (response.type === SocketMessageType.USER_INACTIVE && response.id === messageId) {
                         if (this.socket) {
-                            this.socket.removeEventListener('message', handler);
+                            this.socket.removeEventListener(WSEvents.MESSAGE, handler);
                         }
                         resolve();
                     }
                 };
 
-                this.socket.addEventListener('message', handler);
+                this.socket.addEventListener(WSEvents.MESSAGE, handler);
 
                 const message: GetUnAuthorization = {
                     id: messageId,
@@ -197,13 +197,13 @@ export default class ApiController {
                     const response: ReceiveUserMessagesHistoryResponse = JSON.parse(event.data);
                     if (response.type === SocketMessageType.MSG_FROM_USER && response.id === messageId) {
                         if (this.socket) {
-                            this.socket.removeEventListener('message', handler);
+                            this.socket.removeEventListener(WSEvents.MESSAGE, handler);
                         }
                         resolve();
                     }
                 };
 
-                this.socket.addEventListener('message', handler);
+                this.socket.addEventListener(WSEvents.MESSAGE, handler);
 
                 const message: GetMessage = {
                     id: messageId,
@@ -227,13 +227,13 @@ export default class ApiController {
                     const response: SendMessageToUserResponse = JSON.parse(event.data);
                     if (response.type === SocketMessageType.MSG_SEND && response.id === messageId) {
                         if (this.socket) {
-                            this.socket.removeEventListener('message', handler);
+                            this.socket.removeEventListener(WSEvents.MESSAGE, handler);
                         }
                         resolve();
                     }
                 };
 
-                this.socket.addEventListener('message', handler);
+                this.socket.addEventListener(WSEvents.MESSAGE, handler);
 
                 const message: SendMessage = {
                     id: messageId,

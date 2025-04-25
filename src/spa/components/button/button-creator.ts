@@ -3,6 +3,7 @@ import './button.scss';
 import type { ElementParameters, EventCB } from '../../../types';
 import type { InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
+import { Attributes, DOMEvents } from '../../../types';
 
 export default class ButtonCreator extends CreatorElement {
     public createElement(parameters: ElementParameters): void {
@@ -12,7 +13,7 @@ export default class ButtonCreator extends CreatorElement {
 
         if (parameters.classNames && parameters.classNames.length > 0) {
             parameters.classNames.forEach(name => {
-                if (this.element && 'classList' in this.element) {
+                if (this.element && Attributes.CLASS_LIST in this.element) {
                     this.element.classList.add(name);
                 }
             });
@@ -33,7 +34,7 @@ export default class ButtonCreator extends CreatorElement {
 
     public setCallback(callback: EventCB = null): void {
         if (this.element) {
-            this.element.addEventListener('click', (event: Event) => {
+            this.element.addEventListener(DOMEvents.CLICK, (event: Event) => {
                 if (callback) {
                     callback(event);
                 }
@@ -50,8 +51,8 @@ export default class ButtonCreator extends CreatorElement {
     }
 
     private setButtonType(type: InputTypes): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('type', type);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.TYPE, type);
         }
     }
 }

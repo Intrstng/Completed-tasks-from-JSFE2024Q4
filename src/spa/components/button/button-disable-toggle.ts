@@ -5,12 +5,12 @@ export function toggleButtonActiveClass(button: CreatorElement): void {
     const buttonElement: HTMLElement | HTMLCanvasElement | null = button.getElement();
     if (buttonElement) {
         const isActive: boolean = CreatorElement.hasClasses(buttonElement, [CSS_BUTTON.ACTIVE]);
-        if (isActive && 'classList' in buttonElement) {
-            buttonElement.classList.remove(CSS_BUTTON.ACTIVE);
-            buttonElement.classList.add(CSS_BUTTON.INACTIVE);
-        } else if ('classList' in buttonElement) {
-            buttonElement.classList.add(CSS_BUTTON.ACTIVE);
-            buttonElement.classList.remove(CSS_BUTTON.INACTIVE);
+        if (isActive) {
+            button.removeCssClasses([CSS_BUTTON.ACTIVE]);
+            button.setCssClasses([CSS_BUTTON.INACTIVE]);
+        } else {
+            button.setCssClasses([CSS_BUTTON.ACTIVE]);
+            button.removeCssClasses([CSS_BUTTON.INACTIVE]);
         }
     }
 }

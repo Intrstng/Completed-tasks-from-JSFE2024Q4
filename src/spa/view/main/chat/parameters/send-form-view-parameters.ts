@@ -4,6 +4,7 @@ import { CSS_SEND } from '../chat-classes';
 import { chatContent } from '../../../../../constants/chat-constants';
 import { BUTTON_CONSTANTS } from '../../../../../constants/button-constants';
 import { CSS_BUTTON } from '../../../../components/button/button-classes';
+import { TEXT_AREA_MESSAGES_CONSTANTS } from '../../../../../constants/text-area-constants';
 
 export const sendFormParameters: ElementParameters = {
     tag: 'form',
@@ -12,8 +13,8 @@ export const sendFormParameters: ElementParameters = {
 
 export const sendInputAreaParameters: ElementParameters = {
     tag: 'textarea',
-    rows: '3',
-    cols: '30',
+    rows: TEXT_AREA_MESSAGES_CONSTANTS.ROWS,
+    cols: TEXT_AREA_MESSAGES_CONSTANTS.COLS,
     placeholder: chatContent.MESSAGE,
     classNames: [CSS_SEND.SEND_INPUT],
 };

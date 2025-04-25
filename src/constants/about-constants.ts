@@ -10,7 +10,7 @@ export const aboutContent: AboutContent = {
     DESCRIPTION_ADD:
         "Additionally, it's important to note that the chat service requires a separate local server to operate. This server is responsible for managing chat features, storing messages, and handling user management functions.",
     LINK_COLOR: COLORS.link,
-    VIEWBOX: '0 0 26 26',
+    VIEW_BOX: '0 0 26 26',
 };
 
 export const aboutLinks: AboutLinks = {

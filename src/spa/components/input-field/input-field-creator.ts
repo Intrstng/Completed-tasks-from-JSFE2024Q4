@@ -1,7 +1,7 @@
 import './input-field.scss';
 
 import type { ElementParameters, EventCB } from '../../../types';
-import { InputTypes } from '../../../types';
+import { Attributes, DOMEvents, InputTypes } from '../../../types';
 import CreatorElement from '../creator-element';
 
 export default class InputFieldCreator extends CreatorElement {
@@ -9,7 +9,7 @@ export default class InputFieldCreator extends CreatorElement {
         this.element = document.createElement('input');
         if (parameters.classNames && parameters.classNames.length > 0) {
             parameters.classNames.forEach(name => {
-                if (this.element && 'classList' in this.element) {
+                if (this.element && Attributes.CLASS_LIST in this.element) {
                     this.element.classList.add(name);
                 }
             });
@@ -47,7 +47,7 @@ export default class InputFieldCreator extends CreatorElement {
 
     public setCallback(callback: EventCB = null): void {
         if (this.element) {
-            this.element.addEventListener('keyup', (event: Event) => {
+            this.element.addEventListener(DOMEvents.KEYUP, (event: Event) => {
                 if (callback) {
                     callback(event);
                 }
@@ -77,54 +77,54 @@ export default class InputFieldCreator extends CreatorElement {
     }
 
     private setInputType(type: InputTypes): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('type', type);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.TYPE, type);
         }
     }
 
     private setInputAutocomplete(value: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('autocomplete', value);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.AUTOCOMPLETE, value);
         }
     }
 
     private setInputElementId(id = ''): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('id', id);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.ID, id);
         }
     }
 
     private setInputRequired(required: boolean): void {
-        if (this.element && 'setAttribute' in this.element) {
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
             if (required) {
-                this.element.setAttribute('required', '');
+                this.element.setAttribute(Attributes.REQUIRED, '');
             } else {
-                this.element.removeAttribute('required');
+                this.element.removeAttribute(Attributes.REQUIRED);
             }
         }
     }
 
     private setInputPlaceholder(placeholder: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('placeholder', placeholder);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.PLACEHOLDER, placeholder);
         }
     }
 
     private setInputName(name: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('name', name.split(' ')[0].toLowerCase());
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.NAME, name.split(' ')[0].toLowerCase());
         }
     }
 
     private setInputNumberMinValue(value: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('min', value);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.MIN, value);
         }
     }
 
     private setInputNumberMaxValue(value: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('max', value);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.MAX, value);
         }
     }
 }

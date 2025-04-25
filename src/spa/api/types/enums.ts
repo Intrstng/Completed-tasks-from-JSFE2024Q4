@@ -15,10 +15,16 @@ export enum SocketMessageType {
 }
 
 export enum CONSTANTS_KEYS {
-    BASE_URL = 'BASE_URL',
     WS_URL = 'WS_URL',
     USER_NAME_LENGTH = 'USER_NAME_LENGTH',
     RECONNECT_INTERVAL = 'RECONNECT_INTERVAL',
     ERROR_MESSAGE_DELAY = 'ERROR_MESSAGE_DELAY',
     SECOND = 'SECOND',
+}
+
+export enum WSEvents {
+    OPEN = 'open',
+    MESSAGE = 'message',
+    ERROR = 'error',
+    CLOSE = 'close',
 }

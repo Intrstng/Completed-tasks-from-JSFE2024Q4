@@ -23,12 +23,12 @@ import LabelCreator from '../../components/label/label-creator';
 import { nameLabelParameters, passLabelParameters } from '../../components/label/label-view-parameters';
 import InputFieldCreator from '../../components/input-field/input-field-creator';
 import type { ElementParameters, EventCB, ToggleShowErrorMessageCB } from '../../../types';
-import { IS_DISABLED } from '../../../types';
+import { Attributes, IS_DISABLED } from '../../../types';
 import { PagesNames } from '../../../constants/header-constants';
 import { loginContent } from '../../../constants/login-constants';
 import type { InputFieldsValues } from './types';
-import { validateNameValue } from '../../utils/validation/password-strength/name-validation';
-import { validatePassStrengthValue } from '../../utils/validation/password-strength/password-strength-validation';
+import { validateNameValue } from '../../utils/validation/name-validation';
+import { validatePassStrengthValue } from '../../utils/validation/password-strength-validation';
 import type ApiController from '../../api/api-controller';
 import { toggleShowErrorMessage } from '../../utils/error-message/toggle-show-error-message';
 import ButtonCreator from '../../components/button/button-creator';
@@ -190,9 +190,9 @@ export default class LoginView extends View {
         }
 
         if (isDisabled === IS_DISABLED.TRUE && submitButtonElement) {
-            submitButtonElement.setAttribute('disabled', isDisabled);
+            submitButtonElement.setAttribute(Attributes.DISABLED, isDisabled);
         } else if (isDisabled === IS_DISABLED.FALSE && submitButtonElement) {
-            submitButtonElement.removeAttribute('disabled');
+            submitButtonElement.removeAttribute(Attributes.DISABLED);
         }
     }
 

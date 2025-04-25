@@ -19,7 +19,7 @@ export function createMessageFooter(message: Message): CreatorElement {
     if (message.status?.isEdited) {
         messageStatusCreator.setTextContent(chatContent.EDITED);
     }
-    // Check if needed
+
     if (!message.status?.isDelivered || !message.status.isReaded || !message.status.isEdited) {
         messageStatusCreator.setTextContent(chatContent.SENT);
     }

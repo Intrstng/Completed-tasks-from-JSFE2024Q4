@@ -25,7 +25,7 @@ import {
 } from './parameters/contacts-view-parameters';
 import { chatContent } from '../../../../constants/chat-constants';
 import { CSS_CONTACTS, CSS_MESSAGE } from './chat-classes';
-import { AppStateKeys } from '../../../../types';
+import { AppStateKeys, Attributes, Booleans } from '../../../../types';
 import { messageBodyParameters, messageContainerParameters } from './parameters/message-view-parameters';
 import {
     buttonSubmitParameters,
@@ -123,7 +123,7 @@ export default class ChatView extends View {
     }
 
     private addContacts(listContainer: CreatorElement, contactsData: User[]): void {
-        CreatorElement.deleteAllItemsInContainer(listContainer); // Clean
+        CreatorElement.deleteAllItemsInContainer(listContainer);
 
         contactsData.forEach(contact => {
             const contactCreator = new CreatorElement(contactItemParameters);
@@ -285,9 +285,9 @@ export default class ChatView extends View {
         const element = this.buttonSendMessageCreator.getElement();
         if (element instanceof HTMLElement) {
             if (isDisabled) {
-                element.setAttribute('disabled', 'true');
+                element.setAttribute(Attributes.DISABLED, Booleans.TRUE);
             } else {
-                element.removeAttribute('disabled');
+                element.removeAttribute(Attributes.DISABLED);
             }
         }
     }
@@ -297,9 +297,9 @@ export default class ChatView extends View {
         const element = this.messageInputAreaCreator.getElement();
         if (element instanceof HTMLTextAreaElement) {
             if (currentContact.length > 0) {
-                element.removeAttribute('disabled');
+                element.removeAttribute(Attributes.DISABLED);
             } else {
-                element.setAttribute('disabled', 'true');
+                element.setAttribute(Attributes.DISABLED, Booleans.TRUE);
             }
         }
     }

@@ -1,6 +1,7 @@
 import './label.scss';
 import type { ElementParameters } from '../../../types';
 import CreatorElement from '../creator-element';
+import { Attributes } from '../../../types';
 
 export default class LabelCreator extends CreatorElement {
     public createElement(parameters: ElementParameters): void {
@@ -12,7 +13,7 @@ export default class LabelCreator extends CreatorElement {
 
         if (parameters.classNames && parameters.classNames.length > 0) {
             parameters.classNames.forEach(name => {
-                if (this.element && 'classList' in this.element) {
+                if (this.element && Attributes.CLASS_LIST in this.element) {
                     this.element.classList.add(name);
                 }
             });
@@ -26,8 +27,8 @@ export default class LabelCreator extends CreatorElement {
     }
 
     private setConnectionWithInput(id = ''): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('for', id);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.FOR, id);
         }
     }
 }

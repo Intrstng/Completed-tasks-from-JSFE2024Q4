@@ -5,7 +5,7 @@ export type AboutContent = {
     DESCRIPTION_LIST: string[];
     DESCRIPTION_ADD: string;
     LINK_COLOR: string;
-    VIEWBOX: string;
+    VIEW_BOX: string;
 };
 
 export type AboutLinks = {

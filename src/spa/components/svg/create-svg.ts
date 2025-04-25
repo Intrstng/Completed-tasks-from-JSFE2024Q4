@@ -1,19 +1,20 @@
 import type { ElementParameters } from '../../../types';
 import CreatorElement from '../../components/creator-element';
 import type { SvgElement } from './types';
+import { Attributes, SVG_Attributes } from '../../../types';
 
 export function createSvg(elements: SvgElement[], fillColor: string, viewBox: string, id?: string): SVGElement {
     const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
+    const svg = document.createElementNS(svgNS, SVG_Attributes.SVG);
     if (id != null) {
-        svg.setAttribute('class', `svg-icon svg-icon-${id.toLowerCase()}`);
+        svg.setAttribute(SVG_Attributes.CLASS, `svg-icon svg-icon-${id.toLowerCase()}`);
     }
-    svg.setAttribute('viewBox', viewBox);
-    svg.setAttribute('style', `enable-background:new ${viewBox}`);
-    svg.setAttribute('fill', 'none');
+    svg.setAttribute(SVG_Attributes.VIEW_BOX, viewBox);
+    svg.setAttribute(SVG_Attributes.STYLE, `enable-background:new ${viewBox}`);
+    svg.setAttribute(SVG_Attributes.FILL, SVG_Attributes.NONE);
 
-    const g = document.createElementNS(svgNS, 'g');
-    g.setAttribute('id', 'mainGroup');
+    const g = document.createElementNS(svgNS, SVG_Attributes.G);
+    g.setAttribute(SVG_Attributes.ID, SVG_Attributes.MAIN_GROUP);
 
     elements.forEach(item => {
         const element = document.createElementNS(svgNS, item.type);
@@ -45,8 +46,8 @@ export function generateLogoLink(
     const linkElement: HTMLElement | HTMLCanvasElement | null = creatorLink.getElement();
 
     if (linkElement && linkElement instanceof HTMLElement) {
-        linkElement.setAttribute('href', link);
-        linkElement.setAttribute('target', '_blank');
+        linkElement.setAttribute(Attributes.HREF, link);
+        linkElement.setAttribute(Attributes.TARGET, Attributes.BLANK);
     }
 
     const svgLogo = createSvg(svgElements, color, viewBox, id);

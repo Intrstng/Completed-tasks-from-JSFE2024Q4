@@ -7,6 +7,7 @@ import { CONNECTION_ERROR } from '../../../constants/dialog-constants';
 import { CONSTANTS_KEYS } from '../../api/types';
 import { API_CONSTANTS } from '../../../constants/api-constants';
 import spinnerLogo from '../../../assets/spinner.gif';
+import { Attributes } from '../../../types';
 
 export default class CreatorDialog {
     public dialog: HTMLDialogElement | null = null;
@@ -48,7 +49,7 @@ export default class CreatorDialog {
 
     public getElementId(): string {
         if (this.dialog) {
-            return ('getAttribute' in this.dialog && this.dialog.getAttribute('id')) || '';
+            return (Attributes.GET_ATTRIBUTE in this.dialog && this.dialog.getAttribute(Attributes.ID)) || '';
         } else {
             console.error('Cannot get id. Element is null.');
             return '';
@@ -56,7 +57,7 @@ export default class CreatorDialog {
     }
 
     public setDialogTitleField(value: string): void {
-        if (this.dialogTitle && 'textContent' in this.dialogTitle) {
+        if (this.dialogTitle && Attributes.TEXT_CONTENT in this.dialogTitle) {
             this.dialogTitle.textContent = value;
         }
     }
@@ -71,7 +72,7 @@ export default class CreatorDialog {
         const spinnerCreator = new CreatorElement(loaderSpinnerParameters);
         const spinnerElement: HTMLElement | HTMLCanvasElement | null = spinnerCreator.getElement();
         if (spinnerElement) {
-            spinnerElement.setAttribute('src', spinnerLogo);
+            spinnerElement.setAttribute(Attributes.SRC, spinnerLogo);
         }
         if (this.dialogSpinnerContainer instanceof CreatorElement) {
             this.dialogSpinnerContainer.addInnerElement(spinnerCreator);
@@ -160,11 +161,11 @@ export default class CreatorDialog {
     }
 
     public setOpenAttribute(open: boolean): void {
-        if (this.dialog && 'setAttribute' in this.dialog) {
+        if (this.dialog && Attributes.SET_ATTRIBUTE in this.dialog) {
             if (open) {
-                this.dialog.setAttribute('open', '');
+                this.dialog.setAttribute(Attributes.OPEN, '');
             } else {
-                this.dialog.removeAttribute('open');
+                this.dialog.removeAttribute(Attributes.OPEN);
             }
         } else {
             console.error('Cannot set open attribute: element is null.');
@@ -176,7 +177,7 @@ export default class CreatorDialog {
             console.warn('Cannot set CSS classes: element is null.');
         } else {
             cssClasses.forEach(cssClass => {
-                if (this.dialog && 'classList' in this.dialog) {
+                if (this.dialog && Attributes.CLASS_LIST in this.dialog) {
                     this.dialog.classList.add(cssClass);
                 }
             });
@@ -184,8 +185,8 @@ export default class CreatorDialog {
     }
 
     public setElementId(id = ''): void {
-        if (this.dialog && 'setAttribute' in this.dialog) {
-            this.dialog.setAttribute('id', id);
+        if (this.dialog && Attributes.SET_ATTRIBUTE in this.dialog) {
+            this.dialog.setAttribute(Attributes.ID, id);
         } else {
             console.error('Cannot set element id: element is null.');
         }

@@ -86,7 +86,7 @@ export default class AboutView extends View {
             socialLinksContainerCreator,
             aboutLinks.GIT.link,
             aboutContent.LINK_COLOR,
-            aboutContent.VIEWBOX,
+            aboutContent.VIEW_BOX,
             aboutLinks.GIT.svgID
         );
         this.createLink(socialLinksContainerCreator);

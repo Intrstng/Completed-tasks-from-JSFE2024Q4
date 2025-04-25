@@ -40,7 +40,6 @@ export const CSS_MESSAGE: Css_Classes = {
     MESSAGE_BODY: 'message__body',
     MESSAGE_FOOTER: 'message__footer',
     MESSAGE_STATUS: 'message__status',
-
     MESSAGE_OUTCOME: 'message__outcome',
     MESSAGE_INCOME: 'message__income',
 };

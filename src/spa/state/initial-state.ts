@@ -1,12 +1,5 @@
 import { AppStateKeys } from '../../types';
 import type { AppState } from './types';
-import type { Paths } from '../router/types';
-
-export const PATHS: Paths = {
-    login: '/login',
-    chat: '/chat',
-    about: '/about',
-};
 
 export const INITIAL_STATE: AppState = {
     [AppStateKeys.IS_LOGGED]: false,

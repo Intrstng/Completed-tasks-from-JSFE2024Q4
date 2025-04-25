@@ -1,5 +1,5 @@
 import RouterHandler from './router-handler';
-import { Location, Pages } from '../../types';
+import { DOMEvents, Location, Pages } from '../../types';
 import type { RequestParameters, Route } from './types';
 
 export default class Router {
@@ -11,7 +11,7 @@ export default class Router {
 
         this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener(DOMEvents.DOM_CONTENT_LOADED, () => {
             this.handler.navigate(null);
         });
     }

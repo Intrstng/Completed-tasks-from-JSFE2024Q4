@@ -1,4 +1,6 @@
 import type { EventCB, ElementParameters } from '../../types';
+import { Attributes, DOMEvents } from '../../types';
+import { TEXT_AREA_CONSTANTS } from '../../constants/text-area-constants';
 
 export default class CreatorElement {
     public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
@@ -45,7 +47,7 @@ export default class CreatorElement {
 
     public getElementId(): string {
         if (this.element) {
-            return ('getAttribute' in this.element && this.element.getAttribute('id')) || '';
+            return (Attributes.GET_ATTRIBUTE in this.element && this.element.getAttribute(Attributes.ID)) || '';
         } else {
             console.error('Cannot get id. Element is null.');
             return '';
@@ -114,7 +116,7 @@ export default class CreatorElement {
             console.warn('Cannot set CSS classes: element is null.');
         } else {
             cssClasses.forEach(cssClass => {
-                if (this.element && 'classList' in this.element) {
+                if (this.element && Attributes.CLASS_LIST in this.element) {
                     this.element.classList.add(cssClass);
                 }
             });
@@ -126,7 +128,7 @@ export default class CreatorElement {
             console.warn('Cannot remove CSS classes: element is null.');
         } else {
             cssClasses.forEach(cssClass => {
-                if (this.element && 'classList' in this.element) {
+                if (this.element && Attributes.CLASS_LIST in this.element) {
                     this.element.classList.remove(cssClass);
                 }
             });
@@ -134,7 +136,7 @@ export default class CreatorElement {
     }
 
     public setDataAttribute(datasetKey = 'key', datasetValue: string): void {
-        if (this.element && 'dataset' in this.element) {
+        if (this.element && Attributes.DATASET in this.element) {
             this.element.dataset[datasetKey] = datasetValue;
         } else {
             console.error('Cannot set element dataset attribute: element is null.');
@@ -150,8 +152,8 @@ export default class CreatorElement {
     }
 
     public setElementId(id = ''): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('id', id);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.ID, id);
         } else {
             console.error('Cannot set element id: element is null.');
         }
@@ -159,7 +161,7 @@ export default class CreatorElement {
 
     public setCallback(callback: EventCB = null): void {
         if (this.element && typeof callback === 'function') {
-            this.element.addEventListener('click', (event: Event) => callback(event));
+            this.element.addEventListener(DOMEvents.CLICK, (event: Event) => callback(event));
         } else if (!this.element) {
             console.error('Cannot set event listener: element is null.');
         }
@@ -167,7 +169,7 @@ export default class CreatorElement {
 
     public setInputCallback(callback: EventCB = null): void {
         if (this.element) {
-            this.element.addEventListener('keyup', (event: Event) => {
+            this.element.addEventListener(DOMEvents.KEYUP, (event: Event) => {
                 if (callback) {
                     callback(event);
                 }
@@ -176,28 +178,28 @@ export default class CreatorElement {
     }
 
     private setTextareaSize(parameters: ElementParameters): void {
-        if (this.element && 'setAttribute' in this.element) {
-            const rows = parameters.rows === undefined ? '4' : parameters.rows;
-            const cols = parameters.cols === undefined ? '20' : parameters.cols;
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            const rows = parameters.rows === undefined ? TEXT_AREA_CONSTANTS.ROWS : parameters.rows;
+            const cols = parameters.cols === undefined ? TEXT_AREA_CONSTANTS.COLS : parameters.cols;
 
-            this.element.setAttribute('rows', rows);
-            this.element.setAttribute('cols', cols);
+            this.element.setAttribute(Attributes.ROWS, rows);
+            this.element.setAttribute(Attributes.COLS, cols);
         } else {
             console.error('Cannot set textarea size: element is null.');
         }
     }
 
     private setPlaceholder(placeholder: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('placeholder', placeholder);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.PLACEHOLDER, placeholder);
         } else {
             console.error('Cannot set placeholder: element is null.');
         }
     }
 
     private setElementTitle(title: string): void {
-        if (this.element && 'setAttribute' in this.element) {
-            this.element.setAttribute('title', title);
+        if (this.element && Attributes.SET_ATTRIBUTE in this.element) {
+            this.element.setAttribute(Attributes.TITLE, title);
         } else {
             console.error('Cannot set element title: element is null.');
         }
