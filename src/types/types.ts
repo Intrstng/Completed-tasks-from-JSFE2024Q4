@@ -29,12 +29,6 @@ export type DialogParameters = ElementParameters & {
 
 export type ViewCommon = ChatView | AboutView | LoginView;
 
-export type ButtonParameters = Pick<ElementParameters, 'id' | 'tag' | 'classNames' | 'textContent' | 'callback'>;
-
-export type Callback = () => void;
-
-export type NavigateCB = (url: string) => void;
-
 export type EventCB = ((event: Event) => void | Promise<void>) | null;
 
 export type ToggleShowErrorMessageCB = (errorElement: CreatorElement, isShown: boolean) => void;
