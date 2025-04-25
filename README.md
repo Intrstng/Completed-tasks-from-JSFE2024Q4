@@ -80,7 +80,7 @@ npm install --force
 
 ### Create the `.env` file and specify the port settings and server event log settings in it:
 
- - In the created .env file, set the `SERVER_PORT` parameter to `4000` (if it is not possible to run the server using port `4000`, you can use another port).
+ - In the created .env file, set the `SERVER_PORT` parameter to `4000` (if it is not possible to start the server using port `4000`, you can use another port. But the server port must match the `POST` variable in the file `'./src/constants/api-constants.ts'` of the frontend *Fun chat* application).
  - In the created .env file, set the `LOG` parameter to one of the values listed below:
    - ALL - all incoming and outgoing requests
    - ERROR - only erroneous requests
