@@ -23,16 +23,12 @@ export default class App {
     private header: HeaderView | null = null;
     private main: MainView | null = null;
     private footer: FooterView | null = null;
-    private readonly dialog: CreatorDialog | null = null;
-    private readonly state: SessionStorageState;
+    private readonly dialog: CreatorDialog = new CreatorDialog(dialogParameters, dialogContentParameters);
+    private readonly state: SessionStorageState = new SessionStorageState(this.keyToRecordInLS);
     private isLogged = true;
 
     constructor() {
-        this.state = new SessionStorageState(this.keyToRecordInLS);
-
-        this.dialog = new CreatorDialog(dialogParameters, dialogContentParameters);
         this.dialog.addDialogToLayout();
-
         const routes = this.createRoutes();
         this.router = new Router(routes);
         this.api = new ApiController(this.state, this.router, this.dialog, API_CONSTANTS);

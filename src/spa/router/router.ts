@@ -4,12 +4,10 @@ import type { RequestParameters, Route } from './types';
 
 export default class Router {
     private routes: Route[];
-    private handler: RouterHandler;
+    private handler: RouterHandler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
 
     constructor(routes: Route[]) {
         this.routes = routes;
-
-        this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
 
         document.addEventListener(DOMEvents.DOM_CONTENT_LOADED, () => {
             this.handler.navigate(null);

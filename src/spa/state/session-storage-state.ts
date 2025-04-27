@@ -6,13 +6,12 @@ import { DOMEvents } from '../../types';
 
 export default class SessionStorageState {
     public values: AppState;
-    public subscribers: Map<SocketMessageType, SubscriberCallback>;
+    public subscribers = new Map<SocketMessageType, SubscriberCallback>();
     private readonly accessKey: string;
 
     constructor(key: string) {
         this.accessKey = key;
         this.values = this.loadState();
-        this.subscribers = new Map();
         globalThis.addEventListener(DOMEvents.BEFOREUNLOAD, () => this.saveState());
     }
 

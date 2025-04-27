@@ -37,11 +37,11 @@ export default class LoginView extends View {
     public router: Router;
     private readonly state: SessionStorageState;
     private readonly api: ApiController;
-    private inputFieldName: InputFieldCreator | null;
-    private inputFieldPass: InputFieldCreator | null;
-    private submitButton: ButtonCreator | null;
-    private nameError: CreatorElement | null;
-    private passError: CreatorElement | null;
+    private inputFieldName: InputFieldCreator | null = null;
+    private inputFieldPass: InputFieldCreator | null = null;
+    private submitButton: ButtonCreator | null = null;
+    private nameError: CreatorElement | null = null;
+    private passError: CreatorElement | null = null;
     private isValidName = false;
     private isValidPass = false;
     private toggleShowErrorMessage: ToggleShowErrorMessageCB = toggleShowErrorMessage;
@@ -51,11 +51,7 @@ export default class LoginView extends View {
         this.state = state;
         this.router = router;
         this.api = api;
-        this.inputFieldName = null;
-        this.inputFieldPass = null;
-        this.nameError = null;
-        this.passError = null;
-        this.submitButton = null;
+
         this.configureView();
     }
 

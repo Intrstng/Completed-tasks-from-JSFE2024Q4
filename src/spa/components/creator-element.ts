@@ -3,9 +3,8 @@ import { Attributes, DOMEvents } from '../../types';
 import { TEXT_AREA_CONSTANTS } from '../../constants/text-area-constants';
 
 export default class CreatorElement {
-    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
+    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null = null;
     constructor(parameters: ElementParameters) {
-        this.element = null;
         this.createElement(parameters);
     }
 
