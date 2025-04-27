@@ -5,13 +5,12 @@ import { isValidState } from '../util/assertion-functions/assertion-functions';
 export default class RouterHandler {
     private params: RouterParameters;
     private readonly callback: RouterCB;
-    private readonly handler: (event: Event) => void;
+    private readonly handler: (event: Event) => void = this.onEvent.bind(this);
     private readonly locationEvent: LocationEvent;
 
     constructor(callback: RouterCB, location: Location = Location.PATHNAME) {
         this.locationEvent = location === Location.PATHNAME ? LocationEvent.POPSTATE : LocationEvent.HASHCHANGE;
         this.callback = callback;
-        this.handler = this.onEvent.bind(this);
 
         this.params = {
             nameEvent: this.locationEvent,

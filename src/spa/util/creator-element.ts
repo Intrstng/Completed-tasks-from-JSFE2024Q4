@@ -1,10 +1,14 @@
 import type { EventCallback, ElementParameters } from '../../types';
 import CreatorDialog from './dialog/dialog-creator';
 
+const CreatorElementConstants: { [key: string]: string } = {
+    ROWS: '4',
+    COLS: '20',
+};
+
 export default class CreatorElement {
-    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | null;
+    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | null = null;
     constructor(parameters: ElementParameters) {
-        this.element = null;
         this.createElement(parameters);
     }
 
@@ -116,8 +120,8 @@ export default class CreatorElement {
 
     private setTextareaSize(parameters: ElementParameters): void {
         if (this.element && 'setAttribute' in this.element) {
-            const rows = parameters.rows === undefined ? '4' : parameters.rows;
-            const cols = parameters.cols === undefined ? '20' : parameters.cols;
+            const rows = parameters.rows === undefined ? CreatorElementConstants.ROWS : parameters.rows;
+            const cols = parameters.cols === undefined ? CreatorElementConstants.COLS : parameters.cols;
 
             this.element.setAttribute('rows', rows);
             this.element.setAttribute('cols', cols);

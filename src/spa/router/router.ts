@@ -4,12 +4,10 @@ import { Location, Pages } from '../../types';
 
 export default class Router {
     private routes: Array<Route>;
-    private handler: RouterHandler;
+    private handler: RouterHandler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
 
     constructor(routes: Array<Route>) {
         this.routes = routes;
-
-        this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
 
         document.addEventListener('DOMContentLoaded', () => {
             this.handler.navigate(null);
@@ -26,7 +24,6 @@ export default class Router {
     }
 
     public urlChangedHandler(requestParameters: RequestParameters): void {
-        // Check
         const { path } = requestParameters;
         const routeIndex = this.routes.findIndex(item => item.path === path);
 

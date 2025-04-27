@@ -3,10 +3,6 @@
     backdrop-filter: blur(0.25rem);
 }
 
-//body {
-//  overflow: hidden;
-//}
-
 body:has(dialog[open]) {
     overflow: hidden;
 }

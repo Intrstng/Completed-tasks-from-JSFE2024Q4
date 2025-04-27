@@ -1,13 +1,13 @@
 import type { ElementParameters } from '../../types';
 import CreatorElement from '../util/creator-element';
 
+const DefaultElementParameters: ElementParameters = { tag: 'section', classNames: [] };
+
 export default class View {
     protected viewElementCreator: CreatorElement;
 
     constructor(parameters?: ElementParameters) {
-        const defaultElementParameters: ElementParameters = { tag: 'section', classNames: [] };
-
-        this.viewElementCreator = this.createView(parameters || defaultElementParameters);
+        this.viewElementCreator = this.createView(parameters || DefaultElementParameters);
     }
 
     public getHtmlElement(): HTMLElement | DocumentFragment | null {

@@ -53,7 +53,7 @@ export default tseslint.config(
         "@typescript-eslint/member-ordering": "error",
         "class-methods-use-this": "error",
         "unicorn/better-regex": "warn",
-        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+        "@typescript-eslint/consistent-type-definitions": "off",
         "unicorn/no-array-callback-reference": "off",
         "unicorn/no-array-for-each": "off",
         "unicorn/no-array-reduce": "off",

@@ -1,17 +1,18 @@
 import View from '../view';
 import type { ViewCommon } from '../../../types';
 
-const CssClasses = {
+const CssClassesMainView = {
     MAIN: 'main',
+};
+
+const MainViewParameters = {
+    tag: 'main',
+    classNames: [CssClassesMainView.MAIN],
 };
 
 export default class MainView extends View {
     constructor() {
-        const parameters = {
-            tag: 'main',
-            classNames: [CssClasses.MAIN],
-        };
-        super(parameters);
+        super(MainViewParameters);
     }
 
     public setContent(content: ViewCommon): void {

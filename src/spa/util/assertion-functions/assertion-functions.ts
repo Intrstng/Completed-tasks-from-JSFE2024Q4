@@ -1,5 +1,4 @@
-import type { DecisionItem, JsonData, SelectorState } from '../../../types';
-import type { PopStateEventState } from '../../../types';
+import type { DecisionItem, JsonData, PopStateEventState } from '../../../types';
 
 export function isValidState(state: unknown): state is PopStateEventState {
     return typeof state === 'object' && state !== null && 'url' in state;
@@ -35,19 +34,5 @@ export function assertIsDecisionJsonData(data: unknown): asserts data is JsonDat
         if (!isDecisionItem(item)) {
             throw new Error('Invalid item in "list" array.');
         }
-    }
-}
-
-export function assertIsSelectorState(data: unknown): asserts data is SelectorState {
-    if (!isObject(data)) {
-        throw new Error('Parsed data is not an object.');
-    }
-
-    if (!('isMute' in data) || typeof data.isMute !== 'boolean') {
-        throw new Error('Invalid or missing "isMute" property in SelectorState.');
-    }
-
-    if (!('duration' in data) || (data.duration !== undefined && typeof data.duration !== 'string')) {
-        throw new Error('Invalid or missing "duration" property in SelectorState.');
     }
 }

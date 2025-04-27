@@ -1,30 +1,26 @@
 import '../style.scss';
 import LocalStorageState from './state/local-storage-state';
 import type { Route, ViewCommon } from '../types';
-import { Pages } from '../types';
+import { AppInfo, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
-import LocalStorageSelector from './state/local-storage-selector';
 
-export default class App {
-    private readonly appName: string = 'Decision Making Tool';
-    private readonly keyToRecordInLS: string;
-    private readonly keyToRecordSelectorInLS: string;
+export class AppSpa {
+    private readonly appName: string = AppInfo.NAME;
+    private readonly keyToRecordInLS: string = AppInfo.KEY_LS;
     private readonly router: Router;
-    private main: MainView | null;
+    private main: MainView | null = null;
 
     constructor() {
-        this.main = null;
-        this.keyToRecordInLS = 'decisionMakingTool';
-        this.keyToRecordSelectorInLS = 'decisionMakingToolSelector';
         const state: LocalStorageState = new LocalStorageState(this.keyToRecordInLS);
-        const selectorState: LocalStorageSelector = new LocalStorageSelector(this.keyToRecordSelectorInLS);
 
-        const routes = this.createRoutes(state, selectorState);
+        const routes = this.createRoutes(state);
         this.router = new Router(routes);
 
         this.router.setHashHandler();
         this.createView();
+
+        this.init();
     }
 
     public createView(): void {
@@ -37,7 +33,7 @@ export default class App {
         }
     }
 
-    public createRoutes(state: LocalStorageState, selectorState: LocalStorageSelector): Array<Route> {
+    public createRoutes(state: LocalStorageState): Array<Route> {
         return [
             {
                 path: ``,
@@ -57,7 +53,7 @@ export default class App {
                 path: `${Pages.SELECTOR}`,
                 callback: async (): Promise<void> => {
                     const { default: SelectorView } = await import('./view/main/selector/selector-view');
-                    this.setContent(new SelectorView(selectorState, state, this.router));
+                    this.setContent(new SelectorView(state, this.router));
                 },
             },
             {
@@ -78,7 +74,7 @@ export default class App {
         }
     }
 
-    public init(): void {
+    private init(): void {
         console.log(`Application ${this.appName} initialized...`);
     }
 }

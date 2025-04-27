@@ -7,19 +7,21 @@ import ButtonCreator from '../../../util/button/button-creator';
 import { backToHomeButtonParameters, notFoundTitleParameters } from '../index/index-view-elements-parameters';
 import CreatorElement from '../../../util/creator-element';
 
-const CssClasses = {
+const CssClassesNotFoundView = {
     ERROR: 'not-found',
+};
+
+const NotFoundViewParameters: ElementParameters = {
+    tag: 'section',
+    classNames: [CssClassesNotFoundView.ERROR],
 };
 
 export default class NotFoundView extends View {
     public router: Router;
 
     constructor(router: Router) {
-        const parameters: ElementParameters = {
-            tag: 'section',
-            classNames: [CssClasses.ERROR],
-        };
-        super(parameters);
+        super(NotFoundViewParameters);
+
         this.router = router;
         this.configureView();
     }

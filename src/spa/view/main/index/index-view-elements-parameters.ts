@@ -8,6 +8,12 @@ import type {
 import { InputDescription, InputTypes } from '../../../../types';
 import type { ButtonsCollection } from '../../../../types';
 import { ButtonNames } from '../../../../types';
+import { CssClassesIndexView } from './index-view';
+
+export const IndexViewParameters: ElementParameters = {
+    tag: 'section',
+    classNames: [CssClassesIndexView.INDEX],
+};
 
 export const titleParameters: ElementParameters = {
     tag: 'h1',

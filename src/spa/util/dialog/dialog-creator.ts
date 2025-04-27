@@ -7,16 +7,22 @@ import type {
     DialogInnerElement,
     DialogParameters,
     EventCallback,
+    SaveToFileData,
 } from '../../../types';
-import { ButtonNames } from '../../../types';
+import { ButtonNames, IndexViewItemPrefixes } from '../../../types';
 import CreatorElement from '../creator-element';
 import type LocalStorageState from '../../state/local-storage-state';
 
+const CssClassesDialogButton: { [key: string]: string } = {
+    CLOSE: 'button-dialog-close',
+    CONFIRM: 'button-dialog-confirm',
+};
+
 export default class CreatorDialog {
-    public element: HTMLDialogElement | null;
+    public element: HTMLDialogElement | null = null;
     public dialogContentContainer: HTMLElement | null = null;
-    private callbackDialogSubmit: CallbackDialogSubmit;
-    private temporaryInputValue: string;
+    private readonly callbackDialogSubmit: CallbackDialogSubmit;
+    private temporaryInputValue: string = '';
     private appState: AppState;
 
     constructor(
@@ -25,11 +31,8 @@ export default class CreatorDialog {
         appState: LocalStorageState,
         callback?: CallbackDialogSubmit
     ) {
-        this.element = null;
         this.appState = appState.getState();
-        this.dialogContentContainer = null;
         this.callbackDialogSubmit = callback;
-        this.temporaryInputValue = '';
         this.callbackDialogSubmit = callback || ((): void => {});
         this.createElement(dialogParameters, contentDialogParameters);
     }
@@ -113,7 +116,6 @@ export default class CreatorDialog {
                     }
 
                     if (elementToAppend.textContent === ButtonNames.CONFIRM) {
-                        //contentParameters[index].callback = (event: Event) => this.callbackDialogSubmit(value))
                         this.setOnClickHandler(this.confirmPasteListInput.bind(this));
                     }
 
@@ -145,7 +147,7 @@ export default class CreatorDialog {
             return;
         }
 
-        const isCloseButton = target instanceof HTMLElement && target.classList.contains('button-dialog-close');
+        const isCloseButton = target instanceof HTMLElement && target.classList.contains(CssClassesDialogButton.CLOSE);
         const isClickedOnBackdrop: boolean = target === currentTarget;
 
         if (this.element instanceof HTMLDialogElement && (isClickedOnBackdrop || isCloseButton)) {
@@ -157,7 +159,8 @@ export default class CreatorDialog {
     public closeDialogByConfirmButton(event: Event): void {
         const target = event.target;
 
-        const isCloseButton = target instanceof HTMLElement && target.classList.contains('button-dialog-confirm');
+        const isCloseButton =
+            target instanceof HTMLElement && target.classList.contains(CssClassesDialogButton.CONFIRM);
 
         if (this.element instanceof HTMLDialogElement && isCloseButton) {
             this.element.close();
@@ -205,9 +208,9 @@ export default class CreatorDialog {
             return;
         }
         const isInputConfirmButton =
-            target instanceof HTMLElement && target.classList.contains('button-dialog-confirm');
+            target instanceof HTMLElement && target.classList.contains(CssClassesDialogButton.CONFIRM);
         if (isInputConfirmButton) {
-            const parsedInput: AppState = this.parseInputToObject(this.temporaryInputValue);
+            const parsedInput: SaveToFileData = this.parseInputToObject(this.temporaryInputValue);
 
             if (typeof this.callbackDialogSubmit === 'function') {
                 this.callbackDialogSubmit(parsedInput);
@@ -217,10 +220,10 @@ export default class CreatorDialog {
         this.closeDialogByConfirmButton(event);
     }
 
-    private parseInputToObject(input: string): AppState {
+    private parseInputToObject(input: string): SaveToFileData {
         const lines = input.trim().split('\n');
 
-        const { list, lastId } = lines.reduce<AppState>(
+        const { list, lastId } = lines.reduce<SaveToFileData>(
             (acc, line) => {
                 const pattern = /^\s*(.+?)\s*,\s*(\d+)\s*$/;
                 const match = line.match(pattern);
@@ -231,7 +234,7 @@ export default class CreatorDialog {
 
                     acc.lastId += 1;
                     acc.list.push({
-                        id: `#${acc.lastId}`,
+                        id: `${IndexViewItemPrefixes.HASH}${acc.lastId}`,
                         title,
                         weight,
                     });
@@ -241,7 +244,10 @@ export default class CreatorDialog {
 
                 return acc;
             },
-            { list: [], lastId: this.appState.lastId }
+            {
+                list: [],
+                lastId: this.appState.lastId,
+            }
         );
 
         return { list, lastId };

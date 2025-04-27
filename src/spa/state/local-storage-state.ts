@@ -1,6 +1,7 @@
 import type { AppState, AppStateKey, DecisionItem, ElementParameters, LocalStorageStateInterface } from '../../types';
 import { InputDescription } from '../../types';
 import { assertIsDecisionJsonData } from '../util/assertion-functions/assertion-functions';
+import { inputDurationParameters } from '../view/main/index/index-view-elements-parameters';
 
 export default class LocalStorageState implements LocalStorageStateInterface {
     public values: AppState;
@@ -12,7 +13,7 @@ export default class LocalStorageState implements LocalStorageStateInterface {
         window.addEventListener('beforeunload', () => this.saveState());
     }
 
-    public getField(key: AppStateKey): Array<DecisionItem> | number {
+    public getField(key: AppStateKey): Array<DecisionItem> | number | boolean | string | undefined {
         return this.values[key];
     }
 
@@ -69,7 +70,12 @@ export default class LocalStorageState implements LocalStorageStateInterface {
             }
         }
 
-        this.values = { list: [{ id: '#1', title: '', weight: '' }], lastId: 1 };
+        this.values = {
+            list: [{ id: '#1', title: '', weight: '' }],
+            lastId: 1,
+            isMute: false,
+            duration: inputDurationParameters.value,
+        };
 
         this.saveState();
         return this.values;

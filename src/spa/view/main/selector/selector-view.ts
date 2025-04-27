@@ -14,40 +14,40 @@ import {
     tooltipDurationParameters,
 } from '../index/index-view-elements-parameters';
 import ButtonCreator from '../../../util/button/button-creator';
-import type { ElementParameters } from '../../../../types';
+import type { AppState, ElementParameters } from '../../../../types';
 import { ButtonNames, FieldKeys, Pages } from '../../../../types';
 import LabelCreator from '../../../util/label/label-creator';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import { generateSvg } from '../../../util/generate-svg';
 import CanvasCreator from '../../../util/canvas/canvas-creator';
-import type LocalStorageSelector from '../../../state/local-storage-selector';
 import type LocalStorageState from '../../../state/local-storage-state';
 
-const CssClasses = {
+const CssClassesSelectorView = {
     SELECTOR: 'selector',
     TOOLTIP: 'tooltip',
     TOOLTIP_HIDDEN: 'tooltip-hidden',
     SOUND_OFF: 'button-sound-off',
 };
 
+const SelectorViewParameters = {
+    tag: 'section',
+    classNames: [CssClassesSelectorView.SELECTOR],
+};
+
 export default class SelectorView extends View {
     public router: Router;
-    private readonly selectorState: LocalStorageSelector;
+    private readonly state: LocalStorageState;
     private readonly canvas: CanvasCreator;
     private isMute: boolean;
     private enteredDurationValue: string = inputDurationParameters.value ?? '';
 
-    constructor(selectorState: LocalStorageSelector, appState: LocalStorageState, router: Router) {
-        const parameters = {
-            tag: 'section',
-            classNames: [CssClasses.SELECTOR],
-        };
-        super(parameters);
+    constructor(appState: LocalStorageState, router: Router) {
+        super(SelectorViewParameters);
         this.router = router;
-        this.selectorState = selectorState;
+        this.state = appState;
         this.canvas = new CanvasCreator(canvasParameters, appState);
 
-        const muteState = this.selectorState.getField(FieldKeys.ISMUTE);
+        const muteState = this.state.getField(FieldKeys.ISMUTE);
         this.isMute = typeof muteState === 'boolean' ? muteState : false;
 
         this.configureView();
@@ -57,9 +57,9 @@ export default class SelectorView extends View {
         const tooltipElement = toolTipElement.getElement();
 
         if (tooltipElement && 'classList' in tooltipElement) {
-            tooltipElement.classList.remove(CssClasses.TOOLTIP_HIDDEN);
+            tooltipElement.classList.remove(CssClassesSelectorView.TOOLTIP_HIDDEN);
             setTimeout(() => {
-                tooltipElement.classList.add(CssClasses.TOOLTIP_HIDDEN);
+                tooltipElement.classList.add(CssClassesSelectorView.TOOLTIP_HIDDEN);
             }, 1500);
         }
     }
@@ -101,10 +101,10 @@ export default class SelectorView extends View {
 
                 if (this.isMute && buttonElement && 'classList' in buttonElement) {
                     creatorButton.setTextContent(ButtonNames.SOUND_ON);
-                    buttonElement.classList.remove(CssClasses.SOUND_OFF);
+                    buttonElement.classList.remove(CssClassesSelectorView.SOUND_OFF);
                 } else if (!this.isMute && buttonElement && 'classList' in buttonElement) {
                     creatorButton.setTextContent(ButtonNames.SOUND_OFF);
-                    buttonElement.classList.add(CssClasses.SOUND_OFF);
+                    buttonElement.classList.add(CssClassesSelectorView.SOUND_OFF);
                 }
                 creatorButton.setCallback(this.toggleSound.bind(this));
             }
@@ -124,7 +124,7 @@ export default class SelectorView extends View {
         const svg = generateSvg();
 
         const creatorDurationInput = new InputFieldCreator(inputDurationParameters);
-        let currentDuration = this.selectorState.getField(FieldKeys.DURATION);
+        let currentDuration = this.state.getField(FieldKeys.DURATION);
         currentDuration = typeof currentDuration === 'string' ? currentDuration : inputDurationParameters.value;
 
         creatorDurationInput.setValue(currentDuration);
@@ -168,12 +168,17 @@ export default class SelectorView extends View {
             soundButton.textContent = this.isMute ? ButtonNames.SOUND_ON : ButtonNames.SOUND_OFF;
 
             if (this.isMute) {
-                soundButton.classList.remove(CssClasses.SOUND_OFF);
+                soundButton.classList.remove(CssClassesSelectorView.SOUND_OFF);
             } else {
-                soundButton.classList.add(CssClasses.SOUND_OFF);
+                soundButton.classList.add(CssClassesSelectorView.SOUND_OFF);
             }
 
-            this.selectorState.setField(FieldKeys.ISMUTE, this.isMute);
+            const currentState: AppState = this.state.getState();
+            const updatedState: AppState = {
+                ...currentState,
+                [FieldKeys.ISMUTE]: this.isMute,
+            };
+            this.state.setState(updatedState);
         }
     }
 
@@ -185,6 +190,7 @@ export default class SelectorView extends View {
             console.log('Here wheel starts turning...');
             console.log(`Sound state is: ${this.isMute}`);
             console.log(`Duration value is: ${this.enteredDurationValue}`);
+            this.canvas.spin();
         } else {
             console.error('Canvas element is not an HTMLCanvasElement or is null');
         }
@@ -203,7 +209,13 @@ export default class SelectorView extends View {
             this.enteredDurationValue = event.target.value;
 
             if (SelectorView.validateInput(event.target.value, durationParameters)) {
-                this.selectorState.setField(FieldKeys.DURATION, event.target.value);
+                const currentState: AppState = this.state.getState();
+                const updatedState: AppState = {
+                    ...currentState,
+                    [FieldKeys.DURATION]: event.target.value,
+                };
+
+                this.state.setState(updatedState);
             }
         }
     }

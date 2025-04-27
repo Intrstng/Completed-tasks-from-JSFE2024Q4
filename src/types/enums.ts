@@ -1,3 +1,8 @@
+export enum AppInfo {
+    NAME = 'Decision Making Tool',
+    KEY_LS = 'decisionMakingTool',
+}
+
 export enum Pages {
     INDEX = 'index',
     SELECTOR = 'selector',
@@ -79,4 +84,12 @@ export enum FieldKeys {
 export enum DataHandlerInput {
     TYPE = 'file',
     ACCEPT = 'application/json',
+}
+
+export enum IndexViewItemPrefixes {
+    HASH = '#',
+    LISTITEM_ = 'listItem_',
+    LISTITEM_HASH = 'listItem_#',
+    DELETE_BUTTON_HASH = 'buttonDelete_#',
+    DELETE_BUTTON_ = 'deleteButton_',
 }

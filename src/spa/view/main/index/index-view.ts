@@ -11,8 +11,9 @@ import type {
     DecisionItem,
     DialogContentParameters,
     Callback,
+    SaveToFileData,
 } from '../../../../types';
-import { ButtonNames, FieldKeys, InputDescription, Pages } from '../../../../types';
+import { ButtonNames, FieldKeys, IndexViewItemPrefixes, InputDescription, Pages } from '../../../../types';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import CreatorElement from '../../../util/creator-element';
 import ButtonCreator from '../../../util/button/button-creator';
@@ -21,6 +22,8 @@ import {
     dialogParameters,
     dialogPasteListContentParameters,
     dialogStartContentParameters,
+    IndexViewParameters,
+    inputDurationParameters,
     inputsParameters,
     labelParameters,
     listItemParameters,
@@ -33,26 +36,23 @@ import { DataHandler } from '../../../util/data-handler';
 import LabelCreator from '../../../util/label/label-creator';
 import CreatorDialog from '../../../util/dialog/dialog-creator';
 
-const CssClasses = {
+export const CssClassesIndexView = {
     INDEX: 'index',
 };
+
+const MAX_NUMBER: number = 1000;
+const MAX_DEFAULT_VALUE: number = 100;
 
 export default class IndexView extends View {
     public router: Router;
     private readonly state: LocalStorageState;
-    private readonly listOptions: CreatorElement;
-    private fileSaver: DataHandler;
+    private readonly listOptions: CreatorElement = new CreatorElement(listParameters);
+    private fileSaver: DataHandler = new DataHandler();
 
     constructor(state: LocalStorageState, router: Router) {
-        const parameters = {
-            tag: 'section',
-            classNames: [CssClasses.INDEX],
-        };
-        super(parameters);
+        super(IndexViewParameters);
         this.router = router;
-        this.fileSaver = new DataHandler();
         this.state = state;
-        this.listOptions = new CreatorElement(listParameters);
         this.configureView();
     }
 
@@ -78,7 +78,7 @@ export default class IndexView extends View {
         for (let i = 1; i <= listItemsCollection.length; i += 1) {
             const newListItemParameters: ElementParameters = {
                 ...listItemParameters,
-                id: `listItem_${listItemsCollection[i - 1].id}`,
+                id: `${IndexViewItemPrefixes.LISTITEM_}${listItemsCollection[i - 1].id}`,
             };
 
             const creatorListItem = new CreatorElement(newListItemParameters);
@@ -96,7 +96,7 @@ export default class IndexView extends View {
         this.state.incrementLastId();
         const newListItemParameters: ElementParameters = {
             ...listItemParameters,
-            id: `listItem_#${this.state.getLastId()}`,
+            id: `${IndexViewItemPrefixes.LISTITEM_HASH}${this.state.getLastId()}`,
         };
         const creatorListItem = new CreatorElement(newListItemParameters);
         this.listOptions.addInnerElement(creatorListItem);
@@ -105,7 +105,7 @@ export default class IndexView extends View {
     }
 
     private saveListToFile(): void {
-        const listToSave: AppState = {
+        const listToSave: SaveToFileData = {
             list: this.state.getList(),
             lastId: this.state.getLastId(),
         };
@@ -174,7 +174,7 @@ export default class IndexView extends View {
                 parameters => parameters.placeholder === InputDescription.WEIGHT
             );
             const maxValue: number =
-                weightParameter && weightParameter.max ? Number.parseInt(weightParameter.max, 10) : 100;
+                weightParameter && weightParameter.max ? Number.parseInt(weightParameter.max, 10) : MAX_DEFAULT_VALUE;
 
             if (inputParameters.placeholder === InputDescription.TITLE) {
                 creatorInput.setValue(listItem.title);
@@ -191,13 +191,13 @@ export default class IndexView extends View {
     private addDeleteButton(container: CreatorElement, containerId: string): void {
         const newDeleteButtonParameters: ButtonParameters = {
             ...deleteButtonParameters,
-            id: `buttonDelete_#${this.state.getLastId()}`,
+            id: `${IndexViewItemPrefixes.DELETE_BUTTON_HASH}${this.state.getLastId()}`,
             callback: (): void => {
                 this.deleteListItem(containerId);
             },
         };
         const creatorDeleteButton = new CreatorElement(newDeleteButtonParameters);
-        const deleteButtonId: string = `deleteButton_${containerId}`;
+        const deleteButtonId: string = `${IndexViewItemPrefixes.DELETE_BUTTON_}${containerId}`;
         creatorDeleteButton.setElementId(deleteButtonId);
         container.addInnerElement(creatorDeleteButton);
     }
@@ -215,6 +215,8 @@ export default class IndexView extends View {
         const emptyState: AppState = {
             list: [],
             lastId: 0,
+            isMute: false,
+            duration: inputDurationParameters.value,
         };
         this.state.setState(emptyState);
     }
@@ -230,7 +232,7 @@ export default class IndexView extends View {
 
     private addNewListRecord(): void {
         const newListRecord = {
-            id: `#${this.state.getLastId()}`,
+            id: `${IndexViewItemPrefixes.HASH}${this.state.getLastId()}`,
             title: '',
             weight: '',
         };
@@ -303,7 +305,7 @@ export default class IndexView extends View {
                 values.title &&
                 values.weight &&
                 Number.parseInt(values.weight, 10) > 0 &&
-                Number.parseInt(values.weight, 10) <= 1000
+                Number.parseInt(values.weight, 10) <= MAX_NUMBER
         );
 
         if (isInputsFilledCompletely.length >= 2) {
@@ -313,28 +315,20 @@ export default class IndexView extends View {
         }
     }
 
-    private setValuesFromPasteList(values: AppState): void {
-        // console.log(values);
-        // this.deleteAllListItems();
-        // this.resetState();
-        //
-        // this.state.setState(values);
-        // this.buildListItemGroup();
-
-        console.log('values', values);
-        // this.deleteAllListItems();
-        //this.resetState();
+    private setValuesFromPasteList(values: SaveToFileData): void {
         const storedList: Array<DecisionItem> = this.state.getList();
         const storedLastId: number = this.state.getLastId();
         this.deleteAllListItems();
         this.resetState();
-        console.log(storedList);
-        const updatedList: AppState = {
+
+        const currenState: AppState = this.state.getState();
+        const updatedState: AppState = {
+            ...currenState,
             list: [...storedList, ...values.list],
             lastId: storedLastId + values.list.length,
         };
-        console.log(updatedList);
-        this.state.setState(updatedList);
+
+        this.state.setState(updatedState);
         this.buildListItemGroup();
     }
 
@@ -364,7 +358,7 @@ export default class IndexView extends View {
                 event.target.value = event.target.value.replaceAll(/e/gi, '');
             }
 
-            if (event.target.type === 'number' && Number.parseInt(event.target.value, 10) > 1000) {
+            if (event.target.type === 'number' && Number.parseInt(event.target.value, 10) > MAX_NUMBER) {
                 event.target.value = event.target.value.slice(0, -1);
             }
 
