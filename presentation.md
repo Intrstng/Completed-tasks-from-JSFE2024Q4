@@ -1,4 +1,4 @@
-# Presentation Assignment Overview
+# Presentation
 
 1. [YouTube video link](https://www.youtube.com/watch?v=GM1yrz2gF7o)
 
