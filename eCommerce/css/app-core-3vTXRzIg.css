@@ -1,0 +1,1 @@
+.app{display:grid;grid-template-rows:auto 1fr auto;height:100vh}.main{grid-row:2;padding:1rem 3rem}.content{overflow-y:auto;display:flex;flex-direction:column;margin:0}@media (width <= 1024px){.body{padding:0}}
