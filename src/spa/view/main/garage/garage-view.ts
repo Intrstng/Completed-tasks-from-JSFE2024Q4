@@ -24,7 +24,7 @@ import type LocalStorageState from '../../../state/session-storage-state';
 import InputFieldCreator from '../../../util/input-field/input-field-creator';
 import LabelCreator from '../../../util/label/label-creator';
 import { getCallbackWithID } from '../../../util/assertion-functions/assertion-functions';
-import { createSvg } from '../../../util/create-svg/create-svg';
+import { SvgManager } from '../../../util/create-svg/create-svg';
 import { svgElements } from '../../../util/create-svg/data';
 import type ApiController from '../../../api/api-controller';
 import { generateCarsCollection } from '../../../util/generate-random-car/generate-cars-collection';
@@ -66,6 +66,7 @@ export default class GarageView extends View {
     private carCreateLogo: SVGElement | null = null;
     private carUpdateLogo: SVGElement | null = null;
     private readonly paginationController: PaginationController | null;
+    private readonly svgManager: SvgManager = new SvgManager();
     private carController: CarController | null = null;
     private raceController: RaceController | null = null;
     private readonly dialog: CreatorDialog | null;
@@ -313,13 +314,13 @@ export default class GarageView extends View {
 
         const carCreationBlockCreator = new CreatorElement(carCreationBlockParameters);
         this.addInputsCarBlock(carCreationBlockCreator, InputUse.CREATE);
-        this.carCreateLogo = createSvg(svgElements, COLORS.black, InputUse.CREATE);
+        this.carCreateLogo = this.svgManager.createAndStoreSvg(svgElements, COLORS.black, InputUse.CREATE);
         carCreationBlockCreator.addInnerElement(this.carCreateLogo);
         this.addCarBlockButton(carCreationBlockCreator, createButtonParameters);
 
         const carUpdateBlockCreator = new CreatorElement(carUpdateBlockParameters);
         this.addInputsCarBlock(carUpdateBlockCreator, InputUse.UPDATE);
-        this.carUpdateLogo = createSvg(svgElements, COLORS.black, InputUse.UPDATE);
+        this.carUpdateLogo = this.svgManager.createAndStoreSvg(svgElements, COLORS.black, InputUse.UPDATE);
         carUpdateBlockCreator.addInnerElement(this.carUpdateLogo);
         this.addCarBlockButton(carUpdateBlockCreator, updateButtonParameters);
 
@@ -411,7 +412,7 @@ export default class GarageView extends View {
     private createCarTrack(carData: Car, container: CreatorElement): void {
         const carTrackCreator = new CreatorElement(trackParameters);
 
-        const carIconCreator = createSvg(svgElements, carData.color, String(carData.id));
+        const carIconCreator = this.svgManager.createAndStoreSvg(svgElements, carData.color, String(carData.id));
         this.finish = new CreatorElement(finishParameters);
 
         if (this.carController && this.paginationController && this.dialog) {
@@ -421,6 +422,7 @@ export default class GarageView extends View {
                 this.carController,
                 this.paginationController,
                 this.viewElementCreator,
+                this.svgManager,
                 this.finish,
                 this.dialog
             );

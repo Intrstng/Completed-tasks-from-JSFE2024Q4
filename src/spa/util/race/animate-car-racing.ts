@@ -2,7 +2,7 @@ import type { AnimationFrame } from '../../../types';
 
 export function animateCarRacing(
     carID: number,
-    car: HTMLElement,
+    car: SVGElement,
     duration: number,
     trackDistance: number
 ): AnimationFrame {

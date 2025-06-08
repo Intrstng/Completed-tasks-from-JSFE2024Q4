@@ -24,7 +24,7 @@ import {
     tableRowParameters,
     theadButtonsContainer,
 } from './table-view-parameters';
-import { createSvg } from '../create-svg/create-svg';
+import { SvgManager } from '../create-svg/create-svg';
 import { svgElements } from '../create-svg/data';
 import { createTableRecords } from './create-table-records';
 import type SessionStorageState from '../../state/session-storage-state';
@@ -85,7 +85,7 @@ export default class Table {
             numberCellCreator.setTextContent(String(displayIndex));
 
             const carCellCreator = new CreatorElement(tableRowCellParameters);
-            const carTableLogo = createSvg(svgElements, record.color, Description.TABLE);
+            const carTableLogo = SvgManager.createSvg(svgElements, record.color, Description.TABLE);
             carCellCreator.addInnerElement(carTableLogo);
 
             const nameCellCreator = new CreatorElement(tableRowCellParameters);

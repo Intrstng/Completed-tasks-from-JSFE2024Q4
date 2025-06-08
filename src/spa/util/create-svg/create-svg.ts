@@ -1,33 +1,51 @@
-import { CSS_GARAGE } from '../../view/main/garage/garage-classes';
 import type { ShapeElement, SvgElements, SvgElementsCollection } from './types';
 
-export function createSvg(elements: Array<ShapeElement>, strokeColor: string, id?: string): SVGElement {
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
-    if (id != null) {
-        svg.setAttribute('class', `svg-icon svg-icon-${id.toLowerCase()}`);
-    }
-    svg.setAttribute('viewBox', '0 0 32 32');
-    svg.setAttribute('fill', 'none');
+export class SvgManager {
+    private svgStore: Record<string, SVGElement> = {};
 
-    const g = document.createElementNS(svgNS, 'g');
-    g.setAttribute('id', 'raceCar');
+    public static createSvg(elements: ShapeElement[], strokeColor: string, svgClass?: string): SVGElement {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
 
-    elements.forEach(item => {
-        const element = document.createElementNS(svgNS, item.type);
-        for (const [key, value] of Object.entries(item.attrs)) {
-            if (key === 'stroke') {
-                element.setAttribute(key, strokeColor);
-            } else {
-                element.setAttribute(key, value);
-            }
+        if (svgClass) {
+            svg.setAttribute('class', `svg-icon svg-icon-${svgClass.toLowerCase()}`);
         }
-        g.append(element);
-    });
 
-    svg.append(g);
+        svg.setAttribute('viewBox', '0 0 32 32');
+        svg.setAttribute('fill', 'none');
 
-    return svg;
+        const g = document.createElementNS(svgNS, 'g');
+        g.setAttribute('id', 'raceCar');
+
+        elements.forEach(item => {
+            const element = document.createElementNS(svgNS, item.type);
+            for (const [key, value] of Object.entries(item.attrs)) {
+                element.setAttribute(key, key === 'stroke' ? strokeColor : value);
+            }
+            g.append(element);
+        });
+
+        svg.append(g);
+        return svg;
+    }
+
+    public createAndStoreSvg(elements: ShapeElement[], strokeColor: string, id: string): SVGElement {
+        const svg = SvgManager.createSvg(elements, strokeColor, id);
+        this.svgStore[id] = svg;
+        return svg;
+    }
+
+    public getSvgById(id: string): SVGElement | null {
+        return this.svgStore[id] || null;
+    }
+
+    public removeSvg(id: string): void {
+        delete this.svgStore[id];
+    }
+
+    public clearAllSvgs(): void {
+        this.svgStore = {};
+    }
 }
 
 export function changeSvgStrokeColor(id: string, color: string): void {
@@ -38,14 +56,4 @@ export function changeSvgStrokeColor(id: string, color: string): void {
     svgLines.forEach(line => {
         line.setAttribute('stroke', color);
     });
-}
-
-export function getCarIconFromLayout(id: number): HTMLElement | null {
-    const carIconCollection: NodeListOf<Element> = document.querySelectorAll(`.${CSS_GARAGE.SVG_ICON}-${id}`);
-    let carIcon: HTMLElement | null = null;
-    if (carIconCollection.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        carIcon = carIconCollection[0] as HTMLElement;
-    }
-    return carIcon;
 }

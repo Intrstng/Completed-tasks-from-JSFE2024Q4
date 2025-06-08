@@ -74,7 +74,7 @@ export type ToggleButtonActiveClassCB = (button: CreatorElement) => void;
 
 export type AnimateCarRacingCB = (
     carID: number,
-    car: HTMLElement,
+    car: SVGElement,
     duration: number,
     trackDistance: number
 ) => AnimationFrame;

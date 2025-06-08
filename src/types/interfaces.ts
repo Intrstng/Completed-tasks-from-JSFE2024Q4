@@ -26,11 +26,6 @@ export type Buttons = {
     reset: boolean;
 };
 
-export type Animation = {
-    id: number | null;
-    distance: number;
-};
-
 export type AnimationFrame = {
     carID: number;
     animationID: number | null;

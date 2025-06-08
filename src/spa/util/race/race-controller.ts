@@ -19,7 +19,8 @@ import {
     toggleDisabledAllCarButtons,
     toggleDisabledDragRaceControlButtons,
 } from '../button/button-disable-toggle';
-import { changeSvgStrokeColor, getCarIconFromLayout } from '../create-svg/create-svg';
+import type { SvgManager } from '../create-svg/create-svg';
+import { changeSvgStrokeColor } from '../create-svg/create-svg';
 import { COLORS } from '../../../constants/constants';
 import { CSS_BUTTON } from '../button/button-classes';
 import { CONSTANTS } from '../../state/initial-state';
@@ -34,10 +35,10 @@ export class RaceController {
     private api: ApiController;
     private carController: CarController | null;
     private readonly paginationController: PaginationController | null;
+    private readonly svgManager: SvgManager;
     private readonly finishCreator: CreatorElement | null;
     private dialogContainer: CreatorElement | null;
     private readonly dialog: CreatorDialog | null;
-    private readonly getCarIconFromLayout: (id: number) => HTMLElement | null = getCarIconFromLayout;
     private animateCarRacing: AnimateCarRacingCB = animateCarRacing;
 
     constructor(
@@ -46,6 +47,7 @@ export class RaceController {
         carController: CarController,
         paginationController: PaginationController,
         dialogContainer: CreatorElement,
+        svgManager: SvgManager,
         finish: CreatorElement,
         dialog: CreatorDialog
     ) {
@@ -54,11 +56,12 @@ export class RaceController {
         this.carController = carController;
         this.paginationController = paginationController;
         this.dialogContainer = dialogContainer;
+        this.svgManager = svgManager;
         this.finishCreator = finish;
         this.dialog = dialog;
     }
 
-    public getTrackDistance(car: HTMLElement): number {
+    public getTrackDistance(car: SVGElement): number {
         const carRect: DOMRect = car.getBoundingClientRect();
         let finishRect: DOMRect | null = null;
         if (this.finishCreator instanceof CreatorElement) {
@@ -82,7 +85,7 @@ export class RaceController {
 
     public startRaceCar = async (id: number, isDragRace?: boolean): Promise<ResponseObject | undefined> => {
         toggleDisableButtonsOnStartRace(id);
-        const carIcon: HTMLElement | null = this.getCarIconFromLayout(id);
+        const carIcon: SVGElement | null = this.svgManager.getSvgById(String(id));
         let trackDistance: number;
         if (carIcon) {
             trackDistance = this.getTrackDistance(carIcon);
@@ -172,7 +175,7 @@ export class RaceController {
                 const currentCarColor = currentCar.color;
                 changeSvgStrokeColor(String(id), currentCarColor);
             }
-            const car: HTMLElement | null = this.getCarIconFromLayout(id);
+            const car: SVGElement | null = this.svgManager.getSvgById(String(id));
             if (car && 'style' in car) {
                 car.style.transform = `translateX(0px)`;
             }
