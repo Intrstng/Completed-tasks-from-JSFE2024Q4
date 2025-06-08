@@ -7,27 +7,27 @@ import MainView from './view/main/main-view';
 import LocalStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import ApiController from './api/api-controller';
-import { CONSTANTS, PATHS } from './state/initial-state';
+import { CONSTANTS } from './state/initial-state';
 
 export default class App {
     public api: ApiController;
     private readonly appName: string = AppInfo.NAME;
     private readonly keyToRecordInLS: string = AppInfo.KEY_LS;
     private readonly router: Router;
-    private header: HeaderView | null;
-    private main: MainView | null;
+    private header: HeaderView | null = null;
+    private main: MainView | null = null;
     private readonly state: LocalStorageState;
 
     constructor() {
-        this.header = null;
-        this.main = null;
         this.state = new LocalStorageState(this.keyToRecordInLS);
-        this.api = new ApiController(PATHS, this.state, CONSTANTS);
+        this.api = new ApiController(this.state, CONSTANTS);
         const routes = this.createRoutes(this.state);
         this.router = new Router(routes);
 
         this.router.setHashHandler();
         this.createView();
+
+        this.init();
     }
 
     public createView(): void {
@@ -80,7 +80,7 @@ export default class App {
         }
     }
 
-    public init(): void {
+    private init(): void {
         console.log(`Application ${this.appName} initialized...`);
     }
 }

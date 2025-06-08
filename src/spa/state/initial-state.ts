@@ -1,12 +1,6 @@
-import type { AppState, Car, Constants, Paths } from '../../types';
+import type { AppState, Car, Constants } from '../../types';
 import { Description } from '../../types';
 import { PagesNames } from '../view/header/header-constants';
-
-export const PATHS: Paths = {
-    garage: '/garage',
-    winners: '/winners',
-    engine: '/engine',
-};
 
 const carBrands: Array<string> = [
     'Acura',

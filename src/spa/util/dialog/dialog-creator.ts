@@ -6,14 +6,11 @@ import CreatorElement from '../creator-element';
 import { CSS_DIALOG } from './dialog-classes';
 
 export default class CreatorDialog {
-    public dialog: HTMLDialogElement | null;
-    private dialogName: HTMLElement | null;
-    private dialogTime: HTMLElement | null;
+    public dialog: HTMLDialogElement | null = null;
+    private dialogName: HTMLElement | null = null;
+    private dialogTime: HTMLElement | null = null;
 
     constructor(parameters: DialogParameters, dialogContentParameters: Array<ElementParameters>) {
-        this.dialog = null;
-        this.dialogName = null;
-        this.dialogTime = null;
         this.createElement(parameters, dialogContentParameters);
     }
 

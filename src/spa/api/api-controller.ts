@@ -1,14 +1,4 @@
-import type {
-    AppState,
-    QueryCB,
-    Car,
-    Constants,
-    DriveData,
-    EngineData,
-    Paths,
-    QueryParameters,
-    Winner,
-} from '../../types';
+import type { AppState, QueryCB, Car, Constants, DriveData, EngineData, QueryParameters, Winner } from '../../types';
 import {
     AppStateKeys,
     CarStatus,
@@ -16,6 +6,7 @@ import {
     Description,
     Http_Methods,
     HttpHeaderKeys,
+    Paths,
     QueryParameterKeys,
 } from '../../types';
 import type LocalStorageState from '../state/session-storage-state';
@@ -31,17 +22,14 @@ import {
 
 export default class ApiController {
     private readonly baseUrl: string;
-    private readonly path: Paths;
     private readonly state: LocalStorageState;
     private readonly constants: Constants;
-    private readonly getQueryString: QueryCB | null;
+    private readonly getQueryString: QueryCB = getQueryString;
 
-    constructor(paths: Paths, state: LocalStorageState, constants: Constants) {
+    constructor(state: LocalStorageState, constants: Constants) {
         this.baseUrl = constants.baseURL;
-        this.path = paths;
         this.state = state;
         this.constants = constants;
-        this.getQueryString = getQueryString;
     }
 
     public async getCars(page: number): Promise<void> {
@@ -53,11 +41,11 @@ export default class ApiController {
 
             const queryParameters = this.getQueryString ? this.getQueryString(parameters) : '';
 
-            const response = await fetch(`${this.baseUrl}${this.path.garage}${queryParameters}`);
+            const response = await fetch(`${this.baseUrl}${Paths.GARAGE}${queryParameters}`);
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
 
             const responseData: unknown = await response.json();
@@ -80,19 +68,18 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async getCar(id: number): Promise<Car | undefined> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.garage}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.GARAGE}/${id}`, {
                 method: Http_Methods.GET,
             });
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
 
             const data: unknown = await response.json();
@@ -105,13 +92,12 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async createCar(data: Partial<Car>): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.garage}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.GARAGE}`, {
                 method: Http_Methods.POST,
                 headers: {
                     [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
@@ -121,20 +107,19 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async updateCar(data: Partial<Car>, id: number): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.garage}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.GARAGE}/${id}`, {
                 method: Http_Methods.PUT,
                 headers: {
                     [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
@@ -144,7 +129,7 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
 
             await response.json();
@@ -158,38 +143,36 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async deleteCar(id: number): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.garage}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.GARAGE}/${id}`, {
                 method: Http_Methods.DELETE,
             });
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async startEngine(id: number): Promise<EngineData | undefined> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.STARTED}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.ENGINE}?id=${id}&${CarStatus.STARTED}`, {
                 method: Http_Methods.PATCH,
             });
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
 
             const data: unknown = await response.json();
@@ -202,32 +185,30 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async stopEngine(id: number): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.STOPPED}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.ENGINE}?id=${id}&${CarStatus.STOPPED}`, {
                 method: Http_Methods.PATCH,
             });
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async driveCar(id: number): Promise<DriveData | undefined> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.engine}?id=${id}&${CarStatus.DRIVE}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.ENGINE}?id=${id}&${CarStatus.DRIVE}`, {
                 method: Http_Methods.PATCH,
             });
 
@@ -246,7 +227,6 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
@@ -259,10 +239,10 @@ export default class ApiController {
                 { key: QueryParameterKeys.LIMIT, value: this.constants.winnersOnPage },
             ];
             const queryParameters = this.getQueryString ? this.getQueryString(parameters) : '';
-            const response = await fetch(`${this.baseUrl}${this.path.winners}${queryParameters}`);
+            const response = await fetch(`${this.baseUrl}${Paths.WINNERS}${queryParameters}`);
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
             const winnersResponse: unknown = await response.json();
             let winners: Array<Winner> = [];
@@ -287,13 +267,12 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async createWinner(data: Winner): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.winners}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.WINNERS}`, {
                 method: Http_Methods.POST,
                 headers: {
                     [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
@@ -303,20 +282,19 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async updateWinner(data: Partial<Winner>, id: number): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.WINNERS}/${id}`, {
                 method: Http_Methods.PUT,
                 headers: {
                     [HttpHeaderKeys.CONTENT_TYPE]: ContentTypes.JSON,
@@ -326,39 +304,37 @@ export default class ApiController {
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async deleteWinner(id: number): Promise<void> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.WINNERS}/${id}`, {
                 method: Http_Methods.DELETE,
             });
 
             if (!response.ok) {
                 console.error(`Error: ${response.status} - ${response.statusText}`);
-                return undefined;
+                return;
             }
         } catch (error: unknown) {
             console.error(
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 
     public async checkWinner(id: number): Promise<Winner | boolean | undefined> {
         try {
-            const response = await fetch(`${this.baseUrl}${this.path.winners}/${id}`, {
+            const response = await fetch(`${this.baseUrl}${Paths.WINNERS}/${id}`, {
                 method: Http_Methods.GET,
             });
 
@@ -376,7 +352,6 @@ export default class ApiController {
                 'Network error or unexpected issue occurred:',
                 error instanceof Error ? error.message : JSON.stringify(error)
             );
-            return undefined;
         }
     }
 }

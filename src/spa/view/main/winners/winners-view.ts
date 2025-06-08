@@ -26,27 +26,14 @@ export default class WinnersView extends View {
     public router: Router;
     public api: ApiController;
     private readonly winnersState: SessionStorageState;
-    private winnersQuantity: CreatorElement | null;
-    private readonly winnersPage: CreatorElement | null;
+    private winnersQuantity: CreatorElement | null = null;
+    private readonly winnersPage: CreatorElement | null = null;
     private readonly table: Table | null;
-    private prevButton: CreatorElement | null;
-    private nextButton: CreatorElement | null;
-    private ascWinButton: CreatorElement | null;
-    private descWinButton: CreatorElement | null;
-    private ascTimeButton: CreatorElement | null;
-    private descTimeButton: CreatorElement | null;
     private readonly toggleButtonActiveClass: ToggleActiveButtonCB;
     private readonly paginationController: PaginationController | null;
 
     constructor(state: SessionStorageState, router: Router, api: ApiController) {
         super(winnersParameters);
-        this.winnersQuantity = null;
-        this.prevButton = null;
-        this.nextButton = null;
-        this.ascWinButton = null;
-        this.descWinButton = null;
-        this.ascTimeButton = null;
-        this.descTimeButton = null;
         this.router = router;
         this.winnersState = state;
         this.api = api;

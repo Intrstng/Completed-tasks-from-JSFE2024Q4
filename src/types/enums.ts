@@ -149,3 +149,9 @@ export enum AppStateKeys {
     INPUT_DATA = 'inputData',
     BUTTONS_STATE = 'buttonsState',
 }
+
+export enum Paths {
+    GARAGE = '/garage',
+    WINNERS = '/winners',
+    ENGINE = '/engine',
+}

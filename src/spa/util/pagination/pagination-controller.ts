@@ -5,15 +5,15 @@ import { Description } from '../../../types';
 
 export class PaginationController {
     private readonly state: SessionStorageState;
-    private prevButton: CreatorElement | null;
-    private nextButton: CreatorElement | null;
-    private page: CreatorElement | null;
-    private paginationContainer: CreatorElement | null;
+    private prevButton: CreatorElement | null = null;
+    private nextButton: CreatorElement | null = null;
+    private readonly page: CreatorElement | null;
+    private readonly paginationContainer: CreatorElement | null;
     private readonly getDataForCurrentPage: Callback | null;
     private readonly updateLayout: Callback | null;
-    private paginationParameters: PaginationParameters | null;
-    private pageStateKeys: PageStateKeys | null;
-    private itemsOnPage: number | null;
+    private readonly paginationParameters: PaginationParameters | null;
+    private readonly pageStateKeys: PageStateKeys | null;
+    private readonly itemsOnPage: number | null;
 
     constructor(
         state: SessionStorageState,
@@ -26,8 +26,6 @@ export class PaginationController {
         itemsOnPage: number
     ) {
         this.state = state;
-        this.prevButton = null;
-        this.nextButton = null;
         this.page = page;
         this.paginationContainer = container;
         this.getDataForCurrentPage = getDataForCurrentPageCB;

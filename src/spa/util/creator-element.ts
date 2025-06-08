@@ -1,9 +1,8 @@
 import type { EventCB, ElementParameters } from '../../types';
 
 export default class CreatorElement {
-    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null;
+    public element: HTMLElement | HTMLCanvasElement | HTMLDialogElement | HTMLButtonElement | null = null;
     constructor(parameters: ElementParameters) {
-        this.element = null;
         this.createElement(parameters);
     }
 

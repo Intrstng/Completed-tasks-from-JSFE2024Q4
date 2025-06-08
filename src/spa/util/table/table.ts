@@ -44,14 +44,14 @@ export default class Table {
     private readonly state: SessionStorageState;
     private readonly winnersPage: CreatorElement | null;
     private readonly container: CreatorElement | null;
-    private tableContainer: CreatorElement | null;
-    private table: CreatorElement | null;
-    private ascWinButton: CreatorElement | null;
-    private descWinButton: CreatorElement | null;
-    private ascTimeButton: CreatorElement | null;
-    private descTimeButton: CreatorElement | null;
-    private readonly createTableRecords: CreateTableRecordsCB | null;
-    private readonly toggleButtonActiveClass: ToggleButtonActiveClassCB | null;
+    private tableContainer: CreatorElement | null = null;
+    private table: CreatorElement | null = null;
+    private ascWinButton: CreatorElement | null = null;
+    private descWinButton: CreatorElement | null = null;
+    private ascTimeButton: CreatorElement | null = null;
+    private descTimeButton: CreatorElement | null = null;
+    private readonly createTableRecords: CreateTableRecordsCB = createTableRecords;
+    private readonly toggleButtonActiveClass: ToggleButtonActiveClassCB = toggleButtonActiveClass;
     private readonly getWinnersForCurrentPage: Callback | null;
     private readonly updateTableLayout: Callback | null;
     private readonly createNameHeadCell: TableNameHeadCellCB = createNameHeadCell;
@@ -63,14 +63,6 @@ export default class Table {
         getWinnersForCurrentPageCB: Callback,
         updateTableLayoutCB: Callback
     ) {
-        this.tableContainer = null;
-        this.table = null;
-        this.ascWinButton = null;
-        this.descWinButton = null;
-        this.ascTimeButton = null;
-        this.descTimeButton = null;
-        this.createTableRecords = createTableRecords;
-        this.toggleButtonActiveClass = toggleButtonActiveClass;
         this.state = state;
         this.winnersPage = winnersPage;
         this.container = container;

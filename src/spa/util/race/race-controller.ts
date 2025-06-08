@@ -33,11 +33,11 @@ export class RaceController {
     private readonly state: SessionStorageState;
     private api: ApiController;
     private carController: CarController | null;
-    private paginationController: PaginationController | null;
+    private readonly paginationController: PaginationController | null;
     private readonly finishCreator: CreatorElement | null;
     private dialogContainer: CreatorElement | null;
     private readonly dialog: CreatorDialog | null;
-    private readonly getCarIconFromLayout: (id: number) => HTMLElement | null;
+    private readonly getCarIconFromLayout: (id: number) => HTMLElement | null = getCarIconFromLayout;
     private animateCarRacing: AnimateCarRacingCB = animateCarRacing;
 
     constructor(
@@ -56,7 +56,6 @@ export class RaceController {
         this.dialogContainer = dialogContainer;
         this.finishCreator = finish;
         this.dialog = dialog;
-        this.getCarIconFromLayout = getCarIconFromLayout;
     }
 
     public getTrackDistance(car: HTMLElement): number {
