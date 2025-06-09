@@ -2,10 +2,10 @@ import './header.scss';
 import View from '../view';
 import LinkView from './link/link-view';
 import CreatorElement from '../../util/creator-element';
-import type { Pages } from '../../../types';
+import type { PageParameters, Pages } from '../../../types';
 import type Router from '../../router/router';
 import { headerParameters, navigationParameters, titleParameters } from './headers-view-parameters';
-import type { LinkElements, PageParameters } from './types';
+import type { LinkElements } from './types';
 import { isValidPage } from '../../util/assertion-functions/assertion-functions';
 import { LinkNames, PagesNames } from './header-constants';
 

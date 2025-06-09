@@ -1,4 +1,5 @@
-import type { ShapeElement, SvgElements, SvgElementsCollection } from './types';
+import type { SvgElements, SvgElementsCollection } from './types';
+import type { ShapeElement } from './interfaces';
 
 export class SvgManager {
     private svgStore: Record<string, SVGElement> = {};

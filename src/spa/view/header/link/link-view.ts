@@ -1,8 +1,9 @@
 import './link.scss';
 import View from '../../view';
-import type { LinkElements, PageParameters } from '../types';
+import type { LinkElements } from '../types';
 import { linkParameters } from '../headers-view-parameters';
 import { CSS_HEADER } from '../header-classes';
+import type { PageParameters } from '../../../../types';
 
 export default class LinkView extends View {
     private readonly linkElements: LinkElements;

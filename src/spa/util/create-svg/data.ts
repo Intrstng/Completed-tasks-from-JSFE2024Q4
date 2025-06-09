@@ -1,4 +1,4 @@
-import type { ShapeElement } from './types';
+import type { ShapeElement } from './interfaces';
 
 export const svgElements: Array<ShapeElement> = [
     { type: 'line', attrs: { x1: '2.917', y1: '16.5', x2: '1.5', y2: '16.5', stroke: '#1695d4' } },
