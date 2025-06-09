@@ -13,7 +13,6 @@ import type {
     LogoutRequest,
     Message,
     ReceiveUserMessagesHistoryResponse,
-    Responses,
     SendMessage,
     SendMessageToUserResponse,
     SetMessageEdit,
@@ -22,6 +21,7 @@ import type {
     LoginResponse,
     LogoutResponse,
     ErrorResponse,
+    Responses,
 } from './types';
 import { CONSTANTS_KEYS, SocketMessageType, WSEvents } from './types';
 import { CONNECTION_ERROR } from '../../constants/dialog-constants';
@@ -38,9 +38,33 @@ export default class ApiController {
     private router: Router;
     private readonly constants: API_CONSTANTS_TYPES;
     private readonly errorMessage: CreatorDialog | null = null;
-
     private reconnectInterval: number = API_CONSTANTS.RECONNECT_INTERVAL;
     private isConnected = false;
+
+    private readonly messageHandlers: MessageHandlers = {
+        [SocketMessageType.USER_LOGIN]: this.loginUserAction.bind(this),
+        [SocketMessageType.USER_LOGOUT]: this.logoutUserAction.bind(this),
+        [SocketMessageType.USER_ACTIVE]: this.getActiveUsersAction.bind(this),
+        [SocketMessageType.USER_INACTIVE]: this.getInActiveUsersAction.bind(this),
+        [SocketMessageType.USER_EXTERNAL_LOGIN]: this.externalUserLoginAction.bind(this),
+        [SocketMessageType.USER_EXTERNAL_LOGOUT]: this.externalUserLogoutAction.bind(this),
+        [SocketMessageType.MSG_SEND]: this.sendMessageToUserAction.bind(this),
+        [SocketMessageType.MSG_FROM_USER]: this.getUserMessagesHistoryFromUserAction.bind(this),
+        [SocketMessageType.ERROR]: this.getMessageErrorAction.bind(this),
+
+        [SocketMessageType.MSG_DELIVER]: () => {
+            console.log('MSG_DELIVER will be added soon');
+        },
+        [SocketMessageType.MSG_READ]: () => {
+            console.log('MSG_READ will be added soon');
+        },
+        [SocketMessageType.MSG_EDIT]: () => {
+            console.log('MSG_EDIT will be added soon');
+        },
+        [SocketMessageType.MSG_DELETE]: () => {
+            console.log('MSG_DELETE will be added soon');
+        },
+    };
 
     constructor(
         state: SessionStorageState,
@@ -86,6 +110,24 @@ export default class ApiController {
             this.socket.addEventListener(WSEvents.MESSAGE, (event: MessageEvent) => this.handleMessageSocket(event));
         } else {
             console.error('WebSocket URL is not defined');
+        }
+    }
+
+    public async handleMessageSocket(event: MessageEvent): Promise<void> {
+        try {
+            const message: Responses = JSON.parse(event.data);
+            console.log('Received message:', message);
+
+            const handler = this.messageHandlers[message.type];
+
+            if (handler && isMessageOfType(message, message.type)) {
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                await handler(message as never);
+            } else {
+                console.warn('No handler for message type:', message.type);
+            }
+        } catch (error) {
+            console.error('Error parsing message:', error);
         }
     }
 
@@ -343,84 +385,6 @@ export default class ApiController {
         console.error('Socket connection terminated. Reconnection in progress');
     }
 
-    /**
-     * Handles incoming socket messages.
-     *
-     * I tried to make this function as short as possible:
-     * - moved logic from case blocks to separate functions;
-     * - rewrote the syntax of the switch construct to a short notation,
-     *   however, ESLint reverts these changes;
-     * - tried to rewrite switch to Map, but due to the necessary
-     *   additional type checks the function code becomes even longer.
-     *
-     * This is the only case in the code where an ESLint inline
-     * config comment is used to disable the 40-line-of-code limit for
-     * functions.
-     *
-     * The `noInlineConfig` option in `eslint.config.mjs` has been set to
-     * `false` to allow inline config comments for only this specific case.
-     *
-     * @param {MessageEvent} event - The event containing the
-     * message data.
-     * @returns {Promise<void>} A promise that resolves when the
-     * message has been processed.
-     */
-    /* eslint-disable max-lines-per-function */
-    private async handleMessageSocket(event: MessageEvent): Promise<void> {
-        try {
-            const message: Responses = JSON.parse(event.data);
-            console.log('Received message:', message);
-
-            switch (message.type) {
-                case SocketMessageType.USER_LOGIN: {
-                    return await this.loginUserAction(message);
-                }
-                case SocketMessageType.USER_LOGOUT: {
-                    return this.logoutUserAction(message);
-                }
-                case SocketMessageType.USER_ACTIVE: {
-                    return this.getActiveUsersAction(message);
-                }
-                case SocketMessageType.USER_INACTIVE: {
-                    return this.getInActiveUsersAction(message);
-                }
-                case SocketMessageType.USER_EXTERNAL_LOGIN: {
-                    return this.externalUserLoginAction(message);
-                }
-                case SocketMessageType.USER_EXTERNAL_LOGOUT: {
-                    return this.externalUserLogoutAction(message);
-                }
-                case SocketMessageType.MSG_SEND: {
-                    return this.sendMessageToUserAction(message);
-                }
-                case SocketMessageType.MSG_FROM_USER: {
-                    return this.getUserMessagesHistoryFromUserAction(message);
-                }
-                case SocketMessageType.MSG_DELIVER: {
-                    break;
-                }
-                case SocketMessageType.MSG_READ: {
-                    break;
-                }
-                case SocketMessageType.MSG_EDIT: {
-                    break;
-                }
-                case SocketMessageType.MSG_DELETE: {
-                    break;
-                }
-                case SocketMessageType.ERROR: {
-                    return this.getMessageErrorAction(message);
-                }
-                default: {
-                    console.warn('Unhandled message type:', message);
-                }
-            }
-        } catch (error) {
-            console.error('Error parsing message:', error);
-        }
-    }
-    /* eslint-enable max-lines-per-function */
-
     private async loginUserAction(message: LoginResponse): Promise<void> {
         const { login, isLogined } = message.payload.user;
 
@@ -541,3 +505,16 @@ export default class ApiController {
         this.state.setState(updatedState);
     }
 }
+
+function isMessageOfType<T extends SocketMessageType>(
+    message: Responses,
+    type: T
+): message is Extract<Responses, { type: T }> {
+    return message.type === type;
+}
+
+type MessageHandler<T extends SocketMessageType> = (message: Extract<Responses, { type: T }>) => void | Promise<void>;
+
+export type MessageHandlers = {
+    [K in SocketMessageType]?: MessageHandler<K>;
+};
