@@ -1,7 +1,7 @@
 import type { InputTypes } from './enums';
 import type { EventCB } from './types';
 
-export type ElementParameters = {
+export interface ElementParameters {
     tag?: string;
     id?: string;
     classNames?: string[];
@@ -18,8 +18,8 @@ export type ElementParameters = {
     cols?: string;
     name?: string;
     autocomplete?: string;
-};
+}
 
-export type DialogParameters = {
+export interface DialogParameters extends ElementParameters {
     open: boolean;
-} & ElementParameters;
+}

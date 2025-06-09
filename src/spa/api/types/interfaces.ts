@@ -1,211 +1,232 @@
 import type { CONSTANTS_KEYS, SocketMessageType } from './enums';
 
-export type API_CONSTANTS_TYPES = {
+export interface API_CONSTANTS_TYPES {
     [CONSTANTS_KEYS.WS_URL]: string;
     [CONSTANTS_KEYS.USER_NAME_LENGTH]: number;
     [CONSTANTS_KEYS.RECONNECT_INTERVAL]: number;
     [CONSTANTS_KEYS.ERROR_MESSAGE_DELAY]: number;
     [CONSTANTS_KEYS.SECOND]: number;
-};
+}
 
-type MessageStatus = {
+interface MessageStatus {
     isDelivered?: boolean;
     isReaded?: boolean;
     isEdited?: boolean;
     isDeleted?: boolean;
-};
+}
 
-export type Message = {
+export interface Message {
     id?: string | null;
     from?: string | null;
     to?: string | null;
     text?: string;
     datetime?: number;
     status?: MessageStatus;
-};
+}
 
-export type User = {
+export interface User {
     login: string;
     isLogined: boolean;
-};
+}
 
-export type BaseRequest<T extends SocketMessageType, P> = {
+export interface BaseRequest<T extends SocketMessageType, P> {
     id: string | null;
     type: T;
     payload: P;
-};
+}
 
-export type LoginRequest = {} & BaseRequest<
-    SocketMessageType.USER_LOGIN,
-    {
-        user: {
-            login: string;
-            password: string;
-        };
-    }
->;
+export interface LoginRequest
+    extends BaseRequest<
+        SocketMessageType.USER_LOGIN,
+        {
+            user: {
+                login: string;
+                password: string;
+            };
+        }
+    > {}
 
-export type LogoutRequest = {} & BaseRequest<
-    SocketMessageType.USER_LOGOUT,
-    {
-        user: {
-            login: string;
-            password: string;
-        };
-    }
->;
+export interface LogoutRequest
+    extends BaseRequest<
+        SocketMessageType.USER_LOGOUT,
+        {
+            user: {
+                login: string;
+                password: string;
+            };
+        }
+    > {}
 
-export type GetAuthorization = {} & BaseRequest<SocketMessageType.USER_ACTIVE, null>;
+export interface GetAuthorization extends BaseRequest<SocketMessageType.USER_ACTIVE, null> {}
 
-export type GetUnAuthorization = {} & BaseRequest<SocketMessageType.USER_INACTIVE, null>;
+export interface GetUnAuthorization extends BaseRequest<SocketMessageType.USER_INACTIVE, null> {}
 
-export type GetMessage = {} & BaseRequest<
-    SocketMessageType.MSG_FROM_USER,
-    {
-        user: {
-            login: string;
-        };
-    }
->;
+export interface GetMessage
+    extends BaseRequest<
+        SocketMessageType.MSG_FROM_USER,
+        {
+            user: {
+                login: string;
+            };
+        }
+    > {}
 
-export type SendMessage = {} & BaseRequest<
-    SocketMessageType.MSG_SEND,
-    {
-        message: {
-            to: string;
-            text: string;
-        };
-    }
->;
+export interface SendMessage
+    extends BaseRequest<
+        SocketMessageType.MSG_SEND,
+        {
+            message: {
+                to: string;
+                text: string;
+            };
+        }
+    > {}
 
-export type DeleteMessage = {} & BaseRequest<
-    SocketMessageType.MSG_DELETE,
-    {
-        message: {
-            id: string;
-        };
-    }
->;
+export interface DeleteMessage
+    extends BaseRequest<
+        SocketMessageType.MSG_DELETE,
+        {
+            message: {
+                id: string;
+            };
+        }
+    > {}
 
-export type SetMessageEdit = {} & BaseRequest<
-    SocketMessageType.MSG_EDIT,
-    {
-        message: {
-            id: string;
-            text: string;
-        };
-    }
->;
+export interface SetMessageEdit
+    extends BaseRequest<
+        SocketMessageType.MSG_EDIT,
+        {
+            message: {
+                id: string;
+                text: string;
+            };
+        }
+    > {}
 
-export type SetMessageRead = {} & BaseRequest<
-    SocketMessageType.MSG_READ,
-    {
-        message: {
-            id: string;
-        };
-    }
->;
+export interface SetMessageRead
+    extends BaseRequest<
+        SocketMessageType.MSG_READ,
+        {
+            message: {
+                id: string;
+            };
+        }
+    > {}
 
-export type BaseResponse<T extends SocketMessageType, P> = {
+export interface BaseResponse<T extends SocketMessageType, P> {
     id: string | null;
     type: T;
     payload: P;
-};
+}
 
-export type LoginResponse = {} & BaseRequest<
-    SocketMessageType.USER_LOGIN,
-    {
-        user: User;
-    }
->;
+export interface LoginResponse
+    extends BaseRequest<
+        SocketMessageType.USER_LOGIN,
+        {
+            user: User;
+        }
+    > {}
 
-export type LogoutResponse = {} & BaseRequest<
-    SocketMessageType.USER_LOGOUT,
-    {
-        user: User;
-    }
->;
+export interface LogoutResponse
+    extends BaseRequest<
+        SocketMessageType.USER_LOGOUT,
+        {
+            user: User;
+        }
+    > {}
 
-export type ExternalLoginResponse = {} & BaseRequest<
-    SocketMessageType.USER_EXTERNAL_LOGIN,
-    {
-        user: User;
-    }
->;
+export interface ExternalLoginResponse
+    extends BaseRequest<
+        SocketMessageType.USER_EXTERNAL_LOGIN,
+        {
+            user: User;
+        }
+    > {}
 
-export type ExternalLogoutResponse = {} & BaseRequest<
-    SocketMessageType.USER_EXTERNAL_LOGOUT,
-    {
-        user: User;
-    }
->;
+export interface ExternalLogoutResponse
+    extends BaseRequest<
+        SocketMessageType.USER_EXTERNAL_LOGOUT,
+        {
+            user: User;
+        }
+    > {}
 
-export type GetAllAuthenticatedUsersResponse = {} & BaseRequest<
-    SocketMessageType.USER_ACTIVE,
-    {
-        users: User[];
-    }
->;
+export interface GetAllAuthenticatedUsersResponse
+    extends BaseRequest<
+        SocketMessageType.USER_ACTIVE,
+        {
+            users: User[];
+        }
+    > {}
 
-export type GetAllUnAuthenticatedUsersResponse = {} & BaseRequest<
-    SocketMessageType.USER_INACTIVE,
-    {
-        users: User[];
-    }
->;
+export interface GetAllUnAuthenticatedUsersResponse
+    extends BaseRequest<
+        SocketMessageType.USER_INACTIVE,
+        {
+            users: User[];
+        }
+    > {}
 
-export type SendMessageToUserResponse = {} & BaseRequest<
-    SocketMessageType.MSG_SEND,
-    {
-        message: Message;
-    }
->;
+export interface SendMessageToUserResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_SEND,
+        {
+            message: Message;
+        }
+    > {}
 
-export type ReceiveMessageFromUserResponse = {} & BaseRequest<
-    SocketMessageType.MSG_SEND,
-    {
-        message: Message;
-    }
->;
+export interface ReceiveMessageFromUserResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_SEND,
+        {
+            message: Message;
+        }
+    > {}
 
-export type ReceiveUserMessagesHistoryResponse = {} & BaseRequest<
-    SocketMessageType.MSG_FROM_USER,
-    {
-        messages: Message[];
-    }
->;
+export interface ReceiveUserMessagesHistoryResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_FROM_USER,
+        {
+            messages: Message[];
+        }
+    > {}
 
-export type MessageDeliveryStatusChangeResponse = {} & BaseRequest<
-    SocketMessageType.MSG_DELIVER,
-    {
-        message: Message;
-    }
->;
+export interface MessageDeliveryStatusChangeResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_DELIVER,
+        {
+            message: Message;
+        }
+    > {}
 
-export type MessageReadStatusChangeResponse = {} & BaseRequest<
-    SocketMessageType.MSG_READ,
-    {
-        message: Message;
-    }
->;
+export interface MessageReadStatusChangeResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_READ,
+        {
+            message: Message;
+        }
+    > {}
 
-export type MessageDeleteResponse = {} & BaseRequest<
-    SocketMessageType.MSG_DELETE,
-    {
-        message: Message;
-    }
->;
+export interface MessageDeleteResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_DELETE,
+        {
+            message: Message;
+        }
+    > {}
 
-export type MessageEditResponse = {} & BaseRequest<
-    SocketMessageType.MSG_EDIT,
-    {
-        message: Message;
-    }
->;
+export interface MessageEditResponse
+    extends BaseRequest<
+        SocketMessageType.MSG_EDIT,
+        {
+            message: Message;
+        }
+    > {}
 
-export type ErrorResponse = {} & BaseRequest<
-    SocketMessageType.ERROR,
-    {
-        error: string;
-    }
->;
+export interface ErrorResponse
+    extends BaseRequest<
+        SocketMessageType.ERROR,
+        {
+            error: string;
+        }
+    > {}
