@@ -2,18 +2,10 @@ import type { AppStateKeys } from '../../types';
 import { INITIAL_STATE } from './initial-state';
 import type { AppState, MessageCounter, SubscriberCallback } from './types';
 import type { Message, SocketMessageType, User } from '../api/types';
-import { DOMEvents } from '../../types';
 
-export default class SessionStorageState {
-    public values: AppState;
+export class StateService {
+    public values: AppState = INITIAL_STATE;
     public subscribers = new Map<SocketMessageType, SubscriberCallback>();
-    private readonly accessKey: string;
-
-    constructor(key: string) {
-        this.accessKey = key;
-        this.values = this.loadState();
-        globalThis.addEventListener(DOMEvents.BEFOREUNLOAD, () => this.saveState());
-    }
 
     public subscribe(key: SocketMessageType, callback: SubscriberCallback): void {
         this.subscribers.set(key, callback);
@@ -59,26 +51,5 @@ export default class SessionStorageState {
 
     public resetState(): void {
         this.values = INITIAL_STATE;
-        this.saveState();
-    }
-
-    private loadState(): AppState {
-        const storageItem: string | null = sessionStorage.getItem(this.accessKey);
-        if (storageItem) {
-            try {
-                return JSON.parse(storageItem);
-            } catch (error) {
-                console.error('Failed to parse localStorage item:', error);
-            }
-        }
-
-        this.values = INITIAL_STATE;
-
-        this.saveState();
-        return this.values;
-    }
-
-    private saveState(): void {
-        sessionStorage.setItem(this.accessKey, JSON.stringify(this.values));
     }
 }

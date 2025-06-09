@@ -1,11 +1,8 @@
 import '../style.scss';
-
 import type { ViewCommon } from '../types';
 import { AppInfo, AppStateKeys, Pages } from '../types';
 import Router from './router/router';
 import MainView from './view/main/main-view';
-import type LocalStorageState from './state/session-storage-state';
-import SessionStorageState from './state/session-storage-state';
 import HeaderView from './view/header/header-view';
 import FooterView from './view/footer/footer-view';
 import { PagesNames } from '../constants/header-constants';
@@ -14,17 +11,17 @@ import CreatorDialog from './components/dialog/dialog-creator';
 import { dialogContentParameters, dialogParameters } from './components/dialog/dialog-view-parameters';
 import { API_CONSTANTS } from '../constants/api-constants';
 import type { AuthedPathRoute, Route } from './router/types';
+import { StateService } from './state/state-service';
 
 export default class App {
     public api: ApiController;
     private readonly appName: string = AppInfo.NAME;
-    private readonly keyToRecordInLS: string = AppInfo.KEY_LS;
     private readonly router: Router;
     private header: HeaderView | null = null;
     private main: MainView | null = null;
     private footer: FooterView | null = null;
     private readonly dialog: CreatorDialog = new CreatorDialog(dialogParameters, dialogContentParameters);
-    private readonly state: SessionStorageState = new SessionStorageState(this.keyToRecordInLS);
+    private readonly state: StateService = new StateService();
     private isLogged = true;
 
     constructor() {
@@ -100,21 +97,21 @@ export default class App {
         }
     }
 
-    private async loadChatView(state: LocalStorageState): Promise<void> {
+    private async loadChatView(state: StateService): Promise<void> {
         const { default: ChatView } = await import('./view/main/chat/chat-view');
         this.createHeader();
         this.setContent(Pages.CHAT, new ChatView(state, this.router, this.api));
         this.createFooter();
     }
 
-    private async loadAboutView(state: LocalStorageState): Promise<void> {
+    private async loadAboutView(state: StateService): Promise<void> {
         const { default: AboutView } = await import('./view/about/about-view');
         this.removeHeader();
         this.removeFooter();
         this.setContent(Pages.ABOUT, new AboutView(state, this.router));
     }
 
-    private async loadLoginView(state: LocalStorageState): Promise<void> {
+    private async loadLoginView(state: StateService): Promise<void> {
         const { default: LoginView } = await import('./view/login/login-view');
         this.removeHeader();
         this.removeFooter();

@@ -1,6 +1,5 @@
 import './login.scss';
 import View from '../view';
-import type SessionStorageState from '../../state/session-storage-state';
 import type Router from '../../router/router';
 import {
     buttonAboutParameters,
@@ -32,10 +31,11 @@ import { validatePassStrengthValue } from '../../utils/validation/password-stren
 import type ApiController from '../../api/api-controller';
 import { toggleShowErrorMessage } from '../../utils/error-message/toggle-show-error-message';
 import ButtonCreator from '../../components/button/button-creator';
+import type { StateService } from '../../state/state-service';
 
 export default class LoginView extends View {
     public router: Router;
-    private readonly state: SessionStorageState;
+    private readonly state: StateService;
     private readonly api: ApiController;
     private inputFieldName: InputFieldCreator | null = null;
     private inputFieldPass: InputFieldCreator | null = null;
@@ -46,7 +46,7 @@ export default class LoginView extends View {
     private isValidPass = false;
     private toggleShowErrorMessage: ToggleShowErrorMessageCB = toggleShowErrorMessage;
 
-    constructor(state: SessionStorageState, router: Router, api: ApiController) {
+    constructor(state: StateService, router: Router, api: ApiController) {
         super(loginParameters);
         this.state = state;
         this.router = router;

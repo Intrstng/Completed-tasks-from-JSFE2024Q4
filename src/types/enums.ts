@@ -1,6 +1,5 @@
 export enum AppInfo {
     NAME = 'Fun chat',
-    KEY_LS = 'funChat',
 }
 
 export enum Pages {

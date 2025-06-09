@@ -36,16 +36,16 @@ import type ApiController from '../../../api/api-controller';
 import type { AppState, MessageCounter } from '../../../state/types';
 import type { Message, User } from '../../../api/types';
 import { SocketMessageType } from '../../../api/types';
-import type SessionStorageState from '../../../state/session-storage-state';
 import { sliceNameLength } from '../../../utils/slice-name-string';
 import { createMessageHeader } from '../../../components/message/message-header-creator';
 import { createMessageFooter } from '../../../components/message/message-footer-creator';
 import type { CreateMessageFooterCB, CreateMessageHeaderCB } from '../../../components/message/types';
+import type { StateService } from '../../../state/state-service';
 
 export default class ChatView extends View {
     private readonly router: Router;
     private readonly api: ApiController;
-    private readonly state: SessionStorageState;
+    private readonly state: StateService;
     private contactsListCreator = new CreatorElement(contactsListParameters);
     private buttonSendMessageCreator = new ButtonCreator(buttonSubmitParameters);
     private messageInputAreaCreator = new CreatorElement(sendInputAreaParameters);
@@ -54,7 +54,7 @@ export default class ChatView extends View {
     private createMessageHeader: CreateMessageHeaderCB = createMessageHeader;
     private createMessageFooter: CreateMessageFooterCB = createMessageFooter;
 
-    constructor(state: SessionStorageState, router: Router, api: ApiController) {
+    constructor(state: StateService, router: Router, api: ApiController) {
         super(chatSectionParameters);
         this.router = router;
         this.state = state;

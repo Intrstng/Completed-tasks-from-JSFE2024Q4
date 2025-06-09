@@ -1,5 +1,4 @@
 import { AppStateKeys, DOMEvents } from '../../types';
-import type SessionStorageState from '../state/session-storage-state';
 import type {
     API_CONSTANTS_TYPES,
     DeleteMessage,
@@ -30,11 +29,12 @@ import type Router from '../router/router';
 import { PagesNames } from '../../constants/header-constants';
 import type { AppState } from '../state/types';
 import CreatorDialog from '../components/dialog/dialog-creator';
+import type { StateService } from '../state/state-service';
 
 export default class ApiController {
     public socket: globalThis.WebSocket | null = null;
     private readonly wsURL: string | null = null;
-    private readonly state: SessionStorageState;
+    private readonly state: StateService;
     private router: Router;
     private readonly constants: API_CONSTANTS_TYPES;
     private readonly errorMessage: CreatorDialog | null = null;
@@ -66,12 +66,7 @@ export default class ApiController {
         },
     };
 
-    constructor(
-        state: SessionStorageState,
-        router: Router,
-        errorMessage: CreatorDialog,
-        constants: API_CONSTANTS_TYPES
-    ) {
+    constructor(state: StateService, router: Router, errorMessage: CreatorDialog, constants: API_CONSTANTS_TYPES) {
         this.wsURL = constants[CONSTANTS_KEYS.WS_URL];
 
         if (this.wsURL) {

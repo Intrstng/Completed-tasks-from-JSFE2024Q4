@@ -14,19 +14,19 @@ import {
     userTitleParameters,
 } from './headers-view-parameters';
 import { PagesNames } from '../../../constants/header-constants';
-import type SessionStorageState from '../../state/session-storage-state';
 import { buttonAboutParameters } from '../login/login-view-parameters';
 import { sliceNameLength } from '../../utils/slice-name-string';
 import type ApiController from '../../api/api-controller';
 import ButtonCreator from '../../components/button/button-creator';
+import type { StateService } from '../../state/state-service';
 
 export default class HeaderView extends View {
     private router: Router | null;
-    private readonly state: SessionStorageState;
+    private readonly state: StateService;
     private api: ApiController;
     private readonly userName: string = '';
 
-    constructor(state: SessionStorageState, router: Router, api: ApiController) {
+    constructor(state: StateService, router: Router, api: ApiController) {
         super(headerParameters);
         this.router = router;
         this.state = state;

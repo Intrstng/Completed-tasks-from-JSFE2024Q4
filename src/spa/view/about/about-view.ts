@@ -1,6 +1,5 @@
 import './about.scss';
 import View from '../view';
-import type SessionStorageState from '../../state/session-storage-state';
 import type Router from '../../router/router';
 import {
     aboutListItemParameters,
@@ -23,13 +22,14 @@ import { gitSvgElements } from '../../components/svg/data';
 import type { LinkCreatorCB } from '../../components/link/types';
 import { createLink } from '../../components/link/link-creator';
 import type { GenerateLogoLink } from '../../components/svg/types';
+import type { StateService } from '../../state/state-service';
 
 export default class AboutView extends View {
     public router: Router;
     private generateLogoLink: GenerateLogoLink = generateLogoLink;
     private createLink: LinkCreatorCB = createLink;
 
-    constructor(state: SessionStorageState, router: Router) {
+    constructor(state: StateService, router: Router) {
         super(aboutParameters);
         this.router = router;
         this.configureView();
