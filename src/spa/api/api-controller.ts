@@ -1,3 +1,4 @@
+import type { MessageHandlers } from '../../types';
 import { AppStateKeys, DOMEvents } from '../../types';
 import type {
     API_CONSTANTS_TYPES,
@@ -30,6 +31,7 @@ import { PagesNames } from '../../constants/header-constants';
 import type { AppState } from '../state/types';
 import CreatorDialog from '../components/dialog/dialog-creator';
 import type { StateService } from '../state/state-service';
+import { isMessageOfType } from '../utils/assertion-functions/assertion-functions';
 
 export default class ApiController {
     public socket: globalThis.WebSocket | null = null;
@@ -500,16 +502,3 @@ export default class ApiController {
         this.state.setState(updatedState);
     }
 }
-
-function isMessageOfType<T extends SocketMessageType>(
-    message: Responses,
-    type: T
-): message is Extract<Responses, { type: T }> {
-    return message.type === type;
-}
-
-type MessageHandler<T extends SocketMessageType> = (message: Extract<Responses, { type: T }>) => void | Promise<void>;
-
-export type MessageHandlers = {
-    [K in SocketMessageType]?: MessageHandler<K>;
-};
