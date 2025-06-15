@@ -110,16 +110,14 @@ export default class ApiController {
         }
     }
 
-    public async handleMessageSocket(event: MessageEvent): Promise<void> {
+    public async handleMessageSocket<T extends SocketMessageType>(event: MessageEvent): Promise<void> {
         try {
-            const message: Responses = JSON.parse(event.data);
-            console.log('Received message:', message);
+            const message: Extract<Responses, { type: T }> = JSON.parse(event.data);
 
             const handler = this.messageHandlers[message.type];
 
             if (handler && isMessageOfType(message, message.type)) {
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-                await handler(message as never);
+                await handler(message);
             } else {
                 console.warn('No handler for message type:', message.type);
             }
