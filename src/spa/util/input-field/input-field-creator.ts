@@ -25,13 +25,16 @@ export default class InputFieldCreator extends CreatorElement {
                 this.setInputElementId(`${parameters.id}`);
             }
         }
+        if (parameters.type) {
+            this.setInputType(parameters.type);
+        }
+
         if (parameters.type === InputTypes.NUMBER) {
             if (parameters.max) {
-                this.setInputType(parameters.type);
                 this.setInputNumberMaxValue(parameters.max);
             }
+
             if (parameters.min) {
-                this.setInputType(parameters.type);
                 this.setInputNumberMinValue(parameters.min);
             }
         }
@@ -48,12 +51,8 @@ export default class InputFieldCreator extends CreatorElement {
     }
 
     public setCallback(callback: EventCallback = null): void {
-        if (this.element) {
-            this.element.addEventListener('keyup', (event: Event) => {
-                if (callback) {
-                    callback(event);
-                }
-            });
+        if (this.element && callback) {
+            this.element.addEventListener('input', callback);
         }
     }
 

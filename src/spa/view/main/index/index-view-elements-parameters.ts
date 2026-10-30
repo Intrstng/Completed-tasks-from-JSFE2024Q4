@@ -1,13 +1,13 @@
 import type {
-    CanvasParameters,
-    ElementParameters,
     ButtonParameters,
+    ButtonsCollection,
+    CanvasParameters,
+    DecisionItem,
     DialogContentParameters,
     DialogParameters,
+    ElementParameters,
 } from '../../../../types';
-import { InputDescription, InputTypes } from '../../../../types';
-import type { ButtonsCollection } from '../../../../types';
-import { ButtonNames } from '../../../../types';
+import { ButtonNames, InputDescription, InputTypes } from '../../../../types';
 import { CssClassesIndexView } from './index-view';
 
 export const IndexViewParameters: ElementParameters = {
@@ -228,4 +228,22 @@ export const dialogStartContentParameters: Array<DialogContentParameters> = [
         classNames: ['button', 'button-dialog-close', 'button-dialog-close-start'],
         textContent: ButtonNames.CLOSE,
     },
+];
+
+export const getDialogShowWinnerResult = (option: DecisionItem): Array<DialogContentParameters> => [
+    {
+        tag: 'div',
+        classNames: ['dialog-container-start'],
+    },
+    {
+        tag: 'h2',
+        textContent: 'The winner is:',
+        classNames: ['dialog-title'],
+    },
+    {
+        tag: 'p',
+        textContent: option.title,
+        classNames: ['dialog-text-start'],
+    },
+    dialogCloseButtonParameters,
 ];

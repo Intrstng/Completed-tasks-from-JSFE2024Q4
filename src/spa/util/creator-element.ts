@@ -27,7 +27,7 @@ export default class CreatorElement {
         }
     }
 
-    public getElement(): HTMLElement | HTMLCanvasElement | null {
+    public getElement(): HTMLElement | HTMLCanvasElement | HTMLDialogElement | null {
         return this.element;
     }
 
@@ -46,6 +46,12 @@ export default class CreatorElement {
         } else {
             console.error('Cannot get id. Element is null.');
             return '';
+        }
+    }
+
+    public setDisabled(disabled: boolean): void {
+        if (this.element instanceof HTMLButtonElement || this.element instanceof HTMLInputElement) {
+            this.element.disabled = disabled;
         }
     }
 

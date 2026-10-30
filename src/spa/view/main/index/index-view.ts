@@ -3,14 +3,14 @@ import View from '../../view';
 import type LocalStorageState from '../../../state/local-storage-state';
 import type Router from '../../../router/router';
 import type {
-    ButtonsCollection,
-    ElementParameters,
     AppState,
     ButtonParameters,
+    ButtonsCollection,
+    Callback,
     CallbackDialogSubmit,
     DecisionItem,
     DialogContentParameters,
-    Callback,
+    ElementParameters,
     SaveToFileData,
 } from '../../../../types';
 import { ButtonNames, FieldKeys, IndexViewItemPrefixes, InputDescription, Pages } from '../../../../types';

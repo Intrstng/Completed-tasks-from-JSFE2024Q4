@@ -76,13 +76,21 @@
     }
 
     .picked-option {
+        width: 15rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        text-align: center;
         padding: 0.8rem 1.6rem;
         border-radius: 0.2rem;
         font-family: Corbel, sans-serif;
         color: #fcedd8;
         text-transform: uppercase;
         letter-spacing: 1px;
-        background-color: rgb(1 126 127 / 35%);
+
+        background-color: rgb(222 101 88);
+        border: 1px solid #fcedd8;
         box-shadow:
             rgb(0 0 0 / 9%) 0 2px 1px,
             rgb(0 0 0 / 9%) 0 4px 2px,
