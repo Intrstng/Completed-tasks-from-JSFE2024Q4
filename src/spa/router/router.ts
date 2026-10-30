@@ -1,0 +1,53 @@
+import RouterHandler from './router-handler';
+import type { RequestParameters, Route } from '../../types';
+import { Location, Pages } from '../../types';
+
+export default class Router {
+    private routes: Array<Route>;
+    private handler: RouterHandler = new RouterHandler(this.urlChangedHandler.bind(this), Location.PATHNAME);
+
+    constructor(routes: Array<Route>) {
+        this.routes = routes;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            this.handler.navigate(null);
+        });
+    }
+
+    public setHashHandler(): void {
+        this.handler.disable();
+        this.handler = new RouterHandler(this.urlChangedHandler.bind(this), Location.HASH);
+    }
+
+    public navigate(url: string): void {
+        this.handler.navigate(url);
+    }
+
+    public urlChangedHandler(requestParameters: RequestParameters): void {
+        const { path } = requestParameters;
+        const routeIndex = this.routes.findIndex(item => item.path === path);
+
+        if (routeIndex === -1) {
+            this.redirectToNotFoundPage();
+            return;
+        }
+
+        this.routes[routeIndex]
+            .callback()
+            .then(() => {
+                console.log(`Redirected to route: ${this.routes[routeIndex].path}`);
+            })
+            .catch(error => {
+                console.error('Error in route callback:', error);
+                this.redirectToNotFoundPage();
+            });
+    }
+
+    public redirectToNotFoundPage(): void {
+        const notFoundPageIndex = this.routes.findIndex(item => item.path === `${Pages.NOT_FOUND}`);
+
+        if (notFoundPageIndex !== -1) {
+            this.navigate(this.routes[notFoundPageIndex].path);
+        }
+    }
+}
