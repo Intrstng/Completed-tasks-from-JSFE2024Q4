@@ -18,11 +18,11 @@ body {
   position: relative;
 }
 h1 {
-  margin: 20vh 0 0;
+  margin: 15vh 0 4vh;
   font-size: 3.5rem;
-  font-family: 'Calibri Light', serif;
+  font-family: 'Fira Code', serif;
   font-weight: bold;
-  color: #f0f0f0;
+  color: #FF6082;
   text-transform: uppercase;
   letter-spacing: 0.4rem;
 }
@@ -128,9 +128,9 @@ label {
   margin: 15px auto;
   text-align: center;
   color: #d9ff00;
-  font-family: 'Calibri Light', serif;
+  font-family: 'Fira Code', serif;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   letter-spacing: 3px;
   text-transform: uppercase;
 }
