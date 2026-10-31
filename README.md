@@ -1,6 +1,6 @@
 # Decision Making Tool
 
-**Decision Making Tool** is a single-page application (SPA) built with *vanilla JavaScript* that helps users make random decisions based on weighted options.
+**Decision Making Tool** is a single-page application (SPA) built with **vanilla JavaScript, without using any third-party frameworks**, that helps users make random decisions based on weighted options.
 
 The application consists of two sections: **List of Options** and **Decision Picker**. Users can create, edit, and delete options, assign weights to them, and import options from CSV-formatted text. Lists can also be saved to and loaded from JSON files.
 
